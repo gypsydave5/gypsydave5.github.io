@@ -1,0 +1,16 @@
+---
+layout: default
+---
+<h2>{{ page.title }}</h2>
+<p class="meta">{{ page.date | date_to_string }}</p>
+
+<h3>categories</h3>
+<p class="meta">
+{% for item in page.categories %}
+{{ item | prettyprint }} | 
+{% endfor %}
+</p>
+<div class="post">
+{{ content }}
+</div>
+ 
