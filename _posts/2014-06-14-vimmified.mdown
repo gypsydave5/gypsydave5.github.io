@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Vimming"
+title:  "Vimmified!"
 date:   2014-05-14 20:52:15
 categories: software Vim editors
 ---
@@ -40,3 +40,40 @@ listed in the `.vimrc` configuration file. Like everything in the open-source
 community it's all geared up for \*nix systems, so takes [a little bit of
 tweaking][VundleWin] to get going on Windows.
 
+Even more tweaking was required when I decided to take a great leap forward and
+put [Vimified][Vimified] on as well, a starting collection of packages for Vim.
+Which of course was also [fraught on Windows][VimifiedWin]. But ultimately
+successful (even if I did seem to spend at least three days getting the
+[Airline/Powerline][Airline] status bar fonts working).
+
+Half the fun of this little project has been learning how to edit the .vimrc
+file - and by extension all \*nix config files. More confidence at the command
+line can only be a good thing, and a good poke around the workings of Linux has
+made me feel a little more confident (even so far as to getting the
+[Powerline][Powerline] fonts working in Bash).
+
+\-\-\-
+
+What strikes me as I write this (in Vim - but on the Linux box at home) about
+a month on is how swiftly the Vim keys have worked themselves into my average workflow. I find it
+faster to open new lines, append lines, and navigate with J/K than arrows.
+Combined with Alt-Tabbing between windows, and Vimium in the browser, I haven't
+touched the mouse in creating this document - including all the copy-pasting of
+links. I haven't even left the home keys.
+
+I'm not quite happy to leave Sublime Text yet - but I'm certainly seeing my way
+there.
+
+---
+
+[STPM]: https://sublime.wbond.net/
+[Gvim]: http://www.vim.org/download.php
+[ST3]: http://www.sublimetext.com/3
+[ST3Vim]: http://www.sublimetext.com/docs/3/vintage.html
+[VundleWin]: https://github.com/gmarik/Vundle.vim/wiki/Vundle-for-Windows
+[Vundle]: https://github.com/gmarik/Vundle.vim/wiki/Vundle-for-Windows
+[Vimified]: https://github.com/zaiste/vimified
+[VimifiedWin]: http://kaszkowiak.eu/windows-vimified/
+[Vimium]: http://kaszkowiak.eu/windows-vimified/
+[Airline]: https://github.com/bling/vim-airline
+[Powerline]: https://github.com/Lokaltog/powerline
