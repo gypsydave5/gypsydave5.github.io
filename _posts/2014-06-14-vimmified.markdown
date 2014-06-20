@@ -33,6 +33,6 @@ I'm not quite happy to leave Sublime Text yet - but I'm certainly seeing my way 
 [Vundle]: https://github.com/gmarik/Vundle.vim/wiki/Vundle-for-Windows
 [Vimified]: https://github.com/zaiste/vimified
 [VimifiedWin]: http://kaszkowiak.eu/windows-vimified/
-[Vimium]: http://kaszkowiak.eu/windows-vimified/
+[Vimium]: https://chrome.google.com/webstore/detail/vimium/dbepggeogbaibhgnhhndojpepiihcmeb?hl=en
 [Airline]: https://github.com/bling/vim-airline
 [Powerline]: https://github.com/Lokaltog/powerline
