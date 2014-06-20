@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Vimmified!"
-date:   2014-05-14 20:52:15
+date:   2014-06-14 20:52:15
 categories: software Vim editors
 ---
 
