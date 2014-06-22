@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Your New Jekyll Site
+title: gypsydave5 learns to code
 ---
 
 <div id="home">
@@ -8,6 +8,7 @@ title: Your New Jekyll Site
   <ul class="posts">
     {% for post in site.posts %}
       <li><span>{{ post.date | date_to_string }}</span> &raquo; <a href="{{ post.url }}">{{ post.title }}</a></li>
+      {{ post.excerpt }}
     {% endfor %}
   </ul>
 </div>

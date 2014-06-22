@@ -1,25 +1,50 @@
 
 ---
 layout: post
-title:  "Template"
-date:   2014-05-14 20:52:15
-categories: software
+title:  "Surviving Windows"
+date:   2014-06-22 20:52:15
+categories: software, productivity, Windows
+
 ---
 
-You'll find this post in your `_posts` directory - edit this post and re-build (or run with the `-w` switch) to see your changes!
-To add new posts, simply add a file in the `_posts` directory that follows the convention: YYYY-MM-DD-name-of-post.ext.
+I've worked within Windows and Microsoft OSes for... well, most of my computing life now I think about it. I'm pretty sure that most people are the same. And like most people I've always had my little moans about it. Too many to mention.
 
-Jekyll also offers powerful support for code snippets:
+This has come to a head since I [switched to Linux][LinuxSwitch] a few months ago. Not that Linux (Ubuntu in my case) doesn't have it's own long list of problems, but they all feel more like problems I should be fixing myself - rather than things I'll just moan about and put up with. Yes, Ubuntu (and the Unity desktop specfically) has 'spoiled' me. I'd rather be working in that environment than any earlier version of Windows. Woo-hoo. Hear the joy from camp Linux, joy shall be in heaven over one sinner that repenteth, etc etc usw.
 
-{% highlight ruby %}
-def print_hi(name)
-  puts "Hi, #{name}"
-end
-print_hi('Tom')
-#=> prints 'Hi, Tom' to STDOUT.
-{% endhighlight %}
+But there's still so much of my life that has to be done in Windows. Work spreadsheet has VBA macros? Work machine in Vista? [Netflix requires Silverlight?][Netflix] It's inevitable.
 
-Check out the [Jekyll docs][jekyll] for more info on how to get the most out of Jekyll. File all bugs/feature requests at [Jekyll's GitHub repo][jekyll-gh].
+So instead of moaning I've been trying to fix Windows to make it usable like I want it to be. And I think I've found some good options. The first thing to note is that I've been so used to putting up with Windows that I was under the impression that there was very little that could be done to it. Lay that thought to rest - there's hundreds of hacks, options, fixes, and bits of software we can use to make Window's a happier place to be. Or, if not actively happy, then at least survivable...
 
-[jekyll-gh]: https://github.com/mojombo/jekyll
-[jekyll]:    http://jekyllrb.com
+1 - Winsplit Revolution
+-----------------------
+
+OK, not the greatest name. What I missed most about Ubuntu when stuck on Vista was the way I could throw windows around the desktop using the numpad. This feauture is neatly emulated with [Winsplit Revolution][WSRev], which is small and, well, works. You can customize the shortcuts too. (Looks like the original website is no longer around so I've linked to the CNET page).
+
+2 - Put the taskbar on the side
+-------------------------------
+
+Oh this sounds dumb I know, but nobody even thinks of doing it. Totally inspired by the Unity set up, it just makes more sense. If most of what I'm doing involves reading down a page on the screen - code, text, etc - then I really want optimize the vertical space on the screen. So slam the taskbar to the side and get yourself a couple of centimeters for free.
+
+3 - GVim
+--------
+
+All that Vim goodness - [now on your Windows!][GVimWin] And you can use the same config files. And you can set the config depending on the environment (Windows, Linux, OSX). And you could save all those files onto Dropbox, make symlinks to them... OK - too far. But get GVim for Windows.
+
+Autohotkey
+----------
+
+I'll write something about the what effect removing the caps
+
+4 - Get GNUy
+------------
+
+I've tried [Cygwin][Cygwin] before - part of working using a Linux only font tool. But I found it... big. Powerful, yes - but big. So big I didn't use it. Second time around I've been using [Gow][Gow] - which brings all the \*nix-y command line goodness to your `cmd` shell in Windows.
+
+5 - Chocolatey
+--------------
+
+Missing `apt-get` or similar package management utilities on Windows? [Chocolatey][Chocolatey] to the rescue. Install Git! Install Node! Install everything listed above and more, and get them all updated in the command line. It's brilliant.
+
+
+[Gow](https://github.com/bmatzelle/gow/wiki)
+[Chocolatey](http://chocolatey.org/)
