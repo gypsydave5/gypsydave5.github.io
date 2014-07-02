@@ -24,8 +24,13 @@ In addition I rarely touch ST3 any more, spending most of my editing time on
 Vim as [previously mentioned][vim]. And Guake lost its novelty rapidly. Right now I'm
 sifting through five years of Gmail using [Mutt][Mutt]. Now that's something.
 
+Probably the most affecting bit is to see the phrase 'David Wickes, Software
+Developer' at the top. I'm not a software developer - yet. But I will be soon.
+And reading that, well, it made me feel pretty good about myself. Something to
+aspire to.
+
 [interview](http://www.mylinuxrig.com/post/90468057902/the-linux-setup-david-wickes-software-developer)
-[MLR][http://www.mylinuxrig.com/]
-[Mutt][http://www.mutt.org/]
+[MLR](http://www.mylinuxrig.com/)
+[Mutt](http://www.mutt.org/)
 [vim]({% post_url 2014-06-14-vimmified %})
 [lateLinux]({% post_url 2014-04-29-late-in-the-day-linux %})
