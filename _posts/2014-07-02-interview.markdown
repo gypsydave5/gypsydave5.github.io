@@ -2,7 +2,7 @@
 layout: post
 title:  "Interview at 'My Linux Rig'"
 date:   2014-07-03 22:42:15
-categories: media, Linux, Ubuntu
+categories: media Linux Ubuntu
 ---
 
 A few months ago Steven Ovadia over at [My Linux Rig][MLR] spotted my post
@@ -28,8 +28,6 @@ Probably the most affecting bit is to see the phrase 'David Wickes, Software
 Developer' at the top. I'm not a software developer - yet. But I will be soon.
 And reading that, well, it made me feel pretty good about myself. Something to
 aspire to.
-
----
 
 [interview]: http://www.mylinuxrig.com/post/90468057902/the-linux-setup-david-wickes-software-developer
 [MLR]: http://www.mylinuxrig.com/
