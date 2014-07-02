@@ -29,6 +29,8 @@ Developer' at the top. I'm not a software developer - yet. But I will be soon.
 And reading that, well, it made me feel pretty good about myself. Something to
 aspire to.
 
+---
+
 [interview](http://www.mylinuxrig.com/post/90468057902/the-linux-setup-david-wickes-software-developer)
 [MLR](http://www.mylinuxrig.com/)
 [Mutt](http://www.mutt.org/)
