@@ -5,7 +5,7 @@ date: '2014-05-01T07:56:31+01:00'
 tags: []
 tumblr_url: http://gypsydave5.com/post/84415624123/rails-for-zombies
 ---
-Just been looking at [Rails for Zombies][RFZ] again in preparation for my forthcoming interview with [Makers Academy](MA) (because it’s never too late and you can always do more).
+Just been looking at [Rails for Zombies][RFZ] again in preparation for my forthcoming interview with [Makers Academy][MA] (because it’s never too late and you can always do more).
 
 It strikes me what a difference a few months of Ruby and a course redesign makes. Now when faced with the first set of exercises I wasn’t, as before, struggling to keep up and make sense. Instead I was interrogating what was going on - “Wait, `Zombie.find(1)` - what’s it finding? Capital Z… is it a class? Let’s find out `Zombie.class => Class`  - cool, so the tables are represented by different classes in Ruby… what sort of methods does a Zombie have anyway? `Zombie.find(1).methods`…” and so on.
 
@@ -13,6 +13,6 @@ This was great - using the techniques I’d picked up from Ruby Monk and Ruby Ko
 
 The guys at [Codeschool][CS] have changed the course since my first attempt at it — they describe it as Rails for Zombies: Redux — and it’s a huge improvement. Definitely worth a look. And it’s FREE!
 
-[CS][https://www.codeschool.com/]
-[RFZ][http://railsforzombies.org/]
-[MA](http://railsforzombies.org/)
+[CS]: https://www.codeschool.com/
+[RFZ]: http://railsforzombies.org/
+[MA]: http://railsforzombies.org/
