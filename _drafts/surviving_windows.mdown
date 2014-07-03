@@ -28,7 +28,7 @@ Oh this sounds dumb I know, but nobody even thinks of doing it on Windows becaus
 3 - GVim
 --------
 
-All that Vim goodness - [now on your Windows!][GVimWin] And you can use the same config files. And you can set the config depending on the environment (Windows, Linux, OSX). And you could save all those files onto Dropbox, make symlinks to them... OK - too far. But get GVim for Windows.
+All that Vim goodness - [now on your Windows.][GVimWin] And you can use the same config files. And you can set the config depending on the environment (Windows, Linux, OSX). And you could save all those files onto Dropbox, make symlinks to them... OK - too far. But get GVim for Windows.
 
 Autohotkey
 ----------
@@ -51,10 +51,11 @@ Missing `apt-get` or similar package management utilities on Windows? [Chocolate
 
 Ah, that's it for now. All I'd finish off by saying is that the only thing
 holding me back from improving my experience of Windows was... ignorance. And
-indolence.
+indolence. A good lesson.
 
 [Gow](https://github.com/bmatzelle/gow/wiki)
 [Chocolatey](http://chocolatey.org/)
 [WSRev](http://download.cnet.com/WinSplit-Revolution/3000-2072_4-10971915.html)
 [GVimWin](http://www.vim.org/download.php#pc)
 [AHkey](http://www.autohotkey.com/)
+[Netflix](https://launchpad.net/pipelight)
