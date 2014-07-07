@@ -1,0 +1,16 @@
+---
+layout: post
+title:  "Windows Silver Surfer"
+date:   2014-05-14 20:52:15
+categories: software Windows ag
+---
+
+Adding to my list of [ways to fix the Windows experience][SurvWin], I have to
+pay due respect to [Krystoff Kowalcyzk][KK], a great developer from Poland who
+has ported [Ag (aka The Silver Surfer)][AG] over to Windows. He's also authored
+a really elegant (and for elegant please read lightweight and customizable)
+PDF viewer [SumatraPDF][SPDF]
+
+[SPDF]:http://blog.kowalczyk.info/software/sumatrapdf/free-pdf-reader.html
+[KK]: http://blog.kowalczyk.info/
+[AG]:http://geoff.greer.fm/2011/12/27/the-silver-searcher-better-than-ack/

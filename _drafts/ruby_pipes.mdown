@@ -1,0 +1,25 @@
+---
+layout: post
+title:  "Hash#map in Ruby"
+date:   2014-05-14 20:52:15
+categories: Ruby RubyMonk Enumerable Map Array
+---
+
+Going through the [RubyMonk] exercises I reached chapter 7.1 on the subject of
+Enumberable. Specifically the use of each and
+
+{% highlight ruby %}
+def hash_keys(hash)
+    hash.map { |pair| pair.first }
+end
+{% endhighlight %}
+
+{% highlight ruby %}
+def hash_keys(hash)
+    hash.map {|key,value| key}
+end
+{% endhighlight %}
+
+
+[RubyMonk]: https://rubymonk.com/
+[RMHashMap]: https://rubymonk.com/learning/books/4-ruby-primer-ascent/chapters/44-collections/lessons/98-iterate-filtrate-and-transform#solution4313
