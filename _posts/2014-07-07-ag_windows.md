@@ -6,7 +6,7 @@ categories: software Windows ag
 ---
 
 Adding to my list of [ways to fix the Windows experience][SurvWin], I have to
-pay due respect to [Krystoff Kowalcyzk][KK], a great developer from Poland who
+pay due respect to [Krystoff Kowalcyzk][KK], a developer who
 has ported [Ag (aka The Silver Surfer)][AG] over to Windows. He's also authored
 a really elegant (and for elegant please read lightweight and customizable)
 PDF viewer [SumatraPDF][SPDF]. Both of these have improved my life today.
