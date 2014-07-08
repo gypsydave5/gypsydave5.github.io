@@ -1,0 +1,47 @@
+---
+layout: post
+title:  "Starting Out"
+date:   2014-05-14 20:52:15
+categories: software education codeschools
+---
+
+Friend of mine has just asked me for some advice abot what's the best way to
+learn about the things that I'm learning about. Struck me as a a crazy question
+as I'm only really starting out myself. Who am I to say what's the best?
+
+Yet I considered my experiences at university, where teaching was as much
+a part of learning as sitting down with a book. Teaching, advising, and
+generally talking about a subject (hey, like this blog!) helps cement learning
+in the author. And may be of some value to following the same path later on.
+And the other advantage is that my experiences are going to be fresher - I've
+actually been learning using the resources I would recommend, rather than just
+recommending them in an abstract fashion when the tools are of no use to me.
+
+(Of course you could argue that I would also have no idea if I was being taught
+the *wrong* things, or getting into bad habits. But there are upsides and
+downsides --[everything is dangerous][Foucault], so take it all with a pinch of salt.)
+
+So where to start...
+
+##HTML & CSS
+
+Most people who want to learn something about coding are going to need to
+learn HTML and CSS. I'm fairly sure that this is the usual entry point of people
+starting out as the www has made the use of these two markup languages
+ubiquitous to the point where it impacts on lives more and more. It's
+unfortunate that HTML is awful to write, but on the plus side they're both
+(relatively) simple. And, like I said, ubiquitous -- it will always be useful to
+know how a webpage is structured.
+
+##[Codecademy][CA]
+
+Codecademy is where I started after flailing around for a bit, and it's where
+things really took off for me. It built some powerful foundations, shored up
+some weak areas - and it was a lot of fun too. I'd recommend trying out their
+build a [homepage project][homepage] to begin with, then following along their [HTML track][HTMLtrack] to
+completion.
+
+[CA]:
+[Foucault]: https://en.wikiquote.org/wiki/Michel_Foucault#Sourced
+[HTMLtrack]:
+[homepage]:
