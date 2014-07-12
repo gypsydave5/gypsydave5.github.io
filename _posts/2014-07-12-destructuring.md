@@ -52,7 +52,7 @@ What we're seeing is this:
 x, y = [1,2]
 x # => 1
 y # => 2
-{% highlight ruby %}
+{% endhighlight %}
 
 But done as a loop for all the arrays pulled out of the hash by `#map`. Tony
 Pitluga sings the praises of destructuring block arguments (which is what this
