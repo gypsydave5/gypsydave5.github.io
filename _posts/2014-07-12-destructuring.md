@@ -68,10 +68,10 @@ operator][splat] to collect some of the other elements.
 Consider:
 
 {% highlight ruby %}
-x, \*y = [1,2,3,4,5,6]
+x, \*y = [1,2,3,4,5,6j
 x # => 1
 y # => [2,3,4,5,6]
-{% highlight ruby %}
+{% endhighlight %}
 
 There's a lot more on the magic of the splat in the second edition of [The Well
 Rounded Rubyist][WRR] which has just been published (and which I'm enjoying
