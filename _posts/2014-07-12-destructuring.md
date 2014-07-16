@@ -6,7 +6,7 @@ categories: Ruby RubyMonk Enumerable Inject Map Array
 ---
 
 I went from genius to idiot - very rapidly - when looking at Enumerable#map and
-\#inject in [RubyMonk], a free resource to help learn ruby that I've found
+#inject in [Ruby Monk][RubyMonk], a free resource to help learn ruby that I've found
 really useful. Let's start with 'genius' (although not really genius, more wrong
 but lucky).
 
@@ -68,7 +68,7 @@ operator][splat] to collect some of the other elements.
 Consider:
 
 {% highlight ruby %}
-x, \*y = [1,2,3,4,5,6j
+x, *y = [1,2,3,4,5,6j
 x # => 1
 y # => [2,3,4,5,6]
 {% endhighlight %}

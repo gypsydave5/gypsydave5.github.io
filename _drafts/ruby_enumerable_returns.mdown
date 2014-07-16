@@ -1,82 +1,94 @@
 ---
 layout: post
-title:  "Enumerable#inject returns"
+title:  "Many Enumerable Returns"
 date:   2014-05-14 20:52:15
-categories: Ruby RubyMonk Enumerable Inject Map Array
+categories: Ruby RubyMonk
 ---
 
-I went from genius to idiot - very rapidly - when looking at Enumerable#map and
-\#inject in [RubyMonk], a free resource to help learn ruby that I've found
-really useful. Let's start with 'genius' (although not really genius, more wrong
-but lucky).
+As threatened then, here's the followup to my last post on the #Enumerables
+section from [Ruby Monk][RubyMonk], how I felt like a bit of an idiot, and what I learned from that.
 
-The [question][RMHashMap] was as follows:
+This question is a little further along from the last, and was framed so:
 
-> Exploit the fact that map always returns an array: write a method `hash_keys`
-> that accepts a hash and maps over it to return all the keys in a linear Array.
+> Try implementing a method called occurrences that accepts a string argument and
+> uses inject to build a Hash. The keys of this hash should be unique words from
+> that string. The value of those keys should be the number of times this word
+> appears in that string.
 
-Exciting, right?
+So far so, so good. So I wrote this:
 
-The solution that RM gave was this:
-
-{% highlight ruby %}
-def hash_keys(hash)
-    hash.map { |pair| pair.first }
+{% highlight Ruby %}
+def occurrences(str)
+  str.scan(/\w+/).inject(Hash.new(0)) do |hash, i|
+    hash[i.downcase] += 1
+  end
 end
 {% endhighlight %}
 
-But I went for:
+Which spat out:
+
+> TypeError
+> can't convert String into Integer
+
+And left me confused for a good few minutes. OK, getting on for a quarter of an
+hour. What was going on - what I'd written was very similar to the example
+above:
 
 {% highlight ruby %}
-def hash_keys(hash)
-    hash.map {|key,value| key}
+[4, 8, 15, 16, 23, 42].inject({}) { |a, i| a.update(i => i) }
+{% endhighlight %}
+
+So I caved and looked at the answer:
+
+{% highlight ruby %}
+def occurrences(str)
+	str.scan(/\w+/).inject(Hash.new(0)) do |build, word|
+  	build[word.downcase] +=1
+  	build
+	end
 end
 {% endhighlight %}
 
-Not much difference, but enough. I had become confused when I entered my code,
-thinking more about the `each_with_index` method mentioned in the same page
-above. I was forgetting that `#map` would be sending back a single value,
-an array of the key-value pair. Ruby Monk's solution used that fact to use the
-method `#first` on the array, to get the first element (the key) out.
-
-But, by chance, my solution worked by taking splitting the array by telling the
-block for map that it would be getting two arguments - checking with the good
-people on the #ruby channel on IRC (a chap called bannisterfiend to be precise), this is [*destructuring*][destructuring], binding a set of values to a corresponding set of values that you can normally bind to a single variable (that's the definition as given in [Common Lisp][Lisp], but makes sense here).
-
-What we're seeing is this:
+Which left me none the wiser. Why was the block re-iterating the accumulator
+function at the end? To test this I played around with `p`-ing the lines of the
+block... and discovered something interesting. Namely,
 
 {% highlight ruby %}
-x, y = [1,2]
-x # => 1
-y # => 2
+
+a.update(i => i) # => a
+
+# But...
+
+build[word.downcase] +=1 # => build[word.downcase], the new value of that key
+
+{% endhighlight %}
+
+The block *needs* to return the accumulator - the first example is just lucky
+that it does so already!
+
+The reason the accumulator in an `Enumerable#inject` accumulates is that *it's
+returned from the block on each iteration*. In other words, somewhere in the
+definition of `#inject` for each class that can be made enumerable, the method
+`yield`s to the block, and then keeps the value returned to be passed in again
+as the new accumulator argument.
+
+I'd previously thought of `#inject` as working by *magic*, whereas in fact it was
+working by a method I could probably write myself given enough time. Something
+like (entirely untested).
+
 {% highlight ruby %}
+def inject(default = nil)
+    accumulator = default || self[0]
+    self.each do |element|
+       yield (accumulator, element)
+    end
+    accumulator
+end
+{% endhighlight %}
 
-But done as a loop for all the arrays pulled out of the hash by `#map`. Tony
-Pitluga sings the praises of destructuring block arguments (which is what this
-is) in his longer article on [destructuring in Ruby][destructuring].
-
-There's an improvement in the semantics of the method (would you rather have
-`key` or `pair.first`?) and a saving of writing/time in any later work you might
-want to do on the values. Of course, we wouldn't want to do this to longer
-arrays - too many elements to bind to values.
-
-Unless we used the 'unarray' or, 'star' or (best name evar) [splat operator][splat] to collect some of the other elements.
-Consider:
-
-{% highlight ruby %}
-x, \*y = [1,2,3,4,5,6]
-x # => 1
-y # => [2,3,4,5,6]
-{% highlight ruby %}
-
-There's a lot more on the magic of the splat in the second edition of [The Well Rounded Rubyist][WRR] which has just been published (and which I'm enjoying immensely).
-
-OK, I'll write up my other mistake (the one that broke the `#map` block) later in
-the week.
-
-PS - noticed when getting links for this post that Ruby 2.0 introduces the
-double-splat operator for [turning keyword-value pairs in argument lists into
-a hash][double-splat].
+I relied on `#each` here, but we could easily write an `each` method using
+a `for... in...` loop or similar. The genius is in `yield`, which is the real
+magic that's going on here.
 
 [RubyMonk]: https://rubymonk.com/
 [RMHashMap]: https://rubymonk.com/learning/books/4-ruby-primer-ascent/chapters/44-collections/lessons/98-iterate-filtrate-and-transform#solution4313
