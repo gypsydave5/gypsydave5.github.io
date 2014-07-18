@@ -75,7 +75,7 @@ again as the new accumulator argument.
 
 I'd previously thought of `#inject` as working by *magic*, whereas in fact it
 was working by a method I could probably write myself given enough time.
-Something like this (which I have tested - and then hit .
+Something like this...
 
 {% highlight ruby %}
 
@@ -92,7 +92,8 @@ def bob.inject(default = nil)
       accumulator = yield(accumulator, element)
     end
   end
-  puts "all adds up to: " # just to prove it's this method being called, not the superclasses...
+  puts "all adds up to: "   # just to prove it's this method being
+                            # called, not the superclasses...
   p accumulator
 end
 
@@ -102,15 +103,14 @@ end
 Which gives us such fun as:
 
 {% highlight ruby %}
-
-bob.inject() {|a,e| a += e} # => all adds up to: 21
-
-bob.inject(10) {|a,e| a += e} # => all adds up to: 31
-
-bob.inject([]) {|a,e| a << e**2} # => all adds up to: [1, 4, 9, 16, 25, 36]
-
-bob.inject({}) {|a,e| a[e] = "x"*e; a} # => {5=>"xxxxx", 6=>"xxxxxx", 1=>"x", 2=>"xx", 3=>"xxx", 4=>"xxxx"}
-
+bob.inject() {|a,e| a += e}
+# => all adds up to: 21
+bob.inject(10) {|a,e| a += e}
+# => all adds up to: 31
+bob.inject([]) {|a,e| a << e**2}
+# => all adds up to: [1, 4, 9, 16, 25, 36]
+bob.inject({}) {|a,e| a[e] = "x"*e; a}
+# => {5=>"xxxxx", 6=>"xxxxxx", 1=>"x", 2=>"xx", 3=>"xxx", 4=>"xxxx"}
 {% endhighlight %}
 
 I relied on `#each` here, but we could easily write an `each` method using
