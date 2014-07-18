@@ -44,8 +44,8 @@ So I caved and looked at the answer:
 {% highlight ruby %}
 def occurrences(str)
 	str.scan(/\w+/).inject(Hash.new(0)) do |build, word|
-  	build[word.downcase] +=1
-  	build
+    	build[word.downcase] +=1
+    	build
 	end
 end
 {% endhighlight %}
@@ -81,20 +81,36 @@ Something like this (which I have tested - and then hit .
 
 bob = [1,2,3,4,5,6]
 
-def bob.inject(default = nil) accumulator = default || self[0] if default
-self.each do |element| accumulator = yield(accumulator, element) end else
-self.drop(1).each do |element| accumulator = yield(accumulator, element) end end
-puts "all adds up to: " # just to prove it's this method being called, not the
-superclasses...  p accumulator end {% endhighlight %}
+def bob.inject(default = nil)
+  accumulator = default || self[0]
+  if default
+    self.each do |element|
+      accumulator = yield(accumulator, element)
+    end
+  else
+    self.drop(1).each do |element|
+      accumulator = yield(accumulator, element)
+    end
+  end
+  puts "all adds up to: " # just to prove it's this method being called, not the superclasses...
+  p accumulator
+end
+
+{% endhighlight %}
+
 
 Which gives us such fun as:
 
 {% highlight ruby %}
 
-bob.inject() {|a,e| a += e} # => all adds up to: 21 bob.inject(10) {|a,e| a +=
-e} # => all adds up to: 31 bob.inject([]) {|a,e| a << e**2} # => all adds up to:
-[1, 4, 9, 16, 25, 36] bob.inject({}) {|a,e| a[e] = "x"*e; a} # => {5=>"xxxxx",
-6=>"xxxxxx", 1=>"x", 2=>"xx", 3=>"xxx", 4=>"xxxx"}
+bob.inject() {|a,e| a += e} # => all adds up to: 21
+
+bob.inject(10) {|a,e| a += e} # => all adds up to: 31
+
+bob.inject([]) {|a,e| a << e**2} # => all adds up to: [1, 4, 9, 16, 25, 36]
+
+bob.inject({}) {|a,e| a[e] = "x"*e; a} # => {5=>"xxxxx", 6=>"xxxxxx", 1=>"x", 2=>"xx", 3=>"xxx", 4=>"xxxx"}
+
 {% endhighlight %}
 
 I relied on `#each` here, but we could easily write an `each` method using
