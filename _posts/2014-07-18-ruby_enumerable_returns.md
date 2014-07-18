@@ -5,9 +5,11 @@ date:   2014-07-18 20:52:15
 categories: Ruby
 ---
 
-As threatened then, here's the followup to my [last post][lastpost] on the #Enumerables
-section from [Ruby Monk][RubyMonk], how I felt like a bit of an idiot, and what
-I learned from that.
+As threatened then, here's the followup to my [last post][lastpost] on the `#Enumerables`
+section from [Ruby Monk][RubyMonk], how I felt like a bit of an idiot for a few
+hours, and what I learned from that.
+
+tl;dr - enumerable blocks aren't magic; `yield` is magic.
 
 This question is a little further along from the last, and was framed so:
 
@@ -20,8 +22,8 @@ So far so, so good. So I wrote this:
 
 {% highlight Ruby %}
 def occurrences(str)
-  str.scan(/\w+/).inject(Hash.new(0)) do |hash, i|
-    hash[i.downcase] += 1
+  str.scan(/\w+/).inject(Hash.new(0)) do |hashy, i|
+    hashy[i.downcase] += 1
   end
 end
 {% endhighlight %}
@@ -121,7 +123,12 @@ magic* that's going on here.
 weird in a language that professes that everything is an object. Like a lot in
 Ruby, I discovered a small thing didn't work, patiently played with it until
 I found out why, and then 'worked' that small new piece of knowledge to give me
-greater insight into what was going on.
+greater insight into what was going on. I'm finding this to be the most
+satisfying method to learn by, both because it makes me feel like I'm learning
+to a deeper degree than I would by just reading the answers out of a book, and
+n addition, when the books do cover the subject, I can better apply what's
+written there to what I've seen in action.
+
 
 [RubyMonk]: https://rubymonk.com/
 [RMHashMap]: https://rubymonk.com/learning/books/4-ruby-primer-ascent/chapters/44-collections/lessons/98-iterate-filtrate-and-transform#solution4313
