@@ -1,8 +1,8 @@
 ---
 layout: post
 title:  "Many Enumerable Returns"
-date:   2014-05-14 20:52:15
-categories: Ruby RubyMonk
+date:   2014-07-18 20:52:15
+categories: Ruby
 ---
 
 As threatened then, here's the followup to my [last post] on the #Enumerables
@@ -27,11 +27,11 @@ end
 
 Which spat out:
 
-> TypeError
-> can't convert String into Integer
+> ``TypeError
+> ``can't convert String into Integer
 
 And left me confused for a good few minutes. OK, getting on for a quarter of an
-hour. What was going on - what I'd written was very similar to the example
+hour. What was going on? - what I'd written was very similar to the example
 above:
 
 {% highlight ruby %}
@@ -63,47 +63,37 @@ build[word.downcase] +=1 # => build[word.downcase], the new value of that key
 
 {% endhighlight %}
 
-The block *needs* to return the accumulator - the first example is just lucky
+The block *needs to return the accumulator* - the first example is just lucky
 that it does so already!
 
-The reason the accumulator in an `Enumerable#inject` accumulates is that *it's
-returned from the block on each iteration*. In other words, somewhere in the
-definition of `#inject` for each class that can be made enumerable, the method
-`yield`s to the block, and then keeps the value returned to be passed in again
-as the new accumulator argument.
+The only reason the accumulator in an `Enumerable#inject` accumulates is that
+*it's returned from the block on each iteration*. In other words, somewhere in
+the definition of `#inject` for each class that can be made enumerable, the
+method `yield`s to the block, and then keeps the value returned to be passed in
+again as the new accumulator argument.
 
-I'd previously thought of `#inject` as working by *magic*, whereas in fact it was
-working by a method I could probably write myself given enough time. Something
-like this (which I have tested - and then hit .
+I'd previously thought of `#inject` as working by *magic*, whereas in fact it
+was working by a method I could probably write myself given enough time.
+Something like this (which I have tested - and then hit .
 
 {% highlight ruby %}
 
 bob = [1,2,3,4,5,6]
 
-def bob.inject(default = nil)
-    accumulator = default || self[0]
-    if default
-      self.each do |element|
-        accumulator = yield(accumulator, element)
-      end
-    else
-      self.drop(1).each do |element|
-        accumulator = yield(accumulator, element)
-      end
-    end
-    puts "all adds up to: " # just to prove it's this method being called, not the superclasses...
-    p accumulator
-end
-{% endhighlight %}
+def bob.inject(default = nil) accumulator = default || self[0] if default
+self.each do |element| accumulator = yield(accumulator, element) end else
+self.drop(1).each do |element| accumulator = yield(accumulator, element) end end
+puts "all adds up to: " # just to prove it's this method being called, not the
+superclasses...  p accumulator end {% endhighlight %}
 
 Which gives us such fun as:
 
 {% highlight ruby %}
 
-bob.inject() {|a,e| a += e} # => all adds up to: 21
-bob.inject(10) {|a,e| a += e} # => all adds up to: 31
-bob.inject([]) {|a,e| a << e**2} # => all adds up to: [1, 4, 9, 16, 25, 36]
-bob.inject({}) {|a,e| a[e] = "x"*e; a} # => {5=>"xxxxx", 6=>"xxxxxx", 1=>"x", 2=>"xx", 3=>"xxx", 4=>"xxxx"}
+bob.inject() {|a,e| a += e} # => all adds up to: 21 bob.inject(10) {|a,e| a +=
+e} # => all adds up to: 31 bob.inject([]) {|a,e| a << e**2} # => all adds up to:
+[1, 4, 9, 16, 25, 36] bob.inject({}) {|a,e| a[e] = "x"*e; a} # => {5=>"xxxxx",
+6=>"xxxxxx", 1=>"x", 2=>"xx", 3=>"xxx", 4=>"xxxx"}
 
 {% endhighlight %}
 
@@ -117,7 +107,7 @@ Ruby, I discovered a small thing didn't work, patiently played with it until
 I found out why, and then 'worked' that small new piece of knowledge to give me
 greater insight into what was going on.
 
-[RubyMonk]: https://rubymonk.com/
-[RMHashMap]: https://rubymonk.com/learning/books/4-ruby-primer-ascent/chapters/44-collections/lessons/98-iterate-filtrate-and-transform#solution4313
-[last post]: {% post_url 2014-07-12-destructuring %}
-[yield]: http://rubymonk.com/learning/books/1/chapters/34-lambdas-and-blocks-in-ruby/lessons/78-blocks-in-ruby
+[RubyMonk]: https://rubymonk.com/ [RMHashMap]:
+https://rubymonk.com/learning/books/4-ruby-primer-ascent/chapters/44-collections/lessons/98-iterate-filtrate-and-transform#solution4313
+[last post]: {% post_url 2014-07-12-destructuring %} [yield]:
+http://rubymonk.com/learning/books/1/chapters/34-lambdas-and-blocks-in-ruby/lessons/78-blocks-in-ruby
