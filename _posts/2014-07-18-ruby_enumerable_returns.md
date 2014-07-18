@@ -11,10 +11,10 @@ I learned from that.
 
 This question is a little further along from the last, and was framed so:
 
->>Try implementing a method called occurrences that accepts a string argument and
->>uses inject to build a Hash. The keys of this hash should be unique words from
->>that string. The value of those keys should be the number of times this word
->>appears in that string.
+>Try implementing a method called occurrences that accepts a string argument and
+>uses inject to build a Hash. The keys of this hash should be unique words from
+>that string. The value of those keys should be the number of times this word
+>appears in that string.
 
 So far so, so good. So I wrote this:
 
@@ -28,8 +28,8 @@ end
 
 Which spat out:
 
-> ``TypeError``
-> ``can't convert String into Integer``
+> ``TypeError
+> can't convert String into Integer``
 
 And left me confused for a good few minutes. OK, getting on for a quarter of an
 hour. What was going on? - what I'd written was very similar to the example

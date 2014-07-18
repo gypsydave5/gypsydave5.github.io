@@ -138,6 +138,12 @@ a:visited { color: #a0a; }
   margin-left: 1.35em;
 }
 
+.post blockquote {
+    margin-left: 1.35em;
+    margin-right: 1.35em;
+    font-style: italic
+}
+
 .post code {
   border: 1px solid #ddd;
   background-color: #eef;
