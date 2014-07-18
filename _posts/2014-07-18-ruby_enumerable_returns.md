@@ -28,8 +28,8 @@ end
 
 Which spat out:
 
-> ``TypeError
-> ``can't convert String into Integer
+> ``TypeError``
+> ``can't convert String into Integer``
 
 And left me confused for a good few minutes. OK, getting on for a quarter of an
 hour. What was going on? - what I'd written was very similar to the example
