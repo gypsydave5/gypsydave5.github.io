@@ -5,8 +5,9 @@ date:   2014-07-18 20:52:15
 categories: Ruby
 ---
 
-As threatened then, here's the followup to my [last post] on the #Enumerables
-section from [Ruby Monk][RubyMonk], how I felt like a bit of an idiot, and what I learned from that.
+As threatened then, here's the followup to my [last post][lastpost] on the #Enumerables
+section from [Ruby Monk][RubyMonk], how I felt like a bit of an idiot, and what
+I learned from that.
 
 This question is a little further along from the last, and was framed so:
 
@@ -94,7 +95,6 @@ bob.inject() {|a,e| a += e} # => all adds up to: 21 bob.inject(10) {|a,e| a +=
 e} # => all adds up to: 31 bob.inject([]) {|a,e| a << e**2} # => all adds up to:
 [1, 4, 9, 16, 25, 36] bob.inject({}) {|a,e| a[e] = "x"*e; a} # => {5=>"xxxxx",
 6=>"xxxxxx", 1=>"x", 2=>"xx", 3=>"xxx", 4=>"xxxx"}
-
 {% endhighlight %}
 
 I relied on `#each` here, but we could easily write an `each` method using
@@ -107,7 +107,7 @@ Ruby, I discovered a small thing didn't work, patiently played with it until
 I found out why, and then 'worked' that small new piece of knowledge to give me
 greater insight into what was going on.
 
-[RubyMonk]: https://rubymonk.com/ [RMHashMap]:
-https://rubymonk.com/learning/books/4-ruby-primer-ascent/chapters/44-collections/lessons/98-iterate-filtrate-and-transform#solution4313
-[last post]: {% post_url 2014-07-12-destructuring %} [yield]:
-http://rubymonk.com/learning/books/1/chapters/34-lambdas-and-blocks-in-ruby/lessons/78-blocks-in-ruby
+[RubyMonk]: https://rubymonk.com/
+[RMHashMap]: https://rubymonk.com/learning/books/4-ruby-primer-ascent/chapters/44-collections/lessons/98-iterate-filtrate-and-transform#solution4313
+[lastpost]: {% post_url 2014-07-12-destructuring %}
+[yield]: http://rubymonk.com/learning/books/1/chapters/34-lambdas-and-blocks-in-ruby/lessons/78-blocks-in-ruby

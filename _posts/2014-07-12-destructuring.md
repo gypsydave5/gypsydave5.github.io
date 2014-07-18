@@ -5,8 +5,7 @@ date:   2014-07-12 18:52:15
 categories: Ruby RubyMonk Enumerable Inject Map Array
 ---
 
-I went from genius to idiot - very rapidly - when looking at Enumerable#map and
-#inject in [Ruby Monk][RubyMonk], a free resource to help learn ruby that I've found
+I went from genius to idiot - very rapidly - when looking at Enumerable#map and #inject in [Ruby Monk][RubyMonk], a free resource to help learn ruby that I've found
 really useful. Let's start with 'genius' (although not really genius, more wrong
 but lucky).
 
