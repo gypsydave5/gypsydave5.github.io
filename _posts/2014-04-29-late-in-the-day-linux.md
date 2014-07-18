@@ -18,7 +18,7 @@ Late in the day yesterday I finally decided that I wanted — no, I needed — t
 
 The last time I tried to do this was back in around 2005 or 6, when I was dipping my toes into the open source waters to see what could happen. And I was relatively underwhelmed. Not only did I have no idea what I was doing, but there didn’t seem to be much to do. I’d installed watever version of Ubuntu was around on a partition on my old whatever version of Windows PC. I was impressed that it worked, that it all came together - but then was left struggling over issues of compatibility of certain bits of hardware - I remember something to do with the WiFi… and then at the end of it all I still had something which wasn’t quite as good as XP, and I had no reason to stay around.
 
-Well, see above for reasons to stay around this time. And how’s the experience second time around? In a word: flawless. I went with Ubuntu, threw it onto partition and waited to see what happened. The installation compared favourably with every Windows installation I’ve ever done (a few by now), it reached out to my home Wifi to update itself, it recommended some packages to install. Bliss. The interface is prettier that I could ever have imagined.
+Well, see above for reasons to stay around this time. And how’s the experience second time around? In a word: flawless. I went with [Ubuntu][Ubuntu], threw it onto partition and waited to see what happened. The installation compared favourably with every Windows installation I’ve ever done (a few by now), it reached out to my home Wifi to update itself, it recommended some packages to install. Bliss. The interface is prettier that I could ever have imagined.
 
 And the other difference from ten years or so ago: applications. There are actual, genuine, real things for me to use. not just web apps — threw Chrome on pretty sharpish though and everything I have set up there synchronized neatly — but the new versions of LibreOffice look to be more than enough for what I’ll ever need, Dropbox dropped in well — heck, there’s even Steam. Steam! It was all I could do not play Super Hexagon all afternoon.
 
@@ -28,4 +28,4 @@ So if you’re a little scared of Linux, or perhaps are a little twice-shy like 
 
 Now, on to install Rails 4.0.whatever it is right now!
 
-[Ubuntu](http://www.ubuntu.com/)
+[Ubuntu]: http://www.ubuntu.com/
