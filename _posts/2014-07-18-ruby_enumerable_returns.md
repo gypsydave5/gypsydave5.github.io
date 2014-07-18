@@ -126,11 +126,11 @@ I found out why, and then 'worked' that small new piece of knowledge to give me
 greater insight into what was going on. I'm finding this to be the most
 satisfying method to learn by, both because it makes me feel like I'm learning
 to a deeper degree than I would by just reading the answers out of a book, and
-n addition, when the books do cover the subject, I can better apply what's
+in addition, when the books do cover the subject, I can better apply what's
 written there to what I've seen in action.
-
 
 [RubyMonk]: https://rubymonk.com/
 [RMHashMap]: https://rubymonk.com/learning/books/4-ruby-primer-ascent/chapters/44-collections/lessons/98-iterate-filtrate-and-transform#solution4313
 [lastpost]: {% post_url 2014-07-12-destructuring %}
 [yield]: http://rubymonk.com/learning/books/1/chapters/34-lambdas-and-blocks-in-ruby/lessons/78-blocks-in-ruby
+[reification]: http://en.wikipedia.org/wiki/Reification_(fallacy)
