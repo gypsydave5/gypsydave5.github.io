@@ -2,12 +2,12 @@
 layout: post
 title:  "Many Enumerable Returns"
 date:   2014-07-18 20:52:15
-categories: Ruby
+tags: [Ruby, RubyMonk, Enumberable, yield, blocks]
 ---
 
-As threatened then, here's the followup to my [last post][lastpost] on the `#Enumerables`
-section from [Ruby Monk][RubyMonk], how I felt like a bit of an idiot for a few
-hours, and what I learned from that.
+As threatened then, here's the followup to my [last post][lastpost] on the
+`#Enumerables` section from [Ruby Monk][RubyMonk], how I felt like a bit of an
+idiot for a few hours, and what I learned from that.
 
 tl;dr - enumerable blocks aren't magic; `yield` is magic.
 
@@ -129,8 +129,15 @@ to a deeper degree than I would by just reading the answers out of a book, and
 in addition, when the books do cover the subject, I can better apply what's
 written there to what I've seen in action.
 
+### *postscipt* - 27/714
+
+Of course, David Black covers the same ground, but better (gets `each` off the
+ground using a `for` loop), in chapter 6 of [*The Well Grounded Rubyist*][WGR]. Love that
+book.
+
 [RubyMonk]: https://rubymonk.com/
 [RMHashMap]: https://rubymonk.com/learning/books/4-ruby-primer-ascent/chapters/44-collections/lessons/98-iterate-filtrate-and-transform#solution4313
 [lastpost]: {% post_url 2014-07-12-destructuring %}
 [yield]: http://rubymonk.com/learning/books/1/chapters/34-lambdas-and-blocks-in-ruby/lessons/78-blocks-in-ruby
 [reification]: http://en.wikipedia.org/wiki/Reification_(fallacy)
+[WGR]: http://www.manning.com/black2/

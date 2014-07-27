@@ -2,12 +2,13 @@
 layout: post
 title:  "Destructuring in a Method Block"
 date:   2014-07-12 18:52:15
-categories: Ruby RubyMonk Enumerable Inject Map Array
+tags: [Ruby, RubyMonk, Enumerable, Inject, Map, Array]
 ---
 
-I went from genius to idiot - very rapidly - when looking at Enumerable#map and #inject in [Ruby Monk][RubyMonk], a free resource to help learn ruby that I've found
-really useful. Let's start with 'genius' (although not really genius, more wrong
-but lucky).
+I went from genius to idiot - very rapidly - when looking at Enumerable#map and
+\#inject in [Ruby Monk][RubyMonk], a free resource to help learn ruby that I've
+found really useful. Let's start with 'genius' (although not really genius, more
+wrong but lucky).
 
 The [question][RMHashMap] was as follows:
 
@@ -34,8 +35,8 @@ end
 
 Not much difference, but enough. I had become confused when I entered my code,
 thinking more about the `each_with_index` method mentioned in the same page
-above. I was forgetting that `#map` would be sending back a single value,
-an array of the key-value pair. Ruby Monk's solution used that fact to use the
+above. I was forgetting that `#map` would be sending back a single value, an
+array of the key-value pair. Ruby Monk's solution used that fact to use the
 method `#first` on the array, to get the first element (the key) out.
 
 But, by chance, my solution worked by taking splitting the array by telling the
@@ -64,6 +65,7 @@ arrays - too many elements to bind to values.
 
 Unless we used the 'unarray' or, 'star' or (best name evar) [splat
 operator][splat] to collect some of the other elements.
+
 Consider:
 
 {% highlight ruby %}
