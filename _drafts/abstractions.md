@@ -7,4 +7,5 @@ when they're no longer treated as abstractions but as real things. And, in that
 respect, everything in computer science/software/coding (call it what you like)
 is, for the most part, abstraction.
 
-
+[Martin Fowler on Lambdas]: http://martinfowler.com/bliki/Lambda.html
+[Zed A Shaw on Idioms]: http://learncodethehardway.org/blog/AUG_19_2012.html
