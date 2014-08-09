@@ -1,5 +1,5 @@
 name: gypsydave5 learns to code
 markdown: redcarpet
-highlighter: rouge
+highlighter: pygments
 excerpt separator: ""
 encoding: "utf-8"
