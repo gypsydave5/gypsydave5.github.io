@@ -2,3 +2,4 @@ name: gypsydave5 learns to code
 markdown: redcarpet
 highlighter: rouge
 excerpt separator: ""
+encoding: "utf-8"
