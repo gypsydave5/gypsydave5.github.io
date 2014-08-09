@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Makers: day 6"
+title: "Makers: day 5"
 date: 2014-08-09 16:21:36
 tags: [Makers Academy, coding, learning]
 categories: Makers
