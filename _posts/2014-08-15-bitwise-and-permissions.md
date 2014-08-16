@@ -75,7 +75,7 @@ down. Thing is, for your computer, these two ways of looking at it *are exactly
 the same*.
 
 `777` in decimal notation is `511` (do the maths if you like), but also has
-a decimal representation of... `111111111`. Hey, look - all the 1s! It's like all
+a binary representation of... `111111111`. Hey, look - all the 1s! It's like all
 the switches are turned on - and they really are!. This is because octal digits
 map really neatly to binary digits - they're a three-digit long collection of
 binary digits. 'Binary digit' is a bit of a mouthful (pun intended), so let's
