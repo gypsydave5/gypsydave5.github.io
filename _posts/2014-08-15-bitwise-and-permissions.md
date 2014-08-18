@@ -7,10 +7,11 @@ categories: Makers
 published: true
 ---
 
-So I thought I'd try and write about happened with the making the test pass at
-the last day of the first week at [Makers][MA], as mentioned in [my last post], just
-because I learned a lot about both permissions on a Unix like system, about
-bitwise operators in Ruby, about how Rspec works, and how (not) to fix things.
+So I thought I'd try and write about what happened last day of the first week at
+[Makers][MA], as mentioned in [my last post], about the failing Rspec test for
+the Unix task. Just because I learned a lot about both permissions on a Unix
+like system, about bitwise operators in Ruby, about how Rspec works, and how
+(not) to fix things.
 
 So... the test checking file permissions in a directory by running the following
 Rspec test.
