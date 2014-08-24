@@ -25,7 +25,7 @@ Does Ruby have an `any?` method for `Array`s? Sure enough, there in `Enumerable`
 bikes.any? {|bike| bike.broken?}
 ```
 
-Better. I woudl have been happy. But Steve then says, try passing a the symbol
+Better. I would have been happy. But Steve then says, try passing a the symbol
 for `broken?` as a proc - something I'd seen and not used.
 
 ```ruby
