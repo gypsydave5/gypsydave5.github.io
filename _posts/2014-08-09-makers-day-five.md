@@ -161,7 +161,7 @@ odd.) almost every hour of the day. And I love it.
 [Ecomba]: https://github.com/ecomba
 [RK]: https://twitter.com/rubenkostucki
 [MA]: http://www.makersacademy.com/
-[Stephen]: https://github.com/ecomba
+[Stephen]: https://github.com/Stephen_lloyd
 [Roi]: https://github.com/roidriscoll
 [Spike]: https://github.com/spike01
 [Chris]: https://github.com/flickoid
