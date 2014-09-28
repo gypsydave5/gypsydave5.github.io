@@ -33,10 +33,11 @@ a user, when logged in, and I create a new post, then the post count goes up by
 one (I like speaking in Gherkin). Everything looked OK - but the post wasn't
 saving. And there were no useful error messages.
 
-Alex Peattie is a hero. He's left Makers now, but before he did he hacked
-through what was going on with this problem. And I mean literally hacked - my
-mouth dropped in awe as he systematically got to the source of the problem ("So,
-let's force it to save... it saves the post fine, but doesn't update the user...
+[Alex Peattie](http://alexpeattie.com/) is a hero. He's left Makers now, but
+before he did he hacked through what was going on with my problem. And I mean
+hacked in the manner of destroying briar patches and slaying dragons - my mouth
+dropped in awe as he systematically got to the source of the problem ("So, let's
+force it to save...  it saves the post fine, but doesn't update the user...
 hmmm..."), then started dropping `puts` into the DataMapper source code after
 identifying the problematic lines in the backtrace.
 
@@ -49,5 +50,6 @@ and so prevented the post from saving.
 Simple to fix (just tell the user model to only validate password length on
 creation), but difficult to identify. I won't make that mistake again, but Alex
 remains my hero for sorting that out (and giving a great demonstration
-debugging). We all miss him.
+debugging). [We all miss him](http://alex-farewell-card.herokuapp.com/).
+
 
