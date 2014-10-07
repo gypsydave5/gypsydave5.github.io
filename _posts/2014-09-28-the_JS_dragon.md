@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Slaying The JavaScript Dragon"
-date: 2014-09-09 20:27:05
+date: 2014-09-28 20:27:05
 tags: [Makers Academy]
 categories: Makers
 published: true

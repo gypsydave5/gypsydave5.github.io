@@ -7,10 +7,10 @@ categories: Makers
 published: true
 ---
 
-I love [DataMapper], the lightweight Object Relational Mapper for Ruby. We've
-been using it with Sinatra. It's skinny, it's simple, it's clever, it makes the
-right tables happen in Postgres and the syntax is surprisingly simple. For
-instance, the email field for a user table:
+I love [DataMapper](http://datamapper.org/), the lightweight Object Relational
+Mapper for Ruby. We've been using it with Sinatra. It's skinny, it's simple,
+it's clever, it makes the right tables happen in Postgres and the syntax is
+surprisingly simple. For instance, the email field for a user table:
 
 ```ruby
 property :email, unique: true, required: true, format: email_address
