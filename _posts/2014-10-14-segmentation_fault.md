@@ -4,7 +4,7 @@ title: "Segmentation Fault"
 date: 2014-10-14 13:14:40
 tags: [Makers Academy]
 categories: Makers
-published: false
+published: true
 ---
 
 This is dedicated to my mother. It's her birthday today. It's also [Ada Lovelace
@@ -79,9 +79,10 @@ how to get you to a stripclub but had no idea how to get you emergency
 contraception.
 
 Sexism, whether deliberate or accidental, is, like all evil (I'll stand briefly
-with Plato on this) a consequence of ignorance of one form or another.
+with Plato on this) a consequence of ignorance of one form or another. Would you
+truse a coder who wanted to be deliberately ignorant?
 
-And ignorance sucks.
+Ignorance sucks.
 
 Happy Birthday Mum :)
 
