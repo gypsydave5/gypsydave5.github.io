@@ -1,0 +1,87 @@
+---
+layout: post
+title: "Segmentation Fault"
+date: 2014-10-14 13:14:40
+tags: [Makers Academy]
+categories: Makers
+published: false
+---
+
+This is dedicated to my mother. It's her birthday today. It's also [Ada Lovelace
+day](http://findingada.com/).
+
+[Augusta Ada King, Countess Lovelace](http://en.wikipedia.org/wiki/Ada_Lovelace)
+was the daughter of a poet, a friend and collaborator with Babbage, a socialite
+and a wit. She also wrote the world's first computer program. If there were
+a patron saint for the creative coder it would be her.
+
+Ada Lovelace day is a celebration of women in Science, Technology, Engineering
+and Mathematics. It's also a day to reflect on the issues that face women who
+work in those fields. The biggest one being "Why are there so few women in tech?"
+
+Makers Academy is commited to equality - the first day here when I told my
+partner how many women were students here she was surprised; "That many?". I'm
+rubbish at statitics, but looking around the room you could guess at maybe
+40-50% are women. It's a good sign.
+
+We're holding a round table discussion on Women in Tech today (which is another
+good sign).
+
+One of the panel (I'm awful with names)has just said that he's horrified, as
+a father, about the segmentation that's present in culture. He's raising a son
+to be as gender neutral as possible - as happy playing in a kitchen as with
+a laptop. But he's constantly battling against a culture that genders everything -
+pink and blue Kinder eggs with Barbie and Transormers respectively was his
+example.
+
+My mum can do the numbers challenge on 'Countdown' faster than anyone I know.
+She'd be disappointed if it wasn't done _before_ Carol Vordeman pressed the
+button. She hates the anagrams. She's always hated the anagrams. I hate the anagrams
+too. I love numbers because she loves numbers. If I'm good at coding then she's had
+a hand in that.
+
+She was told to be an English teacher when she was eighteen because she told the
+careers adviser that she quite liked English. She went on the be an amazing and
+dedicated teacher and retired this year. But what might she have done if she'd
+said she liked maths? Or science? Or almost anything else? Maybe she'd be
+a computer programmer now, retiring after a long life in COBOL and C and helping
+me with my JavaScript. Or maybe not - she was an amazing teacher. But who knows!
+
+Or, worse, if her father hadn't made her feel good and proud about being good at
+maths? Where would I be if my mum _hadn't_ liked puzzles and maths?
+
+The problem isn't 'inside' tech, it's _throughout_ society and culture. It might
+make you dispair. It makes me dispair sometimes. But don't dispair - look, here -
+I'll summarise the roundtable 'takeaway' actions for everyone to do. Fix the
+world one stupid ignorant problem at a time.
+
+Women
+-----
+
+- Go talk to children about what you do.
+- Call men out when they say something offensive of just plain wrong. They're
+  proabably completely oblivious to the issue, so be polite.
+
+Men
+---
+
+- Listen. And be there and be nice. But mainly listen more.
+- Don't think it's not problem; eductate yourselves now and recognise the
+  problem.
+
+And one for everyone: 'Own Your Ignorance' (now that's wise) - don't bluff it,
+don't fake it, don't ignore it, don't be scared of it. Your scope for
+improvement _is_ your ignorance. (Maybe that should also involve owning _other_
+people's ignorance too, feeding in to the points above...)
+
+Oh, and one I hadn't heard before -- apparently the first version of Siri knew
+how to get you to a stripclub but had no idea how to get you emergency
+contraception.
+
+Sexism, whether deliberate or accidental, is, like all evil (I'll stand briefly
+with Plato on this) a consequence of ignorance of one form or another.
+
+And ignorance sucks.
+
+Happy Birthday Mum :)
+
