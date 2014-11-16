@@ -2,8 +2,8 @@
 layout: post
 title: "Java"
 date: 2014-11-12 12:20:08
-tags: [Makers Academy]
-categories: [Makers, Java]
+tags: [Makers Academy, Java]
+categories:
 published: true
 ---
 
