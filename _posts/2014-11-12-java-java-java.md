@@ -69,6 +69,7 @@ Travel broadens the mind!
 [Vim]: http://www.vim.org/
 [Maven]: http://maven.apache.org/
 [Gradle]: http://www.gradle.org/
+[Groovy]: https://www.google.co.uk/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=groovy
 [npm]: https://www.npmjs.org/
 [Bundler]: http://bundler.io/
 [AWS Elastic Beanstalk]: http://aws.amazon.com/elasticbeanstalk/
@@ -76,5 +77,5 @@ Travel broadens the mind!
 [Node]: http://nodejs.org/
 [strongly typed]: http://en.wikipedia.org/wiki/Strong_and_weak_typing
 [compiled]: http://en.wikipedia.org/wiki/Compiled_language
-[desigk patterns]: http://en.wikipedia.org/wiki/Software_design_pattern
+[design patterns]: http://en.wikipedia.org/wiki/Software_design_pattern
 [SOLID]: http://en.wikipedia.org/wiki/SOLID_(object-oriented_design)
