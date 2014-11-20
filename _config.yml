@@ -7,20 +7,26 @@ permalink:        pretty
 relative_permalinks: true
 
 # Setup
-title:            Hyde
-tagline:          'A Jekyll theme'
-description:      'A brazen two-column <a href="http://jekyllrb.com" target="_blank">Jekyll</a> theme that pairs a prominent sidebar with uncomplicated content. Made by <a href="https://twitter.com/mdo" target="_blank">@mdo</a>.'
-url:              http://hyde.getpoole.com
+title:            gypsydave5
+tagline:          'Learns to Code'
+description:      'The blog of David Wickes, software developer'
+url:              http://gypsydave5.com
 baseurl:          /
 
 author:
-  name:           'Mark Otto'
-  url:            https://twitter.com/mdo
+  name:           'David Wickes'
+  url:            http://gypsydave5
+  email:          dave@gypsydave5.com
 
 paginate:         5
 
 # Custom vars
-version:          2.1.0
+version:          0.0.1
 
 github:
-  repo:           https://github.com/poole/hyde
+  repo:           https://github.com/gypsydave5
+  username:       gypsydave5
+
+twitter:
+  url: https://twitter.com/gypsydave5
+  handle: '@gypsydave5'
