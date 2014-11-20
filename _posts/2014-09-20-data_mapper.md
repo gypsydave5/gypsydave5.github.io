@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: post
 title: "Data Mapper Woes"
 date: 2014-09-20 20:27:05
 tags: [Makers Academy]
