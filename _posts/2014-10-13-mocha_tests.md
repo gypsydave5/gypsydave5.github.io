@@ -90,9 +90,9 @@ What wizardry is this? Let me try to explain...
 
 And so now we can write tests. Hurrah! But, more importantly, we've gained an
 insight into how testing frameworks work. When I first encountered testing in
-rsepc I went through the various patterns of test as ritual -- 'this is how you
+RSpec I went through the various patterns of test as ritual -- 'this is how you
 do it' -- but the more I work with tests the more I'm respecting the hard work
-that's gone in to making them look like magic.
+that's gone in to making them look like magick.
 
 So I'm really greateful for Mocha being a bit of a pain to test with over the
 last few weeks, as it's made me have to think a bit harder about testing in

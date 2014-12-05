@@ -27,7 +27,7 @@ rubbish at statitics, but looking around the room you could guess at maybe
 We're holding a round table discussion on Women in Tech today (which is another
 good sign).
 
-One of the panel (I'm awful with names)has just said that he's horrified, as
+One of the panel (I'm awful with names) has just said that he's horrified, as
 a father, about the segmentation that's present in culture. He's raising a son
 to be as gender neutral as possible - as happy playing in a kitchen as with
 a laptop. But he's constantly battling against a culture that genders everything -
@@ -52,21 +52,21 @@ maths? Where would I be if my mum _hadn't_ liked puzzles and maths?
 
 The problem isn't 'inside' tech, it's _throughout_ society and culture. It might
 make you dispair. It makes me dispair sometimes. But don't dispair - look, here -
-I'll summarise the roundtable 'takeaway' actions for everyone to do. Fix the
+I'll summarise the roundtable 'take away' actions for everyone to do. Fix the
 world one stupid ignorant problem at a time.
 
 Women
 -----
 
 - Go talk to children about what you do.
-- Call men out when they say something offensive of just plain wrong. They're
+- Call men out when they say something offensive or just plain wrong. They're
   proabably completely oblivious to the issue, so be polite.
 
 Men
 ---
 
 - Listen. And be there and be nice. But mainly listen more.
-- Don't think it's not problem; eductate yourselves now and recognise the
+- Don't think it's not problem; educate yourselves and recognise the
   problem.
 
 And one for everyone: 'Own Your Ignorance' (now that's wise) - don't bluff it,
@@ -80,7 +80,7 @@ contraception.
 
 Sexism, whether deliberate or accidental, is, like all evil (I'll stand briefly
 with Plato on this) a consequence of ignorance of one form or another. Would you
-truse a coder who wanted to be deliberately ignorant?
+trust a coder who wanted to be deliberately ignorant?
 
 Ignorance sucks.
 

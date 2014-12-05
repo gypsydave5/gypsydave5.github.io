@@ -34,7 +34,7 @@ got two choices about how to manage dependencies and builds from the terminal:
 [Maven] and [Gradle]. Maven uses XML to describe the project, one of my
 least favourite formats to read (I think I'm faster reading binary), so
 I settled rapidly on Gradle, which is actually written in [Groovy], a dynamic
-language based on [Java].
+language based on Java.
 
 But back to the command line. I did manage to manage my projects from there -
 and it did give me a feeling of greater control than through the IDE. But it
@@ -52,7 +52,7 @@ off the ground. And I never really fet like I knew what I was doing.
 
 But after a week of Java, and a week helping out with [Node] at Makers,
 getting my hands back on Ruby was lke coming home. How do I feel after
-experiencing my first [strongly typed] [compiled] programming language?
+experiencing my first [strongly typed], [compiled] programming language?
 Overall I'm OK. I learned a lot about [design patterns] and the [SOLID]
 principles - chiefly about where they're from. A lot of the language about
 interfaces makes a lot more sense when you're building an interface seperately
@@ -63,19 +63,19 @@ about methods in general.
 
 Travel broadens the mind!
 
-[IntelliJ]: https://www.jetbrains.com/idea/
-[jUnit]: http://junit.org/
-[G-Unit]: http://en.wikipedia.org/wiki/G-Unit
-[Vim]: http://www.vim.org/
-[Maven]: http://maven.apache.org/
-[Gradle]: http://www.gradle.org/
-[Groovy]: https://www.google.co.uk/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=groovy
-[npm]: https://www.npmjs.org/
-[Bundler]: http://bundler.io/
 [AWS Elastic Beanstalk]: http://aws.amazon.com/elasticbeanstalk/
-[Mockito]: https://code.google.com/p/mockito/
-[Node]: http://nodejs.org/
-[strongly typed]: http://en.wikipedia.org/wiki/Strong_and_weak_typing
+[Bundler]: http://bundler.io/
 [compiled]: http://en.wikipedia.org/wiki/Compiled_language
 [design patterns]: http://en.wikipedia.org/wiki/Software_design_pattern
+[G-Unit]: http://en.wikipedia.org/wiki/G-Unit
+[Gradle]: http://www.gradle.org/
+[Groovy]: https://www.google.co.uk/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=groovy
+[IntelliJ]: https://www.jetbrains.com/idea/
+[jUnit]: http://junit.org/
+[Maven]: http://maven.apache.org/
+[Mockito]: https://code.google.com/p/mockito/
+[Node]: http://nodejs.org/
+[npm]: https://www.npmjs.org/
 [SOLID]: http://en.wikipedia.org/wiki/SOLID_(object-oriented_design)
+[strongly typed]: http://en.wikipedia.org/wiki/Strong_and_weak_typing
+[Vim]: http://www.vim.org/
