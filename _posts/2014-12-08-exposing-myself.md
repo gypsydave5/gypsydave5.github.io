@@ -13,9 +13,10 @@ published: true
 I am currently reading (on impeccable advice), _[Apprenticeship Patterns]_ by
 [Dave Hoover] and [Adewale Oshineye]. The book is written as a series of
 'patterns', a method of analysing and solving problems which is derived from
-a book I've always meant to read but haven't: _[A Pattern Laguage]_. There
-a pattern is a solution to an architectural design pattern, a "best guess as to
-what arrangement of the physical environment will work to solve the problem
+a book I've always meant to read but haven't, _[A Pattern Language]_ by
+Christopher Alexander, Sara Ishikawa and Murray Silverstein. There a pattern is
+a solution to an architectural design pattern, a "best guess as to what
+arrangement of the physical environment will work to solve the problem
 presented." Here the patterns are 'best guesses' as to how to solve the problems
 of becoming a better developer.
 
