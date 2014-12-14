@@ -61,7 +61,7 @@ and put it where others can see it:
  4. What is the best way for me to structure AngularJS and other JavaScript projects?
  5. What is functional programming? I mean, _really_?
  6. What is an algorithm and how do I measure its efficiency?
- 7. Refactoring. I know what it means but can I learn some patterns to do it better?
+ 7. Refactoring. I (think I) know what it means but can I learn some patterns to do it better?
 
 Not exactly five, but I could probably write fifty at the moment. There are lots
 of other things I don't know (list as long as my arm). But, you've got to start

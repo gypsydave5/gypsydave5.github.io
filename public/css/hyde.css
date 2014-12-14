@@ -83,6 +83,10 @@ html {
   font-size: 3.75rem;
 }
 
+.sidebar-about h1 a{
+    text-decoration: none;
+}
+
 .sidebar-about h1 span.gypsy{
   font-size: 3.25rem;
   line-height: 0;
