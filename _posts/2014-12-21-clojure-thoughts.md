@@ -7,7 +7,7 @@ tags:
 published: true
 ---
 
-I've been working with [Clojure] iin the last few days, both looking at the
+I've been working with [Clojure] in the last few days, both looking at the
 [Clojure Koans] and another resource I've discovered [4clojure.com]. I'd like to
 share a nice problem I saw there, and some of the solutions to it which I think
 expose some of the things I'm beginning to appreciate about the language.
@@ -26,9 +26,8 @@ a sequence:
 (= 2 (nth 1 '(1 2 3 4)))
 ```
 
-(`=` is the equality function, taking two arguments and returning true or false)
 
-And we need to get to a function that will do the same, something that will fit
+We need to get to a function that will do the same, something that will fit
 in the blank space below:
 
 ```clojure
@@ -45,7 +44,7 @@ in the blank space below:
 ```
 
 Here we use recurrance, setting the breaking point as the iteration where `n` is
-zero using `if`, at which point the function returns the first value of the
+zero using `if`, at which point the function returns the `first` value of the
 sequence. If it's not, we fire the function again, but this time chopping off
 the first member of the sequence (`(rest seqn)` returns the rest) and
 `dec`rementing the value of `n` by one. We walk through the sequence, losing
@@ -60,8 +59,13 @@ We've named the function `my_nth`, but we could easily anonymize it:
     (recur (rest seqn) (dec n))))
 ```
 
+`recur` is neat - it executes the expressions that follow it, then rebinds the
+values hey produce to the bindings of the recursion point, in this case the
+`fn` method. We then get moved back to that method with the new values, causing
+the recusion. Very cool.
+
 Usually recursion is a neat way of writing a short function; here it's pretty
-longwinded. We can get smaller:
+longwinded. We can get smaller...
 
 ###Solution 2: taking
 
@@ -69,16 +73,16 @@ longwinded. We can get smaller:
 (fn [seqn n] (last (take (inc n) seqn)))
 ```
 
-Here we `take` the first one-more-than-n (`inc` increments its argument) item
-s from the sequence, and then take the `last` one from the end - which will be
-the nth element.
+Here we `take` the first one-more-than-n (`inc` increments its argument) items
+from the sequence, and then take the `last` one from the end of that new list-
+which will be the nth element.
 
 `take` is used in many of the examples I've seen as a way of accessing
-a sequence which may be infinite - I've seen it used to access sequences like
-the Fibonacci series - see some of the examples over at
+a sequence which may be infinite like the Fibonacci series - see some of the
+examples over at
 [Wikibooks](https://en.wikibooks.org/wiki/Clojure_Programming/Examples/Lazy_Fibonacci).
 
-We can squeeze some more succinctness in there using some alternative syntax:
+We can squeeze more succinctness in there using some alternative syntax:
 
 ```clojure
 #(last (take (inc %2) %1))
@@ -86,7 +90,7 @@ We can squeeze some more succinctness in there using some alternative syntax:
 
 But if you want to be really succinct:
 
-###Solution 3: rip off Java
+###Solution 3: ripping off Java
 
 ```clojure
 .get
@@ -97,9 +101,13 @@ Clojure gives you access to Java methods and fields through the use of the dot
 Here we're using the `get()` method from the Java [Lists
 interface](http://docs.oracle.com/javase/tutorial/collections/interfaces/list.html),
 which we get to use on these instances as they are, well, Java lists.  which
-takes one argument - and luckily for us its the index.
+takes one argument - and luckily for us its the index! We're calling `get(6)`
+on the list, which gives us the answer we want.
 
 This is pretty close to cheating, but it goes to show how Clojure's access to
 Java gives us a whole other language of libraries and methods to play with.
 
-Anyway, Clojure three ways. Enjoy.
+[Clojure]: http://clojure.org/
+[Clojure Koans]: http://clojurekoans.com/
+[4clojure.com]: http://www.4clojure.com/
+
