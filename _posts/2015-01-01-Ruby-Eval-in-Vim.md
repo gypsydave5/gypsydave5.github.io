@@ -35,7 +35,7 @@ constructors] and started to look up what was going on.
 So here we go down the Vim rabbit hole again...
 
 The magic is performed by either [rcodetools]' xmpfilter tool or
-[seeing is believing], hooked up to Vim via [vim-ruby-xmpfilter], (which works
+[seeing\_is\_believing], hooked up to Vim via [vim-ruby-xmpfilter], (which works
 for both) or [vim-seeing-is-believing]. Take your pick as I can't really see the
 difference at the moment.
 
@@ -58,6 +58,6 @@ watching more of Avdi.
 [excellent video about constructors]: http://www.rubytapas.com/episodes/7-Constructors?filter=free
 [rcodetools]: http://rubygems.org/gems/rcodetools
 [Ruby Tapas]: http://www.rubytapas.com/
-[seeing_is_believing]: https://github.com/JoshCheek/seeing_is_believing
+[seeing\_is\_believing]: https://github.com/JoshCheek/seeing_is_believing
 [vim-ruby-xmpfilter]: https://github.com/t9md/vim-ruby-xmpfilter
 [vim-seeing-is-believing]: https://github.com/hwartig/vim-seeing-is-believing
