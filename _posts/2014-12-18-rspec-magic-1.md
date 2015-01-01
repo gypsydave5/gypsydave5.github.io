@@ -3,7 +3,7 @@ layout: post
 title: "RSpec Magic Part 1: Lets"
 date: 2014-12-18 11:22:05
 tags:
-    - Rspec
+    - RSpec
     - Ruby
 published: false
 ---
