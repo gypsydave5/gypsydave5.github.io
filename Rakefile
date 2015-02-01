@@ -7,6 +7,10 @@ require "jekyll"
 
 GITHUB_REPONAME = "gypsydave5/gypsydave5.github.io"
 
+desc "build and run locally"
+task :serve do
+  system "bundle exec jekyll serve"
+end
 
 desc "Generate blog files"
 task :generate do
@@ -15,7 +19,6 @@ task :generate do
     "destination" => "_site"
   })).process
 end
-
 
 desc "Generate and publish blog to GitHub Pages"
 task :publish => [:generate] do
