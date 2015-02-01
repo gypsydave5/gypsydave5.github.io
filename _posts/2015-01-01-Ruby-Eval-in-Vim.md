@@ -9,7 +9,7 @@ published: true
 ---
 
 I was watching [Avdi Grimm]'s [Ruby Tapas] videos - well, trying to watch them.
-I got stuck when I saw him do something in Vim that I'd not seen before.
+I got stuck when I saw him do something in <del>Vim</del> Emacs that I'd not seen before.
 Something magical.
 
 On screen he had an expression - something like this:
@@ -60,4 +60,5 @@ watching more of Avdi.
 [Ruby Tapas]: http://www.rubytapas.com/
 [seeing\_is\_believing]: https://github.com/JoshCheek/seeing_is_believing
 [vim-ruby-xmpfilter]: https://github.com/t9md/vim-ruby-xmpfilter
+
 [vim-seeing-is-believing]: https://github.com/hwartig/vim-seeing-is-believing
