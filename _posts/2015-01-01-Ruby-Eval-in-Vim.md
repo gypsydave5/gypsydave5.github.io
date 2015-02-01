@@ -61,8 +61,4 @@ watching more of Avdi.
 [Ruby Tapas]: http://www.rubytapas.com/
 [seeing\_is\_believing]: https://github.com/JoshCheek/seeing_is_believing
 [vim-ruby-xmpfilter]: https://github.com/t9md/vim-ruby-xmpfilter
-<<<<<<< HEAD
-
-=======
->>>>>>> new post about xmpfilter in vim
 [vim-seeing-is-believing]: https://github.com/hwartig/vim-seeing-is-believing
