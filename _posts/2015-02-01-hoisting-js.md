@@ -15,11 +15,11 @@ challenging but to which I can make some small and increasing contributions to. 
 only that, but I'm also working with some damn clever and patient people who
 are happy to explain things to me as we go along.
 
-So here's what I've learned about JavaScript in the last month with
-Mat, Mike, Danielle, Nick and many others.
+So my next thsee posts will be about some of what I've learned about JavaScript
+in the last month with Mat, Mike, Danielle, Nick and many others.
 
 ###Hoisting
-At then top of my list of "words I'd heard associated with JS but didn't have
+At the top of my list of "words I'd heard associated with JS but didn't have
 the foggiest", _hoisting_ or, more transparently, variable hoisting. Behold the
 following:
 
@@ -37,14 +37,16 @@ function printThis(showLog) {
 
 Which you may be inclined to think would return two outputs to the console when
 called with `printThis(true)`, one of `MESSAGE!` and then the ubiquitous JS
-`undefined`. Of course it doesn't, what you instead get is:
+`undefined`. Because `logMessage` isn't defined at the second `console.log()`.
+
+Does it?
 
 ```
 MESSAGE!
 MESSAGE!
 ```
 
-because the interpreter looks at the code and does this to it:
+Because the interpreter looks at the code and does this to it:
 
 ```javascript
 function a(showLog) {
@@ -63,7 +65,7 @@ function a(showLog) {
 The variable is 'hoisted' out of its declaration in the block and created at the
 top of the function. The assignment still takes place in the same place, but
 because the scope of `logMessage` is the entire function, the variable is still
-available at the last `console.log`. This is because (maxim incoming) **JS
+available at the last `console.log`. This is because (motto alert) **JS
 has function-level scope, not block-level scope**. The interpreter just ignores
 those little `{` and `}` unless they're backed up with a function declaration.
 
