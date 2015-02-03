@@ -69,8 +69,8 @@ var addTwoAndTheseThreeUp = addTheseFourUp(this, 2)
 addTwoAndTheseThreeUp(1, 2, 3) //=> 8
 ```
 
-This is technically not _currying_, which should only return functions with an
-arity of 1. Currying `addTheseFourUp` would look something like this:
+This is technically not _currying_, which [should only return functions with an
+arity of 1]. Currying `addTheseFourUp` would look something like this:
 
 ```javascript
 function curriedFour(a) {
@@ -86,4 +86,33 @@ function curriedFour(a) {
 curriedFour(1)(2)(3)(4) //=> 10
 ```
 
+Which we could also play around with like this...
+
+```javascript
+function applyFourTimes(fun) {
+    return function(num) {
+        return fun(fun(fun(fun(num))))
+    }
+}
+
+function double(num) {
+    return num + num
+}
+
+applyFourTimes(double)(3) //=> 48
+```
+
+### Postscript ###
+
+Not only is partial function application not currying - but currying should
+probably be called _Schönfinkelization_ after its true originator, [Moses
+Schönfinkel], to whom [Haskell Curry] attributed the concept. That said, W. V.
+O. Quine points out that the idea had already been hit upon by [Frege].
+
+From JavaScript to philosophy in but a few skips...
+
 [MDN docs]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind
+[should only return functions with an arity of 1]: https://en.wikipedia.org/wiki/Currying#Contrast_with_partial_function_application
+[Haskell Curry]: https://en.wikipedia.org/wiki/Haskell_Curry
+[Frege]: https://en.wikipedia.org/wiki/Moses_Sch%C3%B6nfinkel#Work
+[Moses Schönfinkel]: https://en.wikipedia.org/wiki/Moses_Sch%C3%B6nfinkel
