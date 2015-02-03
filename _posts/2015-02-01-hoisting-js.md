@@ -6,17 +6,17 @@ tags:
     - JavaScript
     - MergerMarket
     - Learnings
-published: false
+published: true
 ---
 
-Working at MergerMarket is fun. Not only am I getting to grips with a new
+Working at [Mergermarket] is fun. Not only am I getting to grips with a new
 language, [Groovy], in a nice, agile environment, on a project that's
 challenging but to which I can make some small and increasing contributions to. Not
 only that, but I'm also working with some damn clever and patient people who
 are happy to explain things to me as we go along.
 
-So here's what I've learned about JavaScript in the last month under the
-tutelage of [Mat], [Mike], [Danielle], [Nick] and many others.
+So here's what I've learned about JavaScript in the last month with
+Mat, Mike, Danielle, Nick and many others.
 
 ###Hoisting
 At then top of my list of "words I'd heard associated with JS but didn't have
@@ -66,3 +66,6 @@ because the scope of `logMessage` is the entire function, the variable is still
 available at the last `console.log`. This is because (maxim incoming) **JS
 has function-level scope, not block-level scope**. The interpreter just ignores
 those little `{` and `}` unless they're backed up with a function declaration.
+
+[Groovy]: http://groovy.codehaus.org/
+[Mergermarket]: http://www.mergermarket.com/info/
