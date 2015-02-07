@@ -4,6 +4,7 @@ title: "Three Ways with Clojure"
 date: 2014-12-21 21:04:07
 tags:
     - Clojure
+    - Functional Programming
 published: true
 ---
 

@@ -2,11 +2,12 @@
 layout: post
 title:  "Surviving Windows"
 date:   2014-07-04 11:35:15
-tags: [software, productivity, Windows]
-
+tags:
+    - Tools
+    - Windows
 ---
 
-I've worked within Windows and Microsoft OSes for... well, most of my computing
+I've worked within Windows and Microsoft OSs for... well, most of my computing
 life now I think about it. I'm pretty sure that most people are the same. And
 like most people I've always had my little moans about it. Too many to mention.
 
@@ -15,12 +16,12 @@ ago. Not that Linux (Ubuntu in my case) doesn't have it's own long list of
 problems, but they all feel more like problems I should be fixing myself
 - rather than things I'll just moan about and put up with. Yes, Ubuntu (and the
 Unity desktop specfically) has 'spoiled' me. I'd rather be working in that
-environment than any earlier version of Windows. Woo-hoo. Hear the joy from camp
+environment than any earlier version of Windows. Woo-hoo. Hear the whoop from camp
 Linux, joy shall be in heaven over one sinner that repenteth, etc etc usw.
 
 But there's still so much of my life that has to be done in Windows. Work
 spreadsheet has VBA macros? Work machine in Vista? [Netflix requires
-Silverlight?][Netflix] It's inevitable.
+Silverlight][Netflix]? It's inevitable.
 
 So instead of moaning I've been trying to fix Windows to make it usable like
 I want it to be. And I think I've found some good options. The first thing to
@@ -30,18 +31,14 @@ to rest - there's hundreds of hacks, options, fixes, and bits of software we can
 use to make Window's a happier place to be. Or, if not actively happy, then at
 least survivable...
 
-1 - Winsplit Revolution
------------------------
-
+## Winsplit Revolution##
 OK, not the greatest name. What I missed most about Ubuntu when stuck on Vista
 was the way I could throw windows around the desktop using the numpad. This
 feauture is neatly emulated with [Winsplit Revolution][WSRev], which is small
 and, well, works. You can customize the shortcuts too. (Looks like the original
 website is no longer around so I've linked to the CNET page).
 
-2 - Put the taskbar on the side
--------------------------------
-
+## Put the taskbar on the side##
 Oh this sounds dumb I know, but nobody even thinks of doing it on Windows
 because it's a change. Totally inspired by the Unity set up, it just makes more
 sense. If most of what I'm doing involves reading down a page on the screen
@@ -49,34 +46,26 @@ sense. If most of what I'm doing involves reading down a page on the screen
 screen. So slam the taskbar to the side and get yourself a couple of centimeters
 for free. If you were going to try one new thing this week make it this.
 
-3 - GVim
---------
-
-All that Vim goodness - [now on your Windows.][GVimWin] And you can use the same
+##GVim##
+All that Vim goodness - [now on your Windows][GVimWin]. And you can use the same
 config files. And you can set the config depending on the environment (Windows,
 Linux, OSX). And you could save all those files onto Dropbox, make symlinks to
 them... OK - too far. But get GVim for Windows.
 
-Autohotkey
-----------
-
+##Autohotkey##
 I'll write something about the what effect of removing the caps lock button from
 my keyboard has been (no, not physically) at a later date. But for fun keyboard
 hacks like this and more I've been enjoying [Autohotkey][AHkey], which has its
 own simple scripting language to allow you to remap and rewite your keyboard to
 your hearts content.
 
-4 - Get GNUy
-------------
-
+##Get GNUy##
 I've tried [Cygwin][Cygwin] before - part of working using a Linux only font
 tool. But I found it... big. Powerful, yes - but big. So big I didn't use it.
 Second time around I've been using [Gow][Gow] - which brings all the \*nix-y
 command line goodness to your `cmd` shell in Windows.
 
-5 - Chocolatey
---------------
-
+##Chocolatey##
 Missing `apt-get` or similar package management utilities on Windows?
 [Chocolatey][Chocolatey] to the rescue. Install Git! Install Node! Install
 everything listed above and more, and get them all updated from the command

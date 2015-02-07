@@ -2,8 +2,10 @@
 layout: post
 title: "Segmentation Fault"
 date: 2014-10-14 13:14:40
-tags: [Makers Academy]
-categories: Makers
+tags:
+    - Makers Academy
+    - Culture
+    - Learnings
 published: true
 ---
 
@@ -55,16 +57,12 @@ make you dispair. It makes me dispair sometimes. But don't dispair - look, here 
 I'll summarise the roundtable 'take away' actions for everyone to do. Fix the
 world one stupid ignorant problem at a time.
 
-Women
------
-
+###Women###
 - Go talk to children about what you do.
 - Call men out when they say something offensive or just plain wrong. They're
   proabably completely oblivious to the issue, so be polite.
 
-Men
----
-
+###Men###
 - Listen. And be there and be nice. But mainly listen more.
 - Don't think it's not problem; educate yourselves and recognise the
   problem.

@@ -2,7 +2,9 @@
 layout: post
 title: Late in the day Linux
 date: '2014-04-29T10:18:31+01:00'
-tags: [Linux, Ubuntu, \*nix, Mac envy, Steam, LibreOffice]
+tags:
+    - Linux
+    - Ubuntu
 tumblr_url: http://gypsydave5.com/post/84224799738/late-in-the-day-linux
 ---
 Late in the day yesterday I finally decided that I wanted — no, I needed — to

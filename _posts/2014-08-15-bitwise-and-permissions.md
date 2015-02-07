@@ -2,19 +2,22 @@
 layout: post
 title: "Bitwise and Permission"
 date: 2014-08-16 20:32:45
-tags: [Makers Academy, coding, Ruby. bitwise]
-categories: Makers
+tags:
+    - Makers Academy
+    - Ruby
+    - TDD
+    - Bitwise
 published: true
 ---
 
 So I thought I'd try and write about what happened last day of the first week at
-[Makers][MA], as mentioned in [my last post], about the failing Rspec test for
+[Makers][MA], as mentioned in [my last post], about the failing RSpec test for
 the Unix task. Just because I learned a lot about both permissions on a Unix
-like system, about bitwise operators in Ruby, about how Rspec works, and how
+like system, about bitwise operators in Ruby, about how RSpec works, and how
 (not) to fix things.
 
 So... the test checking file permissions in a directory by running the following
-Rspec test.
+RSpec test.
 
 ```ruby
   it "Should only allow the owner to change into my/private/files" do
@@ -67,7 +70,6 @@ read/write to user, and just read to group and other. `755` is
 read/write/execute for user, and just read/execute for the group and other.
 
 ##The science "bit"
-
 Notice how none of the octal numbers ever 'carry' over to the next one when
 they're added together? This is a piece of computer science wizzardry - because
 they're in octal, I can look at them as both an actual integer or as a series of
@@ -98,7 +100,6 @@ all the sets would give you the number `511` (which is the same as `777` and
 `111111111`).
 
 ##Bitwise
-
 Now we get to the fun stuff - `permissions & 0000100`. What's the `&` doing? And
 those leading 0s? As mentioned above, the leading zeroes are just Ruby's way of
 saying that this number is in octal. So (repls open) `0000100` just becomes
@@ -122,7 +123,6 @@ one that matches in each number
 We now have enough knowledge to look at the test again
 
 ##Back to the test
-
 To recap, the test looks like this:
 
 ````ruby
@@ -166,7 +166,7 @@ execute permission -- that's `010` becoming `000001000` and `001` to
 bit set. They come out as `0` -- no matches!
 
 And so that's how it all hangs together. But why didn't it work? Simply put
-everyone on the course had just installed the latest version of Rspec, and
+everyone on the course had just installed the latest version of RSpec, and
 `be_true` is not in the latest version's syntax. So all we needed to do was
 change `be_true` over to `eq(64)` and it would've been fixed.
 

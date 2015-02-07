@@ -2,7 +2,10 @@
 layout: post
 title:  "Destructuring in a Method Block"
 date:   2014-07-12 18:52:15
-tags: [Ruby, RubyMonk, Enumerable, Inject, Map, Array]
+tags:
+    - Ruby
+    - Learnings
+    - Functional Programming
 ---
 
 I went from genius to idiot - very rapidly - when looking at Enumerable#map and
@@ -19,19 +22,19 @@ Exciting, right?
 
 The solution that RM gave was this:
 
-{% highlight ruby %}
+```ruby
 def hash_keys(hash)
     hash.map { |pair| pair.first }
 end
-{% endhighlight %}
+```
 
 But I went for:
 
-{% highlight ruby %}
+```ruby
 def hash_keys(hash)
     hash.map {|key,value| key}
 end
-{% endhighlight %}
+```
 
 Not much difference, but enough. I had become confused when I entered my code,
 thinking more about the `each_with_index` method mentioned in the same page
@@ -39,7 +42,7 @@ above. I was forgetting that `#map` would be sending back a single value, an
 array of the key-value pair. Ruby Monk's solution used that fact to use the
 method `#first` on the array, to get the first element (the key) out.
 
-But, by chance, my solution worked by taking splitting the array by telling the
+But, by chance, my solution worked - it split the array by telling the
 block for map that it would be getting two arguments - checking with the good
 people on the #ruby channel on IRC (a chap called bannisterfiend to be precise),
 this is [*destructuring*][destructuring], binding a set of values to
@@ -48,11 +51,11 @@ a corresponding set of values that you can normally bind to a single variable
 
 What we're seeing is this:
 
-{% highlight ruby %}
+```ruby
 x, y = [1,2]
 x # => 1
 y # => 2
-{% endhighlight %}
+```
 
 But done as a loop for all the arrays pulled out of the hash by `#map`. Tony
 Pitluga sings the praises of destructuring block arguments (which is what this
@@ -68,11 +71,11 @@ operator][splat] to collect some of the other elements.
 
 Consider:
 
-{% highlight ruby %}
+```ruby
 x, *y = [1,2,3,4,5,6j
 x # => 1
 y # => [2,3,4,5,6]
-{% endhighlight %}
+```
 
 There's a lot more on the magic of the splat in the second edition of [The Well
 Rounded Rubyist][WRR] which has just been published (and which I'm enjoying

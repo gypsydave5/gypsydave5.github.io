@@ -2,15 +2,16 @@
 layout: post
 title: "Lessons Learned"
 date: 2014-08-24 10:20:19
-tags: [Makers Academy, coding, Ruby. bitwise]
-categories: Makers
+tags:
+    - Makers Academy
+    - Ruby
+    - Craftmanship
 published: true
 ---
 
 Things I've learned so far from my teachers:
 
-###[Stephen] - Succinct Semantics
-
+###[Stephen] - Succinct Semantics###
 I felt a little smug about my code when Steve sat next to me to see how I was
 doing. I was seeing if there were any broken bikes in an array, something like
 
@@ -37,11 +38,9 @@ that you don't have to sacrifice succinctness to semantics and vice versa. Ruby
 has enough well-named methods and techniques to create a short statement that
 someone who didn't know Ruby would still understand. Lesson learned.
 
-
-###[Mihai] - Delete Your Code
-
+###[Mihai] - Delete Your Code###
 I asked Mihai for some help changing my tests for the Boris Bikes project. I was
-trying to change the Rspec tests I'd written from [Chicago to London
+trying to change the RSpec tests I'd written from [Chicago to London
 style][ChiLon] having just been shown how to do doubles.
 
 Start again, Mihai said. Don't be precious or treasure what you've written
@@ -50,8 +49,7 @@ Start again, Mihai said. Don't be precious or treasure what you've written
 Since then I've taken immense pleasure in wiping entire projects out. And
 learned more by doing that. Lesson learned.
 
-###[Enrique] - Cooking without ever having have Eaten
-
+###[Enrique] - Cooking without ever having have Eaten###
 Late in the day I asked Enrique about program design. I was worried, really
 worried, that I didn't know the right way to proceed with writing a program.
 He'd just introduced the idea of design patterns that day, so I asked him to
@@ -70,9 +68,9 @@ creativity, specifically the swimming example][Bergson_swim]. You wouldn't think
 a person could swim if you only ever saw them walk, the argument goes. For
 swimming to be intellectually comprehendable, you've got to throw yourself in
 the water first. You can't theorize about things you haven't done - intuition
-must take the lead, intelligence is a practical faculty (not a speculative one).
+must take the lead, intelligence is a not a speculative faculty, but a practical one.
 
-Mind blown, I staggered home, ignored *The Rspec Book* and wrote more code.
+Mind blown, I staggered home, ignored *The RSpec Book* and wrote more code.
 Lesson learned.
 
 [MA]: http://www.makersacademy.com/

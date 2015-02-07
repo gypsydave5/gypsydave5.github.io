@@ -2,7 +2,11 @@
 layout: post
 title:  "A Pair of Podcasts"
 date:   2014-05-21 22:06:15
-tags: [podcasts, learning]
+tags:
+    - Podcasts
+    - Learnings
+    - Ruby
+    - JavaScript
 ---
 
 Trying to bootstrap myself into software development is a struggle. A struggle
@@ -33,7 +37,7 @@ jekyll).
 
 I've tried other podcasts and audios - chiefly lecture series from some of
 America's great institutions such as Harvard's [CS50][Harvard] course available
-from [EdEx][Harvard], and Stanford's [Programming Methodology][Stanford] course
+from [EdX][Harvard], and Stanford's [Programming Methodology][Stanford] course
 (which I enjoy a lot). While these broad academic courses are both informative
 and entertaining, and helpful, I'm still not at the point where the subjects
 unders discussion are anything more than reinforcement to my study of Ruby and

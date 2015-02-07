@@ -2,20 +2,18 @@
 layout: post
 title: "Game of Life"
 date: 2014-11-15 10:21:21
-tags: [Makers Academy]
-categories: Makers
+tags:
+    - Code Retreat
 published: false
 ---
 
-####Rules
-
+####Rules of the Game of Life
 - Any live cell with less than two live neighbours dies.
 - Any live cell with two or three live neighbours lives.
 - Any live cell with more than three live neighbours dies.
 - Any dead cell with exactly three live neighbours becomes live.
 
 ####Global day of Code Retreat Rules
-
 - Forty minute iterations
 
 - Iteration 1. Free style.

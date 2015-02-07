@@ -2,7 +2,9 @@
 layout: post
 title:  "Windows Silver Surfer"
 date:   2014-07-07 22:10:15
-tags: [software, Windows, ag, pdf readers]
+tags:
+    - Tools
+    - Windows
 ---
 
 Adding to my list of [ways to fix the Windows experience][SurvWin], I have to
@@ -11,7 +13,7 @@ has ported [Ag (aka The Silver Surfer)][AG] over to Windows. He's also authored
 a really elegant (and for elegant please read lightweight and customizable)
 PDF viewer [SumatraPDF][SPDF]. Both of these have improved my life today.
 
-I've been looking at alternatives to Adobe Reader on the Ubuntu box as well --
+I've been looking at alternatives to Adobe Reader on the Ubuntu box as well -
 currently I'm enjoying the simplicity of [muPDF][muPDF], but there are many
 other options out there.
 

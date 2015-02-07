@@ -2,8 +2,8 @@
 layout: post
 title: "Makers: day 5"
 date: 2014-08-09 16:21:36
-tags: [Makers Academy, coding, learning]
-categories: Makers
+tags:
+    - Makers Academy
 ---
 
 I thought I'd be writing a blog post everyday about my experience at
@@ -11,8 +11,7 @@ I thought I'd be writing a blog post everyday about my experience at
 damn quickly. Things move quickly, so let's go for a quick update and review
 before I get along with my Saturday...
 
-##Day -2
-
+##Day -2##
 Headed to the graduation of the cohort 12 weeks ahead of ours and met some of
 the guys joining me in the August group, as well as the 'seniors' (that's
 seniors by a full 6 weeks -- I don't thinks they'll be taking my lunch money).
@@ -21,8 +20,7 @@ beautiful stuff such as the artist portfolio site, and a fun way to work out
 which film to watch with your friends using the IMDB API. I was struck with how
 polished these projects looked - fleshed out and beautiful.
 
-##Day 0
-
+##Day 0##
 First day. Start early and meet everyone. We all introduce each other with
 interesting facts (much antipathy towards mushrooms), and the Makers team do the
 same. Many of the names have sinces wondered off into the sunset of my memory,
@@ -86,7 +84,6 @@ Vim is enough for me, although Andy in our cohort borrows the keyboard for a day
 and starts to learn COLMAC. Brave.
 
 ##Day 3
-
 I'm ahead. A few of us are ahead. In fact a few of us are wondering why we're
 not useing OOP methods to write this code because, frankly, it's looking a bit
 messy right now. My code is particularly awful until [Ben] and I chat about it
@@ -115,15 +112,14 @@ was good to have things explained carefully and accurately, and with
 a demonstration as well. I learned a lot.
 
 ##Day 4
-
 Test Driven Developmet (TDD) drops with a bang today as Enrique and Stephen
-introduce [Rspec][Rspec] and a completely different way of writing code. Really.
-I'd heard of TDD, I'd heard people moan about it or eulogise it -- but I'd not
-seen it until Enrique started hammering away at Vim on the projector ot create
+introduce [RSpec][RSpec] and a completely different way of writing code. Really.
+I'd heard of TDD, I'd heard people moan about or praise it -- but I'd not
+seen it until Enrique started hammering away at Vim on the projector to create
 [FizzBuzz] by first defining what the code ought to be doing and then making it
 do it, then expanding the spec', making the code fail, making the code pass,
 expanding the spec'... repeat, rinse... it was amazing. He hooked it up with the
-idea of both scientific method and a good doctor washing their hands. And it
+idea of both the scientific method and a good doctor washing their hands. And it
 made sense -- declaring where you're going and then getting there, rather than
 just blindly, messily, hacking around until something drops out.
 
@@ -145,8 +141,8 @@ Which was a load off everyone's mind.
 
 The Friday Challenge was CLI based, so I waltzed blithly through (and had
 a really good time remembering some fun commands). Excitingly it was marked with
-an Rspec file which checked whether your changes 'passed' -- literally.
-Unfortunately the file was written in an earlier version of the Rspec syntax and
+an RSpec file which checked whether your changes 'passed' -- literally.
+Unfortunately the file was written in an earlier version of the RSpec syntax and
 so the tests failed even when they should've passed. So [Spike] and I got to do
 our own Friday Challenge and fix the RSpec file. I say challenge -- we made more
 of a mountain out of that molehill than maybe we should've, but we learned a lot
@@ -156,7 +152,7 @@ Mulling over what was going on with `permissions & 0000100` while leaning on
 a beanbag, talking the problem through with a new friend while drinking a cold
 beer at six-thirty on a Friday, I felt happier than I have in years. In the last
 week I've literally eaten and slept code (I dreamed in Ruby one night. It was
-odd.) almost every hour of the day. And I love it.
+odd) almost every hour of the day. And I love it.
 
 [Ecomba]: https://github.com/ecomba
 [RK]: https://twitter.com/rubenkostucki
@@ -168,6 +164,6 @@ odd.) almost every hour of the day. And I love it.
 [Ruth]: https://github.com/ruthearle
 [EnriquesKeyboard]: http://www.typematrix.com/
 [CTMTweet]: http://www.typematrix.com/
-[Rspec]: http://rspec.info/
+[RSpec]: http://rspec.info/
 [Javier]: https://github.com/silver-io
-[FizzBuzz]: https://github.com/gypsydave5/fizzbuzz
+[FizzBuzz]: https://ithub.com/gypsydave5/fizzbuzz

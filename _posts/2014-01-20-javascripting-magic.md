@@ -4,7 +4,7 @@ title: "(not quite) Currying in JavaScript"
 date: 2015-02-01 16:25:18
 tags:
     - JavaScript
-    - MergerMarket
+    - Mergermarket
     - Learnings
     - Functional Programming
 published: false

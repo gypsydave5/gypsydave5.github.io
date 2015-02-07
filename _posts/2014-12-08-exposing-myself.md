@@ -3,9 +3,9 @@ layout: post
 title: "Exposing my ignorance"
 date: 2014-12-08 21:22:02
 tags:
-    - Apprenticeship
-    - Learning
-    - Patterns
+    - Craftmanship
+    - Culture
+    - Learnings
     - Books
 published: true
 ---

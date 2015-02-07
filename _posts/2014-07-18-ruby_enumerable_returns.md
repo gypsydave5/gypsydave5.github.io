@@ -2,7 +2,9 @@
 layout: post
 title:  "Many Enumerable Returns"
 date:   2014-07-18 20:52:15
-tags: [Ruby, RubyMonk, Enumberable, yield, blocks]
+tags:
+    - Ruby
+    - Learnings
 ---
 
 As threatened then, here's the followup to my [last post][lastpost] on the

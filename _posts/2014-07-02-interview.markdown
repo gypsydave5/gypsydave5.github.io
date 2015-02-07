@@ -2,7 +2,11 @@
 layout: post
 title:  "Interview at 'My Linux Rig'"
 date:   2014-07-03 22:42:15
-tags: [media, Linux, Ubuntu, mutt, irssi]
+tags:
+    - Fame
+    - Linux
+    - Ubuntu
+    - Tools
 ---
 
 A few months ago Steven Ovadia over at [My Linux Rig][MLR] spotted my post
@@ -23,7 +27,7 @@ around my Linux machine better than my Windows set up.
 In addition I rarely touch ST3 any more, spending most of my editing time on
 Vim as [previously mentioned][vim]. And Guake lost its novelty rapidly. Right now I'm
 sifting through five years of Gmail using [Mutt][Mutt]. Now that's something.
-And using [irssi][irssi] to dip my toe into the community with IRC..
+And using [irssi][irssi] to dip my toe into the community with IRC.
 
 Probably the most affecting bit is to see the phrase 'David Wickes, Software
 Developer' at the top. I'm not a software developer - yet. But I will be soon.

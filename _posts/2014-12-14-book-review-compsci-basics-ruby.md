@@ -4,6 +4,7 @@ title: "Book Review: Computer Science Programming Basics in Ruby"
 date: 2014-12-14 20:54:50
 tags:
     - Reviews
+    - Ruby
     - Books
 published: true
 ---

@@ -3,7 +3,7 @@ layout: post
 title: "RSpec Magic Part 2: Verifying Doubles"
 date: 2014-12-18 11:22:05
 tags:
-    - Rspec
+    - RSpec
     - Ruby
 published: false
 ---
@@ -55,5 +55,3 @@ Failure/Error: instance_double "Bicycle", broken?: false, wheels: 2
 This behaviour could be incredibly useful (a great kick start to defining a new
 class) or a bit of an annoyance (do I really want RSpec moaning at me about all
 the methods I've not implemented in a class I've just started work on?).
-
-

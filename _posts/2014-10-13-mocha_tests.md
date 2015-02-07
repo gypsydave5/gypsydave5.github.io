@@ -2,8 +2,10 @@
 layout: post
 title: "Mocha tests with MongoDB and Mongoose"
 date: 2014-10-13 21:23:50
-tags: [Makers Academy]
-categories: Makers
+tags: 
+    - Makers Academy
+    - Node
+    - TDD
 published: true
 ---
 
@@ -39,7 +41,7 @@ function - you'll only want to test the database once the save has saved (i.e.
 once its calledback).
 
 (The following is all in CoffeeScript - which I'm agnostic about. It definitely
-has th advantage of brevity, which is a quality all of its own.)
+has the advantage of brevity, which is a quality all of its own.)
 
 ```coffee
 it 'saves users', (done) ->
@@ -58,7 +60,7 @@ whole thing just times out - which is not what we're after.
 I tried a number of solutions to this problem (in fact the above _is_ one of
 those solutions - the first attempts were even more worthless), including a few
 experiments with the [Chai as
-Promised](http://chaijs.com/plugins/chai-as-promised) library which involves
+Promised](http://chaijs.com/plugins/chai-as-promised) library which includes
 such great statements as `to.eventually.deep.equal` But the problem wasn't
 resolved until I hit upon the following pattern:
 

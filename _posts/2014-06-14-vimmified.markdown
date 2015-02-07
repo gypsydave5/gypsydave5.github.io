@@ -2,7 +2,12 @@
 layout: post
 title:  "Vimmified!"
 date:   2014-06-14 20:52:15
-tags: [productivity, software, Vim, text editors, Sublime Text]
+tags:
+    - Sublime Text
+    - Text Editors
+    - Vim
+    - Windows
+    - Tools
 ---
 
 I'm not sure why I've started to use Vim obsessively over the last week - there

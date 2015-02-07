@@ -2,8 +2,9 @@
 layout: post
 title: "Slaying The JavaScript Dragon"
 date: 2014-09-28 20:27:05
-tags: [Makers Academy]
-categories: Makers
+tags: 
+    - Makers Academy
+    - Node
 published: true
 ---
 
@@ -30,14 +31,14 @@ I still struggled with getting Express and Node.
 
 I knew that JS was asynchronous - but I didn't really _know_ it, if you take my
 meaning. The difference between Sinatra and Express became apparent from the
-beginning. Where on Sinatra it was fairly easy to get Rspec and Capybara
+beginning. Where on Sinatra it was fairly easy to get RSpec and Capybara
 performing tests out of the box, with Mocha it felt like I was contantly and
 actively fighting against the framework. Callbacks came back unexpectedly or not
 at all. Tests passed - twice - when they should've failed.
 
 The final straw came when we collectively couldn't get read/write operations
 working consistently. I suddenly realised how spoiled I've been by using Ruby,
-Rspec et al -- these are really mature pieces of software that act as you
+RSpec et al -- these are really mature pieces of software that act as you
 expect. I feel that Node and Express are amazing - don't get me wrong. But
 I've found it nigh-on impossible to test them.
 
@@ -53,4 +54,3 @@ simple one-liner methods I realised exactly how much I'd learned in the last
 eight weeks. I feel like I've got a firm foothold in the Ruby world.
 
 Now on to the Mocha.
-

@@ -6,8 +6,7 @@ tags:
     - Makers Academy
     - Databases
     - Ruby
-    - Datamapper
-categories: Makers
+    - DataMapper
 published: true
 ---
 
@@ -46,8 +45,8 @@ hmmm..."), then started dropping `puts` into the DataMapper source code after
 identifying the problematic lines in the backtrace.
 
 As it turns out, it was the password length that was the problem. As the User
-was being updated with the new post it it is being associated with, the password
-requirement (6 letters or more) was kicking in -- even when no password was
+was being updated with the new post it is being associated with, the password
+requirement (6 letters or more) was kicking in - even when no password was
 being submitted with the update. So the post was fine - just the user didn't,
 and so prevented the post from saving.
 
@@ -55,5 +54,3 @@ Simple to fix (just tell the user model to only validate password length on
 creation), but difficult to identify. I won't make that mistake again, but Alex
 remains my hero for sorting that out (and giving a great demonstration
 debugging). [We all miss him](http://alex-farewell-card.herokuapp.com/).
-
-

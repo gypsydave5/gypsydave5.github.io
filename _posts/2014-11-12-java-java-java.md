@@ -2,8 +2,9 @@
 layout: post
 title: "Java"
 date: 2014-11-12 12:20:08
-tags: [Makers Academy, Java]
-categories:
+tags:
+    - Makers Academy
+    - Java
 published: true
 ---
 
@@ -18,7 +19,7 @@ Based on a job opportunity I started to try and learn Java last week. Flailing
 around for guidance, Enrique told me to install an IDE. [IntelliJ] to be
 precise - mainly to get something to manage my dependencies for me.. That's
 a whole story in itself, but I hacked around a bit, ran some tutorials, and
-eventually I got a Hello World out into the world. Finally
+eventually I got a `Hello World` out into the world. Finally
 I understood why things in Java could be `public static void`, finally
 I understood the syntax. Squint a little and it just looks like JavaScript. Ish.
 
@@ -42,13 +43,13 @@ also revealed what a lot of work the IDE was doing. I feel like I've been
 relatively spoiled using [npm] and [Bundler] - just `require` what you
 need and it's there - magick. Java - even with [Gradle]'s help - is horrible
 to look at. A long mess of `com.something.somethingElse.someMethodHere`, each
-individual damn thing being summoned individually. And me with no intuitive idea
+individual damn thing being summoned individually. And me with no idea
 of how it all works. I can only imagine what it would be like without
 a dependency manager helping out.
 
-I even (by the end) managed to deploy a horrifically simple and untested app to
+I (by the end) managed to deploy a horrifically simple and untested app to
 the [AWS Elastic Beanstalk]. But I never managed to get mocks in [Mockito]
-off the ground. And I never really fet like I knew what I was doing.
+off the ground. And I never really felt like I knew what I was doing.
 
 But after a week of Java, and a week helping out with [Node] at Makers,
 getting my hands back on Ruby was lke coming home. How do I feel after
