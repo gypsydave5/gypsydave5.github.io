@@ -1,13 +1,13 @@
 ---
 layout: post
 title: "(not quite) Currying in JavaScript"
-date: 2015-02-01 16:25:18
+date: 2015-02-19 13:20:28
 tags:
     - JavaScript
     - MergerMarket
     - Learnings
     - Functional Programming
-published: false
+published: true
 ---
 
 Currying, yet another _I've heard the cool kids saying that_ word. Acually,
