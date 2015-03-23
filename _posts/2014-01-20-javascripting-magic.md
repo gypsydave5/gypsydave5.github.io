@@ -10,7 +10,7 @@ tags:
 published: false
 ---
 
-Currying, yet another _I've heard the cool kids saying that_ word. Acually,
+Currying, yet another computer science term I'm all at sea with. Acually,
 having done some reading, it turns out the cool kids may be misusing it, but
 we'll get to that part later. Let's just spend a minute looking at the wonder of
 `.bind()`.
@@ -61,7 +61,7 @@ and returning one of smaller arity:
 
 ```javascript
 function addTheseFourUp(a, b, c, d) {
-    return a + b + c + d
+  return a + b + c + d
 }
 
 var addTwoAndTheseThreeUp = addTheseFourUp(this, 2)
@@ -74,16 +74,16 @@ arity of 1. Currying `addTheseFourUp` would look something like this:
 
 ```javascript
 function curriedFour(a) {
-    return function(b) {
-        return function(c) {
-            return function (d) {
-                return a + b + c + d
-            }
-        }
+  return function(b) {
+    return function(c) {
+      return function (d) {
+        return a + b + c + d
+      }
     }
+  }
 }
 
 curriedFour(1)(2)(3)(4) //=> 10
-```
+  ```
 
 [MDN docs]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind

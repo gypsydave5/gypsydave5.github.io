@@ -7,6 +7,8 @@ require "jekyll"
 
 GITHUB_REPONAME = "gypsydave5/gypsydave5.github.io"
 
+task default: :publish
+
 desc "build and run locally"
 task :serve do
   system "bundle exec jekyll serve"

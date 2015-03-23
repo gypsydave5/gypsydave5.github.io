@@ -1,4 +1,3 @@
-
 ---
 layout: post
 title: "Evaluating Ruby in Vim"
@@ -32,8 +31,8 @@ p = Point.new(3,5) # => #<Point:0x000000038862d0 @x=3 @y=5>
 ```
 
 I immediately stopped paying attention to the [excellent video about
-constructors] and started to look up what was going on.
-So here we go down the Vim rabbit hole again...
+constructors] and started to look up what was going on. So here we go down the
+Vim rabbit hole again...
 
 The magic is performed by either [rcodetools]' xmpfilter tool or
 [seeing\_is\_believing], hooked up to Vim via [vim-ruby-xmpfilter], (which works

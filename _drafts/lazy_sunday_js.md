@@ -1,3 +1,15 @@
+---
+layout: post
+title: "Lazy Evaluation and Memoization"
+date: 2015-03-21 21:41:18
+tags:
+    - JavaScript
+    - Mergermarket
+    - Learnings
+    - Functional Programming
+published: false
+---
+
 I've been seeking out more functional JavaScript ideas since I started to get
 addicted from my exposure to [the `bind()` function]. My next 'conquest' has
 been **lazy evaluation**.
@@ -142,6 +154,7 @@ lazyMemoSum()
 It does the calculation the first time, and every subsequent call uses the
 memoized result.
 
+[the `bind()` function]:
 [`apply()`]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/apply
 [`arguments`]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/arguments
 [`call()`]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/call
