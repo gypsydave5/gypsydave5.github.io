@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Lazy Evaluation and Memoization"
+title: "(Basic) Lazy Evaluation and Memoization in JavaScript"
 date: 2015-03-21 21:41:18
 tags:
     - JavaScript
@@ -54,8 +54,8 @@ addThisLater() //=> 9
 that, when it evaluates, returns the result of evaluating the passed in function
 with the other arguments.
 
-So far so good - but what needs to go inside `addThisLater()` to make it work as
-we describe it above? As it turns out, not that much:
+So far so good - but what needs to be returned from `lazyEval()` to make it work as
+described above? As it turns out, not that much:
 
 ```javascript
 function lazyEval (fn) {
@@ -63,12 +63,12 @@ function lazyEval (fn) {
 }
 ```
 
-And this is where things get exciting. We've [seen `bind()` before][bind], so let's
-take a look at `apply()`, what happens when we chain it with `bind()`, and
+And this is where things get exciting. We've [seen `bind()` before][bind], so
+let's take a look at `apply()`, what happens when we chain it with `bind()`, and
 what's happening with `arguments` keyword.
 
 [`apply()`] is pretty simple - it's a method that all functions have. It takes
-two arguments. When it's evaluated it returns the result of evaluating the
+two arguments. When its evaluated it returns the result of evaluating the
 function within the scope of the first argument (just like `bind()`). The second
 argument is an array (or an array-like object - that's important) of arguments
 for the function to be evaluated with. Which all sounds scary, but if I do this:
@@ -77,17 +77,16 @@ for the function to be evaluated with. Which all sounds scary, but if I do this:
 add.apply(this, [ 1, 2 ]) //=> 3
 ```
 
-I hope that begins to makes more sense. But let's take a look at `arguments`.
+I hope that begins to makes more sense. Now let's take a closer look at `arguments`.
 
 ### `arguments` and Argument Binding ###
 
-[`arguments`] is an array-like object (and you can read about what exactly that
-means yourself) which contains, unsurprisingly, all of the arguments
-passed to the current function you're in the scope of - even ones not bound to
-a variable.
+[`arguments`] is an array-like object (it lacks a number of methods that arrays
+have) which contains, unsurprisingly, all of the arguments passed to the current
+function you're in the scope of - even ones not bound to a variable.
 
-JavaScript functions, unlike many other languages, can take as many parameters
-as you like. What this means is that this:
+JavaScript functions, unlike some other languages, can take as many parameters
+as you like. Which means that this:
 
 ```javascript
 add(1, 2) //=> 3
@@ -100,9 +99,9 @@ add(1, 2, 'peace', ['love'], { and: 'understanding' }) //=> 3
 ```
 
 `add()` binds its first two arguments to `a` and `b`. Those extra arguments get
-ignored by `add()` - it just goes on adding as usual. But that does not mean that those
-arguments go nowhere. They're still available to the function in the `arguments`
-<del>array</del> array-like object.
+ignored - `add()` just goes on adding as usual. But that does not mean that
+those arguments go nowhere. They're still available to the function in the
+`arguments` <del>array</del> array-like object.
 
 Look, try this:
 
@@ -119,11 +118,9 @@ echo('peace', ['love'], { and: 'understanding' })
 echo('faith', 'hope', 'charity')[2] //=> 'charity'
 ```
 
-(Hey, that object looks and acts an awful lot like an array...)
-
-OK, back on track. When `apply(fn, arguments)` is evaluated, it is passing
-the arguments `fn, fn, 4, 5` along to the function that `apply()` is being called on.
-Namely, in this case, `bind()`.
+OK, back on track. When `apply(fn, arguments)` is evaluated, it is passing the
+arguments `fn, fn, 4, 5` along to the function that `apply()` is being called
+on. Namely, in this case, `bind()`.
 
 (As a comparison, if `apply()` was replaced by it's close cousin, [`call()`],
 which takes more traditional looking arguments, it would look like this:
@@ -137,7 +134,7 @@ ready to be evaluated with a flick of our `()`.
 
 ### Memoization ###
 
-All of which is great, but what's the point if you evaluate the function
+All of which is great, but what's the point if you have to evaluate the function
 every time it's called? Wouldn't it be better if the function 'remembered' the
 result, and returned the remembered result the second time it was called rather
 than evaluating it all over again? Or, to continue the increasingly strained
@@ -152,19 +149,17 @@ it's not all that hard (there's no arguments at all!):
 ```javascript
 function lazyEvalMemo (fn) {
   var args = arguments;
+  var result;
+  var lazyEval = fn.bind.apply(fn, args);
   return function () {
-    var result;
-    var lazyEval = fn.bind.apply(fn, args);
-      return function () {
-      if (result) {
-        console.log("I remember this one!");
-        return result
-      }
-      console.log("Let me work this out for the first time...");
-      result = lazyEval()
-      return result;
+    if (result) {
+      console.log("I remember this one!");
+      return result
     }
-  }()
+    console.log("Let me work this out for the first time...");
+    result = lazyEval()
+      return result;
+  }
 }
 ```
 
