@@ -10,30 +10,25 @@ tags:
 published: true
 ---
 
-I've been seeking out more functional JavaScript ideas since I started to get
-addicted from my exposure to [the `bind()` function][bind]. My next 'conquest' has
-been **lazy evaluation**.
+Calculation takes time and effort. If I needed to know what `4719340 + 397394`
+was (and I didn't have a calculator), it would take a few minutes to work out.
+Right now as I don't need to know.  Maybe I'll never need to know. I could put
+those two numbers and the `+` sign on a piece of paper and stick it in my
+pocket. If I ever wanted to know the answer, I could get the paper out and do
+the maths. I should write 'Answer to silly blog sum' on the top of the paper so
+I know what the sum is about. And why I'm carrying a piece of paper around.
 
-Calculations take time and resources. For instance, if I needed to know what
-`4719340 + 397394` was (and I didn't have a calculator), it would take a few
-minutes to work out. Right now as I'm typing this, I don't need to know.  Maybe
-I'll never need to know. I could put those two numbers and the `+` sign on
-a piece of paper, stick it in my pocket and, if ever I was curious or bored
-enough to want to know the answer, I could get the paper out. Maybe I'll write
-'Answer to silly blog sum' on the top of the paper so I know what the sum is
-about. And why I'm carrying a piece of paper around.
-
-That's lazy evaluation - hold on to an expression and only evaluate it when you
-need to use it. It pairs neatly with **memoization** - keeping the results of evaluated
-expressions in memory so that you don't have to evaluate them every time you need
-their result.
+That's lazy evaluation - holding on to an expression and only evaluating it when
+you need it. It pairs neatly with **memoization** - keeping the results of
+evaluated expressions in memory so that you don't have to evaluate them every
+time you need their result.
 
 (Which figures as, if I ever do work out what `4719340 + 397394` is, I never
 want to work it out again. Ever.)
 
-So let's take a look at implementing lazy evaluation in JavaScript - in other
-languages, such as Clojure, we get [a lot of this baked in] - but in JavaScript
-we've got to do a bit of work for it. Let's take a simple function:
+Let's take a look at doing some lazy evaluation in JavaScript - in other
+languages, such as Clojure, we get [a lot of this baked in], but in JavaScript
+there's some work to do. Let's take a simple function:
 
 ```javascript
 function add (a, b) {
@@ -66,6 +61,8 @@ function lazyEval (fn) {
 And this is where things get exciting. We've [seen `bind()` before][bind], so
 let's take a look at `apply()`, what happens when we chain it with `bind()`, and
 what's happening with `arguments` keyword.
+
+### `apply()`
 
 [`apply()`] is pretty simple - it's a method that all functions have. It takes
 two arguments. When its evaluated it returns the result of evaluating the
@@ -119,10 +116,10 @@ echo('faith', 'hope', 'charity')[2] //=> 'charity'
 ```
 
 OK, back on track. When `apply(fn, arguments)` is evaluated, it is passing the
-arguments `fn, fn, 4, 5` along to the function that `apply()` is being called
+arguments `fn, 4, 5` along to the function that `apply()` is being called
 on. Namely, in this case, `bind()`.
 
-(As a comparison, if `apply()` was replaced by it's close cousin, [`call()`],
+(As a comparison, if `apply()` was replaced by its close cousin, [`call()`],
 which takes more traditional looking arguments, it would look like this:
 `bind.call(fn, fn, 4, 5)`)
 
@@ -139,7 +136,8 @@ every time it's called? Wouldn't it be better if the function 'remembered' the
 result, and returned the remembered result the second time it was called rather
 than evaluating it all over again? Or, to continue the increasingly strained
 example, I should write the answer down on my piece of paper once I've worked it
-out, rather than having to do the sum every time I need to know the answer.
+out the first time, rather than having to do the sum every time I need to know
+the answer.
 
 And that's [memoization], a way of optimizing code so that it will return cached
 results for the same inputs. This might get a little more complicated with
@@ -158,7 +156,7 @@ function lazyEvalMemo (fn) {
     }
     console.log("Let me work this out for the first time...");
     result = lazyEval()
-      return result;
+    return result;
   }
 }
 ```
