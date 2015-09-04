@@ -1,5 +1,5 @@
 # Dependencies
-markdown:         kramdown
+markdown:         redcarpet
 highlighter:      pygments
 
 # Permalinks
@@ -30,3 +30,6 @@ github:
 twitter:
   url: https://twitter.com/gypsydave5
   handle: '@gypsydave5'
+
+redcarpet:
+  extensions: [footnotes]
