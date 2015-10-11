@@ -52,8 +52,6 @@ the ever-present Nokogiri and StringScanner. Natural language
 processing and fuzzy matching using Phrasie and Text are shown off
 too.
 
-_I was given a copy of this book to review._
-
 And that may be the biggest selling point of this book: it's a book I
 can apply to my work _right away_ - I am literally using the things
 I've learned at work today. Perfect for the beginner Rubyist, or
