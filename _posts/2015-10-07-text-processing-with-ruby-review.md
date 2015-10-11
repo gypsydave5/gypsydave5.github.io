@@ -52,13 +52,18 @@ the ever-present Nokogiri and StringScanner. Natural language
 processing and fuzzy matching using Phrasie and Text are shown off
 too.
 
-And that may be the biggest selling point of this book: it's a book I
-can apply to my work _right away_ - I am literally using the things
-I've learned at work today. Perfect for the beginner Rubyist, or
-anyone who wants some standout techniques for handling text whatever
-language they're using.
+I've found [_Text Processing with Ruby_][bookSite] a great exploration
+of working with text both inside and outside of Ruby. Reading it has
+extended my knowledge of Ruby significantly, while giving me a wealth
+of new techniques and tools to use to manipulate text.
 
-[^1]: The author gave an interesting example of the power available in command line tools when I saw him speak at [Brighton Ruby], comparing the processing speed of Hadoop against a laptop's UNIX tool chain using small (~2GB) data sets. You can read more about this comparison on [Adam Drake's blog][BigDataCli].
+And that may be the biggest selling point of this book: I can apply
+it _right away_ - I am literally using the things I've learned at work
+today. Perfect for the beginner to intermediate Rubyist, or any
+programmer who wants some standout techniques for handling text
+whatever language they're using.
+
+[^1]: The author gave an interesting example of the power available in command line tools when I saw him speak at [Brighton Ruby], comparing the processing speed of Hadoop against a laptop's UNIX tool chain using small (~2GB) data sets. You can read more about this comparison on [Adam Drake's blog][BigDataCLI].
 
 [BigDataCLI]: http://aadrake.com/command-line-tools-can-be-235x-faster-than-your-hadoop-cluster.html
 [authorName]: https://robm.me.uk/
