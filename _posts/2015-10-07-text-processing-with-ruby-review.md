@@ -19,10 +19,10 @@ A standout feature is the book's use of command line tools. While
 there are obviously ways to count the number of lines in a file in
 Ruby, none are going to be as quick and as easy as `cat file.txt | wc
 -l`.[^1] The book breaks down and blurs the edges between shell tools,
-Ruby scripts and larger, more organised code in a realy beautiful way.
+Ruby scripts and larger, more organised code in a really beautiful way.
 
-Time is spent using tools like `cat`, `grep` and `cut`, and using them
-to interoperate with Ruby code written straight into the command
+We're shown tools like `cat`, `grep` and `cut`, and how to
+interoperate them with Ruby code written straight into the command
 line. And as this builds up we're then shown how to handle standard
 input and output inside Ruby programs, allowing us to create our own
 command line tools that will play nicely as a part of a pipeline with
@@ -58,9 +58,9 @@ And that may be the biggest selling point of this book: it's a book I
 can apply to my work _right away_ - I am literally using the things
 I've learned at work today. Perfect for the beginner Rubyist, or
 anyone who wants some standout techniques for handling text whatever
-language they'r using.
+language they're using.
 
-[^1]: The author gave an interesting example of the power availble in command line tools when I saw him speak at [Brighton Ruby], comparing the processing speed of Hadoop against a laptop's UNIX toolchain using small (~2GB) data sets. You can read more about this comparison on [Adam Drake's blog][BigDataCli].
+[^1]: The author gave an interesting example of the power available in command line tools when I saw him speak at [Brighton Ruby], comparing the processing speed of Hadoop against a laptop's UNIX tool chain using small (~2GB) data sets. You can read more about this comparison on [Adam Drake's blog][BigDataCli].
 
 [BigDataCLI]: http://aadrake.com/command-line-tools-can-be-235x-faster-than-your-hadoop-cluster.html
 [authorName]: https://robm.me.uk/
