@@ -36,7 +36,10 @@ amazing things I've seen done in Ruby to date
 
 Regular expressions are covered in greater depth than I have seen in
 other Ruby books, and with a strong emphasis on their real-world
-application. The book shows how to use Ruby's system variables (the ones
+application. By the time I'd finished these sections I felt like a
+real regex ninja.
+
+The book also shows how to use Ruby's system variables (the ones
 starting with `$`) to keep regex and other code short. Some people
 (OK, my friend Andrea) dislike using anything starting with a `$` in
 their code, and I can see their point as it can look a little esoteric
