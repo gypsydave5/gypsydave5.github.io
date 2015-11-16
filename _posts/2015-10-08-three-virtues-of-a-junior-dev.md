@@ -5,7 +5,7 @@ date: 2015-10-07 20:39:14
 tags:
   - Theory
   - Learnings
-  - Makers
+  - MakersAcademy
 published: false
 ---
 
@@ -93,9 +93,8 @@ when will you be?
 
 ### Bravery
 
-        When you're going through hell, keep going
-
-Bit of Churchill there.
+>When you're going through hell, keep going
+><br>&mdash;<cite>Churchill</cite>
 
 You must be brave. If you're not brave you will find it near
 impossible to do what I've already outlined above - because learning
@@ -115,7 +114,7 @@ frightening. Everything in coding comes with such big words that
 everyone else seems to understand, with a new library coming along
 every two minutes and a host of computer science concepts you've never
 heard of getting bandied about by your colleagues. Coding has its own
-culture and cant (in the sense of a [secreat language]) that you'll be
+culture and cant (in the sense of a [secret language]) that you'll be
 desperate to get inside of, if only so that you can get the jokes on
 [xkcd]. And it's scary.
 
@@ -126,8 +125,20 @@ you need to say it, and you need to keep asking what seem like stupid
 questions of your colleagues, or you will be wasting everyone's time -
 especially yours.
 
-You must be brave enough to feel stupid all the time, but to still
-keep going.
+Victor Hugo has it that "curiosity is one of the forms of feminine
+bravery",[^1] and this is the also the sense of bravery I'm driving
+at - of daring to know no matter the danger to your self-esteem. You
+will feel better and be better for it.
+
+You must be brave enough to feel stupid all the time, and to still
+be curious.
+
+### Curiosity
+> Curiosity is one of the forms of feminine bravery.
+><br>&mdash;<cite>Victor Hugo</cite>
+
+[^1][_Ninety Three_, Part 1, Book 1, Chapter 1](https://books.google.co.uk/books?id=nVWxBgAAQBAJ&pg=PA3&dq=%22Curiosity+is+one+of+the+forms+of+feminine+bravery%22&hl=en&sa=X&ved=0CCQQ6AEwAWoVChMIhpHG4527yAIVyTkUCh1mBwod#v=onepage&q=%22Curiosity%20is%20one%20of%20the%20forms%20of%20feminine%20bravery%22&f=false)
+
 
 [xkcd]: http://xkcd.com/
 [secret language]: https://en.wiktionary.org/wiki/cant

@@ -3,8 +3,10 @@ layout: post
 title: "<em>Text Processing with Ruby</em> by Rob Miller"
 date: 2015-10-07 20:39:14
 tags:
-  - Book Review
+  - Review
   - Ruby
+  - Unix
+  - Text
 published: true
 ---
 
