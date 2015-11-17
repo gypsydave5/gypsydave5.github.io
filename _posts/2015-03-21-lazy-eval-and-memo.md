@@ -10,13 +10,25 @@ tags:
 published: true
 ---
 
-Calculation takes time and effort. If I needed to know what `4719340 + 397394`
+Calculation takes time and effort. If I needed to know what, say
+
+```
+4719340 + 397394
+```
+
 was (and I didn't have a calculator), it would take a few minutes to work out.
-Right now as I don't need to know.  Maybe I'll never need to know. I could put
+Right now, I don't need to know.  Maybe I'll never need to know. I could put
 those two numbers and the `+` sign on a piece of paper and stick it in my
-pocket. If I ever wanted to know the answer, I could get the paper out and do
-the maths. I should write 'Answer to silly blog sum' on the top of the paper so
-I know what the sum is about. And why I'm carrying a piece of paper around.
+pocket.
+
+![4719340 + 397394](/images/sum.png)
+
+If I ever wanted to know the answer, I could get the paper out and do
+the maths. I should write 'Answer to silly blog sum' on the top of the paper.
+
+![4719340 + 397394 with title](/images/sum-with-title.png)
+
+Now I know what the sum is there for. And why I'm carrying a piece of paper around.
 
 That's lazy evaluation - holding on to an expression and only evaluating it when
 you need it. It pairs neatly with **memoization** - keeping the results of
