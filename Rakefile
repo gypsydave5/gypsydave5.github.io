@@ -11,7 +11,7 @@ task default: :publish
 
 desc "build and run locally"
 task :serve => [:tags] do
-  system "bundle exec jekyll serve"
+  system "bundle exec jekyll serve --port 8105"
 end
 
 desc "Generate blog files"
