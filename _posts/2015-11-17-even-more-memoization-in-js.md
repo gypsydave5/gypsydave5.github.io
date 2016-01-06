@@ -1,4 +1,3 @@
-
 ---
 layout: post
 title: "(Even More) Memoization and Lazy Evaluation in JavaScript"
