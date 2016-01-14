@@ -9,6 +9,8 @@ tags:
 published: false
 ---
 
+_This post it based on a talk I gave back at Makers Academy a few months ago._
+
 >We will encourage you to develop the three great virtues of a
 >programmer: laziness, impatience, and hubris.
 ><br>&mdash;<cite>Larry Wall</cite>
@@ -44,14 +46,14 @@ junior. It's a limitless resource. And we're confronted with it every
 day we write code. There has not been a single day that I've been
 sitting in front of a computer that I've not felt _dumb_ in some way.
 
-So get used to that feeling, get really comfortable because, as far as
-I can tell, it never goes away. And that's OK.
+So I suggest that we get used to that feeling, get really comfortable because,
+as far as I can tell, it never goes away. And that's OK.
 
-If there's one thing I learned at Makers Academy, it was to be comfortable
+If there's one thing I learned at Makers Academy, it was to be happy
 with my ignorance - to embrace it, and to turn it to my advantage. Every
 time you don't know something, find out. Be dogged, enjoy the chase, and
-at the end you will know something new. As long as you have a way of turning
-ignorance to knowledge, as long as you 'know how to know', then your
+in the end you will know something new. As long as you have a way of turning
+base metal into gold, as long as you 'know how to know', then your
 infinite supply of ignorance is an infinite supply of knowledge in
 disguise.
 
@@ -59,13 +61,13 @@ Through the alchemy of learning we turn ignorance into knowledge.
 
 ### Enthusiasm
 
-When you start working as a junior you know practically nothing. I
-arrived halfway through the creation of a multi-web-app microservice
-architected web-scraping and alerting project, written in Groovy and
-NodeJS and hooked together with RabbitMQ and MongoDB.
+When you start working as a junior you know practically nothing. I arrived
+halfway through the creation of a multi-web-app-microservice-architected-web-scraping
+and alerting project, written in Groovy and NodeJS and hooked together with
+RabbitMQ and MongoDB.
 
 And of the above, the things I was most comfortable with were the Node
-and the Mongo. And I was really uncomfortable with those.
+and the Mongo. And I was [really uncomfortable][jsdragon] with those.
 
 So, presented with that, what do you have to offer. Well, you've got a
 few handy mantras you can throw in to the mix now and then ("We should
@@ -133,12 +135,10 @@ will feel better and be better for it.
 You must be brave enough to feel stupid all the time, and to still
 be curious.
 
-### Curiosity
-> Curiosity is one of the forms of feminine bravery.
-><br>&mdash;<cite>Victor Hugo</cite>
+### Conclusion
 
 [^1][_Ninety Three_, Part 1, Book 1, Chapter 1](https://books.google.co.uk/books?id=nVWxBgAAQBAJ&pg=PA3&dq=%22Curiosity+is+one+of+the+forms+of+feminine+bravery%22&hl=en&sa=X&ved=0CCQQ6AEwAWoVChMIhpHG4527yAIVyTkUCh1mBwod#v=onepage&q=%22Curiosity%20is%20one%20of%20the%20forms%20of%20feminine%20bravery%22&f=false)
 
-
 [xkcd]: http://xkcd.com/
 [secret language]: https://en.wiktionary.org/wiki/cant
+[jsdragon]: {% post_url 2014-09-28-the_JS_dragon.md %}
