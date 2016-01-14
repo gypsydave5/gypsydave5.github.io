@@ -177,7 +177,7 @@ Database = <database name goes here>
 Port = <port number>
 ```
 
-This connection information is called a DSN, and we'll be using it in `dbext`.
+This connection information is called a DSN[^7], and we'll be using it in `dbext`.
 Replace `MyMSSQLDB` with something more descriptive - it's the name of the
 connection to your database that ODBC (and, by extension, `dbext`) will use.
 
@@ -189,7 +189,7 @@ Now we've got an ODBC connection to play with, it's time to put its details into
 `dbext`. This can bedone by putting the following into your `.vimrc` - right
 next to where you declared your PostgreSQL connection information.
 
-`let g:dbext_default_profile_MyMSSQLDB = 'type=ODBC:user=<username>:passwd=<password>:dsnname=MyMSSQLDB'`[^7]
+`let g:dbext_default_profile_MyMSSQLDB = 'type=ODBC:user=<username>:passwd=<password>:dsnname=MyMSSQLDB'`[^8]
 
 Pretty long, right? But comprehendible. We're giving similar information to that
 which we used for the PostgreSQL connection, only we're declaring that the type
@@ -236,7 +236,8 @@ Port = <port number>
 [^4]: CPAN is running all the tests on each of the modules. Bit excessive I know.
 [^5]: This inforamation can also be added using the `odbcinst` tool, But this way seems easier to me. Read more about these files in the unixODBC documentation  [here][odbcFiles]
 [^6]: ODBC will also look in `/usr/local/etc/odbc.ini` for DSNs, but these will be available to all users. So we're putting them in the local user file it checks, `~/.odbc.ini`.
-[^7]: The connection information used here can include the database, but we've pushed that part down to the DSN defined above. It must always include the `username` and `passwd` from what I've seen through experimentation.
+[^7]: Data Source Name - just so you know.
+[^8]: The connection information used here can include the database, but we've pushed that part down to the DSN defined above. It must always include the `username` and `passwd` from what I've seen through experimentation.
 
 [.pgpass]: http://www.postgresql.org/docs/-3/static/libpq-pgpass.html
 [FreeTDS]: http://www.freetds.org/
@@ -247,5 +248,3 @@ Port = <port number>
 [CPAN]: http://search.cpan.org/~mjevans/DBD-ODBC-1.52/ODBC.pm
 [Homebrew]: http://brew.sh/
 [odbcFiles]: http://www.unixodbc.org/odbcinst.html
-
-
