@@ -1,3 +1,4 @@
+
 ### 1. Tennant Correspondence Principle ###
 
 Originally based on an observation about languages, this 'principle' states that
@@ -14,7 +15,7 @@ For instance, here's a lambda that doubles a number:
 ((lambda (n) (+ n n)) 2) ; => 4
 ```
 
-If we wrap it in another lamba...
+If we wrap it in another lambda...
 
 ```lisp
 (lambda () (lambda (n) (+ n n)))
