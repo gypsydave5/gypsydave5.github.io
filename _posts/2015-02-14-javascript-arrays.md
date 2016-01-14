@@ -13,13 +13,13 @@ if we did something like this - we wouldn't be messing with the array would we?
 
 ```javascript
 array = ["tom", "alan", "harry"]
-array.suprise= "dave"
+array.suprise = "dave"
 ```
 
 surely not?
 
 ```javascript
-for (index in array) { console.log( index ) }
+for (index in array) { console.log(index) }
 
 //=> 0
 //=> 1

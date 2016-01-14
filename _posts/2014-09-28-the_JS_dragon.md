@@ -4,7 +4,8 @@ title: "Slaying The JavaScript Dragon"
 date: 2014-09-28 20:27:05
 tags: 
     - Makers Academy
-    - Node
+    - NodeJS
+    - JavaScript
 published: true
 ---
 
