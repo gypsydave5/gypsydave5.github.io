@@ -3,7 +3,9 @@ layout: post
 title: "Downloading a list of URLs"
 date: 2016-02-04 21:43:25
 tags:
+  - Tools
   - Bash
+  - Unix
   - curl
   - xargs
   - gnu
