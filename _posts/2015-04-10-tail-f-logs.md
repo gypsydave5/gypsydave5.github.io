@@ -6,7 +6,6 @@ tags:
     - Tools
     - Unix
     - Microservices
-    - Bash
 published: true
 ---
 
