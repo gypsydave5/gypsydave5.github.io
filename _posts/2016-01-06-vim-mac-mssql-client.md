@@ -1,11 +1,10 @@
 ---
 layout: post
-title: "Using Vim as a SQL Server Client on a Mac"
+title: "Using Vim as a SQL Server Client"
 date: 2015-11-17 20:08:44
 tags:
   - SQL
   - SQL Server
-  - Mac
   - Vim
 published: true
 ---
@@ -16,7 +15,7 @@ a connection to a Windows box running the Microsoft development client. Laggy,
 slow, and an unfamiliar environment.
 
 So what are my options on a Mac? Well, there are a couple of SQL Server clients
-out there,but the one I tried out turned out to be buggy - there's nothing
+out there, but the one I tried out turned out to be buggy - there's nothing
 less fun than losing a query you've been crafting for an hour. And why should
 I spend time moving the query betweeen an editor (Vi) and an awkward GUI
 interface?
