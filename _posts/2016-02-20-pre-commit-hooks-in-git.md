@@ -9,11 +9,11 @@ published: true
 
 Remembering to run your tests before you commit is hard:
 
-```shell
-* 84f7e2e 2016-02-10 | Another typo. And a failing test. [David Wickes]
-* ef215f8 2016-02-09 | OMFG semicolons WAAAAAT [David Wickes]
-* c20b65d 2016-02-09 | Typo [David Wickes]
-* fca4aa8 2016-02-06 | Another fix for the same failing test[David Wickes]
+```bash
+* 84f7e2e 2016-02-06 | Another typo. And test[David Wickes]
+* ef215f8 2016-02-06 | OMFG semicolons WAAAAAT [David Wickes]
+* c20b65d 2016-02-06 | Typo [David Wickes]
+* fca4aa8 2016-02-06 | Another fix for the same test[David Wickes]
 * f0206a9 2016-02-06 | Fixes failing test [David Wickes]
 * 657cc48 2016-02-06 | Amazing new feature [David Wickes]
 ```
@@ -29,12 +29,12 @@ Wait, wut? Don't get even. Automate all the things!
 Inside the unexamined recesses of the `.git` directory of every repo
 is a folder called `hooks`. You should look inside it.
 
-```shell
+```bash
 applypatch-msg.sample
 commit-msg.sample
 post-update.sample
 pre-applypatch.sample
-pre-commit.sample # <--- This Guy here!
+pre-commit.sample # <--- This one here!
 pre-push.sample
 pre-rebase.sample
 prepare-commit-msg.sample
@@ -50,7 +50,7 @@ tl;dr is:
 So say we have a Node project we're working on. A cool pre-commit hook would
 look like:
 
-```
+```bash
 #!/bin/sh
 
 npm test
@@ -67,7 +67,7 @@ But you'd hate to do that for every project, right? Automate that too.
 
 Try this:
 
-```
+```bash
 $ git config --global init.templatedir '~/.git-templates'
 $ mkdir -p ~/.git-templates/hooks
 ```
@@ -88,7 +88,7 @@ directories of new projects you clone or initialize.
 We now need to make our hook more generic. Let's save the below off in
 `~/.git-templates/hooks/pre-commit`:
 
-```
+```bash
 #!/bin/sh
 
 if [ -f package.json ]; then
@@ -117,6 +117,6 @@ And there we are - have fun exploring the other sample templates, [read the
 docs][docs], and experiment with other useful scripts. Then tell me about them
 on Twitter so I can use them.
 
-[^1] `chmod a+x pre-commit` - you didn't need telling, but just in case.
+[^1]: `chmod a+x pre-commit` - you didn't need telling, but just in case.
 [docs]: https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks
 
