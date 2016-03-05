@@ -133,6 +133,29 @@ above are entirely superfluous - the same could have been achieved with:
 
     $ <file-with-list-of-urls.txt parallel curl -L {} -o {/}
 
+### Update
+
+And if you want to avoid reading all those logs and just get on with your life,
+try sending the whole process to the background and redirecting `stdin` and
+`stdout` to a file.
+
+    $ nohup cat filelist | xargs -n4 curl -L &>output &
+
+`nohup` protects the process from being interrupted by the session closing. So
+it'll keep on going even when you close your terminal or SSH connection. Don't
+worry, you can still `kill` it if you've made a mistake.
+
+And the _four_ arguments?
+
+```
+    http:/www.somedomain.com/my/file/number-one.txt
+    --create-dirs
+    -o
+    a-directory/hierarchy/number-one.txt
+```
+
+You get `curl` to make you a directory structure too.
+
 [wget]: https://www.gnu.org/software/wget/
 [curl]: https://curl.haxx.se/
 [xargs]: https://en.wikipedia.org/wiki/Xargs
