@@ -2,7 +2,9 @@
 layout: post
 title:  "Double Dash"
 date:   2014-07-13 00:36:31
-categories: bash
+categories: 
+       bash
+
 published: false
 ---
 
@@ -14,7 +16,7 @@ $ ls -la
 
 -rw-r--r--   1 gypsydave5  1482096370   647 11 Oct 20:15 :w
 drwxr-xr-x   2 gypsydave5  1482096370    68 10 Feb 08:55 -p/
--rw-r--r--   1 gypsydave5  1482096370  2900 11 Oct 20:15 (
+-rw-r--r--   1 gypsydave5  1482096370  2900 11 Oct 20:15 \(
 ```
 
 Hopefully you're nothing like me and you never get this, but I'm both a sloppy
@@ -55,7 +57,7 @@ $ ls -la
 
 -rw-r--r--   1 gypsydave5  1482096370   647 11 Oct 20:15 :w
 drwxr-xr-x   2 gypsydave5  1482096370    68 10 Feb 08:55 -p/
--rw-r--r--   1 gypsydave5  1482096370  2900 11 Oct 20:15 (
+-rw-r--r--   1 gypsydave5  1482096370  2900 11 Oct 20:15 \(
 ```
 
 Boo. Happily there's a *nix convention to help with these situations: `--`.
@@ -73,5 +75,5 @@ drwxr-xr-x   2 gypsydave5  1482096370    68 10 Feb 08:55 -p/
 
 DISCO!
 
-[^1]: I'm _still_ not sure how I managed this. But I'm staring at the evidence now.
+[^1]: I'm _still_ not sure how I managed this. But I'm staring at the evidence now, so I know it must've happened.
 
