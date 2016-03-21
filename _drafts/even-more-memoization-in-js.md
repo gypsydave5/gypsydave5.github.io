@@ -4,7 +4,6 @@ title: "(Even More) Memoization in JavaScript"
 date: 2015-11-17 20:08:44
 tags:
     - JavaScript
-    - Mergermarket
     - Learnings
     - Functional Programming
 published: false
@@ -157,7 +156,7 @@ Sorted.
 ### The General Case
 
 Now let's put together a function that can memoize _any_ function - and as
-a bonus, we can also hide that nasty `_memo` property behing a closure:
+a bonus, we can also hide that nasty `_memo` property behind a closure:
 
 ```javascript
 function memoize (fn) {
@@ -179,10 +178,10 @@ declare `memo` inside our function - and hooray it's now unavailable to anyone
 but the function we're returning. Now that's what I call private.
 
 The function we give back, well we don't know how many arguments it's going to
-be given so why bind them to any variables. Which is a long winded way of saying
+be given so why bind them to any variables? Which is a long winded way of saying
 we'll leave its arguments empty. Any arguments we do get we'll instantly turn
-into an array by the funky `Array.prototype.slice.call(arguments)` dance. And
-that array we can `stringify()` neatly on the next line.
+into an array by using the funky `Array.prototype.slice.call(arguments)` dance.
+And that array we can `stringify()` neatly on the next line.
 
 Then we do much the same as we have been above, only instead of giving `x + 1`
 to as the value of `_memo[jsonX]`, we set `memo[jsonArgs]` to the result of
@@ -191,6 +190,60 @@ done.
 
 Again, throw some `console.log`s in there to see what's really going on.
 
-### Here's One I <del>Made Earlier</del> Bought from the Supermarket
+### Here's One I <del>Made Earlier</del> Installed With `npm`
 
+The above is so incredibly useful that you'll not be surprised to learn that
+it's implemented, with slight modifications, in functional JavaScript libraries
+like [Underscore], [Lodash] and (personal niche favourite) [Ramda].[^1]
+
+Let's take a look at the Lodash implementation:[^2]
+
+```
+function memoize(func, resolver) {
+  if (typeof func != 'function' || (resolver && typeof resolver != 'function')) {
+    throw new TypeError(FUNC_ERROR_TEXT);
+  }
+  var memoized = function() {
+    var args = arguments,
+        key = resolver ? resolver.apply(this, args) : args[0],
+        cache = memoized.cache;
+
+    if (cache.has(key)) {
+      return cache.get(key);
+    }
+    var result = func.apply(this, args);
+    memoized.cache = cache.set(key, result);
+    return result;
+  };
+  memoized.cache = new memoize.Cache;
+  return memoized;
+}
+```
+
+Now, although this is a little more <del>long-winded</del> complicated than the
+code above, it should be similar enough for us to see that they're doing the
+same thing. The difference being that we are to supply an external funcition to
+hash the arguments (the `resolver` function), and that Lodash offers a custom
+caching object with a `get()` and `set()` interface, which we can overwrite if
+we like.
+
+(Bonus Question: why does this implementation of memoize suck if we don't supply
+a `resolver`?)
+
+### Conclusion
+
+You're not going to want to memoize a function like this often, and when you do
+you're probably going to use a library for it. That's life. But understanding
+the mechanics behind memoziation - function application, the caching of the
+arguments, and all the fun we can have with lambdas - lets apply them in other
+areas with more ease.
+
+If you can do this, you can probably work out how to write most of the other
+'functional' programming constructs yourself. I heard someone at a Clojure
+meetup stand up and say (tongue in cheek) "Behold - the power of the lambda!".
+The more I write code in this way, the more I think they were right. I might get
+a T-shirt made...
+
+[^1]: Seriously, this is the one to go for. It's amazing, it's beautiful - it's _functional_.
+[^2]: https://github.com/lodash/lodash/blob/4.6.1-npm/memoize.js#L48
 [firstBlog]: {% post_url 2015-03-21-lazy-eval-and-memo.md %}
