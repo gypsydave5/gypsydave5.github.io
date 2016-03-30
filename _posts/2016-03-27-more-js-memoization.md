@@ -15,6 +15,16 @@ memoization, and to look at how some popular JS libraries handle it.
 
 ### Memoization refresher
 
+According to [Wikipedia][memWik], memoization is:
+
+> an optimization technique used primarily to speed up computer programs by
+> storing the results of expensive function calls and returning the cached
+> result when the same inputs occur again.
+
+We want the program to remember the results of its operation, so it doesn't
+have to expend any extra time and effort in doing them all over again. It all
+seems a little obvious really.
+
 So the first time we saw memoization it was in the context of [lazy
 evaluation][firstBlog], where the memoized function had already been prepared
 to be lazy. The lazily evaluated function was executed within our memoizer, and
@@ -252,3 +262,4 @@ of code ourselves.
 [Ramda]: http://ramdajs.com/0.20.0/index.html
 [Underscore]: http://underscorejs.org/
 [Lodash]: https://lodash.com/
+[memWik]: https://en.wikipedia.org/wiki/Memoization
