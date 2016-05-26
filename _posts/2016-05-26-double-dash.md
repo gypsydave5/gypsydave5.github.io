@@ -1,11 +1,9 @@
 ---
 layout: post
-title:  "Double Dash"
-date:   2014-07-13 00:36:31
-categories: 
-       bash
-
-published: false
+title: "Double Dash"
+date: 2016-05-26 21:17:08
+categories: bash
+published: true
 ---
 
 If you're anything like me you'll find your directories liberally scattered
@@ -44,23 +42,7 @@ usage: rm [-f | -i] [-dPRrvW] file ...
        unlink file
 ```
 
-Ummm...
-
-```
-$ rm -rf "\-p"
-```
-
-Yay!
-fast
-```
-$ ls -la
-
--rw-r--r--   1 gypsydave5  1482096370   647 11 Oct 20:15 :w
-drwxr-xr-x   2 gypsydave5  1482096370    68 10 Feb 08:55 -p/
--rw-r--r--   1 gypsydave5  1482096370  2900 11 Oct 20:15 \(
-```
-
-Boo. Happily there's a *nix convention to help with these situations: `--`.
+Boo. Happily there's a \*nix convention to help with these situations: `--`.
 Double-dash tells the command you're running that everything that comes after
 it is not to be treated as a command option, but is instead a filename. So:
 
@@ -69,11 +51,13 @@ $ rm -rf -- -p
 $ ls -la
 
 -rw-r--r--   1 gypsydave5  1482096370   647 11 Oct 20:15 :w
-drwxr-xr-x   2 gypsydave5  1482096370    68 10 Feb 08:55 -p/
 -rw-r--r--   1 gypsydave5  1482096370  2900 11 Oct 20:15 (
 ```
 
 DISCO!
+
+This behaviour is implemented in most of the command line tools you'll use on
+a \*nix system - it's useful to know.
 
 [^1]: I'm _still_ not sure how I managed this. But I'm staring at the evidence now, so I know it must've happened.
 
