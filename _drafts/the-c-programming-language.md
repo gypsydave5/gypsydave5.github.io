@@ -5,6 +5,7 @@ date: 2016-05-26 22:35:20
 tags:
     - C
     - Languages
+    - Learning
 published: false
 ---
 
@@ -20,6 +21,12 @@ list my mind went "Basically Ruby with _bleaugh_ indentation, _bleaugh_ Java
 _bleaugh_, sounds really hard, sounds hard." So I went with 'sounds hard' - and
 I'm really glad I did.
 
+I thought I'd try and capture my process of learning C from a Ruby/JavaScript
+background as it might be useful to other developers in a similar position
+- people with no CS background but who do know how to program. I'll be
+approaching this in a series of posts, most of which will be following
+[a presentation I gave on C][presentation].[^1]
+
 ## Why C is Great
 
 When I learn a programming language, I find it illuminates features across all
@@ -31,13 +38,11 @@ C.
 
 For example, I wanted to sort an array in C. So I hit the internet, and it
 returns me the function `qsort()` from the C standard library. The function
-takes an array (figures),
-:wqa
-"To have possess a second language is to possess a second soul", a quote
-attributed to Charlemagne
+takes an array (figures).
 
 Maybe I hate myself
 
 [^1]:
 [^2]: Other than Lisp. Obviously.
+[presentation]: http://blog.gypsydave5.com/the-c-programming-language-presentation/
 
