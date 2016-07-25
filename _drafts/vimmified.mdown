@@ -55,11 +55,11 @@ made me feel a little more confident (even so far as to getting the
 \-\-\-
 
 What strikes me as I write this (in Vim - but on the Linux box at home) about
-a month on is how swiftly the Vim keys have worked themselves into my average workflow. I find it
-faster to open new lines, append lines, and navigate with J/K than arrows.
-Combined with Alt-Tabbing between windows, and Vimium in the browser, I haven't
-touched the mouse in creating this document - including all the copy-pasting of
-links. I haven't even left the home keys.
+a month on is how swiftly the Vim keys have worked themselves into my average
+workflow. I find it faster to open new lines, append lines, and navigate with
+J/K than arrows.  Combined with Alt-Tabbing between windows, and Vimium in the
+browser, I haven't touched the mouse in creating this document - including all
+the copy-pasting of links. I haven't even left the home keys.
 
 I'm not quite happy to leave Sublime Text yet - but I'm certainly seeing my way
 there.
