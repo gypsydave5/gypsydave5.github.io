@@ -14,11 +14,12 @@ I've started to learn C. There's a number of reasons for this. First, it was the
 a bit of Go recently, and just about every other page on the excellent [Go Blog]
 has a sentence that starts with "In C&hellip;".[^1]
 
-Third, I've started a course on [Data Structures and Algorithms][DS&A] on [Coursera],
-inspired by the ever-inspirational [Denise Yu]. The course only accepts
-submissions in four languages: Python, Java, C++ and C.[^2] Going through that
-list my mind went "Basically Ruby with _bleaugh_ indentation, _bleaugh_ Java
-_bleaugh_, sounds _really_ hard, sounds hard." So I went with 'sounds hard'.
+Third, I've started a course on [Data Structures and Algorithms][DS&A] on
+[Coursera], inspired by the ever-inspirational [Denise Yu]. The course only
+accepts submissions in four languages: Python, Java, C++ and C.[^2] Going
+through that list my mind went "Basically Ruby with _bleaugh_ indentation,
+_bleaugh_ Java _bleaugh_, sounds _really_ hard, sounds hard." So I went with
+'sounds hard'.
 
 I thought I'd try and capture my process of learning C as it might be useful to
 others in a similar position - i.e. no computer science background but know how
@@ -33,8 +34,8 @@ UNIX.[^4] He needed a language that provided sufficient abstraction to be able
 to write a program quickly and efficiently, while at the same time being able to
 communicate directly with the computer's memory addresses to allow a programmer
 to perform low level optimizations. It has been a remarkably popular language,
-being used to write other languages (parts of Ruby are written in C,  NodeJS
-uses C to make certain operations faster), and heavily influencing most modern
+being used to write other languages (Ruby is written in C, NodeJS wouldn't work
+without [libuv], written in C), and heavily influencing most modern
 programming languages (Java, Ruby, JavaScript, and most obviously, Go).
 
 ## `hello, world`
@@ -69,7 +70,7 @@ Line 4: The meat of the program. Here we're calling a function called `printf`
 which has already been written for us as a part of the C standard library - this
 is why we did that `#include` at the beginning. We're calling it with a single
 argument, a string literal inside double quotes, that just says "hello, world"
-with a newline character (`\n)` at the end.
+with a newline character (`\n`) at the end.
 
 At the end of the line we put a semi-colon to tell C that the line has finished.
 
@@ -108,10 +109,10 @@ Success, we're now all C programmers!
 
 If you've run programs on the command line before you may be aware that you get
 exit codes with each program that runs. You may have even been (un)lucky enough
-to see something on the lines of `Error: non-zero exit code`. On an POSIX
+to see something on the lines of `Error: non-zero exit code`. On a POSIX
 system, a process returns a number to the process that called it to let it know
 how things went - this is called the exit code. `0` is the good one, every other
-number is some increasingly dire shade of 'gone wrong'.
+number is some flavour of 'gone wrong'.
 
 The default return value for main, if we don't explicitly return a value, is `0`.
 We can change this behaviour in our `hello-world` by returning an explicit
@@ -149,4 +150,5 @@ command `echo $?`.
 [K&R]: https://en.wikipedia.org/wiki/Indent_Style#K.26R_style
 [Go Blog]: https://blog.golang.org/
 [gcc]: https://gcc.gnu.org/
+[libuv]: https://nikhilm.github.io/uvbook/introduction.html
 
