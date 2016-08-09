@@ -1,36 +1,35 @@
 ---
 layout: post
-title: "The C Programming Language Part One: hello, world"
+title: "Learning the C Programming Language<br><h2>Part 1: <i>hello, world</i></h2>"
 date: 2016-05-26 22:35:20
 tags:
     - C
     - Languages
     - Learning
-published: false
+published: true
 ---
 
 I've started to learn C. There's a number of reasons for this. First, it was the
 'proper' programming language when I was a kid. Second, I've been learning quite
-a bit of Go recently, and just about every other page on the excellent Go Blog
-has a sentence that starts with "In C...".
+a bit of Go recently, and just about every other page on the excellent [Go Blog]
+has a sentence that starts with "In C&hellip;".[^1]
 
-Third, I've started a course on [Data Structures and Algorithms] on [Coursera],
+Third, I've started a course on [Data Structures and Algorithms][DS&A] on [Coursera],
 inspired by the ever-inspirational [Denise Yu]. The course only accepts
-submissions in four languages: Python, Java, C++ and C.[^1] Going through that
+submissions in four languages: Python, Java, C++ and C.[^2] Going through that
 list my mind went "Basically Ruby with _bleaugh_ indentation, _bleaugh_ Java
-_bleaugh_, sounds really hard, sounds hard." So I went with 'sounds hard' - and
-I'm really glad I did.
+_bleaugh_, sounds _really_ hard, sounds hard." So I went with 'sounds hard'.
 
-I thought I'd try and capture my process of learning C from a Ruby/JavaScript
-background as it might be useful to others in a similar position - people with
-no CS background but who do know how to program. I'll be approaching this in
-a series of posts, most of which will be following [a presentation I gave on
-C][presentation].[^2]
+I thought I'd try and capture my process of learning C as it might be useful to
+others in a similar position - i.e. no computer science background but know how
+to program in Ruby and JavaScript. I'll be approaching this in a series of
+posts, most of which will be following the loose structure of [a presentation
+I gave on C][presentation].[^3]
 
 ## Background
 
 C was invented by Dennis Richie at Bell labs in the 1970s in order to wrte
-UNIX.[^3] He needed a language that provided sufficient abstraction to be able
+UNIX.[^4] He needed a language that provided sufficient abstraction to be able
 to write a program quickly and efficiently, while at the same time being able to
 communicate directly with the computer's memory addresses to allow a programmer
 to perform low level optimizations. It has been a remarkably popular language,
@@ -40,21 +39,18 @@ programming languages (Java, Ruby, JavaScript, and most obviously, Go).
 
 ## `hello, world`
 
-Another of the ways C has influenced programming is through the book [_The
-C Programming Language][cbook] by Kernighan and Richie. The author's intials
-gave their name to a [code format style][K&R], along with giving us the _de
-facto_ industry standard for the first program you write in a language: "hello,
-world".
+Another of the ways C has influenced programming is through [_The C Programming
+Language_][cbook] by Richie and Brian Kernighan. The author's intials gave their
+name to a [style of formatting code][K&R], along with giving us the _de facto_
+standard for your first program: "hello, world".
 
-And it's pretty simple and instructive in C:
-
-```clang
+{% highlight c linenos %}
 #include <stdio.h>
 
 int main() {
     printf("hello, world\n");
 }
-```
+{% endhighlight %}
 
 Line 1: Include a file called `stdio.h`. It includes information about the
 functions in the C standard library that deal with I/O - input/output. In this
@@ -80,17 +76,17 @@ At the end of the line we put a semi-colon to tell C that the line has finished.
 ## Compiling and running
 
 If you put all of that into a file called `hello-world.c`, save it, head to the
-terminal and type[^4]
+terminal and type[^5]
 
-```shell
+```bash
 gcc hello-world.c
 ```
 
-Then if you `ls` the same directory you should see a new file called`a.out`.[^4]
+Then if you `ls` the same directory you should see a new file called`a.out`.[^6]
 If you then run this with `./a.out`, you'll see `hello, world`. Mission
 accomplished.
 
-`gcc` is the Gnu Compiler Collection[^6], which will compile your C program into
+`gcc` is the [Gnu Compiler Collection][gcc],[^7] which will compile your C program into
 an executable that your computer can run. All this means is that instead of
 translating each line of your program into something your computer can
 understand as you run it, as with something like Ruby or JavaScript, we're
@@ -99,7 +95,7 @@ translating the whole program in one go before we run it.
 `a.out` isn't that informative, so in order to get a better filename we can pass
 a flag to GCC:
 
-```shell
+```bash
 gcc hello-world.c -o hello-word
 ```
 
@@ -114,14 +110,14 @@ If you've run programs on the command line before you may be aware that you get
 exit codes with each program that runs. You may have even been (un)lucky enough
 to see something on the lines of `Error: non-zero exit code`. On an POSIX
 system, a process returns a number to the process that called it to let it know
-how it went - this is called the exit code. `0` is the good one, every other
-number is some shade of 'gone wrong'.
+how things went - this is called the exit code. `0` is the good one, every other
+number is some increasingly dire shade of 'gone wrong'.
 
 The default return value for main, if we don't explicitly return a value, is `0`.
 We can change this behaviour in our `hello-world` by returning an explicit
-value using the keyword `return` - very Ruby, so JavaScript.
+value using the keyword `return` (very Ruby, so JavaScript).
 
-```clang
+```c
 #include <stdio.h>
 
 int main() {
@@ -137,14 +133,20 @@ time you do. You may be able to see the returned value in your terminal's
 prompt. Otherwise you can echo out the last commands exit status with the
 command `echo $?`.
 
-[^1]: You can now do the same course with a more diverse set of languages.
-[^2]: This was given at a Makers Academy alumni event. To view the speakers notes tap `n`.
-[^3]: A longer discussion of the origins of C was written by Richie and is available here: https://www.bell-labs.com/usr/dmr/www/chist.pdf
-[^4]: This assumes you have gcc installed, which is likely if you've been developing on your computer for a while.
-[^5]: You want to know _why_ it's `a.out`? Read Richie's C History - link above.
-[^6]: Bet it used to be called the Gnu C Compiler - acronyms are so wonderfully flexible...
+[^1]: Don't believe me? Look at [this](https://blog.golang.org/go-slices-usage-and-internals)
+[^2]: You can now do the same course with a more diverse set of languages.
+[^3]: This was given at a Makers Academy alumni event. To view the speakers notes tap `n`.
+[^4]: A longer discussion of the origins of C was written by Richie and is available [here](https://www.bell-labs.com/usr/dmr/www/chist.pdf)
+[^5]: This assumes you have gcc installed, which is likely if you've been developing on your computer for a while.
+[^6]: You want to know _why_ it's `a.out`? Read Richie's C History - link above.
+[^7]: Yes, it used to be called the Gnu C Compiler - acronyms are so wonderfully flexible...
 
+[DS&A]: https://www.coursera.org/specializations/data-structures-algorithms
+[Coursera]: https://www.coursera.org/
+[Denise Yu]: https://twitter.com/deniseyu21
 [presentation]: http://blog.gypsydave5.com/the-c-programming-language-presentation/
 [cbook]: https://en.wikipedia.org/wiki/The_C_Programming_Language
 [K&R]: https://en.wikipedia.org/wiki/Indent_Style#K.26R_style
+[Go Blog]: https://blog.golang.org/
+[gcc]: https://gcc.gnu.org/
 
