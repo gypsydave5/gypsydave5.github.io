@@ -58,17 +58,24 @@ my_number = 5;
 ```
 
 In Ruby, you'd just need the second line, and in JavaScript it would be the same
-but `int` would be `var`.[^1] But what's going on under the hood of your
-computed when you ask for a variable.
+but `int` would be replaced with `var`.[^1] What's going on under the hood of your
+computed when you ask for a variable?
 
 This is the bit where I remember the video of the American politician explaining
 that the internet is a series of tubes. Well, I'm about to be just a reductivist
 and say that your computer's memory is a big long line of ones and zeroes.
 
-![a series of empty boxes](/images/a-series-of-empty-boxes.png)
+![a series zeroes and ones](/images/zeroes-and-ones.png)
+
+So Matrix.
 
 Each one of these ones and zeroes is called a _bit_ (Binary DigIT - geddit?). And
-eight of those in a row is called a _byte_ (no idea, you look it up).
+eight of those in a row is called a _byte_ (no idea, you look it up). Byte is
+a good level of abstraction to work from, so let's replace our image of a long
+list of zeroes and ones with a long row of boxes, each box holding a byte of
+information.
+
+![a series of empty boxes](/images/a-series-of-empty-boxes.png)
 
 
 [^1]: Or you could do it in a single line, `var number = 5`, which some versions of C will also let you do: `int number = 5`

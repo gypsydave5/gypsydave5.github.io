@@ -29,14 +29,14 @@ I gave on C][presentation].[^3]
 
 ## Background
 
-C was invented by Dennis Richie at Bell labs in the 1970s in order to wrte
-UNIX.[^4] He needed a language that provided sufficient abstraction to be able
-to write a program quickly and efficiently, while at the same time being able to
-communicate directly with the computer's memory addresses to allow a programmer
-to perform low level optimizations. It has been a remarkably popular language,
-being used to write other languages (Ruby is written in C, NodeJS wouldn't work
-without [libuv], written in C), and heavily influencing most modern
-programming languages (Java, Ruby, JavaScript, and most obviously, Go).
+C was invented by Dennis Richie at Bell labs in the 1970s in order to write
+UNIX.[^4] He needed a language that provided sufficient abstraction to program
+quickly and efficiently, while at the same time being able to communicate
+directly with the computer's memory addresses to allow a programmer to perform
+low level optimizations. It has been a remarkably popular language, being used
+to write other languages (Ruby is written in C, NodeJS wouldn't work without
+[libuv], written in C), and heavily influencing most modern programming
+languages (Java, Ruby, JavaScript, and most obviously, Go).
 
 ## `hello, world`
 
