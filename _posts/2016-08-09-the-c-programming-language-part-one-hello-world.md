@@ -63,8 +63,8 @@ function that gets executed when the program is, well, executed. The arguments
 function is in the curly braces. So far so JavaScript. For people who have never
 seen a typed language the `int` is a little surprising. All it's telling us (and
 C) is that the return value for this function is an integer. We'll talk about
-types later, but for now the int is almost working like `def` in Ruby or even
-`function` in JavaScript.
+types later, but for now the `int` is almost working like `def` in Ruby or
+`function` in JavaScript - it's a keyword declaring a function.
 
 Line 4: The meat of the program. Here we're calling a function called `printf`
 which has already been written for us as a part of the C standard library - this
