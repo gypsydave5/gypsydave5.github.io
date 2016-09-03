@@ -160,7 +160,7 @@ for me the result of 2000000000 + 200000000 is -294967296. Which is just wrong.
 What happened? Well we just experienced *[integer overflow]*, where C quite
 happily adds two numbers together and stores them in a variable, but if the type
 of the variable isn't big enough to hold the new number C will just store as
-many bytes as it can in the space it's got. Look, try this variation:
+many bits as it can in the space it's got. Look, try this variation:
 
 ```c
 #include <stdio.h>
@@ -178,7 +178,7 @@ int main() {
 You should get -2147483648, not 2147483648.
 
 Integer overflow is like the moment when all the numbers on your car's odometer
-are all 9s, and then they all roll over at onece to all the 0s - you've run out
+are all 9s, and then they all roll over at once to all the 0s - you've run out
 of space to represent the new number with digits you're using. And for 'digits'
 in our example read 'bits' - `1111111111111111` becomes `0000000000000000`,
 which is the representation of -2147483648 in binary.[^6]
