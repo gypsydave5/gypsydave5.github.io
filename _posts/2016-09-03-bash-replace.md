@@ -1,7 +1,7 @@
 ---
 layout: post
-title:  "Fixing command line mistakes (and history expansion)"
-date:   2016-09-03 11:30:44
+title:  "Fixing your last bash command"
+date:   2016-09-03 19:49:37
 categories: bash
 published: true
 ---
