@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Learning the C Programming Language<br><h2>Part 1: <i>hello, world</i></h2>"
-date: 2016-05-26 22:35:20
+date: 2016-08-09 22:35:20
 tags:
     - C
     - Languages

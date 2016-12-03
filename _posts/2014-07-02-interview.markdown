@@ -12,8 +12,8 @@ tags:
 A few months ago Steven Ovadia over at [My Linux Rig][MLR] spotted my post
 about [the night I installed Linux][lateLinux] and asked me if I'd like to do a quick
 interview about, well, about my Linux setup. Sounded like a good idea so
-I answered his questions. He posted [the interview][interview] today and
-if you'd like to look at it.
+I answered his questions. He posted [the interview][interview] today if you'd
+like to look at it.
 
 If there's any amendments that need to be made now that I've been using Linux
 for, oh, about 20 times as long as I had been, it would have to be that I find

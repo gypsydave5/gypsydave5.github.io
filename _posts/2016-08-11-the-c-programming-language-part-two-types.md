@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Learning the C Programming Language<br><h2>Part Two: Types</h2>"
-date: 2016-08-11 14:58:17
+date: 2016-12-03 13:42:01
 tags:
     - C
     - Languages
