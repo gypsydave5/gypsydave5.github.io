@@ -6,7 +6,7 @@ tags:
     - C
     - Languages
     - Learning
-published: false
+published: true
 ---
 
 _This post follows on from my [first post about the C programming
@@ -218,8 +218,8 @@ us to manage memory directly.
 In practice when I write C, I start with using `int`s, wait until I see errors
 that are due to integer oveflow, and then find and replace to change the `int`s
 to `long long` or `unsigned long long`. In practice, on my highly specced modern
-computer, I'm not too worried about how much memory I'm using for my toy
-C programs.
+computer, I'm not too worried about tinkering with how much memory I'm using for
+my toy C programs.
 
 But it's nice to know I can.
 
