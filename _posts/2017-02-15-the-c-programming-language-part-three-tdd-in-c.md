@@ -1,11 +1,12 @@
 ---
 layout: post
-title: "Learning the C Programming Language<br><h2>Part Three: TDD in C</h2>"
+title: "Learning the C Programming Language<br><h2>Part Three: Modules and TDD in C</h2>"
 date: 2016-12-03 13:42:01
 tags:
     - C
     - Languages
     - Learning
+    - TDD
 published: false
 ---
 
@@ -66,9 +67,42 @@ should be true. At root, all tests come down to this: is something true or not?
 
 ## Enter `assert`
 
-The original intention of `assert` in C was as an assertion about your program
-that could be included inside the program itself. You would be able to compile
-your program either with the assertions
+The original intention of `assert` in C was as an assertion that could be
+included inside the program itself. You would be able to compile
+your program either with the assertions turned on, or turned off by disabling
+debugging.
+
+This way of using `assert` doesn't really work for TDD - you can't run the
+assertion without having the code in the first place. In addition, you don't get
+what for me is one of the chief advantages of TDD, namely enforced separation of
+concerns.
+
+### Wait, separation of concerns?
+
+In order to test some aspect of your software on its own, it needs to be
+separable from the rest of the code; the testing will drive this. As you build
+each new part, you test it separately from the rest.
+
+So how to we break up a C program? The first step should be familiar to most
+developers: wrap everything in a function.
+
+### Functions in C
+
+We've already seen a function in C - the `main` function. Declaring our own is
+a doddle; let's do some addition:
+
+```c
+#include <stdio.h>
+
+int add(int a, int b) {
+    return a + b;
+}
+
+int main() {
+    int answer = add(1, 1);
+    printf("one plus one is: %d", answer);
+}
+```
 
 
 [postOne]: {% post_url 2016-12-03-the-c-programming-language-part-two-types %}
