@@ -13,6 +13,10 @@ published: false
 _This post follows on from my [second post about the C programming
 language][postTwo], and is the third in a series of posts about learning C_
 
+When I was thinking about writing tests in C, it led me to almost entirely
+reevaluate the way I think about tests. If you just want to see how to test in
+C (or how I do it anyway), skip to the end. Otherwise...
+
 ## There is no magic
 When I learned to practice test-driven development (TDD), I learned in Ruby
 using RSpec. It was wonderful! RSpec has a delightful syntax, reading like
@@ -32,7 +36,7 @@ the start of this was when I started writing tests in JavaScript using the Mocha
 framework:
 
 ```javascript
-describe('add', function() {
+describe('add', function () {
     it('knows that five plus two makes seven', function() {
         expect(add(2, 5)).to.equal(7);
     });
@@ -104,5 +108,19 @@ int main() {
 }
 ```
 
+This stuff shouldn't be too surprising. The only things worth mentioning are
+that there is no magic function declaration keyword like `function` or `def`. In
+C it's the presence of the parentheses after the name that make it into
+a function. We do need to declare the return type - in both instances it's an
+`int` like we saw in [the first post][postOne]. This is the first time we've
+seen arguments in a function though - and it's probably not surprising that
+they've typed as well. In C the type goes before the name.[^1] So `add` takes two
+`int`s and returns an int. Hooray.
 
-[postOne]: {% post_url 2016-12-03-the-c-programming-language-part-two-types %}
+Oh, and like JavaScript we have to remember to `return` the result.
+
+[^1]: A fact regretted by Rob Pike and [rectified in Go][goDeclarationSyntax]
+
+[postOne]: {% post_url 2016-08-09-the-c-programming-language-part-one-hello-world.md %}
+[postTwo]: {% post_url 2016-12-03-the-c-programming-language-part-two-types %}
+[goDeclarationSyntax]: https://blog.golang.org/gos-declaration-syntax
