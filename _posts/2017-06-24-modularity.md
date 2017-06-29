@@ -6,7 +6,7 @@ tags:
     - TDD
     - Design
     - Modularity
-published: false
+published: true
 ---
 
 A while back an friend and I were talking about programming. They'd recently taken
@@ -66,11 +66,9 @@ greater advantages.
 This is probably the most important one. If your code is small and independent,
 then there is a much higher chance of you and everyone else understanding what
 it does. If a single function / class / method is longer than a screen, I would
-go so far as to say that it's near impossible to understand what it does. Some
-clever people[^3] think that understanding small pieces of code is more important
-than TDD - maybe. But it's definitely not inconsequential.
+go so far as to say that it's near impossible to understand what it does.
 
-If you're programming in small, easy to comprehend[^4] parts, then there is more
+If you're programming in small, easy to comprehend[^3] parts, then there is more
 chance that you'll be understood - if only because you'll have had to give them
 names. Possibly bad names, but names all the same. Names you'll be able to read
 and know what they mean and so what the parts do. Or at the worst, names that you
@@ -95,13 +93,16 @@ well, and integrate with other programs.
 
 But as we're not writing programs - we're just writing parts of programs - we
 don't have to worry about the requirement for generalization (that can come
-later if at all). And integration is eased if we make the modules truely
-independent of each other.
+later if at all). That integration is eased internally if we make the modules
+truely independent of each other.
+
+Like Lego blocks - some are small and general (think a 3x4 flat piece), or small
+and specific (think a laser gun), but they're all small and easy to integrate
+with each other.
 
 [^1]: For 'awesome' read 'adequate'.
 [^2]: Barely anything is its own reward. Maybe pizza.
-[^3]: Rich Hickey's classic "We say, “I can make a change because I have tests.” Who does that? Who drives their car around banging into the guard rails!?".
-[^4]: From the Latin _com_ together, and _prehendere_ grasp.
+[^3]: From the Latin _com_ together, and _prehendere_ grasp. It's literally easier to hold stuff together when it's small.
 
 [UnixPhil]: https://en.wikipedia.org/wiki/Unix_philosophy
 
