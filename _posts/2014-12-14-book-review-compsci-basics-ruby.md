@@ -12,7 +12,7 @@ published: true
 I recently finished reading [Computer Science Programming Basics in Ruby] by
 Ophir Frieder, Gideon Frieder and David Grossman. I was looking for something
 that would extend my knowledge of computer science fundamentals - the title
-appealed a I've done the majority of my coding up to this point in Ruby, so
+appealed as I've done the majority of my coding up to this point in Ruby, so
 I was hoping the familiar language would allow me to concentrate more on the
 computer science theory.
 

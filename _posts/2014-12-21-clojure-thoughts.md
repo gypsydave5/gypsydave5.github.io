@@ -98,7 +98,7 @@ But if you want to be really succinct:
 ```
 
 Clojure gives you access to Java methods and fields through the use of the dot
-(`.`) operator, which taks the form `(.instanceMember instance arguments*)`.
+(`.`) operator, which takes the form `(.instanceMember instance arguments*)`.
 Here we're using the `get()` method from the Java [Lists
 interface](http://docs.oracle.com/javase/tutorial/collections/interfaces/list.html),
 which we get to use on these instances as they are, well, Java lists.  which
