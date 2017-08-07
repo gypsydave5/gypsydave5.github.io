@@ -39,10 +39,10 @@ function normalPromiseLand () {
     Promise.resolve('some value')
         .then(theResultOfAPromise => console.log(theResultOfAPromise))
 }
-
 ```
 
-And here's the same thing in ~nuspeak~ async/await
+And here's the same thing in nuspeak async/await
+
 ```javascript
 async function asyncAwaitLand () {
  const theResultOfAPromise = await Promise.resolve('some value')
@@ -50,10 +50,10 @@ async function asyncAwaitLand () {
 }
 ```
 
-### Interop with Promises
+### Playing nicely with Promises
 
-I say 'interop' but that's crap: `async` functions _return_ Promises anyway, so
-if you want to start chaining them all together be my guest:
+`async` functions _return_ Promises, so if you want to start chaining them all
+together be my guest:
 
 ```javascript
 const arrowAsync = async () => {
