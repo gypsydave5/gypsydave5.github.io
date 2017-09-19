@@ -9,21 +9,13 @@ tags:
 published: true
 ---
 
-I'm reading (_The Structure and Interpretation of Computer Programs_)[sicp].
+I'm reading [_The Structure and Interpretation of Computer Programs_][sicp].
 It's hard - my maths is terrible in comparison to what was expected of Computer
 Science undergraduates at MIT in the 80s. But I'm learning some things, and one
 of the things that clicked today near the end of the first section of Chapter
 2 was Church numerals.
 
 ## Counting... without numbers
-
-What's a number? No really, what is it? Well, there are lots of different sorts
-of numbers so let's just start off with the non-negative integers - 0 and
-upwards. The Natural numbers.
-
-What can we use to define these numbers? We could
-
-
 
 In the [first post I wrote about the lambda calculus][lambda-1] we looked at the basic
 syntax and a simple function that took two numbers and added them together:
@@ -51,7 +43,7 @@ And this is where things start to get weird.
 ## What is a number anyway?
 
 You will now be inducted into a sacred mystery that will allow you to make and
-understand geeky jokes on the internet[^1]. Be brave.
+understand geeky Lisp jokes on the internet. Be brave.
 
 In a universe with no things - only functions - how would we count? Well, we'd
 have to do it with functions.
@@ -84,7 +76,7 @@ number being represented.
 
 ## Church Numbers
 
-So much for the theory, let's take a look at some 'real' numbers[^2]. First up, the
+So much for the theory, let's take a look at some real numbers.[^2] First up, the
 number one:
 
 ```
@@ -145,7 +137,7 @@ favourite language that has some sort of anonymous function. Say Python - if we
 were to write `three` from above we'd have:
 
 ```python
-three = lambda f: lambda x: f(f(f(x)))¬
+three = lambda f: lambda x: f(f(f(x)))
 ```
 
 If I want to test this - to see if it does what I think it does - I just need a
@@ -181,7 +173,7 @@ Which translates to:
 ```
 
 We don't have to use `zero` and increment however - we could count using any
-values that behave in the required way. For instance:[^5]
+values that behave in the required way.[^5] For instance:
 
 ```scheme
 (define increment (lambda (x) (cons '() x)))
@@ -254,10 +246,10 @@ But what about the `+` and `1` and `0` above? I said that there were only
 functions in the lambda calculus, aren't we still cheating a little bit.
 
 We are. So in the next post let's define `increment`, `add`, `multiply` and
-maybe even `exponentiation` in terms of lambdas.
+maybe even `exponentiation` in terms of lambdas. Things are certain to get
+weirder.
 
 
-[^1]: It's amazing how much of a driver to education understanding jokes can be
 [^2]: I mean, actually these are the natural numbers including zero, not the real numbers
 [^3]: You could do this with `def`s, but this is the _lambda_ calculus after all
 [^4]: α-conversion and β-reduction - see [the first post][lambda-1]

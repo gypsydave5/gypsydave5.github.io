@@ -118,7 +118,7 @@ We can just change all the `x`s to `a`s
 λay.a + y
 ```
 
-And the expression hasn't changed in its meaning one iota.[^2]
+And the expression hasn't changed its meaning one iota.[^2]
 
 'β-reduction' (beta-reduction) is a little more complicated - what it means is
 that, when a value is applied to a function, we can substitute all the variables
