@@ -6,7 +6,7 @@ tags:
     - Mathematics
     - Functional Programming
     - Lambda Calculus
-published: false
+published: true
 ---
 
 I'm reading (_The Structure and Interpretation of Computer Programs_)[sicp].
@@ -50,8 +50,8 @@ And this is where things start to get weird.
 
 ## What is a number anyway?
 
-You will now be inducted into a sacred Lispy mystery that will allow you to make
-and understand geeky jokes on the internet[^1]. Be brave.
+You will now be inducted into a sacred mystery that will allow you to make and
+understand geeky jokes on the internet[^1]. Be brave.
 
 In a universe with no things - only functions - how would we count? Well, we'd
 have to do it with functions.
@@ -68,8 +68,8 @@ const two = () => {}
 That's cheating! What are these 'names' of which you speak? Are they made of
 functions too?
 
-The thing is, we don't just want a symbol for `2` - the numeral. What we need
-is a function that expresses the very essence of two-ness.
+The thing is, we don't just want a _symbol_ for `2` - the numeral. What we need
+is a function that represents, in some way, the very essence of two-ness.
 
 What I'm trying to get across here (without jumping to the solution
 immediately) is that the representation of numbers in the lambda calculus are
@@ -133,46 +133,136 @@ OK, so no peeking now. What's zero?
 ```
 
 It's just ignoring the original function and returning the value it would've
-been applied to - it's applied zero times.
+been applied to. The function `f` has been applied to `x` zero times.
 
-## Playing around
+## Playing around with the computer
 
 I find there to be two productive ways to play around with the lambda calculus
 when I've been learning it.
 
 Firstly, and probably more obviously, try plugging around with them in your
-favourite language. Say Python - if we were to write `three` from above we'd
-have:
+favourite language that has some sort of anonymous function. Say Python - if we
+were to write `three` from above we'd have:
 
 ```python
-lambda f: lambda x: f(f(f(x)))¬
+three = lambda f: lambda x: f(f(f(x)))¬
 ```
 
 If I want to test this - to see if it does what I think it does - I just need a
-function to be `f` and some value it can be repeatedly applied to.
+function to be `f`:
 
-
-
-In JavaScript:
-
-```javascript
-f => x => x
+```python
+increment = lambda x: x + 1
 ```
 
-And Scheme:
+and some value it can be repeatedly applied to:
+
+```python
+zero = 0
+```
+
+So then I just plug in those values:
+
+```python
+three(increment)(0) #=> 3
+```
+
+We used three variables to hold the values above, but we could just inline them
+to get to something that looks a little more lambda-y:
+
+```python
+(lambda f: lambda x: f(f(f(x))))(lambda x: x + 1)(0) #=> 3
+```
+
+Which translates to:
+
+```
+(λfx. f(f(f(x)))) (λx. x + 1) 0 = 3
+```
+
+We don't have to use `zero` and increment however - we could count using any
+values that behave in the required way. For instance:[^5]
 
 ```scheme
-(lambda (f) (lambda (x) x))
+(define increment (lambda (x) (cons '() x)))
 
+(define zero '())
+
+(((lambda (f) (lambda (x) (f x))) increment) zero) ;=> (())
+(((lambda (f) (lambda (x) (f (f x)))) increment) zero) ;=> (() ())
+(((lambda (f) (lambda (x) (f (f (f x))))) increment) zero) ;=> (() () ())
 ```
 
+## Playing around with pen and paper
+
+The second way I like to play with lambdas is with pen and paper. The simplicity
+of the syntax, and the very few transformations allowed on an expression[^4], mean
+that it's possible to do the evaluation yourself. Let's try it with the above:
 
 
+```
+(λfx. f(f(f(x)))) (λx. x + 1) 0
+```
+
+```
+(λx. (λx. x + 1)((λx. x + 1)((λx. x + 1) x))) 0
+```
+
+```
+(λx. (λa. a + 1)((λb. b + 1)((λc. c + 1) x))) 0
+```
+
+```
+(λa. a + 1)((λb. b + 1)((λc. c + 1) 0))
+```
+
+```
+(λa. a + 1)((λb. b + 1)(0 + 1))
+```
+
+```
+(λa. a + 1)((λb. b + 1) 1)
+```
+
+```
+(λa. a + 1)(1 + 1)
+```
+
+```
+(λa. a + 1) 2
+```
+
+```
+(2 + 1)
+```
+
+```
+3
+```
+
+This is fun to try out, and while it's not much help when the expression is
+relatively simple as the one above, it gets pretty vital for me when I want to
+discover how more complicated expressions work.
+
+In summary, the computer is great for checking that a lambda expression works,
+but I prefer to do get the pen and paper out if I want to get a feel for what's
+going on - for what makes it work.
+
+## But ...
+
+But what about the `+` and `1` and `0` above? I said that there were only
+functions in the lambda calculus, aren't we still cheating a little bit.
+
+We are. So in the next post let's define `increment`, `add`, `multiply` and
+maybe even `exponentiation` in terms of lambdas.
 
 
 [^1]: It's amazing how much of a driver to education understanding jokes can be
 [^2]: I mean, actually these are the natural numbers including zero, not the real numbers
 [^3]: You could do this with `def`s, but this is the _lambda_ calculus after all
+[^4]: α-conversion and β-reduction - see [the first post][lambda-1]
+[^5]: I am thoroughly in debt to the amazing book [_The Little Schemer_][schemer] for the inspiration behind this example.
 
 [sicp]: https://mitpress.mit.edu/sicp/
 [lambda-1]: {% post_url 2017-09-11-lambda-calculus %}
+[schemer]: https://mitpress.mit.edu/books/little-schemer

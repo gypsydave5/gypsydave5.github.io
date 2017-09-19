@@ -6,25 +6,24 @@ tags:
     - Mathematics
     - Functional Programming
     - Lambda Calculus
-published: false
+published: true
 ---
 
 The word lambda comes up more and more the longer you work as a
 programmer. There it is as a keyword in Python for an anonymous function. Same
-again in Scheme. Look at the logos for (almost) ...
+again in Scheme. Look at the logos for Racket, Clojure, MIT. Lambdas
+everywhere. The interest/obsession goes back to the mathematical roots of Lisp,
+specifically Alonzo Church's _lambda calculus_.
 
-Whatever, lame intro.
 
-Alonzo Church came up with the lambda calculus as a part of his investigations
-into the foundations of mathematics. The same sort of investigations led Alan
-Turing to the thought experiment of the Turing machine.
+## Why?
 
-In a way, the lambda calculus is to functional programming as the Turing machine
-is to working with computer memory; an abstract model.
-
-In another way it's they're both insights into THE VERY NATURE OF REALITY ITSELF.
-
-Ok, enough of the blurb.
+Church was researching the foundations of mathematics - particularly
+computation. The notation he came up with is a way of expressing any computation
+at all - if a computer can do it, it can be written in the syntax of the lambda
+calculus. But, interestingly for us, it is not concerned about _how_ the computer
+does it; rather it just has some simple rules about _what_ a computer can
+do. It is, if you like, a very simple declarative programming language.
 
 ## Syntax
 
@@ -160,4 +159,4 @@ Next up - [numbers made of functions][lambda-2]!
 [^2]: Aaaargh! _Another_ Greek letter!
 
 [currying]: {% post_url 2015-02-19-not-quite-js-currying %}
-[lambda-2]: {% post_url 2017-09-11-church-numbers %}
+[lambda-2]: {% post_url 2015-02-19-not-quite-js-currying %}
