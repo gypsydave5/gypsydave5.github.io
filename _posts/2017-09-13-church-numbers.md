@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Lambda Calculus 2 - Church Numbers"
-date: 2017-09-11 20:54:21
+date: 2017-09-13 20:54:21
 tags:
     - Mathematics
     - Functional Programming

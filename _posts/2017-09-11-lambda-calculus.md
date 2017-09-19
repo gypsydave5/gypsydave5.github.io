@@ -21,7 +21,7 @@ specifically Alonzo Church's _lambda calculus_.
 Church was researching the foundations of mathematics - particularly
 computation. The notation he came up with is a way of expressing any computation
 at all - if a computer can do it, it can be written in the syntax of the lambda
-calculus. But, interestingly for us, it is not concerned about _how_ the computer
+    calculus. But, interestingly for us, it is not concerned about _how_ he computer
 does it; rather it just has some simple rules about _what_ a computer can
 do. It is, if you like, a very simple declarative programming language.
 
@@ -159,4 +159,4 @@ Next up - [numbers made of functions][lambda-2]!
 [^2]: Aaaargh! _Another_ Greek letter!
 
 [currying]: {% post_url 2015-02-19-not-quite-js-currying %}
-[lambda-2]: {% post_url 2015-02-19-not-quite-js-currying %}
+[lambda-2]: {% post_url 2017-09-13-church-numbers %}
