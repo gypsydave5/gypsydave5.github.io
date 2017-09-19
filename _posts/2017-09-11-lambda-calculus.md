@@ -9,11 +9,11 @@ tags:
 published: true
 ---
 
-The word lambda comes up more and more the longer you work as a
+The word 'lambda' comes up more and more the longer you work as a
 programmer. There it is as a keyword in Python for an anonymous function. Same
-again in Scheme. Look at the logos for Racket, Clojure, MIT. Lambdas
-everywhere. The interest/obsession goes back to the mathematical roots of Lisp,
-specifically Alonzo Church's _lambda calculus_.
+again in Scheme. Oh look, there it is in Ruby. Look at the logos for Racket,
+Clojure, MIT. Lambdas everywhere. The interest/obsession goes back to the
+mathematical roots of Lisp, specifically Alonzo Church's _lambda calculus_.
 
 
 ## Why?
@@ -21,9 +21,10 @@ specifically Alonzo Church's _lambda calculus_.
 Church was researching the foundations of mathematics - particularly
 computation. The notation he came up with is a way of expressing any computation
 at all - if a computer can do it, it can be written in the syntax of the lambda
-    calculus. But, interestingly for us, it is not concerned about _how_ he computer
-does it; rather it just has some simple rules about _what_ a computer can
-do. It is, if you like, a very simple declarative programming language.
+calculus. But, interestingly for us, it is not concerned about _how_ he
+computer does it; rather it just has some simple rules about _what_ a
+computer can do. It is, if you like, a very simple declarative programming
+language.
 
 ## Syntax
 
