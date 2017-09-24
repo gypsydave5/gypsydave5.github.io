@@ -9,13 +9,7 @@ tags:
 published: true
 ---
 
-I'm reading [_The Structure and Interpretation of Computer Programs_][sicp].
-It's hard - my maths is terrible in comparison to what was expected of Computer
-Science undergraduates at MIT in the 80s. But I'm learning some things, and one
-of the things that clicked today near the end of the first section of Chapter
-2 was Church numerals.
-
-## Counting... without numbers
+## Counting... without numbers?
 
 In the [first post I wrote about the lambda calculus][lambda-1] we looked at the basic
 syntax and a simple function that took two numbers and added them together:
