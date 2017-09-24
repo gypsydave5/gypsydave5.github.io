@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Lambda Calculus 3 - Arithmetic with Church Numbers"
-date: 2017-09-13 20:54:21
+date: 2017-09-23 20:54:21
 tags:
     - Mathematics
     - Functional Programming
