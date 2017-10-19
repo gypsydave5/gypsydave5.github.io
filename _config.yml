@@ -8,7 +8,7 @@ relative_permalinks: true
 
 # Setup
 title:            gypsydave5
-tagline:          'Learns to Code'
+tagline:          'Still learning'
 description:      'The blog of David Wickes, software developer'
 url:              http://gypsydave5.com
 baseurl:          /
@@ -32,4 +32,4 @@ twitter:
   handle: '@gypsydave5'
 
 redcarpet:
-  extensions: [footnotes]
+  extensions: ["footnotes", "strikethrough"]

@@ -15,7 +15,6 @@ again in Scheme. Oh look, there it is in Ruby. Look at the logos for Racket,
 Clojure, MIT. Lambdas everywhere. The interest/obsession goes back to the
 mathematical roots of Lisp, specifically Alonzo Church's _lambda calculus_.
 
-
 ## Why?
 
 Church was researching the foundations of mathematics - particularly
@@ -29,13 +28,13 @@ language.
 ## Syntax
 
 The lambda calculus gets its name from its use of the Greek letter lambda -
-`λ` to represent a function that takes a single argument.
+$\lambda$ to represent a function that takes a single argument.
 
-After the `λ` comes the name that that single argument is bound to - say `x`.
+After the $\lambda$ comes the name that that single argument is bound to - say $x$.
 
-And after that we write a `.` to say that we're inside the 'body' of the function.
+And after that we write a $.$ to say that we're inside the 'body' of the function.
 
-The `x` is a bound variable - it stands for some value that the function can be
+The $x$ is a bound variable - it stands for some value that the function can be
 applied to.
 
 And to apply a value to a function, you call it by putting them next to each
@@ -59,9 +58,7 @@ and in Scheme we have
 
 in the lambda calculus syntax we have:
 
-```
-λx.x + 1
-```
+$$ \lambda x.x + 1 $$
 
 ## Only one argument?
 
@@ -81,27 +78,23 @@ and in Scheme:
 (lambda (x) (lambda (y) (+ x y)))
 ```
 
-so in the Lambda calculus we have:
+so in the lambda calculus we have:
 
-```
-λx.λy.x + y
-```
+$$ \lambda x.\lambda y.x + y $$
 
 Although usually[^1] we'd just write:
 
-```
-λxy.x + y
-```
+$$ \lambda xy.x + y $$
 
 But we would of course remember that, if the function had only one argument
 applied to it, it would return a function that expected the next argument.
 
-## α-conversion and β-reduction
+## $\alpha$-conversion, $\beta$-reduction
 
 These terms do absolutely nothing to dispell the feeling that the lambda
 calculus is a bit elitist. Look, even more Greek letters - it must be
 complicated and clever because just writing about it requires me to know how to
-say `α`!
+say $\alpha$!
 
 Really though, these are just big words for 'substitution' and 'application',
 the basics of which you probably picked up in high school algebra.
@@ -109,15 +102,15 @@ the basics of which you probably picked up in high school algebra.
 'α-conversion' (alpha-conversion) just means that we can change the name of a
 bound variable in a Lambda expression. So if we've got:
 
-```
-λxy.x + y
-```
 
-We can just change all the `x`s to `a`s
+$$ \lambda xy.x + y $$
 
-```
-λay.a + y
-```
+
+We can just change all the $x$s to $a$s
+
+
+$$ \lambda ay.a + y $$
+
 
 And the expression hasn't changed its meaning one iota.[^2]
 
@@ -139,25 +132,20 @@ y => 5 + y
 We unwrap the outer function and replace occurances of its variable with the
 supplied value. In lambda land:
 
-```
-(λxy. x + y) 5
-```
+$$ (\lambda xy. x + y)\ 5 $$
 
 Becomes
 
-```
-λy. 5 + y
-```
+$$ \lambda y. 5 + y $$
 
 (I threw some parentheses around that other Lambda expression to make it clear
-that the `5` was getting applied to the whole function and to separate it from
-the body `x + y` - there's no hard and fast rules as far as that goes).
+that the $5$ was getting applied to the whole function and to separate it from
+the body $x + y$ - there's no hard and fast rules as far as that goes).
 
-Next up - [numbers made of functions][lambda-2]!
+Next up - [numbers made of functions][lambda-2]. Wait, what?
 
-
-[^1]: To save on the world's dwindling supply of `λ`s
-[^2]: Aaaargh! _Another_ Greek letter!
+[^1]: To save on the world's dwindling supply of $\lambda$s
+[^2]: Greek alphabet pun. BOOM!
 
 [currying]: {% post_url 2015-02-19-not-quite-js-currying %}
 [lambda-2]: {% post_url 2017-09-13-church-numbers %}
