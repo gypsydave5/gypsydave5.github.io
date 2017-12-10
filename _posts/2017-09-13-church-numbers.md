@@ -248,6 +248,10 @@ We are. So in the [next post][lambda-3] let's define `increment`, `add`,
 `multiply` and maybe even `exponentiation` in terms of lambdas. Things are
 certain to get weirder.
 
+Oh, and - you were promised the ability to undestand jokes on the internet? Take
+a look at [this][im-a-schemer] - hopefully it makes some sense now you know what
+$one$ is.
+
 [^1]: I mean, actually these are the [natural numbers][natural-numbers] including zero, not actually the [real numbers][real-numbers]. Yay, maths joke!
 [^2]: I've always wanted to say that. But, seriously - implement them. It's fun!
 [^3]: You could do this with `def`s, but this is the _lambda_ calculus after all
@@ -258,5 +262,6 @@ certain to get weirder.
 [lambda-1]: {% post_url 2017-09-11-lambda-calculus %}
 [lambda-3]: {% post_url 2017-09-23-lambda-arithmetic %}
 [schemer]: https://mitpress.mit.edu/books/little-schemer
+[im-a-schemer]: http://www.schemers.org/Miscellaneous/imagine.txt
 [natural-numbers]: https://en.wikipedia.org/wiki/Natural_number
 [real-numbers]: https://en.wikipedia.org/wiki/Real_number

@@ -18,7 +18,7 @@ But before we get into it, let's clear up some stuff about brackets...
 
 ## Left association and you
 
-Just as it's easier to write $\lambda nfx.$ than $\lambda n.\lambda f.\lambdax.$
+Just as it's easier to write $\lambda nfx.$ than $\lambda n.\lambda f.\lambda x.$
 because we make the assumption that each application of the function returns
 a new function, so there is a way of writing out function application without
 having to use lots of parentheses.[^1]
