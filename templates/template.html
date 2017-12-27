@@ -1,0 +1,56 @@
+{{define "main"}}
+<!DOCTYPE html>
+<html>
+  {{template "head"}}
+  <body>
+    {{template "header"}}
+    {{template "post" .Post}}
+    {{template "postlist" .PostList}}
+  </body>
+</html>
+{{end}}
+
+{{define "postlist"}}
+<aside>
+  <h3>Other Posts</h3>
+  <ul>
+    {{range .}}<li><a href="/posts/{{.Path}}">{{.Title}}</a></li>{{end}}
+  </ul>
+</aside>
+{{end}}
+
+{{define "post"}}
+<main>
+<h1>{{.Title}}</h1>
+<time datetime="{{.Date.Format "2006-01-02T15:04"}}" >
+  {{.Date.Format "Jan 02, 2006"}}
+</time>
+  <article>{{.Body}}</article>
+</main>
+{{end}}
+
+{{define "head"}}
+<head>
+  <meta charset="utf-8"/>
+  <link rel="stylesheet" href="/public/css/style.css">
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ['\\(','\\)'] ],
+          processEscapes: true
+        },
+        displayAlign: "left",
+        displayIndent: "2em"
+    });
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" id="">
+  </script>
+</head>
+{{end}}
+
+{{define "header"}}
+<header>
+  <h1><a href="/">gypsydave5</a></h1>
+  <p>The blog of David Wickes, software developer</p>
+</header>
+{{end}}
