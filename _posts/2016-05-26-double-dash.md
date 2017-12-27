@@ -2,7 +2,8 @@
 layout: post
 title: "Double Dash"
 date: 2016-05-26 21:17:08
-categories: bash
+categories:
+    - bash
 published: true
 ---
 

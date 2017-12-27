@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "A Pair of Podcasts"
-date:   2014-05-21 22:06:15
+date: 2014-05-21 22:06:15
 tags:
     - Podcasts
     - Learnings
@@ -40,7 +40,7 @@ America's great institutions such as Harvard's [CS50][Harvard] course available
 from [EdX][Harvard], and Stanford's [Programming Methodology][Stanford] course
 (which I enjoy a lot). While these broad academic courses are both informative
 and entertaining, and helpful, I'm still not at the point where the subjects
-unders discussion are anything more than reinforcement to my study of Ruby and
+under discussion are anything more than reinforcement to my study of Ruby and
 JavaScript. I'm sure it will also click into place eventually, much like the
 Envylabs podcasts.
 

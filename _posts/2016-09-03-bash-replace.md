@@ -2,7 +2,8 @@
 layout: post
 title:  "Fixing your last bash command"
 date:   2016-09-03 19:49:37
-categories: bash
+categories:
+    - bash
 published: true
 ---
 

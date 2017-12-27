@@ -1,14 +1,14 @@
 ---
 layout: post
-title: Rails for Zombies
-date: '2014-05-01T07:56:31+01:00'
+title: "Rails for Zombies"
+date: 2014-05-01 07:56:31
 tags:
     - Rails
     - Ruby
     - Codeschool
     - Makers Academy
-tumblr_url: http://gypsydave5.com/post/84415624123/rails-for-zombies
 ---
+
 Just been looking at [Rails for Zombies][RFZ] again in preparation for my
 forthcoming interview with [Makers Academy][MA] (because it’s never too late and
 you can always do more).
