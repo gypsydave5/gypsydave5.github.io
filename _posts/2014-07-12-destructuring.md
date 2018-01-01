@@ -6,6 +6,7 @@ tags:
     - Ruby
     - Learnings
     - Functional Programming
+published: true
 ---
 
 I went from genius to idiot - very rapidly - when looking at Enumerable#map and

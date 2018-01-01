@@ -6,6 +6,7 @@ tags:
     - Learnings
     - Tools
     - Clojure
+published: true
 ---
 
 Thought I should share this, as it surprised me. I solved one of

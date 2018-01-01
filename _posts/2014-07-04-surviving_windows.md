@@ -5,6 +5,7 @@ date:   2014-07-04 11:35:15
 tags:
     - Tools
     - Windows
+published: true
 ---
 
 I've worked within Windows and Microsoft OSs for... well, most of my computing

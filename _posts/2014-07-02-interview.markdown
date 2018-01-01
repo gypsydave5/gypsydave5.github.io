@@ -7,6 +7,7 @@ tags:
     - Linux
     - Ubuntu
     - Tools
+published: true
 ---
 
 A few months ago Steven Ovadia over at [My Linux Rig][MLR] spotted my post

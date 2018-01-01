@@ -5,6 +5,7 @@ date: 2014-04-29 10:18:31
 tags:
     - Linux
     - Ubuntu
+published: true
 ---
 
 Late in the day yesterday I finally decided that I wanted — no, I needed — to

@@ -4,6 +4,7 @@ title: "Makers: day 5"
 date: 2014-08-09 16:21:36
 tags:
     - Makers Academy
+published: true
 ---
 
 I thought I'd be writing a blog post everyday about my experience at

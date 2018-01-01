@@ -5,6 +5,7 @@ date:   2014-07-18 20:52:15
 tags:
     - Ruby
     - Learnings
+published: true
 ---
 
 As threatened then, here's the followup to my [last post][lastpost] on the

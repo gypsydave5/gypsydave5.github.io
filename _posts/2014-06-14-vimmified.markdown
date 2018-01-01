@@ -8,6 +8,7 @@ tags:
     - Vim
     - Windows
     - Tools
+published: true
 ---
 
 I'm not sure why I've started to use Vim obsessively over the last week - there

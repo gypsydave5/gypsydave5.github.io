@@ -7,6 +7,7 @@ tags:
     - Ruby
     - Codeschool
     - Makers Academy
+published: true
 ---
 
 Just been looking at [Rails for Zombies][RFZ] again in preparation for my

@@ -7,6 +7,7 @@ tags:
     - Learnings
     - Ruby
     - JavaScript
+published: true
 ---
 
 Trying to bootstrap myself into software development is a struggle. A struggle

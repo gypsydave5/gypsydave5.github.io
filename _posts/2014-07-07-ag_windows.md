@@ -5,6 +5,7 @@ date:   2014-07-07 22:10:15
 tags:
     - Tools
     - Windows
+published: true
 ---
 
 Adding to my list of [ways to fix the Windows experience][SurvWin], I have to
