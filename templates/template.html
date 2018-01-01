@@ -1,56 +1,47 @@
 {{define "main"}}
 <!DOCTYPE html>
-<html>
-  {{template "head"}}
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <link rel="stylesheet" href="/public/css/style.css">
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+      tex2jax: {
+          inlineMath: [['$','$'], ['\\(','\\)']],
+          processEscapes: true
+      },
+      displayAlign: "left",
+      displayIndent: "2em"
+    });
+    </script>
+    <script type="text/javascript"
+            async
+            src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+  </head>
   <body>
-    {{template "header"}}
-    {{template "post" .Post}}
-    {{template "postlist" .PostList}}
+    <header>
+      <h1>gypsydave5</h1>
+      <p>The blog of David Wickes, software developer</p>
+    </header>
+    <main>
+      {{template "post" .Post}}
+    </main>
+    <aside>
+      {{template "postlist" .PostList}}
+    </aside>
   </body>
 </html>
 {{end}}
 
 {{define "postlist"}}
-<aside>
-  <h3>Other Posts</h3>
-  <ul>
-    {{range .}}<li><a href="/posts/{{.Path}}">{{.Title}}</a></li>{{end}}
-  </ul>
-</aside>
+<ul>
+{{range .}}<li><a href="/posts/{{.Path}}">{{.TitleText}}</a></li>{{end}}
+</ul>
 {{end}}
 
 {{define "post"}}
-<main>
 <h1>{{.Title}}</h1>
-<time datetime="{{.Date.Format "2006-01-02T15:04"}}" >
-  {{.Date.Format "Jan 02, 2006"}}
-</time>
-  <article>{{.Body}}</article>
-</main>
-{{end}}
-
-{{define "head"}}
-<head>
-  <meta charset="utf-8"/>
-  <link rel="stylesheet" href="/public/css/style.css">
-  <script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-          inlineMath: [ ['$','$'], ['\\(','\\)'] ],
-          processEscapes: true
-        },
-        displayAlign: "left",
-        displayIndent: "2em"
-    });
-  </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" id="">
-  </script>
-</head>
-{{end}}
-
-{{define "header"}}
-<header>
-  <h1><a href="/">gypsydave5</a></h1>
-  <p>The blog of David Wickes, software developer</p>
-</header>
+<time datetime="{{.Date.Format "2006-01-02T15:04"}}" >{{.Date.Format "Jan 02, 2006"}}</time>
+<section>{{.Body}}</section>
 {{end}}
