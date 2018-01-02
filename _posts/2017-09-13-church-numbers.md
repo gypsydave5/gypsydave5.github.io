@@ -259,8 +259,8 @@ $one$ is.
 [^5]: I am thoroughly in debt to the amazing book [_The Little Schemer_][schemer] for the this example.
 
 [sicp]: https://mitpress.mit.edu/sicp/
-[lambda-1]: {% post_url 2017-09-11-lambda-calculus %}
-[lambda-3]: {% post_url 2017-09-23-lambda-arithmetic %}
+[lambda-1]: /posts/2017/9/11/lambda-calculus-1---syntax/
+[lambda-3]: /posts/2017/9/23/lambda-calculus-3---arithmetic-with-church-numbers/
 [schemer]: https://mitpress.mit.edu/books/little-schemer
 [im-a-schemer]: http://www.schemers.org/Miscellaneous/imagine.txt
 [natural-numbers]: https://en.wikipedia.org/wiki/Natural_number

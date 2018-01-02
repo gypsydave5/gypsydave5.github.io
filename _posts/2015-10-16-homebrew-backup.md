@@ -77,4 +77,4 @@ Did I mention that [Text Processing with Ruby][review] was an amazing book?
 I worked out how to do the above from what I read in the section on
 Unix tools. Nice.
 
-[review]: {% post_url 2015-10-07-text-processing-with-ruby-review %}
+[review]: /posts/2015/10/7/text-processing-with-ruby-by-rob-miller/

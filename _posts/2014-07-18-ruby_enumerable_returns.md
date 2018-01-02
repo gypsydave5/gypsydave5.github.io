@@ -23,13 +23,13 @@ This question is a little further along from the last, and was framed so:
 
 So far so, so good. So I wrote this:
 
-{% highlight Ruby %}
+```ruby
 def occurrences(str)
   str.scan(/\w+/).inject(Hash.new(0)) do |hashy, i|
     hashy[i.downcase] += 1
   end
 end
-{% endhighlight %}
+```
 
 Which spat out:
 
@@ -40,34 +40,34 @@ And left me confused for a good few minutes. OK, getting on for a quarter of an
 hour. What was going on? - what I'd written was very similar to the example
 above:
 
-{% highlight ruby %}
+```ruby
 [4, 8, 15, 16, 23, 42].inject({}) { |a, i| a.update(i => i) }
-{% endhighlight %}
+```
 
 So I caved and looked at the answer:
 
-{% highlight ruby %}
+```ruby
 def occurrences(str)
 	str.scan(/\w+/).inject(Hash.new(0)) do |build, word|
     	build[word.downcase] +=1
     	build
 	end
 end
-{% endhighlight %}
+```
 
 Which left me none the wiser. Why was the block re-iterating the accumulator
 function at the end? To test this I played around with `p`-ing the lines of the
 block... and discovered something interesting. Namely,
 
-{% highlight ruby %}
-
+```ruby
 a.update(i => i) # => a
+```
 
 # But...
 
+```ruby
 build[word.downcase] +=1 # => build[word.downcase], the new value of that key
-
-{% endhighlight %}
+```
 
 The block *needs to return the accumulator* - the first example is just lucky
 that it does so already!
@@ -82,8 +82,7 @@ I'd previously thought of `#inject` as working by *magic*, whereas in fact it
 was working by a method I could probably write myself given enough time.
 Something like this...
 
-{% highlight ruby %}
-
+```ruby
 bob = [1,2,3,4,5,6]
 
 def bob.inject(default = nil)
@@ -101,13 +100,12 @@ def bob.inject(default = nil)
                             # called, not the superclasses...
   p accumulator
 end
-
-{% endhighlight %}
+```
 
 
 Which gives us such fun as:
 
-{% highlight ruby %}
+```ruby
 bob.inject() {|a,e| a += e}
 # => all adds up to: 21
 bob.inject(10) {|a,e| a += e}
@@ -116,7 +114,7 @@ bob.inject([]) {|a,e| a << e**2}
 # => all adds up to: [1, 4, 9, 16, 25, 36]
 bob.inject({}) {|a,e| a[e] = "x"*e; a}
 # => {5=>"xxxxx", 6=>"xxxxxx", 1=>"x", 2=>"xx", 3=>"xxx", 4=>"xxxx"}
-{% endhighlight %}
+```
 
 I relied on `#each` here, but we could easily write an `each` method using
 a `for... in...` loop or similar. The genius is in `yield`, which is the *real
@@ -140,7 +138,7 @@ book.
 
 [RubyMonk]: https://rubymonk.com/
 [RMHashMap]: https://rubymonk.com/learning/books/4-ruby-primer-ascent/chapters/44-collections/lessons/98-iterate-filtrate-and-transform#solution4313
-[lastpost]: {% post_url 2014-07-12-destructuring %}
+[lastpost]: posts/2014/7/12/destructuring-in-a-method-block/
 [yield]: http://rubymonk.com/learning/books/1/chapters/34-lambdas-and-blocks-in-ruby/lessons/78-blocks-in-ruby
 [reification]: http://en.wikipedia.org/wiki/Reification_(fallacy)
 [WGR]: http://www.manning.com/black2/

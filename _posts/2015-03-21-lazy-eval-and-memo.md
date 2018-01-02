@@ -203,6 +203,6 @@ memoized result.
 [a lot of this baked in]: http://clojure.org/sequences
 [`apply()`]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/apply
 [`arguments`]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/arguments
-[bind]: {% post_url 2015-02-19-not-quite-js-currying %}
+[bind]: /posts/2015/2/19/%28not-quite%29-currying-in-javascript/
 [`call()`]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/call
 [memoization]: https://en.wikipedia.org/wiki/Memoization

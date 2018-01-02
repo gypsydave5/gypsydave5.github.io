@@ -38,6 +38,6 @@ aspire to.
 [interview]: http://www.mylinuxrig.com/post/90468057902/the-linux-setup-david-wickes-software-developer
 [MLR]: http://www.mylinuxrig.com/
 [Mutt]: http://www.mutt.org/
-[vim]: {% post_url 2014-06-14-vimmified %}
-[lateLinux]: {% post_url 2014-04-29-late-in-the-day-linux %}
+[vim]: /posts/2014/6/14/vimmified!/
+[lateLinux]: /posts/2014/4/29/late-in-the-day-linux/
 [irssi]: http://irssi.org/

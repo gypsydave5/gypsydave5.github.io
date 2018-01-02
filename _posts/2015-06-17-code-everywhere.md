@@ -50,5 +50,5 @@ done between two stops on the tube.
 phone][PhoneClojure]).
 
 [Plemo]: http://www.amazon.co.uk/13-13-3-Notebook-Computer-MacBook-Briefcase/dp/B00GQT54GO
-[PhoneClojure]: {% post_url 2015-05-18-clojure-tube %}
+[PhoneClojure]: /posts/2015/5/18/clojure-on-the-tube/
 [Pommodoro]: http://pomodorotechnique.com/

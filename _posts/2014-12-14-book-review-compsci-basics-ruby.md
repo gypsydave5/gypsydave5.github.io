@@ -45,5 +45,5 @@ approachable introductory text, if maybe a touch academic. Just not for me right
 now.
 
 [Computer Science Programming Basics in Ruby]: http://shop.oreilly.com/product/0636920028192.do
-[last post]: {% post_url 2014-12-08-exposing-myself %}
+[last post]: /posts/2014/12/8/exposing-my-ignorance/
 [The Well Grounded Rubyist]: http://www.manning.com/black2/

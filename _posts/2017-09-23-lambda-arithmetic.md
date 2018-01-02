@@ -323,6 +323,6 @@ using the lambda calculus.
 [^5]: Get your pencil and paper out if you want to prove it!
 [^6]: The same will go for multiplication. We know that this has to be the case if we're representing these numbers and operations correctly as they should display the [commutative property][comm]
 
-[lambda-1]: {% post_url 2017-09-11-lambda-calculus %}
-[lambda-2]: {% post_url 2017-09-13-church-numbers %}
-[comm]: https:$/en.wikipedia.org/wiki/Commutative_property
+[lambda-1]: /posts/2017/9/11/lambda-calculus-1---syntax/
+[lambda-2]: /posts/2017/9/13/lambda-calculus-2---church-numbers/
+[comm]: https://en.wikipedia.org/wiki/Commutative_property

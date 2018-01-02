@@ -176,6 +176,6 @@ it worked, and even then we ended up with `is_not eq(0)` instead of the neater
 the weekend that I really got a handle on what was going on
 
 [MA]: http://www.makersacademy.com/
-[my last post]: {% post_url 2014-08-09-makers-day-five %}
+[my last post]: /posts/2014/8/9/makers:-day-5/
 [filemode]: http://www.ruby-doc.org/core-2.1.2/File/Stat.html#method-i-mode
 [bw&]: http://en.wikipedia.org/wiki/Bitwise_operation#AND

@@ -258,7 +258,7 @@ of code ourselves.
 
 [^1]: Seriously, this is the one to go for. It's amazing, it's beautiful - it's _functional_.
 [the Lodash implementation]: https://github.com/lodash/lodash/blob/4.6.1-npm/memoize.js#L48
-[firstBlog]: {% post_url 2015-03-21-lazy-eval-and-memo %}
+[firstBlog]: /posts/2015/3/21/%28basic%29-lazy-evaluation-and-memoization-in-javascript/
 [Ramda]: http://ramdajs.com/0.20.0/index.html
 [Underscore]: http://underscorejs.org/
 [Lodash]: https://lodash.com/

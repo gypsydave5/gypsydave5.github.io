@@ -147,5 +147,5 @@ Next up - [numbers made of functions][lambda-2]. Wait, what?
 [^1]: To save on the world's dwindling supply of $\lambda$s
 [^2]: Greek alphabet pun. BOOM!
 
-[currying]: {% post_url 2015-02-19-not-quite-js-currying %}
-[lambda-2]: {% post_url 2017-09-13-church-numbers %}
+[currying]: /posts/2015/2/19/%28not-quite%29-currying-in-javascript/
+[lambda-2]: /posts/2017/9/13/lambda-calculus-2---church-numbers/

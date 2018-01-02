@@ -121,6 +121,6 @@ Oh, and like JavaScript we have to remember to `return` the result.
 
 [^1]: A fact regretted by Rob Pike and [rectified in Go][goDeclarationSyntax]
 
-[postOne]: {% post_url 2016-08-09-the-c-programming-language-part-one-hello-world.md %}
-[postTwo]: {% post_url 2016-12-03-the-c-programming-language-part-two-types %}
+[postOne]: /posts/2016/8/9/learning-the-c-programming-language-part-1:-hello,-world/
+[postTwo]: /posts/2016/12/3/learning-the-c-programming-language-part-two:-types/
 [goDeclarationSyntax]: https://blog.golang.org/gos-declaration-syntax

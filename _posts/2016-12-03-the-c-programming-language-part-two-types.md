@@ -230,7 +230,7 @@ But it's nice to know I can.
 [^5]: This may be a contentious statement, and is worthy of another post, but here I'm refering to type as early programmers would have understood the idea of a type of data, rather than the types of [type theory](https://en.wikipedia.org/wiki/Type_theory), based on Bertrand Russell's solution to the [set theoretic paradoxes](https://en.wikipedia.org/wiki/Russell's_paradox), which was later brought in to computer science by way of Alonzo Church and languages like ML and which functional programmers tend to wax lyrical about in languages like Scala. Take a look at [this blog post](http://arcanesentiment.blogspot.co.uk/2015/01/a-brief-history-of-type.html) and [this short post](http://lists.seas.upenn.edu/pipermail/types-list/2014/001781.html).
 [^6]: If you want to know _why_ this is, take a look at some articles on [Two's Complement](https://en.wikipedia.org/wiki/Two's_complement). [This one](https://www.cs.cornell.edu/~tomf/notes/cps104/twoscomp.html) is pretty good too. `unsigned` types don't have to worry about this and so can consequently store larger, non-negative integers.
 
-[postOne]: {% post_url 2016-08-09-the-c-programming-language-part-one-hello-world %}
+[postOne]: /posts/2016/8/9/learning-the-c-programming-language-part-1:-hello,-world/
 [integer overflow]: https://en.wikipedia.org/wiki/Integer_overflow
 [JStypes]: http://people.mozilla.org/~jorendorff/es5.html#sec-8
 [Fixnum]: https://ruby-doc.org/core-2.2.0/Fixnum.html

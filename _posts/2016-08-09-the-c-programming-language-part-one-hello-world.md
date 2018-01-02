@@ -45,13 +45,13 @@ Language_][cbook] by Richie and Brian Kernighan. The author's intials gave their
 name to a [style of formatting code][K&R], along with giving us the _de facto_
 standard for your first program: "hello, world".
 
-{% highlight c linenos %}
+```c
 #include <stdio.h>
 
 int main() {
     printf("hello, world\n");
 }
-{% endhighlight %}
+```
 
 Line 1: Include a file called `stdio.h`. It includes information about the
 functions in the C standard library that deal with I/O - input/output. In this
