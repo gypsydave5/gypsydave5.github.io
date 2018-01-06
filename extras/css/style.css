@@ -6,6 +6,7 @@
     --color-3: rgba(197,103,  0,1);
     --color-4: rgba(155, 81,  0,1);
     --background-color-0: rgba(155, 81, 0, 0.1);
+    --background-color-1: rgba(155, 81, 0, 0.5);
     --text-color: #012;
 }
 
@@ -116,10 +117,20 @@ time {
 
 aside {
     display: flex;
+    padding: 10px 20px;
     flex-direction: column;
+    background-color: var(--color-3);
 }
 
-aside li {
+aside h2 {
+    margin: 0;
+    background-color: var(--color-1);
+}
+
+aside ul {
+    margin: 0;
+    list-style: none;
+    padding: 0;
 }
 
 aside li time {
