@@ -73,7 +73,11 @@ a:hover {
 body {
     display: flex;
     flex-wrap: wrap;
-    background: var(--background-color-0)
+    background: var(--background-color-0);
+}
+
+main {
+    width: 100%;
 }
 
 header {
@@ -81,29 +85,22 @@ header {
     background-color: var(--color-2);
     width: 100%;
     display: flex;
-    flex-wrap: wrap;
     flex-direction: row;
+    flex-wrap: wrap;
     justify-content: space-between;
 }
 
 header p {
     background-color: var(--color-1);
-    display: block;
-    width: 200px;
+    max-width: 200px;
     padding: 2px;
 }
 
 header h1 {
     padding: 2px;
     background-color: var(--color-0);
-    display: block;
-    width: 200px;
+    max-width: 200px;
     text-align: center;
-}
-
-main {
-    display: flex;
-    flex-wrap: wrap;
 }
 
 article {
@@ -119,6 +116,7 @@ aside {
     display: flex;
     padding: 10px 20px;
     flex-direction: column;
+    max-width: 200px;
     background-color: var(--color-3);
 }
 
@@ -129,8 +127,15 @@ aside h2 {
 
 aside ul {
     margin: 0;
-    list-style: none;
     padding: 0;
+    list-style: none;
+    word-break: break-all;
+    overflow-wrap: break-word;
+}
+
+aside li a {
+    word-break: break-all;
+    overflow-wrap: break-word;
 }
 
 aside li time {
@@ -138,8 +143,12 @@ aside li time {
 }
 
 pre {
-    font-family: "CMU Typewriter";
     color: #DDD;
     background-color: #222;
     padding: 5px 10px;
+    overflow: scroll;
+}
+
+pre code {
+    font-family: "CMU Typewriter";
 }
