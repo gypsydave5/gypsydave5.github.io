@@ -218,17 +218,17 @@ above. I'm going to go through it step by step, and I'm going to note which of
 the reductions steps being performed at each line.
 
 $$
-\begin{array}{ c | l | c}
-& Expression & Reduction \\\
+\\begin{array}{ c | l | c}
+& Expression & Reduction \\\\
 \hline
-0 & (\lambda fx.\ f\ (f\ (f\ x)))\ (\lambda x. x + 1)\ 0 \\\
-1 & (\lambda x.\ (\lambda x.\ x + 1)\ ((\lambda x.\ x + 1)\ ((\lambda x.\ x + 1)\ x)))\ 0 & \beta \\\
-2 & (\lambda x. (\lambda a.\ a + 1)\ ((\lambda b.\ b + 1)\ ((\lambda c.\ c + 1)\ x)))\ 0 & \alpha \\\
-3 & (\lambda a.\ a + 1)\ ((\lambda b.\ b + 1)\ ((\lambda c.\ c + 1)\ 0)) & \beta \\\
-4 & (\lambda a.\ a + 1)\ ((\lambda b.\ b + 1)\ 1) & \beta \\\
-5 & (\lambda a.\ a + 1)\ 2 & \beta \\\
+0 & (\lambda fx.\ f\ (f\ (f\ x)))\ (\lambda x. x + 1)\ 0 \\\\
+1 & (\lambda x.\ (\lambda x.\ x + 1)\ ((\lambda x.\ x + 1)\ ((\lambda x.\ x + 1)\ x)))\ 0 & \beta \\\\
+2 & (\lambda x. (\lambda a.\ a + 1)\ ((\lambda b.\ b + 1)\ ((\lambda c.\ c + 1)\ x)))\ 0 & \alpha \\\\
+3 & (\lambda a.\ a + 1)\ ((\lambda b.\ b + 1)\ ((\lambda c.\ c + 1)\ 0)) & \beta \\\\
+4 & (\lambda a.\ a + 1)\ ((\lambda b.\ b + 1)\ 1) & \beta \\\\
+5 & (\lambda a.\ a + 1)\ 2 & \beta \\\\
 6 & 3 & \beta
-\end{array}
+\\end{array}
 $$
 
 This is fun to try out, and while it's not much help when the expression is
@@ -255,7 +255,7 @@ $one$ is.
 [^1]: I mean, actually these are the [natural numbers][natural-numbers] including zero, not actually the [real numbers][real-numbers]. Yay, maths joke!
 [^2]: I've always wanted to say that. But, seriously - implement them. It's fun!
 [^3]: You could do this with `def`s, but this is the _lambda_ calculus after all
-[^4]: $\alpha$-conversion and $\alpha$-reduction - see [the first post][lambda-1]
+[^4]: $\alpha$-conversion and $\beta$-reduction - see [the first post][lambda-1]
 [^5]: I am thoroughly in debt to the amazing book [_The Little Schemer_][schemer] for the this example.
 
 [sicp]: https://mitpress.mit.edu/sicp/
