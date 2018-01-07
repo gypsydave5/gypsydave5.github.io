@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <meta charset="UTF-8">
     {{template "mathjax"}}
     <link rel="stylesheet" href="/css/style.css">
   </head>
@@ -12,9 +13,6 @@
       <p>The blog of David Wickes, software developer</p>
     </header>
     {{template "post" .Post}}
-    <aside>
-      {{template "postlist" .PostList}}
-    </aside>
     </main>
   </body>
 </html>
@@ -48,8 +46,10 @@
   MathJax.Hub.Config({
       tex2jax: {
           inlineMath: [['$','$'], ['\\(','\\)']],
-          processEscapes: true
+          processEscapes: true,
       },
+      displayAlign: "left",
+      displayIndent: "1em",
       CommonHTML: { linebreaks: { automatic: true } },
       "HTML-CSS": { linebreaks: { automatic: true } },
       SVG       : { linebreaks: { automatic: true } }

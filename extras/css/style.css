@@ -72,40 +72,47 @@ a:hover {
 
 body {
     display: flex;
+    flex-direction: column;
     flex-wrap: wrap;
     background: var(--background-color-0);
+    width: 100%;
+    margin: 0;
 }
 
 main {
     width: 100%;
-}
-
-header {
-    padding: 5px;
-    background-color: var(--color-2);
-    width: 100%;
     display: flex;
-    flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-between;
 }
 
+header {
+    background-color: var(--color-2);
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 100%;
+}
+
 header p {
     background-color: var(--color-1);
+    margin: 10px 0;
+    padding: 0;
     max-width: 200px;
-    padding: 2px;
 }
 
 header h1 {
-    padding: 2px;
     background-color: var(--color-0);
-    max-width: 200px;
     text-align: center;
+    margin: 10px 0;
+    padding: 0;
 }
 
 article {
-    max-width: 600px;
-    padding: 0 20px;
+    padding: 0 5px;
+    max-width: 100%;
+    font-size: 16px;
 }
 
 time {
@@ -114,10 +121,10 @@ time {
 
 aside {
     display: flex;
-    padding: 10px 20px;
+    padding: 5px;
     flex-direction: column;
-    max-width: 200px;
     background-color: var(--color-3);
+    width: 100%;
 }
 
 aside h2 {
@@ -151,4 +158,52 @@ pre {
 
 pre code {
     font-family: "CMU Typewriter";
+}
+@media screen and (min-width: 600px) {
+    header p {
+        font-size: 18px;
+    }
+    header h1 {
+        font-size: 36px;
+    }
+}
+
+@media screen and (min-width: 780px) {
+    article {
+        font-size: 20px;
+        width: 500px;
+        padding: 0 10px;
+        margin: auto;
+    }
+
+    aside {
+        width: 390px;
+    }
+
+    header {
+        background-color: var(--color-2);
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        justify-content: start;
+        width: 33%;
+    }
+
+    header p {
+        width: 100%;
+        max-width: 100%;
+    }
+    header h1 {
+        width: 100%;
+        max-width: 100%;
+    }
+}
+
+@media screen and (min-width: 940px) {
+    header p {
+        font-size: 20px;
+    }
+    header h1 {
+        font-size: 40px;
+    }
 }
