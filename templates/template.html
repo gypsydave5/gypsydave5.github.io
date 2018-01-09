@@ -1,29 +1,36 @@
-{{define "main"}}
+{{define "post"}}
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    {{template "mathjax"}}
-    <link rel="stylesheet" href="/css/style.css">
-  </head>
+  {{template "head"}}
   <body>
     <main>
-    <header>
-      <h1>gypsydave5</h1>
-      <p>The blog of David Wickes, software developer</p>
-    </header>
-    {{template "post" .Post}}
+    {{template "header"}}
+    {{template "article" .Post}}
     </main>
   </body>
 </html>
 {{end}}
 
+{{define "head"}}
+<head>
+  <meta charset="UTF-8">
+  {{template "mathjax"}}
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+{{end}}
+
+{{define "header"}}
+<header>
+  <h1>gypsydave5</h1>
+  <p>The blog of David Wickes, software developer</p>
+</header>
+{{end}}
+
 {{define "postlist"}}
-<h2>Recent Posts</h2>
+<h1>All Posts</h1>
 <ul>
-  {{range .Reverse.Take 10}}
-  <li>
-    <a href="/posts/{{.Path}}">{{.TitleText}}
+  {{range .}}
+  <li> <a href="/posts/{{.Path}}">{{.TitleText}}
       <time
        datetime="{{.Date.Format "2006-01-02T15:04"}}"
        >{{.Date.Format "Jan 02, 2006"}}</time>
@@ -33,7 +40,7 @@
 </ul>
 {{end}}
 
-{{define "post"}}
+{{define "article"}}
 <article>
   <h1>{{.Title}}</h1>
   <time datetime="{{.Date.Format "2006-01-02T15:04"}}" >{{.Date.Format "Jan 02, 2006"}}</time>
@@ -67,4 +74,19 @@
 <script type="text/javascript"
         src="/js/prism.js">
 </script>
+{{end}}
+
+{{define "index"}}
+<!DOCTYPE html>
+<html lang="en">
+  {{template "head"}}
+  <body>
+    <main>
+      {{template "header"}}
+      <article>
+        {{template "postlist" .}}
+      </article>
+    </main>
+  </body>
+</html>
 {{end}}
