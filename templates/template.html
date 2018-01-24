@@ -1,11 +1,26 @@
 {{define "post"}}
 <!DOCTYPE html>
 <html lang="en">
-  {{template "head"}}
+  {{template "head" .Post.TitleText}}
   <body>
     <main>
     {{template "header"}}
     {{template "article" .Post}}
+    </main>
+  </body>
+</html>
+{{end}}
+
+{{define "about"}}
+<!DOCTYPE html>
+<html lang="en">
+  {{template "head" "About Me"}}
+  <body>
+    <main>
+    {{template "header"}}
+    <article>
+      {{.}}
+    </article>
     </main>
   </body>
 </html>
@@ -16,28 +31,38 @@
   <meta charset="UTF-8">
   {{template "mathjax"}}
   <link rel="stylesheet" href="/css/style.css">
+  <title>{{.}}</title>
 </head>
 {{end}}
 
 {{define "header"}}
 <header>
-  <h1>gypsydave5</h1>
-  <p>The blog of David Wickes, software developer</p>
+  <section class="top">
+    <h1>gypsydave5</h1>
+    <p>The blog of David Wickes, software developer</p>
+  </section>
+
+  <ul class="links">
+    <li><a href="/about/">about</a></li>
+    <li><a href="/posts/">posts</a></li>
+  </ul>
 </header>
 {{end}}
 
 {{define "postlist"}}
-<h1>All Posts</h1>
-<ul>
-  {{range .}}
-  <li> <a href="/posts/{{.Path}}">{{.TitleText}}
-      <time
-       datetime="{{.Date.Format "2006-01-02T15:04"}}"
-       >{{.Date.Format "Jan 02, 2006"}}</time>
-    </a>
-  </li>
-  {{end}}
-</ul>
+<section class="post-list">
+  <h1>All Posts</h1>
+  <ul>
+    {{range .}}
+    <li> <a href="/posts/{{.Path}}">{{.TitleText}}
+        <time
+            datetime="{{.Date.Format "2006-01-02T15:04"}}"
+            >{{.Date.Format "Jan 02, 2006"}}</time>
+      </a>
+    </li>
+    {{end}}
+  </ul>
+</section>
 {{end}}
 
 {{define "article"}}
@@ -79,13 +104,11 @@
 {{define "index"}}
 <!DOCTYPE html>
 <html lang="en">
-  {{template "head"}}
+  {{template "head" "Posts Index"}}
   <body>
     <main>
       {{template "header"}}
-      <article>
-        {{template "postlist" .}}
-      </article>
+      {{template "postlist" .}}
     </main>
   </body>
 </html>

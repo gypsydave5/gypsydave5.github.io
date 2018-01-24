@@ -66,6 +66,12 @@ a {
     text-decoration-skip: ink;
 }
 
+ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
 a:hover {
     background: var(--color-2);
 }
@@ -84,6 +90,7 @@ main {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+    flex-direction: column;
 }
 
 header {
@@ -93,6 +100,30 @@ header {
     flex-wrap: wrap;
     justify-content: space-between;
     width: 100%;
+}
+
+header section {
+    width: 100%;
+    display: flex;
+    flex-direction: inherit;
+}
+
+header .top {
+    justify-content: space-between;
+    flex-direction: inherit;
+}
+
+header .links {
+    width: 100%;
+    display: flex;
+    flex-direction: inherit;
+    background-color: var(--background-color-0);
+    justify-content: space-evenly;
+}
+
+header .links a {
+    width: 100%;
+    font-variant: small-caps;
 }
 
 header p {
@@ -132,7 +163,16 @@ aside h2 {
     background-color: var(--color-1);
 }
 
-aside ul {
+.post-list {
+    font-size: 16px;
+    padding: 0 10px;
+    margin: auto;
+}
+
+.post-list h1 {
+    font-size: 36px;
+}
+.post-list ul {
     margin: 0;
     padding: 0;
     list-style: none;
@@ -140,12 +180,12 @@ aside ul {
     overflow-wrap: break-word;
 }
 
-aside li a {
+.post-list li a {
     word-break: break-all;
     overflow-wrap: break-word;
 }
 
-aside li time {
+.post-list li time {
     font-size: 10px
 }
 
@@ -159,6 +199,7 @@ pre {
 pre code {
     font-family: "CMU Typewriter";
 }
+
 @media screen and (min-width: 600px) {
     header p {
         font-size: 18px;
@@ -169,15 +210,15 @@ pre code {
 }
 
 @media screen and (min-width: 780px) {
+    main {
+        flex-direction: row;
+    }
+
     article {
         font-size: 20px;
         width: 500px;
         padding: 0 10px;
         margin: auto;
-    }
-
-    aside {
-        width: 390px;
     }
 
     header {
@@ -187,6 +228,10 @@ pre code {
         flex-wrap: wrap;
         justify-content: start;
         width: 33%;
+    }
+
+    .links li {
+        margin: auto;
     }
 
     header p {
@@ -203,6 +248,7 @@ pre code {
     header p {
         font-size: 20px;
     }
+
     header h1 {
         font-size: 40px;
     }
