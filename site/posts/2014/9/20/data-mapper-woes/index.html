@@ -1,0 +1,97 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+  <meta charset="UTF-8">
+  
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+          inlineMath: [['$','$'], ['\\(','\\)']],
+          processEscapes: true,
+      },
+      displayAlign: "left",
+      displayIndent: "1em",
+      CommonHTML: { linebreaks: { automatic: true } },
+      "HTML-CSS": { linebreaks: { automatic: true } },
+      SVG       : { linebreaks: { automatic: true } }
+    });
+</script>
+<script type="text/javascript"
+        async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+  <link rel="stylesheet" href="/css/style.css">
+  <title>Data Mapper Woes</title>
+</head>
+
+  <body>
+    <main>
+    
+<header>
+  <section class="top">
+    <h1>gypsydave5</h1>
+    <p>The blog of David Wickes, software developer</p>
+  </section>
+
+  <ul class="links">
+    <li><a href="/about/">about</a></li>
+    <li><a href="/posts/">posts</a></li>
+  </ul>
+</header>
+
+    
+<article>
+  <h1>Data Mapper Woes</h1>
+  <time datetime="2014-09-20T20:27" >Sep 20, 2014</time>
+  <p>I love <a href="http://datamapper.org/">DataMapper</a>, the lightweight Object Relational
+Mapper for Ruby. We&rsquo;ve been using it with Sinatra. It&rsquo;s skinny, it&rsquo;s simple,
+it&rsquo;s clever, it makes the right tables happen in Postgres and the syntax is
+surprisingly simple. For instance, the email field for a user table:</p>
+
+<pre><code class="language-ruby">property :email, unique: true, required: true, format: email_address
+</code></pre>
+
+<p>Look! It&rsquo;s amazing &ndash; not only do we set the property, but we&rsquo;ve made it
+required and unique, and we&rsquo;ve validated that it&rsquo;s an email address. Amazing!</p>
+
+<p>I love it, but like all wonderful DSLs when it&rsquo;s good it&rsquo;s very very good, but
+when it&rsquo;s bad it&rsquo;s <em>horrid</em>.</p>
+
+<p>In the example I was working on I was creating a user which could be associated
+with many posts - it was a basic Twitter like app. The user had some
+requirements as above - specifically those listed for the email, but also that
+the user name was unique and that the password was more than six characters
+long. So far so incredibly boring.</p>
+
+<p>I set the wheels in motion, I write a feature test in Cucumber to see if as
+a user, when logged in, and I create a new post, then the post count goes up by
+one (I like speaking in Gherkin). Everything looked OK - but the post wasn&rsquo;t
+saving. And there were no useful error messages.</p>
+
+<p><a href="http://alexpeattie.com/">Alex Peattie</a> is a hero. He&rsquo;s left Makers now, but
+before he did he hacked through what was going on with my problem. And I mean
+hacked in the manner of destroying briar patches and slaying dragons - my mouth
+dropped in awe as he systematically got to the source of the problem (&ldquo;So, let&rsquo;s
+force it to save&hellip;  it saves the post fine, but doesn&rsquo;t update the user&hellip;
+hmmm&hellip;&rdquo;), then started dropping <code>puts</code> into the DataMapper source code after
+identifying the problematic lines in the backtrace.</p>
+
+<p>As it turns out, it was the password length that was the problem. As the User
+was being updated with the new post it is being associated with, the password
+requirement (6 letters or more) was kicking in - even when no password was
+being submitted with the update. So the post was fine - just the user didn&rsquo;t,
+and so prevented the post from saving.</p>
+
+<p>Simple to fix (just tell the user model to only validate password length on
+creation), but difficult to identify. I won&rsquo;t make that mistake again, but Alex
+remains my hero for sorting that out (and giving a great demonstration
+debugging). <a href="http://alex-farewell-card.herokuapp.com/">We all miss him</a>.</p>
+
+</article>
+
+    </main>
+  </body>
+</html>

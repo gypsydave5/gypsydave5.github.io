@@ -1,0 +1,302 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+  <meta charset="UTF-8">
+  
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+          inlineMath: [['$','$'], ['\\(','\\)']],
+          processEscapes: true,
+      },
+      displayAlign: "left",
+      displayIndent: "1em",
+      CommonHTML: { linebreaks: { automatic: true } },
+      "HTML-CSS": { linebreaks: { automatic: true } },
+      SVG       : { linebreaks: { automatic: true } }
+    });
+</script>
+<script type="text/javascript"
+        async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+  <link rel="stylesheet" href="/css/style.css">
+  <title>(Even More) Memoization in JavaScript</title>
+</head>
+
+  <body>
+    <main>
+    
+<header>
+  <section class="top">
+    <h1>gypsydave5</h1>
+    <p>The blog of David Wickes, software developer</p>
+  </section>
+
+  <ul class="links">
+    <li><a href="/about/">about</a></li>
+    <li><a href="/posts/">posts</a></li>
+  </ul>
+</header>
+
+    
+<article>
+  <h1>(Even More) Memoization in JavaScript</h1>
+  <time datetime="2016-03-28T00:01" >Mar 28, 2016</time>
+  <p>A while ago I wrote a piece on <a href="/posts/2015/3/21/%28basic%29-lazy-evaluation-and-memoization-in-javascript/">basic lazy evaluation and memoization in
+JavaScript</a>. I&rsquo;d like to continue some of the thoughts there on
+memoization, and to look at how some popular JS libraries handle it.</p>
+
+<h3>Memoization refresher</h3>
+
+<p>According to <a href="https://en.wikipedia.org/wiki/Memoization">Wikipedia</a>, memoization is:</p>
+
+<blockquote>
+<p>an optimization technique used primarily to speed up computer programs by
+storing the results of expensive function calls and returning the cached
+result when the same inputs occur again.</p>
+</blockquote>
+
+<p>We want the program to remember the results of its operation, so it doesn&rsquo;t
+have to expend any extra time and effort in doing them all over again. It all
+seems a little obvious really.</p>
+
+<p>So the first time we saw memoization it was in the context of <a href="/posts/2015/3/21/%28basic%29-lazy-evaluation-and-memoization-in-javascript/">lazy
+evaluation</a>, where the memoized function had already been prepared
+to be lazy. The lazily evaluated function was executed within our memoizer, and
+the result was retained within the scope of the memoized function, to be
+returned each subsequent time the function was called. As a refresher:</p>
+
+<pre><code class="language-javascript">function lazyEvalMemo (fn) {
+  const args = arguments;
+  let result;
+  const lazyEval = fn.bind.apply(fn, args);
+  return function () {
+    if (result) {
+      return result
+    }
+    result = lazyEval()
+    return result;
+  }
+}
+</code></pre>
+
+<p>Which is great if want the function to be memoized with a specific set of
+arguments. But that isn&rsquo;t going to work all of the time - probably not even most
+of the time. It&rsquo;s rare that there&rsquo;s just one set of parameters we want to be
+eternally bound to our function. A bit of freedom would be nice.</p>
+
+<h3>Keeping track of your arguments</h3>
+
+<p>If we want to be able to memoize a function which can take a variety of
+arguments, we need a way to keep track of them. Let&rsquo;s take one of the simplest
+cases:</p>
+
+<pre><code class="language-javascript">function addOne (x) {
+  return x + 1;
+};
+</code></pre>
+
+<p>That shouldn&rsquo;t take too much explanation. Now, in order to have a memoized
+version of it, we need to keep track of all the different values of <code>x</code> passed
+to it, and to associate them with the return value of <code>addOne</code>.</p>
+
+<p>A JavaScript object should suffice, taking <code>x</code> as a key, and the result as the
+value. Let&rsquo;s give it a go:</p>
+
+<pre><code class="language-javascript">
+const memo = {};
+
+function memoAddOne (x) {
+  if (memo[x]) {
+    return memo[x];
+  }
+  return memo[x] = x + 1;
+};
+</code></pre>
+
+<p>This takes advantage of the fact that the value of an assignment to an object is
+the value assigned (in this case <code>x + 1</code>), saving a line or so. The only issue
+here is that the value of <code>memo</code> is floating around in public, just waiting for
+other functions to overwrite and mutate. We need a way to hide it.</p>
+
+<p>Well, we could place <code>memo</code> on the function itself - it is an object after all
+- and just put an underscore in front of its name to try and let the world know
+that it&rsquo;s private (even though it isn&rsquo;t really private):</p>
+
+<pre><code class="language-javascript">function memoAddOne (x) {
+  memoAddOne._memo = memoAddOne._memo || {};
+
+  if (memoAddOne._memo[x]) {
+    return memoAddOne._memo[x];
+  }
+  return memoAddOne._memo[x] = x + 1;
+};
+</code></pre>
+
+<p>This isn&rsquo;t beautiful, but it works. <code>_memo</code> gets defined as an empty object on
+initialization and gets filled up with results on each application of the
+function - throw some <code>console.log()</code>s in there to prove it to yourself. That&rsquo;s
+exciting - although we&rsquo;re still a little exposed with the <code>_memo</code> property being
+available on the function.</p>
+
+<p>That said, we&rsquo;ve got what we came for - a memoized version of our function that
+works for many different arguments.</p>
+
+<h3>Fun with strings</h3>
+
+<p>Problem is, we&rsquo;re reliant on <code>x</code> being used as the property for our <code>_memo</code>
+object. As all good school children are taught, JavaScript, like the universe,
+is just a load of strings held together by poorly-understood forces. When <code>x</code>
+is used in <code>_memo[x]</code>, JavaScript handily casts it to a string to be used as the
+property name.</p>
+
+<p>I say handily - but try this&hellip;</p>
+
+<pre><code class="language-javascript">memoAddOne([55]) // =&gt; '551'
+memoAddOne(55) // =&gt; '551'
+memoAddOne(66) // =&gt; 67
+memoAddOne([66]) // =&gt; 67
+</code></pre>
+
+<p>Because&hellip;</p>
+
+<pre><code class="language-javascript">55.toString() // =&gt; '55'
+[55].toString() // =&gt; '55'
+</code></pre>
+
+<p>Ah, JavaScript: thou givest with one hand&hellip; <code>toString()</code>, which is what
+JavaScript is using under the hood to cast the non-string property identifier to
+a string, does not uniquely identify that argument. So our function behaves
+inconsistently depending on whether it was given the array or the number that
+<code>toString()</code> converts to the same string.</p>
+
+<p>We need a more predictable way of parsing our argument. Happily, we can borrow
+one of the built-in functions of JavaScript to do this, <code>JSON.stringify()</code>.</p>
+
+<pre><code class="language-javascript">JSON.stringify(55) // =&gt; '55'
+JSON.stringify('55') // =&gt; '&quot;55&quot;'
+JSON.stringify([55]) // =&gt; '[55]'
+JSON.stringify(['55']) // =&gt; '[&quot;55&quot;]'
+</code></pre>
+
+<p>Pretty good - let&rsquo;s give it a whirl:</p>
+
+<pre><code class="language-javascript">function memoAddOne (x) {
+  memoAddOne._memo = memoAddOne._memo || {};
+  const jsonX = JSON.stringify(x);
+
+  if (memoAddOne._memo[jsonX]) {
+    return memoAddOne._memo[jsonX];
+  }
+  return memoAddOne._memo[jsonX] = x + 1;
+};
+
+memoAddOne([55]) // =&gt; '551'
+memoAddOne(55) // =&gt; 56
+</code></pre>
+
+<p>Sorted.</p>
+
+<h3>The General Case</h3>
+
+<p>Now let&rsquo;s put together a function that can memoize <em>any</em> function - and as
+a bonus, we can also hide that nasty <code>_memo</code> property behind a closure:</p>
+
+<pre><code class="language-javascript">function memoize (fn) {
+  const memo = {};
+
+  return function () {
+    const args = Array.prototype.slice.call(arguments);
+    const jsonArgs = JSON.stringify(args);
+
+    if (memo[jsonArgs]) {
+      return memo[jsonArgs];
+    }
+    return memo[jsonArgs] = fn.apply(null, args);
+  };
+};
+</code></pre>
+
+<p>Much of this should now be familiar, but let&rsquo;s dig in. We take a single
+argument, hopefully a function, and bind it to the variable <code>fn</code>. We now get to
+declare <code>memo</code> inside our function - and hooray it&rsquo;s now unavailable to anyone
+but the function we&rsquo;re returning. Now that&rsquo;s what I call private - thank you
+closures!</p>
+
+<p>The function we give back, well we don&rsquo;t know how many arguments it&rsquo;s going to
+be given so why bind them to any parameters? We&rsquo;ll just leave its parameters
+empty. Any arguments we do get we&rsquo;ll instantly turn into an array by using the
+funky <code>Array.prototype.slice.call(arguments)</code> dance. And that array we can
+<code>stringify()</code> on the next line and call something useful like <code>jsonArgs</code>.</p>
+
+<p>Then we do much the same as above, only instead of giving <code>x + 1</code> as the
+value of <code>_memo[jsonX]</code>, we set the value of <code>memo[jsonArgs]</code> as the result of
+applying the <code>args</code> array to the original function we were given to memoize. Job
+done.</p>
+
+<p>Again, throw some <code>console.log</code>s in there to see what&rsquo;s really going on.</p>
+
+<h3>Here&rsquo;s One I <del>Made Earlier</del> Installed With <code>npm</code></h3>
+
+<p>The above is so incredibly useful that you&rsquo;ll not be surprised to learn that
+it&rsquo;s implemented, with slight modifications, in functional JavaScript libraries
+like <a href="http://underscorejs.org/">Underscore</a>, <a href="https://lodash.com/">Lodash</a> and (personal niche favourite) <a href="http://ramdajs.com/0.20.0/index.html">Ramda</a>.<sup class="footnote-ref" id="fnref:1"><a rel="footnote" href="#fn:1">1</a></sup></p>
+
+<p>Let&rsquo;s take a look at <a href="https://github.com/lodash/lodash/blob/4.6.1-npm/memoize.js#L48">the Lodash implementation</a>:</p>
+
+<pre><code>function memoize(func, resolver) {
+  if (typeof func != 'function' || (resolver &amp;&amp; typeof resolver != 'function')) {
+    throw new TypeError(FUNC_ERROR_TEXT);
+  }
+  var memoized = function() {
+    var args = arguments,
+        key = resolver ? resolver.apply(this, args) : args[0],
+        cache = memoized.cache;
+
+    if (cache.has(key)) {
+      return cache.get(key);
+    }
+    var result = func.apply(this, args);
+    memoized.cache = cache.set(key, result);
+    return result;
+  };
+  memoized.cache = new memoize.Cache;
+  return memoized;
+}
+</code></pre>
+
+<p>Now, although this is a little more <del>long-winded</del> complicated than the
+code above, it should be similar enough for us to see that they&rsquo;re doing the
+same thing. The difference being that in the above we are to supply an external function to
+hash the arguments (the <code>resolver</code> function), and that Lodash offers a custom
+caching object with a <code>get()</code> and <code>set()</code> interface, which we can overwrite if
+we like.</p>
+
+<p>(Bonus Question: why does this implementation of <code>memoize</code> suck if we don&rsquo;t supply
+a <code>resolver</code> argument?)</p>
+
+<p>The above library code will save us all the hassle of writing a memoization
+function ourselves - but now we can see how they work under the hood, we can
+take a more informed decision about whether we need to create a dependency on
+external library, or whether we just put together the (relatively) simple piece
+of code ourselves.</p>
+
+<div class="footnotes">
+
+<hr />
+
+<ol>
+<li id="fn:1">Seriously, this is the one to go for. It&rsquo;s amazing, it&rsquo;s beautiful - it&rsquo;s <em>functional</em>.</li>
+</ol>
+
+</div>
+
+</article>
+
+    </main>
+  </body>
+</html>

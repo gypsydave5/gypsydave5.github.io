@@ -1,0 +1,110 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+  <meta charset="UTF-8">
+  
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+          inlineMath: [['$','$'], ['\\(','\\)']],
+          processEscapes: true,
+      },
+      displayAlign: "left",
+      displayIndent: "1em",
+      CommonHTML: { linebreaks: { automatic: true } },
+      "HTML-CSS": { linebreaks: { automatic: true } },
+      SVG       : { linebreaks: { automatic: true } }
+    });
+</script>
+<script type="text/javascript"
+        async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+  <link rel="stylesheet" href="/css/style.css">
+  <title>Hoisting in JavaScript</title>
+</head>
+
+  <body>
+    <main>
+    
+<header>
+  <section class="top">
+    <h1>gypsydave5</h1>
+    <p>The blog of David Wickes, software developer</p>
+  </section>
+
+  <ul class="links">
+    <li><a href="/about/">about</a></li>
+    <li><a href="/posts/">posts</a></li>
+  </ul>
+</header>
+
+    
+<article>
+  <h1>Hoisting in JavaScript</h1>
+  <time datetime="2015-02-01T16:25" >Feb 01, 2015</time>
+  <p>Working at <a href="http://www.mergermarket.com/info/">Mergermarket</a> is fun. Not only am I getting to grips with a new
+language, <a href="http://groovy.codehaus.org/">Groovy</a>, in a nice, agile environment, on a project that&rsquo;s
+challenging but to which I can make some small and increasing contributions to. Not
+only that, but I&rsquo;m also working with some damn clever and patient people who
+are happy to explain things to me as we go along.</p>
+
+<p>So my next thsee posts will be about some of what I&rsquo;ve learned about JavaScript
+in the last month with Mat, Mike, Danielle, Nick and many others.</p>
+
+<p>###Hoisting
+At the top of my list of &ldquo;words I&rsquo;d heard associated with JS but didn&rsquo;t have
+the foggiest&rdquo;, <em>hoisting</em> or, more transparently, variable hoisting. Behold the
+following:</p>
+
+<pre><code class="language-javascript">function printThis(showLog) {
+
+    if(showLog === true){
+        var logMessage = 'MESSAGE!';
+        console.log(logMessage);
+    }
+
+    console.log(logMessage);
+}
+</code></pre>
+
+<p>Which you may be inclined to think would return two outputs to the console when
+called with <code>printThis(true)</code>, one of <code>MESSAGE!</code> and then the ubiquitous JS
+<code>undefined</code>. Because <code>logMessage</code> isn&rsquo;t defined at the second <code>console.log()</code>.</p>
+
+<p>Does it?</p>
+
+<pre><code>MESSAGE!
+MESSAGE!
+</code></pre>
+
+<p>Because the interpreter looks at the code and does this to it:</p>
+
+<pre><code class="language-javascript">function a(showLog) {
+
+    var logMessage;
+
+    if(showLog === true){
+        logMessage = 'MESSAGE!';
+        console.log(logMessage);
+    }
+
+    console.log(logMessage);
+}
+</code></pre>
+
+<p>The variable is &lsquo;hoisted&rsquo; out of its declaration in the block and created at the
+top of the function. The assignment still takes place in the same place, but
+because the scope of <code>logMessage</code> is the entire function, the variable is still
+available at the last <code>console.log</code>. This is because (motto alert) <strong>JS
+has function-level scope, not block-level scope</strong>. The interpreter just ignores
+those little <code>{</code> and <code>}</code> unless they&rsquo;re backed up with a function declaration.</p>
+
+</article>
+
+    </main>
+  </body>
+</html>

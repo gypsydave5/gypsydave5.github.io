@@ -1,0 +1,196 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+  <meta charset="UTF-8">
+  
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+          inlineMath: [['$','$'], ['\\(','\\)']],
+          processEscapes: true,
+      },
+      displayAlign: "left",
+      displayIndent: "1em",
+      CommonHTML: { linebreaks: { automatic: true } },
+      "HTML-CSS": { linebreaks: { automatic: true } },
+      SVG       : { linebreaks: { automatic: true } }
+    });
+</script>
+<script type="text/javascript"
+        async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+  <link rel="stylesheet" href="/css/style.css">
+  <title>Learning the C Programming Language Part 1: hello, world</title>
+</head>
+
+  <body>
+    <main>
+    
+<header>
+  <section class="top">
+    <h1>gypsydave5</h1>
+    <p>The blog of David Wickes, software developer</p>
+  </section>
+
+  <ul class="links">
+    <li><a href="/about/">about</a></li>
+    <li><a href="/posts/">posts</a></li>
+  </ul>
+</header>
+
+    
+<article>
+  <h1>Learning the C Programming Language<br><h2>Part 1: <i>hello, world</i></h2></h1>
+  <time datetime="2016-08-09T22:35" >Aug 09, 2016</time>
+  <p>I&rsquo;ve started to learn C. There&rsquo;s a number of reasons for this. First, it was the
+&lsquo;proper&rsquo; programming language when I was a kid. Second, I&rsquo;ve been learning quite
+a bit of Go recently, and just about every other page on the excellent <a href="https://blog.golang.org/">Go Blog</a>
+has a sentence that starts with &ldquo;In C&amp;hellip;&rdquo;.<sup class="footnote-ref" id="fnref:1"><a rel="footnote" href="#fn:1">1</a></sup></p>
+
+<p>Third, I&rsquo;ve started a course on <a href="https://www.coursera.org/specializations/data-structures-algorithms">Data Structures and Algorithms</a> on
+<a href="https://www.coursera.org/">Coursera</a>, inspired by the ever-inspirational <a href="https://twitter.com/deniseyu21">Denise Yu</a>. The course only
+accepts submissions in four languages: Python, Java, C++ and C.<sup class="footnote-ref" id="fnref:2"><a rel="footnote" href="#fn:2">2</a></sup> Going
+through that list my mind went &ldquo;Basically Ruby with <em>bleaugh</em> indentation,
+<em>bleaugh</em> Java <em>bleaugh</em>, sounds <em>really</em> hard, sounds hard.&rdquo; So I went with
+&lsquo;sounds hard&rsquo;.</p>
+
+<p>I thought I&rsquo;d try and capture my process of learning C as it might be useful to
+others in a similar position - i.e. no computer science background but know how
+to program in Ruby and JavaScript. I&rsquo;ll be approaching this in a series of
+posts, most of which will be following the loose structure of <a href="http://blog.gypsydave5.com/the-c-programming-language-presentation/">a presentation
+I gave on C</a>.<sup class="footnote-ref" id="fnref:3"><a rel="footnote" href="#fn:3">3</a></sup></p>
+
+<h2>Background</h2>
+
+<p>C was invented by Dennis Richie at Bell labs in the 1970s in order to write
+UNIX.<sup class="footnote-ref" id="fnref:4"><a rel="footnote" href="#fn:4">4</a></sup> He needed a language that provided sufficient abstraction to program
+quickly and efficiently, while at the same time being able to communicate
+directly with the computer&rsquo;s memory addresses to allow a programmer to perform
+low level optimizations. It has been a remarkably popular language, being used
+to write other languages (Ruby is written in C, NodeJS wouldn&rsquo;t work without
+<a href="https://nikhilm.github.io/uvbook/introduction.html">libuv</a>, written in C), and heavily influencing most modern programming
+languages (Java, Ruby, JavaScript, and most obviously, Go).</p>
+
+<h2><code>hello, world</code></h2>
+
+<p>Another of the ways C has influenced programming is through <a href="https://en.wikipedia.org/wiki/The_C_Programming_Language"><em>The C Programming
+Language</em></a> by Richie and Brian Kernighan. The author&rsquo;s intials gave their
+name to a <a href="https://en.wikipedia.org/wiki/Indent_Style#K.26R_style">style of formatting code</a>, along with giving us the <em>de facto</em>
+standard for your first program: &ldquo;hello, world&rdquo;.</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main() {
+    printf(&quot;hello, world\n&quot;);
+}
+</code></pre>
+
+<p>Line 1: Include a file called <code>stdio.h</code>. It includes information about the
+functions in the C standard library that deal with I/O - input/output. In this
+case printing to the terminal.</p>
+
+<p>Line 3: All C programs start with a function called <code>main</code> - this is the
+function that gets executed when the program is, well, executed. The arguments
+(of which we&rsquo;re using none at all) are in the parentheses. The body of the
+function is in the curly braces. So far so JavaScript. For people who have never
+seen a typed language the <code>int</code> is a little surprising. All it&rsquo;s telling us (and
+C) is that the return value for this function is an integer. We&rsquo;ll talk about
+types later, but for now the <code>int</code> is almost working like <code>def</code> in Ruby or
+<code>function</code> in JavaScript - it&rsquo;s a keyword declaring a function.</p>
+
+<p>Line 4: The meat of the program. Here we&rsquo;re calling a function called <code>printf</code>
+which has already been written for us as a part of the C standard library - this
+is why we did that <code>#include</code> at the beginning. We&rsquo;re calling it with a single
+argument, a string literal inside double quotes, that just says &ldquo;hello, world&rdquo;
+with a newline character (<code>\n</code>) at the end.</p>
+
+<p>At the end of the line we put a semi-colon to tell C that the line has finished.</p>
+
+<h2>Compiling and running</h2>
+
+<p>If you put all of that into a file called <code>hello-world.c</code>, save it, head to the
+terminal and type<sup class="footnote-ref" id="fnref:5"><a rel="footnote" href="#fn:5">5</a></sup></p>
+
+<pre><code class="language-bash">gcc hello-world.c
+</code></pre>
+
+<p>Then if you <code>ls</code> the same directory you should see a new file called<code>a.out</code>.<sup class="footnote-ref" id="fnref:6"><a rel="footnote" href="#fn:6">6</a></sup>
+If you then run this with <code>./a.out</code>, you&rsquo;ll see <code>hello, world</code>. Mission
+accomplished.</p>
+
+<p><code>gcc</code> is the <a href="https://gcc.gnu.org/">Gnu Compiler Collection</a>,<sup class="footnote-ref" id="fnref:7"><a rel="footnote" href="#fn:7">7</a></sup> which will compile your C program into
+an executable that your computer can run. All this means is that instead of
+translating each line of your program into something your computer can
+understand as you run it, as with something like Ruby or JavaScript, we&rsquo;re
+translating the whole program in one go before we run it.</p>
+
+<p><code>a.out</code> isn&rsquo;t that informative, so in order to get a better filename we can pass
+a flag to GCC:</p>
+
+<pre><code class="language-bash">gcc hello-world.c -o hello-word
+</code></pre>
+
+<p>Which outputs to the file <code>hello-world</code>, which we can now run with
+<code>./hello-world</code></p>
+
+<p>Success, we&rsquo;re now all C programmers!</p>
+
+<h3>Why <code>main</code> returns an <code>int</code></h3>
+
+<p>If you&rsquo;ve run programs on the command line before you may be aware that you get
+exit codes with each program that runs. You may have even been (un)lucky enough
+to see something on the lines of <code>Error: non-zero exit code</code>. On a POSIX
+system, a process returns a number to the process that called it to let it know
+how things went - this is called the exit code. <code>0</code> is the good one, every other
+number is some flavour of &lsquo;gone wrong&rsquo;.</p>
+
+<p>The default return value for main, if we don&rsquo;t explicitly return a value, is <code>0</code>.
+We can change this behaviour in our <code>hello-world</code> by returning an explicit
+value using the keyword <code>return</code> (very Ruby, so JavaScript).</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main() {
+    printf(&quot;hello, world\n&quot;);
+    return 1;
+}
+</code></pre>
+
+<p>(don&rsquo;t forget the semicolon!)</p>
+
+<p>Experiment with different return values. Remember to recompile your program each
+time you do. You may be able to see the returned value in your terminal&rsquo;s
+prompt. Otherwise you can echo out the last commands exit status with the
+command <code>echo $?</code>.</p>
+
+<div class="footnotes">
+
+<hr />
+
+<ol>
+<li id="fn:1">Don&rsquo;t believe me? Look at <a href="https://blog.golang.org/go-slices-usage-and-internals">this</a></li>
+
+<li id="fn:2">You can now do the same course with a more diverse set of languages.</li>
+
+<li id="fn:3">This was given at a Makers Academy alumni event. To view the speakers notes tap <code>n</code>.</li>
+
+<li id="fn:4">A longer discussion of the origins of C was written by Richie and is available <a href="https://www.bell-labs.com/usr/dmr/www/chist.pdf">here</a></li>
+
+<li id="fn:5">This assumes you have gcc installed, which is likely if you&rsquo;ve been developing on your computer for a while.</li>
+
+<li id="fn:6">You want to know <em>why</em> it&rsquo;s <code>a.out</code>? Read Richie&rsquo;s C History - link above.</li>
+
+<li id="fn:7">Yes, it used to be called the Gnu C Compiler - acronyms are so wonderfully flexible&hellip;</li>
+</ol>
+
+</div>
+
+</article>
+
+    </main>
+  </body>
+</html>

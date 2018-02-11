@@ -1,0 +1,75 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+  <meta charset="UTF-8">
+  
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+          inlineMath: [['$','$'], ['\\(','\\)']],
+          processEscapes: true,
+      },
+      displayAlign: "left",
+      displayIndent: "1em",
+      CommonHTML: { linebreaks: { automatic: true } },
+      "HTML-CSS": { linebreaks: { automatic: true } },
+      SVG       : { linebreaks: { automatic: true } }
+    });
+</script>
+<script type="text/javascript"
+        async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+  <link rel="stylesheet" href="/css/style.css">
+  <title>Brew Cask</title>
+</head>
+
+  <body>
+    <main>
+    
+<header>
+  <section class="top">
+    <h1>gypsydave5</h1>
+    <p>The blog of David Wickes, software developer</p>
+  </section>
+
+  <ul class="links">
+    <li><a href="/about/">about</a></li>
+    <li><a href="/posts/">posts</a></li>
+  </ul>
+</header>
+
+    
+<article>
+  <h1>Brew Cask</h1>
+  <time datetime="2015-03-21T19:12" >Mar 21, 2015</time>
+  <p><a href="http://brew.sh/">Homebrew</a> is wonderful, and if you&rsquo;re using a Mac to develop on and aren&rsquo;t
+using it to manage your command line applications then I&rsquo;d be surprised.
+Actually, I&rsquo;d assume you were using <a href="https://www.macports.org/">MacPorts</a>.</p>
+
+<p>I&rsquo;ve recently started to take advantage of an additonal library of prebuilt
+binaries for Homebrew called <a href="https://github.com/caskroom/homebrew-cask">Cask</a>. This gives access to many (if not all) of
+the larger, often graphical, applications that you need, such as Chrome,
+IntelliJ, Vagrant&hellip; it&rsquo;s a long list.</p>
+
+<p>It even integrates well with my favourite Mac productivity tool, <a href="http://www.alfredapp.com/">Alfred</a>. And,
+yes, you can install that with Cask too.</p>
+
+<p>Set up with:</p>
+
+<pre><code class="language-bash">brew install caskroom/cask/brew-cask
+</code></pre>
+
+<p>and then install software with:</p>
+
+<pre><code class="language-bash">brew cask install alfred
+</code></pre>
+
+</article>
+
+    </main>
+  </body>
+</html>
