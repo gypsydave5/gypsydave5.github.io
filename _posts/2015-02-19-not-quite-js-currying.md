@@ -64,7 +64,7 @@ function addTheseFourUp(a, b, c, d) {
     return a + b + c + d
 }
 
-var addTwoAndTheseThreeUp = addTheseFourUp(this, 2)
+var addTwoAndTheseThreeUp = addTheseFourUp.bind(this, 2)
 
 addTwoAndTheseThreeUp(1, 2, 3) //=> 8
 ```
