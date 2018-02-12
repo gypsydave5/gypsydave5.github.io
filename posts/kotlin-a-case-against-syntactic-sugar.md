@@ -28,8 +28,10 @@ fun addTwo (number: Int): Int {
   return number + 2
 }
 ```
+That's nice and easy - just like C or Go or Java!
+
 But maybe that's a bit too verbose - we could just return the result as... an
-assignment type thingy?
+assignment?
 
 ```kotlin
 fun addTwo (number: Int): Int = number + 2
@@ -47,7 +49,7 @@ This, of course, doesn't work. Because ... wait, what? Why doesn't this work?
 Well even though that thing looks like a function, it's going to get compiled
 down to some Java bytecode which will turn it into a method on a class. I have
 no idea how that happens - but I imagine it's something like using a different
-vtable for variables and functions like we get in Common Lisp.
+lookup table for variables and functions like we get in Common Lisp.
 
 So we need to reference the function like this:
 
@@ -78,7 +80,7 @@ listOfNumbers.map { number -> number + 2 }
 ```
 
 And to really round off the fun, we can get rid of `number` and replace it with
-the default receiver - `it`.
+the default receiver - `it`. Like Groovy!
 
 ```kotlin
 val listOfNumbers = listOf(1, 2, 3, 4)
@@ -93,15 +95,15 @@ outer function. How useful is that! You'll end up only mapping over _one_ of the
 numbers.
 
 If you really _want_ to return from the lambda - or block, did I say that
-they're sometimes called blocks when they're the last argument. It's good to
-have more that one name for the same thing, right? So if you want to return
-early you can use the `return@map` syntax.
+they're sometimes called blocks when they're the last argument? It's good to
+have more that one name for the same thing, right? So if you really want to
+return early you can use the `return@map` syntax.
 
 Or, you know, use an anonymous function.
 
 Oh, did I not mention anonymous functions? They're just like functions, and
 lambdas, and closures, and blocks except they have a different syntax _and
-return works_. They're
+return works_.
 
 ```kotlin
 val listOfNumbers = listOf(1, 2, 3, 4)
@@ -122,19 +124,31 @@ objects to make them behave like functions á la Scala:
 object addTwo {
     invoke(number: Int) = number + 2
 }
+
+val listOfNumbers = listOf(1, 2, 3, 4)
+listOfNumbers.map(addTwo)
 ```
 
 ## So what, Dave?
 
 Am I against having different solutions to problems? Certainly not? Do I hate
-either implicit or explicit returns? No.
+either implicit or explicit returns? No, nothing that specific.
 
-What I hate here is the lack of opinion, the confusion of paradigms. Why
+What's grinding my gears is the confusion between the 'Lambda' syntax and the
+'Anonymous Function' syntax. Here the language is letting you write the same
+concept - the anonymous function - in two different ways. And the only
+discernable advantage of one syntax over the other is the introduction of the
+keyword `return` - the behaviour of each is (or at least can be made) identical.
 
+The saddening part of this that the language has taken the core (arguably)
+functional language primitive and made it into two different things. Both
+syntaxes reference the same programming concept, but just by there being two of
+them the language is introducing an unnecessary confusion.
 
+And that confusion is important, because a (programming) language is a language
+we should be able to express ourselves in clearly, without ambiguity.
 
-
-[^1]: Execept in Groovy they got called closures because it's important to have
-  as many words for the same idea as possible.
+[^1]: Except in Groovy they got called closures because it's very important to have
+  as many words for the same concept as possible.
 
 [SO]: https://stackoverflow.com/questions/48112081/why-does-kotlin-have-two-syntaxes-for-lambdas-anonymous-functions
