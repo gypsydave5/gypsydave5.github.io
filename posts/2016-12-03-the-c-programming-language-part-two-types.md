@@ -213,7 +213,7 @@ are both good solutions, and take away the headache of having to think about the
 correct type to use to represent an integer, but also lack the freedom for
 us to manage memory directly.
 
-## Practically speaking&hellip;
+## Practically speaking...
 
 In practice when I write C, I start with using `int`s, wait until I see errors
 that are due to integer oveflow, and then find and replace to change the `int`s
@@ -227,7 +227,7 @@ But it's nice to know I can.
 [^2]: The late senator [Ted Stevens](https://en.wikipedia.org/wiki/Series_of_tubes)
 [^3]: Worth noting that the size of a byte was only fixed when IBM decided it would be 8 bits. Maybe take a look at [this](http://www.wordorigins.org/index.php/bit_byte/).
 [^4]: Eight ones, `11111111`, in binary is 255 in decimal.
-[^5]: This may be a contentious statement, and is worthy of another post, but here I'm refering to type as early programmers would have understood the idea of a type of data, rather than the types of [type theory](https://en.wikipedia.org/wiki/Type_theory), based on Bertrand Russell's solution to the [set theoretic paradoxes](https://en.wikipedia.org/wiki/Russell's_paradox), which was later brought in to computer science by way of Alonzo Church and languages like ML and which functional programmers tend to wax lyrical about in languages like Scala. Take a look at [this blog post](http://arcanesentiment.blogspot.co.uk/2015/01/a-brief-history-of-type.html) and [this short post](http://lists.seas.upenn.edu/pipermail/types-list/2014/001781.html).
+[^5]: This may be a contentious statement. Here I'm refering to type as early programmers would have understood the idea of a type of data, rather than the types of [type theory](https://en.wikipedia.org/wiki/Type_theory), based on Bertrand Russell's solution to the [set theoretic paradoxes](https://en.wikipedia.org/wiki/Russell's_paradox), which was later brought in to computer science by way of Alonzo Church and languages like ML and which functional programmers tend to wax lyrical about in languages like Scala. Take a look at [this blog post](http://arcanesentiment.blogspot.co.uk/2015/01/a-brief-history-of-type.html) and [this short post](http://lists.seas.upenn.edu/pipermail/types-list/2014/001781.html).
 [^6]: If you want to know _why_ this is, take a look at some articles on [Two's Complement](https://en.wikipedia.org/wiki/Two's_complement). [This one](https://www.cs.cornell.edu/~tomf/notes/cps104/twoscomp.html) is pretty good too. `unsigned` types don't have to worry about this and so can consequently store larger, non-negative integers.
 
 [postOne]: /posts/2016/8/9/learning-the-c-programming-language-part-1:-hello,-world/
