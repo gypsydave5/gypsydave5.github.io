@@ -1,3 +1,4 @@
+#!/bin/bash
 TEMPDIR=`mktemp -d 2>/dev/null || mktemp -d -t 'mytmpdir'`
 
 cp -r site/. $TEMPDIR
