@@ -53,6 +53,10 @@
     src: url("/fonts/cmutypewritertext_roman/cmuntt-webfont.woff");
 }
 
+* {
+  box-sizing: border-box;
+}
+
 html {
     font-family: "CMU Serif";
     color: #012;
@@ -74,6 +78,16 @@ ul {
 
 a:hover {
     background: var(--color-2);
+}
+
+a:focus {
+    background: var(--color-1);
+    outline:none;
+}
+
+span:focus {
+    background: var(--color-1);
+    outline:none;
 }
 
 body {
@@ -129,7 +143,7 @@ header .links a {
 header p {
     background-color: var(--color-1);
     margin: 10px 0;
-    padding: 0;
+    padding: 1em;
     max-width: 200px;
 }
 
@@ -144,6 +158,11 @@ article {
     padding: 0 5px;
     max-width: 100%;
     font-size: 16px;
+}
+
+article ul li {
+  list-style: square;
+  margin-left: 1em
 }
 
 time {
@@ -183,6 +202,7 @@ aside h2 {
 .post-list li a {
     word-break: break-all;
     overflow-wrap: break-word;
+    padding: 3px;
 }
 
 .post-list li time {
@@ -216,7 +236,7 @@ pre code {
 
     article {
         font-size: 20px;
-        width: 500px;
+        width: 45rem;
         padding: 0 10px;
         margin: auto;
     }
@@ -227,7 +247,7 @@ pre code {
         flex-direction: column;
         flex-wrap: wrap;
         justify-content: start;
-        width: 33%;
+        width: 20%;
     }
 
     .links li {
