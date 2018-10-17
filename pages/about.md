@@ -1,6 +1,5 @@
 ---
-layout: page
-title: About me
+title: About
 ---
 
 I'm a graduate of [the University of Warwick] and [Makers Academy]. I have been

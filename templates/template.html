@@ -11,15 +11,16 @@
 </html>
 {{end}}
 
-{{define "about"}}
+{{define "page"}}
 <!DOCTYPE html>
 <html lang="en">
-  {{template "head" "About Me"}}
+  {{template "head" .Title}}
   <body>
     <main>
     {{template "header"}}
     <article>
-      {{.}}
+      <h1>{{.Title}}</h1>
+      {{.Body}}
     </article>
     </main>
   </body>
@@ -72,6 +73,7 @@
   {{.Body}}
 </article>
 {{end}}
+
 
 {{define "mathjax"}}
 <script type="text/x-mathjax-config">
