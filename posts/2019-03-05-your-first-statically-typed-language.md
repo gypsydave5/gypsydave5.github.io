@@ -19,10 +19,10 @@ then consider what would be a good choice of statically typed language for a new
 programmer to learn.
 
 - [Who is this for](#who-is-this-for)
-- [What is a statically typed, compiled language](#what-is-a-statically-typed-compiled-language)
+- [What is a statically typed, compiled language?](#what-is-a-statically-typed-compiled-language)
 - [Advantages](#advantages)
 - [Disadvantages](#disadvantages)
-- [Where should I start](#where-should-i-start)
+- [Where should I start?](#where-should-i-start)
 
 ## Who is this for?
 
