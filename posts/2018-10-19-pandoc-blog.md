@@ -16,7 +16,7 @@ Nah, it's `pandoc` and `now`.
 
 ## What's `pandoc`?
 
-[Pandoc][pandoc] is a 'universal document converter' - a swiss army knife for
+[Pandoc][pandoc] is a 'universal document converter' - a swiss army knife fordefault-text-scale
 changing document type a into document type b. It's good for lots of things, but
 today it's going to be good for turning Markdown (what we like writing in) into
 HTML (what we read on a website).
