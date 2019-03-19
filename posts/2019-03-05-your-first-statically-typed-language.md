@@ -68,7 +68,7 @@ simple sentence:
 
 > What's five added to a banana?
 
-Becomes.
+Becomes
 
 > What's five (which is a number) added (adding, if you didn't know, is something you do with numbers) to a banana (which is a fruit)?
 
