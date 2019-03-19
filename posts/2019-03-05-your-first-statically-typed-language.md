@@ -9,7 +9,7 @@ tags:
 published: false
 ---
 
-Most people's first programming language is a dynamically typed, interpreted language - JavaScript, Python or Ruby. These are excellent languages to learn programming with - but there's a separate category of languages in widespred use: statically typed, compiled languages - C, Go, Java, C# and many others. This article will try to explain the difference between the two language categories, consider some of their advantages and disadvantages, and then consider what would be a good choice of statically typed language for a new programmer to learn.
+Most people's first programming language is a dynamically typed, interpreted language - JavaScript, Python or Ruby. These are excellent languages to learn programming with - but there's a separate category of languages in widespred use: statically typed, compiled languages - C, Go, Java, C# and many others. This article will try to explain the difference between the two language categories, look at their advantages and disadvantages, and then consider what would be a good choice of statically typed language for a programmer who is only familiar with dynamically typed languages to learn.
 
 - [Who is this for](#who-is-this-for)
 - [What is a statically typed, compiled language?](#what-is-a-statically-typed-compiled-language)
@@ -19,11 +19,12 @@ Most people's first programming language is a dynamically typed, interpreted lan
 
 ## Who is this for?
 
-The target audience of this article is someone who is comfortable with a programming in a dynamically typed language and who is interested in learning a statically typed language, and wants to know why it might be worth while. The examples are in JavaScript, TypeScript, Python and Go, but no knowledge of these languages is required. It is based on my own experience of being a self-taught developer who started working in Ruby and JavaScript and has extended to languages like Go, TypeScript, Kotlin and Rust.
+The target audience of this article is someone who is comfortable with programming in a dynamically typed language and who is interested in learning a statically typed language, and wants to know why it is worth while. The examples are in JavaScript, TypeScript, Python and Go, but no knowledge of these
+languages should be required. It is based on my own experience of being a self-taught developer who started working in Ruby and JavaScript and has extended to languages like Go, TypeScript, Kotlin and Rust.
 
 ## What is a statically typed, compiled language?
 
-There are two pairs of opposites - _dynamically typed_ vs. _statically typed_, and _compiled_ vs. _interpreted_.
+There are two pairs of opposites to look at here: _dynamically typed_ vs. _statically typed_, and _compiled_ vs. _interpreted_. Let's go through them in that order.
 
 ### Dynamic vs Static typing
 
@@ -31,10 +32,9 @@ If someone asked you:
 
 > What's five added to a banana?
 
-You'd be confused - what do they mean? It looks like they've made a mistake. Maybe they don't know what the meaning of 'plus' is, or what a 'banana' is. Something has gone wrong as the question does not make sense.[^1]
+You'd be confused - what do they mean? It looks like they've made a mistake. Maybe they don't know what the meaning of 'add' is, or what a 'banana' is. Maybe they have a different meaning of 'add' to us. Something has gone wrong somewhere though, as their question doesn't make sense to us.[^1]
 
-Computer programming languages have the same idea of 'making sense'. By having the idea of _types_ in a language, the program you have written can be checked to see if it 'makes sense'. _Type checking_ will tell you that you can't add
-`1` to `"banana"`.[^2]
+Programming languages have a way of telling us that an expression written in the language do or do not make sense. They do this by using the _type_ that every value in a programming language has. In dynamically typed languages we only really become aware of types when we use a value of one type in the wrong way - when we say something that doesn't 'make sense'.
 
 For instance, in Python we can write this:
 
@@ -42,7 +42,7 @@ For instance, in Python we can write this:
 5 + "banana"
 ```
 
-Try saving that in a file called `typecheck.py` and executing it with `python typecheck.rb`. You should get the following error in your terminal:
+Try saving that in a file called `typecheck.py` and executing it with `python typecheck.py`. You should get the following error in your terminal:
 
 ```
 Traceback (most recent call last):
@@ -51,17 +51,30 @@ Traceback (most recent call last):
 TypeError: unsupported operand type(s) for +: 'int' and 'str'
 ```
 
-This is a type error - you can tell that from the `TypeError` bit of the message. The error is telling you that you can't `+` the types `int` and `str` together. Just like you don't know how to add together 5 and banana, neither does Python.
+This is a type error - you can tell that from the `TypeError` bit of the message. The error is telling you that you can't `+` the types `int` and `str` together. Just like you don't know how to add together 5 and a banana, neither does Python.
+
+This type error is thrown by a _type checker_. The type checker kicks in when the Python program is run and checks that the two things that are being `+`ed together are of the right type.[^2]
 
 Type checking can happen at one of two times: when the program is running (commonly called 'run time') or sometime before then. Dynamically typed languages have their types checked at run time - this is what happened with the Python program we ran above; the type error become apparent when the program was run. Statically typed languages have their types checked before they are run.
 
 #### Type annotations
 
-In order for the type checker to accurately check the types in a statically typed language, you will often have to explicitly declare the type of a variable through a _type annotation_. A type annotation is a little extra information you add to a variable to say what type it's value is. It's just like saying
+In order for the type checker to accurately check the types in a statically
+typed language, you will often have to explicitly declare the type of a variable
+through a _type annotation_. A type annotation is a little extra information you
+add to a variable to say what type it is. In English we can imagine adding type
+annotations to our nouns and verbs as extra information in parentheses. So our
+simple sentence:
 
-> What's five [a number] added to [needs two numbers] a banana [a fruit]
+> What's five added to a banana?
 
-Here I've added some 'type annotations' to the sentence above, declaring that 'banana' is a fruit, and 'five' is a number. I've also annotated the verb 'added to' to say that it needs two numbers to work. Notice that with our human type annotations we don't need to know what 'five' is, what a 'banana' is, and what addition is, to know that this sentence doesn't make sense. We don't even need to know what a number is. We just know that the verb in the middle needs two nouns to be of the type 'number' for this sentence to be valid. The type checker in for a statically typed language works in the same way.[^3]
+Becomes.
+
+> What's five (which is a number) added (adding, if you didn't know, is something you do with numbers) to a banana (which is a fruit)?
+
+Which might be good evidence that natural language is not a place for type annotations.
+
+That that with these English type annotations we don't need to know what 'five' is, what a 'banana' is, and what 'addition' is, to know that this sentence doesn't make sense. We don't even need to know what a 'number' is. We just know that the verb in the middle needs two nouns to be of the type 'number' for this sentence to be valid. We could perform this kind of check automatically just by looking at the symbols without having to know anything about their meaning. The type checker in for a statically typed language works in the same way.[^3]
 
 For instance, in TypeScript, a statically typed variation of JavaScript:
 
@@ -233,12 +246,11 @@ Do you have any experience of transitioning from dynamically typed languages to 
 
 [^1]: We could say that the sentence is syntactically correct, but is semantically nonsense.
 
-[^2]: Unless that language is JavaScript, in which case type checking will have absolutely no problem adding `5` and `"banana"` together.
+[^2]: Try and imagine what would happen if there were _no types_ in a language. All you would have is bits floating around in memory. How would you know where the 'number' started? Or ended? Or which bits of the memory were the program? This is why all programming languages are typed - programming would be impossible without them.
 
-[^3]: Although often the type checker _does_ know the types of the values it's looking at - it will know that `1` is a number. This is how type inference works.
+[^3]: Although often the type checker _does_ know the types of the values it's looking at - it will know that `1` is a number. This is how type inference works, helping statically typed languages become a lot less verbose. For instance in Go we can just say `x := 1` and the type checker will be able to infer the type of `x` to be a number.
 
-[^4]: There are some subtleties to this - often a language interpreter will compile parts of the code on the fly, and compiled languages can have sections of code whose types can only
-    be worked out after compilation when we run the program (at 'run time').
+[^4]: There are some subtleties to this - often a language interpreter will compile parts of the code on the fly, and compiled languages can have sections of code whose types can only be worked out after compilation when we run the program (at 'run time').
 
 [^5]: This is sometimes called _transpilation_.
 
