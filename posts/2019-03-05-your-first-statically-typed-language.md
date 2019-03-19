@@ -59,12 +59,7 @@ Type checking can happen at one of two times: when the program is running (commo
 
 #### Type annotations
 
-In order for the type checker to accurately check the types in a statically
-typed language, you will often have to explicitly declare the type of a variable
-through a _type annotation_. A type annotation is a little extra information you
-add to a variable to say what type it is. In English we can imagine adding type
-annotations to our nouns and verbs as extra information in parentheses. So our
-simple sentence:
+In order for the type checker to accurately check the types in a statically typed language, you will often have to explicitly declare the type of a variable through a _type annotation_. A type annotation is a little extra information you add to a variable to say what type it is. In English we can imagine adding type annotations to our nouns and verbs as extra information in parentheses. So our simple sentence:
 
 > What's five added to a banana?
 
