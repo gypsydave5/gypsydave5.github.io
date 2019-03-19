@@ -31,10 +31,10 @@ If someone asked you:
 
 > What's five added to a banana?
 
-You'd be confused - what do they mean? It looks like they've made a mistake. Maybe they don't know what the meaning of 'plus' is, or what a 'banana' is. Something has gone wrong as the question does not make sense.[^4]
+You'd be confused - what do they mean? It looks like they've made a mistake. Maybe they don't know what the meaning of 'plus' is, or what a 'banana' is. Something has gone wrong as the question does not make sense.[^1]
 
 Computer programming languages have the same idea of 'making sense'. By having the idea of _types_ in a language, the program you have written can be checked to see if it 'makes sense'. _Type checking_ will tell you that you can't add
-`1` to `"banana"`.[^5]
+`1` to `"banana"`.[^2]
 
 For instance, in Python we can write this:
 
@@ -61,7 +61,7 @@ In order for the type checker to accurately check the types in a statically type
 
 > What's five [a number] added to [needs two numbers] a banana [a fruit]
 
-Here I've added some 'type annotations' to the sentence above, declaring that 'banana' is a fruit, and 'five' is a number. I've also annotated the verb 'added to' to say that it needs two numbers to work. Notice that with our human type annotations we don't need to know what 'five' is, what a 'banana' is, and what addition is, to know that this sentence doesn't make sense. We don't even need to know what a number is. We just know that the verb in the middle needs two nouns to be of the type 'number' for this sentence to be valid. The type checker in for a statically typed language works in the same way.[^6]
+Here I've added some 'type annotations' to the sentence above, declaring that 'banana' is a fruit, and 'five' is a number. I've also annotated the verb 'added to' to say that it needs two numbers to work. Notice that with our human type annotations we don't need to know what 'five' is, what a 'banana' is, and what addition is, to know that this sentence doesn't make sense. We don't even need to know what a number is. We just know that the verb in the middle needs two nouns to be of the type 'number' for this sentence to be valid. The type checker in for a statically typed language works in the same way.[^3]
 
 For instance, in TypeScript, a statically typed variation of JavaScript:
 
@@ -101,13 +101,13 @@ These annotations will be used by the TypeScript type checker, which runs when t
 
 ### Compiled / Interpreted
 
-In an interpreted language such as JavaScript each line of the program is read and executed in sequence, one after the other,[^a] by an interpreter, which builds up the running process from the program you wrote, line by line.
+In an interpreted language such as JavaScript each line of the program is read and executed in sequence, one after the other,[^4] by an interpreter, which builds up the running process from the program you wrote, line by line.
 
 Compilation is the act of turning the program you've written in one language into another language. For TypeScript, the target language is JavaScript. And during the compilation - at 'compile time' - the type checker will analyse the TypeScript program for any errors.
 
-Compilers are usually used to translate a high level programming language (like JavaScript) into a lower level language like an assembly language or machine code. In the case of TypeScript, the compiler outputs anoher high level language - JavaScript.[^8]
+Compilers are usually used to translate a high level programming language (like JavaScript) into a lower level language like an assembly language or machine code. In the case of TypeScript, the compiler outputs anoher high level language - JavaScript.[^5]
 
-Compiled vs. interpreted is barely ever a cut and dried distinction when with a particular programming language - an interpreter will sometimes have a compilation step which runs just before the code is executed,[^b] and the output of a compiler will have to be run by an interpreter. In addition, being compiled or interpreted is not necessarily a property of the language itself. Compilers have been written for languages that are normally interpreted, and interpreters for languages that are normally compiled.
+Compiled vs. interpreted is barely ever a cut and dried distinction when with a particular programming language - an interpreter will sometimes have a compilation step which runs just before the code is executed,[^6] and the output of a compiler will have to be run by an interpreter. In addition, being compiled or interpreted is not necessarily a property of the language itself. Compilers have been written for languages that are normally interpreted, and interpreters for languages that are normally compiled.
 
 For a statically typed, compiled language, the compilation step is where the type checker runs. Type checking is useful for the compiler as it allows it to make optimizations in the performance of the software - if a variable is always going to be a `number` it can optimize the memory locations used.
 
@@ -134,7 +134,7 @@ which will give us the result
 '5banana'
 ```
 
-Oh JavaScript... more than happy to `+` _anything_ together.[^10] It's easy to laugh at this sort of error, but I've seen teams working on JavaScript bugs for days based on a number being stored as a string. It's an easy mistake to make. It's also the sort of bug that will _never, ever_ happen to you - until it happens to you.
+Oh JavaScript... more than happy to `+` _anything_ together.[^7] It's easy to laugh at this sort of error, but I've seen teams working on JavaScript bugs for days based on a number being stored as a string. It's an easy mistake to make. It's also the sort of bug that will _never, ever_ happen to you - until it happens to you.
 
 But if we try to replicate the same bug in TypeScript
 
@@ -149,7 +149,7 @@ function add(n1: number, n2: number): number {
 add(five, banana)
 ```
 
-When we compile this with the TypeScript compiler[^11]
+When we compile this with the TypeScript compiler[^8]
 
 ```
 add.ts:8:11 - error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
@@ -167,7 +167,7 @@ This is the biggest advantage of static typing from the programmer's perspective
 
 ### Editor integration
 
-But the fun of type checking doesn't end with compilation - far from it. Because a type checker can be run even before you compile your program it can be integrated with your text editor to give you information about your program as you're typing. Because the type annotations declare what the type of a variable is, the editor can now tell you useful things like which methods are available to use on it.[^12]
+But the fun of type checking doesn't end with compilation - far from it. Because a type checker can be run even before you compile your program it can be integrated with your text editor to give you information about your program as you're typing. Because the type annotations declare what the type of a variable is, the editor can now tell you useful things like which methods are available to use on it.[^9]
 
 [!gif of editor completion]
 
@@ -197,7 +197,7 @@ The verbosity of a statically typed language is made very clear at the boundarie
 
 ### No REPL based development
 
-Most compiled languages do not have support for a Read-Evaluate-Print-Loop,[^13] and do not lend themselves to the sort of interactive development seen in languages such as Clojure. If you work in this way you'll miss it - if you don't it won't make a bit of difference to you.
+Most compiled languages do not have support for a Read-Evaluate-Print-Loop,[^10] and do not lend themselves to the sort of interactive development seen in languages such as Clojure. If you work in this way you'll miss it - if you don't it won't make a bit of difference to you.
 
 ## Where should I start?
 
@@ -229,23 +229,25 @@ Do you have any experience of transitioning from dynamically typed languages to 
 [learngo]: https://github.com/quii/learn-go-with-tests
 [gobyexample]: https://gobyexample.com/
 [go]: https://golang.org/
+[JavaScriptWAT]: https://www.destroyallsoftware.com/talks/wat
 
-[^4]: We could say that the sentence is syntactically correct, but is semantically nonsense.
+[^1]: We could say that the sentence is syntactically correct, but is semantically nonsense.
 
-[^5]: Unless that language is JavaScript, in which case type checking will have absolutely no problem adding `5` and `"banana"` together.
+[^2]: Unless that language is JavaScript, in which case type checking will have absolutely no problem adding `5` and `"banana"` together.
 
-[^6]: Although often the type checker _does_ know the types of the values it's looking at - this is how type inference works.
+[^3]: Although often the type checker _does_ know the types of the values it's looking at - it will know that `1` is a number. This is how type inference works.
 
-[^a]: There are some subtleties to this - often a language interpreter will compile parts of the code on the fly, and compiled languages can have sections of code whose types can only be worked out after compilation when we run the program (at 'run time').
+[^4]: There are some subtleties to this - often a language interpreter will compile parts of the code on the fly, and compiled languages can have sections of code whose types can only
+    be worked out after compilation when we run the program (at 'run time').
 
-[^b]: This is called a 'just in time' compiler for obvious reasons.
+[^5]: This is sometimes called _transpilation_.
 
-[^8]: This is sometimes called _transpilation_.
+[^6]: This is called a 'just in time' compiler for obvious reasons.
 
-[^10]: If you've not watched the [JavaScript WAT] video, now would be a good time.
+[^7]: If you've not watched Gary Bernhardt's [JavaScriptWAT] video, now would be a good time.
 
-[^11]: If you're interested in seeing this for yourself, you will need a NodeJS environment on your computer. Then you will need to install the TypeScript compiler from NPM by running `npm install -g typescript`. To compile a TypeScript file, i.e. one called `add.ts`, run `tsc add.ts`. The compiled JavaScript output will be in a file called `add.js` if there are no compilation errors.
+[^8]: If you're interested in seeing this for yourself, you will need a NodeJS environment on your computer. Then you will need to install the TypeScript compiler from NPM by running `npm install -g typescript`. To compile a TypeScript file, i.e. one called `add.ts`, run `tsc add.ts`. The compiled JavaScript output will be in a file called `add.js` if there are no compilation errors.
 
-[^12]: This sort of assistance _is_ available in dynamically typed languages, but not to the same degree.
+[^9]: This sort of assistance _is_ available in dynamically typed languages, but not to the same degree.
 
-[^13]: There is, of course, some nuance to this. For instance languages that run, on the Java Virtual Machine (JVM) _can_ support a REPL by sending the compiled Java Byte Code emitted from the REPL directly to a running instance of the JVM.
+[^10]: There is, of course, some nuance to this. For instance languages that run, on the Java Virtual Machine (JVM) _can_ support a REPL by sending the compiled Java Byte Code emitted from the REPL directly to a running instance of the JVM.
