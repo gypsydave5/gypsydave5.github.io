@@ -57,6 +57,10 @@
   box-sizing: border-box;
 }
 
+html, body, main {
+  height: 100%;
+}
+
 html {
     font-family: "CMU Serif";
     color: #012;
