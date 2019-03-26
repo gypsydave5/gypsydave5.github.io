@@ -19,7 +19,7 @@ disadvantages, and then consider what would be a good choice of statically typed
 language for a programmer who is only familiar with dynamically typed languages
 to learn.
 
-- [Who is this for](#who-is-this-for)
+- [Who is this for?](#who-is-this-for)
 - [What is a statically typed, compiled
   language?](#what-is-a-statically-typed-compiled-language)
 - [Advantages](#advantages)
