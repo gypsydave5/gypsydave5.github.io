@@ -1,6 +1,6 @@
 ---
 title: Why learn... about REST?
-published: true
+published: false
 date: 2019-03-22 19:12:28
 description: Understanding REST for the beginner
 tags:
