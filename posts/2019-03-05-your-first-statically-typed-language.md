@@ -1,5 +1,5 @@
 ---
-title: Why learn... a statically typed language
+title: "Why learn... a statically typed language?"
 published: true
 date: 2019-03-22 19:12:28
 description: Static typing for programmers with a dynamically typed background

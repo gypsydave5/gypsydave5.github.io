@@ -1,5 +1,5 @@
 ---
-title: Why learn... about REST?
+title: "Why learn... about REST? 1: URIs and Resources"
 published: false
 date: 2019-03-22 19:12:28
 description: Understanding REST for the beginner
