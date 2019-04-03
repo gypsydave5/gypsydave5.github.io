@@ -2,8 +2,8 @@ gypsydave5.github.io
 ====================
 
 This is my blog, hosted with Github Pages, available at both
-[blog.gypsydave5.com](blog.gypsydave5.com) and
-[gypsydave5.github.io](gypsydave5.github.io).
+[blog.gypsydave5.com](https://blog.gypsydave5.com) and
+[gypsydave5.github.io](https://gypsydave5.github.io).
 
 It was created using [blawg][blawg], a static site generator I wrote.
 
