@@ -62,7 +62,7 @@ create the response that gets sent back. All of a sudden you don't have to have
 a file in a directory to send back. It could be anything.
 
 For instance, it could be [a picture of the office coffee machine this
-second](https://www.cl.cam.ac.uk/coffee/coffee.html)so you know whether there's
+second](https://www.cl.cam.ac.uk/coffee/coffee.html), so you know whether there's
 any coffee in it:
 
 ```
@@ -78,7 +78,7 @@ http://info.cern.ch/search?term=h3
 or even just the current time:
 
 ```
-http://gypsydave5.com/time/now
+http://time.gypsydave5.com/now
 ```
 
 Each of these URLs' responses should be generated on the server. So the URLs are
@@ -114,23 +114,26 @@ or even
 
 ![an analogue clock face showing 13:37](http://todo.com)
 
-All of these could be the current time - they're all correct. But they're all
-different in some way.
+Did you pick the right one? Is there a right one?  What is 'now'? Can you touch
+it? Can you taste it? Can point to it for me?
 
-What is the time? Can you touch it? Can you taste it? Can you show me where it
-is?
+Sorry to get all philosophical, but 'now' is definitely _abstract_ - it's not
+a thing that you can see (like a document), but more of a concept. But it's
+a concept that we can see represented in all of the examples above - none of
+them 'is' 'now', but all of them are representations of 'now'.
 
-```
-http://gypsydave5.com/dog
-```
+This is one of the key mental leaps that REST asks you to make - that URLs are
+abstract things called _resources_. You will never have direct access to
+a resource through HTTP; what you will get are _representations_ of that
+resource.
 
-```
-http://gypsydave5.com/dog
-```
+So which of the above representations is correct? All of them, of course! So
+which one should we send back when someone requests `http://time.gypsydave5.com/now`?
+Whichever one seems right to you.
 
-```
-http://pets.org/my-pet
-```
+### Content Negotiation
+
+But perhaps we'd like to
 
 [^1]: You will also see the terms _URI_ (Universal Resource Indicator), _URN_
     (Universal Resource Name) and _IRI_ (International Resource
