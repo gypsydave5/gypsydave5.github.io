@@ -1,6 +1,6 @@
 ---
 title: "Why learn... about Media Types"
-published: false
+published: true
 date: 2019-04-07 19:12:28
 description:
 tags:
