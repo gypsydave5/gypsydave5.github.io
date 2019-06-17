@@ -8,7 +8,8 @@ import (
 func main() {
 	fs := http.FileServer(http.Dir("site"))
 	http.Handle("/", fs)
+	port := ":3333"
 
-	log.Println("Serving site on port 8000 (http://localhost:3000")
-	log.Fatal(http.ListenAndServe(":8000", nil))
+	log.Printf("Serving site on port %[1]s (http://localhost%[1]s)\n", port)
+	log.Fatal(http.ListenAndServe(port, nil))
 }
