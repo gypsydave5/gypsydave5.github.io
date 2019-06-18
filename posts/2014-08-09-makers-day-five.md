@@ -12,7 +12,7 @@ I thought I'd be writing a blog post everyday about my experience at
 damn quickly. Things move quickly, so let's go for a quick update and review
 before I get along with my Saturday...
 
-##Day -2##
+## Day -2
 Headed to the graduation of the cohort 12 weeks ahead of ours and met some of
 the guys joining me in the August group, as well as the 'seniors' (that's
 seniors by a full 6 weeks -- I don't thinks they'll be taking my lunch money).
@@ -21,7 +21,7 @@ beautiful stuff such as the artist portfolio site, and a fun way to work out
 which film to watch with your friends using the IMDB API. I was struck with how
 polished these projects looked - fleshed out and beautiful.
 
-##Day 0##
+## Day 0
 First day. Start early and meet everyone. We all introduce each other with
 interesting facts (much antipathy towards mushrooms), and the Makers team do the
 same. Many of the names have sinces wondered off into the sunset of my memory,
@@ -41,7 +41,7 @@ borrowed a friend's. So I thought I'd try it out...
 
 I'm typing this on the Mac. Enough said.
 
-##Day 1
+## Day 1
 
 And it's straight into the first project - creating a student directory for our
 cohort using Ruby and the command line. We're all at different levels of
@@ -52,7 +52,7 @@ The exercises are kept as a text document on GitHub with links to pills on how
 to use Git and the Unix command line. I pair with [Chris] who I'd met on the
 open day. We have a great time getting through the work.
 
-##Day 2
+## Day 2
 
 There are lectures throughout the day -- one in the morning and one in the
 afternoon -- with additional talks during the day from other people coming in to
@@ -82,9 +82,9 @@ layout on both (2) the MacBook if he's out and about or (3) the [scariest
 keyboard in the world][EnriquesKeyboard] if he's wanting to type a lot.
 
 Vim is enough for me, although Andy in our cohort borrows the keyboard for a day
-and starts to learn COLMAC. Brave.
+and starts to learn Colemak. Brave.
 
-##Day 3
+## Day 3
 I'm ahead. A few of us are ahead. In fact a few of us are wondering why we're
 not useing OOP methods to write this code because, frankly, it's looking a bit
 messy right now. My code is particularly awful until [Ben] and I chat about it
@@ -112,7 +112,7 @@ lecture. I've found myself getting tangled up in my own branches so much that it
 was good to have things explained carefully and accurately, and with
 a demonstration as well. I learned a lot.
 
-##Day 4
+## Day 4
 Test Driven Developmet (TDD) drops with a bang today as Enrique and Stephen
 introduce [RSpec][RSpec] and a completely different way of writing code. Really.
 I'd heard of TDD, I'd heard people moan about or praise it -- but I'd not
