@@ -7,7 +7,7 @@ tags:
     - Logic
     - Functional Programming
     - Lambda Calculus
-published: false
+published: true
 ---
 
 I found Church numbers pretty tough, and I'm still not sure I fully understand
@@ -112,8 +112,10 @@ of pairs above:
 
 $$
 zero \quad \equiv \quad \lambda x\ x
+$$
 
-succ \quad \equiv \quad \lambda n.\ pair\ <FALSE>\ n
+$$
+succ \quad \equiv \quad \lambda n.\ pair\ \<FALSE\>\ n
 $$
 
 Here we've defined $zero$ as the identity function, and $succ$, the successor,
@@ -145,7 +147,7 @@ end
 We could think of `if` as being a function in the lambda calculus:
 
 $$
-if \quad \equiv \quad \lambda bool.\lambda t.\lambda f.\ <SOMETHING>
+if \quad \equiv \quad \lambda bool.\lambda t.\lambda f.\ tOrf
 $$
 
 This is fine, but gets us nowhere. But what if there were two different
@@ -154,20 +156,25 @@ for false ones. Yes, I know, that would make no sense - you'd have to know which
 one to use. But humour me.
 
 $$
-if-true \quad \equiv \quad \lambda bool.\lambda t.\lambda f.\ t
+ifTrue \quad \equiv \quad \lambda bool.\lambda t.\lambda f.\ t
+$$
 
-if-false \quad \equiv \quad \lambda bool.\lambda t.\lambda f.\ f
+$$
+ifFalse \quad \equiv \quad \lambda bool.\lambda t.\lambda f.\ f
 $$
 
 We're not even using the boolean any more, we're just saying that if the
 boolean is true, we evaluate to first argument, and if it's false we evaluate to
 the second argument.
 
-If we're not using the boolean, we can get rid of it from the end.
+If we're not using the lambda that takes a boolean - the $\lambda bool$ - we can
+get rid of it from the end.
 
 $$
 true \quad \equiv \quad \lambda a.\lambda b.\ a
+$$
 
+$$
 false \quad \equiv \quad \lambda a.\lambda b.\ b
 $$
 
@@ -187,7 +194,7 @@ So now we've got truth going, let's have some fun defining some boolean
 operations. First, an easy one - $and$. And once again we're going to use the
 behaviour of $and$ to give us a clue as to the implementation.
 
-What' s the behaviour? This might be easier to do if we construct a truth
+What's the behaviour? This might be easier to do if we construct a truth
 table. What's a truth table I hear you cry? Well, in logic we can draw up a
 table showing the truth or falsity of a proposition (sentence that is either
 true or false) based upon the truth or falsity of the propositions from which it
@@ -202,12 +209,12 @@ written as '$P$' and '$Q$' - and who are we to disagree with tradition? The symb
 false will be '$T$' and '$F$'.
 
 $$
-\begin{array}{ c  c | c }
-P & Q & P \land Q \\\
+\begin{array}{| c c | c |}
+P & Q & P \land Q \\\\
 \hline
-T & T & T \\\
-T & F & F \\\
-F & T & F \\\
+T & T & T \\\\
+T & F & F \\\\
+F & T & F \\\\
 F & F & F
 \end{array}
 $$
@@ -217,8 +224,9 @@ What can we learn from this? Well, two things:
 - If $P$ is false, then the proposition is always false.
 - If $P$ is true, then the proposition has the same value as $Q$
 
-So we could say something like "if $P$ then $Q$ else $false$". Which can be
-written quite as:
+So we could say something like "if $P$ then $Q$ else $false$". And as $P$ is
+a boolean as described above, we can pass it a couple of arguments just like it
+was an 'if... then... else'. So we can write $and$ as:
 
 $$
 and \quad \equiv \quad \lambda p.\lambda q.\ p\ q\ false
@@ -236,12 +244,12 @@ As if $p$ is false we can just evaluate to $p$
 'Or' is represented by '$\lor$':
 
 $$
-\begin{array}{ c  c | c }
-P & Q & P \lor Q \\\
+\begin{array}{| c  c | c |}
+P & Q & P \lor Q \\\\
 \hline
-T & T & T \\\
-T & F & T \\\
-F & T & T \\\
+T & T & T \\\\
+T & F & T \\\\
+F & T & T \\\\
 F & F & F
 \end{array}
 $$
@@ -262,10 +270,10 @@ $$
 'Not' is nice and short as a truth table. We will use $\lnot$ to represent it
 
 $$
-begin{array}{ c | c }
-P & \lnot P \\\
+\begin{array}{ c | c }
+P & \lnot P \\\\
 \hline
-T & F  \\\
+T & F \\\\
 F & T
 \end{array}
 $$
@@ -279,35 +287,45 @@ $$
 not \quad \equiv \quad \lambda p.\lambda a.\lambda b.\ p\ b\ a
 $$
 
+---
+
 ### if ... then
 
 $$
 \begin{array}{ c  c | c }
-P & Q & P \limp Q \\\
+P & Q & P \implies Q \\\\
 \hline
-T & T & T \\\
-T & F & F \\\
-F & T & T \\\
+T & T & T \\\\
+T & F & F \\\\
+F & T & T \\\\
 F & F & T
 \end{array}
 $$
 
 $$
-implies \quad \equiv \quad \lambda p.\lambda q. p\ q\ \p
+implies \quad \equiv \quad \lambda p.\lambda q. p\ q\ p
 $$
+
+---
 
 ### if and only if
 
 $$
 \begin{array}{ c  c | c }
-P & Q & P \liff Q \\\
+P & Q & P \iff Q \\\\
 \hline
-T & T & T \\\
-F & F & T \\\
-F & T & F \\\
+T & T & T \\\\
+F & F & T \\\\
+F & T & F \\\\
 T & F & F
 \end{array}
 $$
+
+$$
+iff \quad \equiv \quad \lambda p.\lambda q. p\ q\ (not\ p)
+$$
+
+---
 
 $$
 true \quad \equiv \quad \lambda a.\lambda b.\ a
