@@ -11,6 +11,10 @@ h3 {
   line-height: 1.2;
 }
 
+pre {
+  white-space: pre-wrap;
+}
+
 @media print {
   body {
     max-width: none;

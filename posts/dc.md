@@ -38,7 +38,7 @@ But first...
 
 ... what is it?
 
-## `dc`, your friendly neighbourhood Reverse Polish Desk Calculator
+## `dc`, Your Friendly Neighbourhood Reverse Polish Desk Calculator
 
 `dc` is a _desk calculator_, as opposed to a _pocket_ calculator[^1] or a computer.
 In fact, when `dc` was first written there really weren't very many pocket
