@@ -33,7 +33,8 @@ When we first ran it, it failed on the first expectation above - even though we
 knew that the file had the right permissions. So what was going on - both in
 terms of how it was meant to work, and why it wasn't working?
 
-##Permissions
+## Permissions
+
 Let's start with that first expectation.
 
 ```ruby
@@ -69,7 +70,7 @@ In practice: `chmod 777` gives permissions for everything. `chmod 644` gives
 read/write to user, and just read to group and other. `755` is
 read/write/execute for user, and just read/execute for the group and other.
 
-##The science "bit"
+## The science "bit"
 Notice how none of the octal numbers ever 'carry' over to the next one when
 they're added together? This is a piece of computer science wizzardry - because
 they're in octal, I can look at them as both an actual integer or as a series of
@@ -99,7 +100,7 @@ permissions on that file - a file with read, write and exeute permissions for
 all the sets would give you the number `511` (which is the same as `777` and
 `111111111`).
 
-##Bitwise
+## Bitwise
 Now we get to the fun stuff - `permissions & 0000100`. What's the `&` doing? And
 those leading 0s? As mentioned above, the leading zeroes are just Ruby's way of
 saying that this number is in octal. So (repls open) `0000100` just becomes
@@ -122,7 +123,7 @@ one that matches in each number
 
 We now have enough knowledge to look at the test again
 
-##Back to the test
+## Back to the test
 To recap, the test looks like this:
 
 ````ruby

@@ -32,14 +32,14 @@ to rest - there's hundreds of hacks, options, fixes, and bits of software we can
 use to make Window's a happier place to be. Or, if not actively happy, then at
 least survivable...
 
-## Winsplit Revolution##
+## Winsplit Revolution
 OK, not the greatest name. What I missed most about Ubuntu when stuck on Vista
 was the way I could throw windows around the desktop using the numpad. This
 feauture is neatly emulated with [Winsplit Revolution][WSRev], which is small
 and, well, works. You can customize the shortcuts too. (Looks like the original
 website is no longer around so I've linked to the CNET page).
 
-## Put the taskbar on the side##
+## Put the taskbar on the side
 Oh this sounds dumb I know, but nobody even thinks of doing it on Windows
 because it's a change. Totally inspired by the Unity set up, it just makes more
 sense. If most of what I'm doing involves reading down a page on the screen
@@ -47,26 +47,26 @@ sense. If most of what I'm doing involves reading down a page on the screen
 screen. So slam the taskbar to the side and get yourself a couple of centimeters
 for free. If you were going to try one new thing this week make it this.
 
-##GVim##
+## GVim
 All that Vim goodness - [now on your Windows][GVimWin]. And you can use the same
 config files. And you can set the config depending on the environment (Windows,
 Linux, OSX). And you could save all those files onto Dropbox, make symlinks to
 them... OK - too far. But get GVim for Windows.
 
-##Autohotkey##
+## Autohotkey
 I'll write something about the what effect of removing the caps lock button from
 my keyboard has been (no, not physically) at a later date. But for fun keyboard
 hacks like this and more I've been enjoying [Autohotkey][AHkey], which has its
 own simple scripting language to allow you to remap and rewite your keyboard to
 your hearts content.
 
-##Get GNUy##
+## Get GNUy
 I've tried [Cygwin][Cygwin] before - part of working using a Linux only font
 tool. But I found it... big. Powerful, yes - but big. So big I didn't use it.
 Second time around I've been using [Gow][Gow] - which brings all the \*nix-y
 command line goodness to your `cmd` shell in Windows.
 
-##Chocolatey##
+## Chocolatey
 Missing `apt-get` or similar package management utilities on Windows?
 [Chocolatey][Chocolatey] to the rescue. Install Git! Install Node! Install
 everything listed above and more, and get them all updated from the command

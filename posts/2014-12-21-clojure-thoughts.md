@@ -13,7 +13,7 @@ I've been working with [Clojure] in the last few days, both looking at the
 share a nice problem I saw there, and some of the solutions to it which I think
 expose some of the things I'm beginning to appreciate about the language.
 
-###The Problem
+### The Problem
 
 as stated on [4clojure](http://www.4clojure.com/problem/21#prob-title).
 
@@ -35,7 +35,7 @@ in the blank space below:
 (= (___ '(4 5 6 7) 2) 6)
 ```
 
-###Solution 1: recurring
+### Solution 1: recurring
 
 ```clojure
 (fn my_nth [seqn n] (if
@@ -68,7 +68,7 @@ the recusion. Very cool.
 Usually recursion is a neat way of writing a short function; here it's pretty
 longwinded. We can get smaller...
 
-###Solution 2: taking
+### Solution 2: taking
 
 ```clojure
 (fn [seqn n] (last (take (inc n) seqn)))
