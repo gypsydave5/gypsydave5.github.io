@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Lambda Calculus 3 - Logic with Church Booleans"
+title: "Lambda Calculus 4 - Logic with Church Booleans"
 date: 2017-10-21 20:54:21
 tags:
     - Mathematics
