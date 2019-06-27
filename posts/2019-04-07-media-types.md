@@ -2,7 +2,7 @@
 title: "Why learn... about Media Types"
 published: true
 date: 2019-04-07 19:12:28
-description:
+description: All about media types and how to use them
 tags:
   - web
   - beginners
