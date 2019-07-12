@@ -167,6 +167,10 @@ programming languages_.
 
 ## Stack Based Programming
 
+Stack based programming works by, instead of having functions return values,
+which are then kept as variables in the running program, and then used
+to 
+
 ## `bc`, `dc`'s Younger Brother
 
 ## `dc` in Popular Culture[^3]
@@ -176,6 +180,6 @@ programming languages_.
 [^1]: For those of you too young to remember, a pocket calculator is like the
   calculator app on your phone, but you can't make phone calls on it and it's
   got more buttons.
-[^1]: Ironically, the most popular family of programming languages that uses
+[^2]: Ironically, the most popular family of programming languages that uses
   Polish Notation is Lisp, _which is full of parentheses_.
 [^3]: Well, popular as far as fifty year old command line tools go.
