@@ -2,7 +2,7 @@
 title: On Developer Fetishes
 published: true
 description: Attachment is the root of suffering
-date: 2015-03-21 19:12:28
+date: 2019-07-15 22:48:07
 tags:
   - shell
   - frameworks
