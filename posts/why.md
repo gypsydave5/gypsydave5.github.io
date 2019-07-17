@@ -1,7 +1,7 @@
 ---
 title: Why learn about... bits, bytes and binary
 description: enough about bits to make you a bit dangerous
-published: true
+published: false
 date: 2019-07-12 22:52:55
 tages:
   - CS
@@ -400,19 +400,152 @@ drwxr-xr-x   3 davidwic  1482096370     96 19 Jun 00:24 templates
 
 The column on the right represents the _file permissions_ for each file. The
 first character shows whether its a directory (a `d`), and the other nine show
-`r`ead, `w`rite and e`x`ecute permissions for the current user, the group and
-everyone.
+`r`ead, `w`rite and e`x`ecute permissions for the owner, the owner's group and
+everyone else.
+
+So if a directory could be read, written and executed by the owner it
+would say
+
+	drwx------
+
+And if a file could be read by everyone
+
+	-r--r--r--
+
+Fun times.
+
+But we don't really need the letters - the position of the flags give us all the
+information we need. If we say that `0` represents disabled, and `1` represents
+enabled, and ignoring the directory flag, we could write the file permission above as
+
+	100100100
+
+Oh hey look - a binary number!
+
+Now look at the repeating pattern - it goes Read, Write and Execute three times.
+We could break this up into groups of three bits:
+
+	100 100 100
+
+But after our brush with hexidecimal we know that each of those groups of three
+binary numerals can be written as a single octal numeral:
+
+	444
+
+For that one, but for the directory that can only be used by the owner:
+
+	700
+
+These magic octal file permission numbers come up _disturbingly_ often - more
+often than you'd think was necessary in the twenty first century. For instance,
+exciting modern programming language Go [needed to model file
+permissions](https://golang.org/pkg/os/#FileMode), it did so by using as 32 bit
+_number_ where the nine 'least significant bits' (i.e.  the end of the number)
+represented `rwxrwxrwx` permissions as above. The same occurs in Python, and
+[NodeJS](https://nodejs.org/api/fs.html#fs_file_modes).
+
+Treating numbers as flags has some exciting - or gnarly - side effects. For
+instance, if you wanted to make creating permissions a bit more readable you
+could do something like
+
+```
+owner_read = 0400
+owner_write = 0200
+group_read = 0040
+other_read = 0004
+
+permission = owner_read + owner_write + group_read + other_read // => 0644
+```
+
+Which reads better - but we don't want to do this:
+
+```
+permission = other_read + other_read + other_read // => 0020 - group write!
+```
+
+But there _is_ a way around this - we can use a special set of operators that
+work on numbers _at the bit_ level, treating each bit as a boolean flag.
+
+## Bitwise operators
+
+Look, I'm not sure I should be telling you this - it's pretty low level and
+nasty. But we've come this far.
+
+So you're used to booleans, and you've probably used some boolean operators in
+your time as a programmer. They look something like this.
+
+```
+true && true == true
+false && true == false
+false || true == true
+false || false == false
+```
+
+`&&` for 'and', and `||` for 'or'
+
+But what if we treated the binary digit `0` as false, and the binary digit `1`
+as true? We could do something very similar:
+
+```
+1 & 1 == 1
+1 & 0 == 0
+1 | 0 == 1
+0 | 0 == 0
+```
+
+Most programming languages will have these operators - `&` is 'bitwise and', and
+`|` is 'bitwise or'. They work by looking at numbers as a series of bits and
+comparing the bits at the equivalent positions. They then treat the two bits
+they're comparing like booleans above, and they use the resulting bit to
+construct a new number - the result. It's probably easier to see than to
+describe - let's stick another two digits on to the examples above:
+
+```
+001 & 101 == 001 // only the last bit is set in both numbers
+101 & 111 == 101 // only the first and last bits are set in both numbers
+100 | 010 == 110 // the first or the second bits are set in both numbers
+001 | 000 == 001 // are you getting the hang of it now?
+```
+
+By using the `|` operator when constructing file permissions as above, we can
+avoid the bits 'overflowing' into the next digit and changing the permission:
 
 
+```
+permission =  004 | 004 | 004 // => 004 - no matter how many times you 'add' it!
+```
+
+and `&` makes a funky way to test for which file permissions have been set.
+
+```
+other_execute = 0001
+if current_file.permissions & other_execute != other_execute {
+  // don't have execute permission!
+}
+```
+
+This works because, if the last bit isn't set in the `current_file.permissions`,
+the result of `&`ing it with `0001` will _always be `0`
+
+```
+  0776 & 0001 // => 0000
+  0777 & 0001 // => 0001
+```
+
+There are other bitwise operators - really, really funky ones that produce an
+'exclusive or', shift bits to the left and right, and invert all the bits in
+a number. Take a look at them if you have time.[^11]
+
+## Conclusion
 
 ## Appendix: using `dc` to handle conversion
 
 Working with binary, octal and hexadecimal - and converting between
-them all and decimal - can be a pain in backside. To avoid trying to
-do all the maths on your fingers (and toes), I recommend using some
-sort of calculator. Vavious tools are available online to do this for
-you, but a tool is probably available at your fingertips if you're on
-a Unix-like system: `dc`, the desk calculator.
+them all and decimal - can be a pain in backside. To avoid trying
+to do all the maths on your fingers (and toes), I recommend using
+some sort of calculator. Vavious tools are available online to do
+this for you, but a tool is available at your fingertips if you're
+on a Unix-like system: `dc`, the desk calculator.
 
 We can tell `dc` to use different bases for input and output by using
 the `i` and `o` commands - so
@@ -433,7 +566,6 @@ will return
 You can run this calculation through `dc` either by running it
 interactively (start `dc` and then type in the expression), or by
 sending the expression in with a flag
-
 
 	dc -e '16 o 2 i 1111 p'
 
@@ -466,3 +598,5 @@ practice to remember how to use `dc`. But it's also fun!
 [^10]: We actually do something very similar everyday with decimal numbers: it
   is customary to group the digits of large numbers into threes, making them
   easier to read - i.e. `1 345 383 398`.
+
+[^11]: 'Bit shifting' makes for an efficient, if obscure, way of multiplying and dividing by two while rounding down.
