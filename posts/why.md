@@ -4,7 +4,7 @@ description: enough about bits to make you a bit dangerous
 published: false
 date: 2019-07-12 22:52:55
 tages:
-  - CS
+  - computerscience
 ---
 
 One of the goals of good computer programming is to provide the
@@ -466,25 +466,27 @@ permission = other_read + other_read + other_read // => 0020 - group write!
 But there _is_ a way around this - we can use a special set of operators that
 work on numbers _at the bit_ level, treating each bit as a boolean flag.
 
-## Bitwise operators
+## Bitwise Operations
 
 Look, I'm not sure I should be telling you this - it's pretty low level and
-nasty. But we've come this far.
+nasty. But we've come this far and we can't turn back now.
 
-So you're used to booleans, and you've probably used some boolean operators in
-your time as a programmer. They look something like this.
+So you're used to booleans when you're programming - things like `True` and
+`False` - and the operations that we can perform on them - things like _and_ and
+_or_. They probably look something like this in your language (this is in Ruby):
 
-```
+```ruby
 true && true == true
 false && true == false
 false || true == true
 false || false == false
 ```
 
-`&&` for 'and', and `||` for 'or'
+`&&` is the boolean 'and' operator, and `||` is the boolean 'or' operator. There
+are others (like 'not'), but let's focus on these two.
 
-But what if we treated the binary digit `0` as false, and the binary digit `1`
-as true? We could do something very similar:
+What if we treated the binary digit `0` as false, and the binary digit `1`
+as true?[^11] We could do something very similar:
 
 ```
 1 & 1 == 1
@@ -508,11 +510,12 @@ describe - let's stick another two digits on to the examples above:
 ```
 
 By using the `|` operator when constructing file permissions as above, we can
-avoid the bits 'overflowing' into the next digit and changing the permission:
-
+avoid the bits 'overflowing' into the next digit and changing the permission
+- we can think of `|` as having the meaning 'apply permission' in this
+  context.[^11]
 
 ```
-permission =  004 | 004 | 004 // => 004 - no matter how many times you 'add' it!
+permission =  004 | 004 | 004 // => 004 - no matter how many times you 'apply' it!
 ```
 
 and `&` makes a funky way to test for which file permissions have been set.
@@ -525,18 +528,34 @@ if current_file.permissions & other_execute != other_execute {
 ```
 
 This works because, if the last bit isn't set in the `current_file.permissions`,
-the result of `&`ing it with `0001` will _always be `0`
+the result of `&`ing it with `0001` will _always_ be `0`
 
 ```
-  0776 & 0001 // => 0000
+  0000 & 0001 // => 0000
+  0006 & 0001 // => 0000
+  0742 & 0001 // => 0000
+  0001 & 0001 // => 0001
   0777 & 0001 // => 0001
 ```
 
 There are other bitwise operators - really, really funky ones that produce an
 'exclusive or', shift bits to the left and right, and invert all the bits in
-a number. Take a look at them if you have time.[^11]
+a number ('bitwise not'). Take a look at them if you have time.[^12]
 
 ## Conclusion
+
+Bits are useful as they're pretty much as low level as you _can_ go when
+programming. When you know that an integer is stored in 64 bits, it will give
+you a good idea of just how large that number can be.
+
+Bytes are probably the smallest abstraction that you'll work with on a day to
+day basis. You'll usually see them when dealing with raw information - byte
+arrays and byte streams. They form the building block of larger data
+structures, like strings.
+
+Number systems like hexadecimal and octal are a common way to show data of
+a number of bytes conveniently. They let you reason about the size of the data
+(the number of bits needed).
 
 ## Appendix: using `dc` to handle conversion
 
@@ -574,8 +593,7 @@ or piping it through on standard input
 	echo '16 o 2 i 1111 p' | dc
 
 It's a quick way to do the conversion, although it does takes some
-practice to remember how to use `dc`. But it's also fun!
-
+practice to remember how to use `dc`.
 
 [^1]: I've worked at that company - the clever sod left years ago, but he is still 'fondly' remembered...
 
@@ -595,8 +613,10 @@ practice to remember how to use `dc`. But it's also fun!
 
 [^9]: Which leads to a lot of craziness.
 
-[^10]: We actually do something very similar everyday with decimal numbers: it
-  is customary to group the digits of large numbers into threes, making them
-  easier to read - i.e. `1 345 383 398`.
+[^10]: We actually do something very similar everyday with decimal numbers: it is customary to group the digits of large numbers into threes, making them easier to read - i.e. `1 345 383 398`.
 
-[^11]: 'Bit shifting' makes for an efficient, if obscure, way of multiplying and dividing by two while rounding down.
+[^11]: This should not be too much of a leap for those of you familiar with JavaScript's definition of truth...
+
+[^12]: I must emphasise that this is not a pattern that should be emulated - it works nicely for file permissions as it's small (and so memory efficient) and will never need more than the nine bits assigned. If you were to repeat this pattern for, say, different departments in an organization, you'd severely impair the readability of the code and limit the number of departments to the reserved bits.
+
+[^12]: 'Bit shifting' makes for an efficient, if obscure, way of multiplying and dividing by two while rounding down.
