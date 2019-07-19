@@ -2,7 +2,7 @@
 title: "`dc`: an Introduction to Stack Based Programming"
 published: false
 date: 2019-06-05 20:33:31
-description: The hidden pleasures of the Unix desk calculator
+description: The unknown pleasures of the Unix desk calculator
 tags:
   - unix
   - maths
@@ -20,7 +20,6 @@ and instead of typing `cd` you somehow typed `dc`.
 
 And then this happens:
 
-
 ```shell
 $ dc
 
@@ -29,10 +28,10 @@ $ dc
 Nothing. Absolutely nothing. Now the faint of heart would, at this point, give
 up. Perhaps a quick `^C` to make the problem goes away.
 
-But you are made of bolder stuff! Let me assure you that you've struck _gold_!
-Ancient wisdom, layed down by the wise Unix masters for us to find. `dc` holds
-many secrets, it comes from a noble heritage, and it has much to teach us. Come!
-come with me friends! Let us explore the wonders of `dc`.
+But _you_ are made of bolder stuff! Let me assure you that you've struck _gold_!
+Ancient wisdom, layed down by the wise Unix masters for us to find. `dc` comes
+from a noble heritage, holds many secrets, and has much to teach us. Come!  come
+with me friends! Let us explore the wonders of `dc`.
 
 But first...
 
@@ -65,8 +64,8 @@ only backwards.
 Sorry, sorry - it's an easy joke to make, which is why I did.
 
 Polish Notation is also known as _prefix notation_. Instead of all the
-mathematical operations appearing in between the numbers (`2 + 3`), in Polish
-notation they appear at the beginning (`+ 2 3`).
+mathematical operations appearing in between the numbers (infix notation - `2 + 3`),
+in Polish notation they appear at the beginning (`+ 2 3`).
 
 The genius of Polish notation is that _it doesn't require parentheses or
 operator prescedence_  to organise an expression.[^1] Let me demonstrate: take
@@ -116,9 +115,9 @@ $ dc
 
 ```
 
-Ummm... still nothing. Did we break it? No, there's just one snag: the result is
-still 'on the plate' - to see it we need to print it out with the command `p`.
-Type it in and hit return again:
+Ummm... still nothing. Did we break it? Did we do something wrong? No, there's
+just one snag: the result is still 'on the plate' - to see it we need to print
+it out with the command `p`.  Type it in and hit return again:
 
 ```shell
 $ dc
@@ -167,19 +166,67 @@ programming languages_.
 
 ## Stack Based Programming
 
-Stack based programming works by, instead of having functions return values,
-which are then kept as variables in the running program, and then used
-to 
+We're used to programming using _variables_, as arguments to functions and as
+the subject of operations. We add two numbers - assign the result to a variable.
+We return values from functions. We maintain the 'state' of our program either
+through keeping it in variables, or passing it around as an argument to
+functions. No really.
 
-## `bc`, `dc`'s Younger Brother
+In stack based programming, the state is ever present as a stack. You call
+a function - it takes the stack, does something with a number of its values by
+`popping` them off the end, and then `pushes` some values on again. There are no
+'arguments', there is no 'result', there are no 'variables'. There's just this
+one beautiful stack representing the state and progress of your program.
+
+Even if you're used to programming in different styles and paradigms, stack
+based programming is pretty freaky. It blows your mind a little bit - and that's
+fun. It's also _ridiculously terse_ - because there's no assignment going on, or
+function arguments being bound, all you're seeing are pure functions being
+applied to the stack. For instance, here's a 'simple' pallindrome detector
+written in the language Factor:[^3]
+
+```factor
+: palindrome? ( string -- ? ) dup reverse = ;
+```
+
+Breaking it down, we have
+
+- `palindrome?` is the name of the function
+- `( string -- ? )` is the function signature - it takes a string from the stack
+  and puts on a boolean - `?`
+- `dup` duplicates the value on the stack
+- `reverse` reverses the first string on the stack in place
+- `=` takes two values off the stack and puts on a boolean, true if they're
+  equal, false otherwise
+- and `;` is the end of the function!
+
+## `bc`, `dc`'s Younger, Better Looking, More Successful Brother
+
+Now it's possible that, even after this _amazing_ introduction to stack based
+programming and Reverse Polish Notation, you're still not _completely_ in love
+with the idea of the `+` coming at the end of adding two numbers up. And I can
+totally understand that.
+
+So you'll be happy to learn that your needs were catered for by the creation of
+`bc` - which is just `dc` but with infix notation. `1 + 1` really will add up to
+`2` in `bc` (but it's a little more complicated to use - have a read of the
+`man` page).
 
 ## `dc` in Popular Culture[^3]
 
+`dc` had its fifteen minutes of fame when it was used as part of the one-line
+implementation of the RSA algorithm in the late 90s. The US government had, in
+its infinite wisdom, passed a law to restrict the publication and sharing of
+cryptographic tools - including algorithms. Hacker types weren't too pleased
+about this - it was essentially making maths illegal - and so they took to
+sharing RSA in some fairly inventive ways: putting it on ties etc.[^4]
 
 
 [^1]: For those of you too young to remember, a pocket calculator is like the
   calculator app on your phone, but you can't make phone calls on it and it's
   got more buttons.
 [^2]: Ironically, the most popular family of programming languages that uses
-  Polish Notation is Lisp, _which is full of parentheses_.
-[^3]: Well, popular as far as fifty year old command line tools go.
+  Polish Notation is Lisp, _which is full of parentheses_. There are reasons.
+[^3]: And also ripped off from the Factor tutorial which ships with the very comprehensive and usable Factor IDE, which you should [download today](https://factorcode.org)
+[^3]: Well, 'popular' as far as fifty year old command line tools go.
+[^4]: These days there'd be a whole Red Bubble store devoted to it.
