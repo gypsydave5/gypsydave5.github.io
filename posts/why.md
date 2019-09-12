@@ -3,22 +3,22 @@ title: Why learn about... bits, bytes and binary
 description: enough about bits to make you a bit dangerous
 published: false
 date: 2019-07-12 22:52:55
-tages:
+tags:
   - computerscience
+  - beginners
 ---
 
-One of the goals of good computer programming is to provide the
-user of our software with a good _abstraction_; we don't want our
-web browsers to be forcing us to think about HTTP requests, we want
-to click links and see pages. We don't want to know how an object
-is created in memory in JavaScript, we just want to use it to display
-cat videos in our browser.
+One of the goals of computer programming is to provide the user of our software
+with a good _abstraction_; we don't want our web browsers to be forcing us to
+think about HTTP requests, we want to click links and see pages. We don't want
+to know how an object is created in memory in JavaScript, we just want to use it
+to display cat videos in our browser.
 
-But often we're exposed to some of the hideous truths buried beneath
-our comfortable abstractions. Perhaps because of an error in our
-code. Or because we're having to work with our computers at a more
-fundamental level. Or it's because some clever sod decided that all
-the user entitlements would be modelled using a bit mask.[^1]
+But often we're exposed to some of the hideous truths buried beneath our
+comfortable abstractions. Perhaps because of an error in our code. Or because
+we're having to work with our computers at a more fundamental level. Or it's
+because some clever sod decided that all the user entitlements would be modelled
+using a bit mask.[^1]
 
 Anyway, this is an article about bits, bytes and binary. It's also
 about octal and hexadecimal, but that doesn't make for as catchy a
@@ -540,7 +540,7 @@ the result of `&`ing it with `0001` will _always_ be `0`
 
 There are other bitwise operators - really, really funky ones that produce an
 'exclusive or', shift bits to the left and right, and invert all the bits in
-a number ('bitwise not'). Take a look at them if you have time.[^12]
+a number ('bitwise not'). Take a look at them if you have time.[^13]
 
 ## Conclusion
 
@@ -555,7 +555,8 @@ structures, like strings.
 
 Number systems like hexadecimal and octal are a common way to show data of
 a number of bytes conveniently. They let you reason about the size of the data
-(the number of bits needed).
+(the number of bits needed), while also providing a convenient way of showing
+that data.
 
 ## Appendix: using `dc` to handle conversion
 
@@ -568,7 +569,6 @@ on a Unix-like system: `dc`, the desk calculator.
 
 We can tell `dc` to use different bases for input and output by using
 the `i` and `o` commands - so
-
 
 	2 i 16 o
 
@@ -603,9 +603,9 @@ practice to remember how to use `dc`.
 
 [^4]: Not wanting to get too philosophical about this, but it's interesting how quickly we can get to some vary rarified ideas when we talk about computers - questions like "what _is_ a number?" don't come up very often in everyday conversation. This should be a hint to us that we're either doing something very clever and difficult, or something completely pointless.
 
-[^5]: This is _not_ how it works in real computers - I'm sorry to mislead you. If you're _really_ interested in this stuff - and I mean really interested, as I think I'm pretty interested but even I find this a bit a bit tedious - you should read some articles on [two's complement](https://en.wikipedia.org/wiki/Two%27s_complement). The reason you use two's complement rather than another way of encoding numbers is to permit the performance of binary arithmetic on the bits in identical ways whether the number is positive or negative. But as I'm not covering that here then I'm happy to gloss over it and push on with the more useful stuff.
+[^5]: This is _not_ how it works in real computers - I'm sorry to mislead you. If you're _really_ interested in this stuff - and I mean really interested, as I think I'm pretty interested but even I find this a bit tedious - you should read some articles on [two's complement](https://en.wikipedia.org/wiki/Two%27s_complement). The reason you use two's complement rather than another way of encoding numbers is to permit the performance of binary arithmetic on the bits in identical ways whether the number is positive or negative. But as I'm not covering that here then I'm happy to gloss over it and push on with the more useful stuff.
 
-[^6]: There is no _necessity_ behind having eight bits in a byte, and in fact a lot of early computer systems used six or seven bits as their _byte size_. But eight is standard these days.
+[^6]: There is no _necessity_ behind having eight bits in a byte, and in fact a lot of early computer systems used six or seven bits as their _byte size_. But eight is standard these days. To avoid confusion an eight bit byte is often referred to as an 'octet'. This can also _increase_ confusion so I'm not going to do that here.
 
 [^7]: Hard... but not impossible. Ancient Greek was written in ALL CAPITALS WITHTHESPACESREMOVED. And you think it's hardReadingThingsInCamelCase...
 
@@ -619,4 +619,4 @@ practice to remember how to use `dc`.
 
 [^12]: I must emphasise that this is not a pattern that should be emulated - it works nicely for file permissions as it's small (and so memory efficient) and will never need more than the nine bits assigned. If you were to repeat this pattern for, say, different departments in an organization, you'd severely impair the readability of the code and limit the number of departments to the reserved bits.
 
-[^12]: 'Bit shifting' makes for an efficient, if obscure, way of multiplying and dividing by two while rounding down.
+[^13]: 'Bit shifting' makes for an efficient, if obscure, way of multiplying and dividing by two while rounding down.
