@@ -1,3 +1,15 @@
+# Four Functional Refactors
+
+These are the four functional refactoring that Jim Weirich lists while
+demonstrating a a derivation of the Y-combinator in Ruby. It's a great video
+- well worth a watch. I'll pop it at the end of this article if you've got the
+time to enjoy it.
+
+Refactors like these help to restructure your code to allow you to introduce new
+behaviours,
+
+I find it useful having these refactors in my head when working. Maybe you will
+too!
 
 ### 1. Tennant Correspondence Principle ###
 
@@ -7,75 +19,94 @@ same way as the expression itself.
 
 For instance, here's a lambda that doubles a number:
 
-```lisp
-(lambda (n) (+ n n))
+```javascript
+n => n + n
 ```
 
-```lisp
-((lambda (n) (+ n n)) 2) ; => 4
+```javascript
+(n => n + n)(2)
+// 4
 ```
 
 If we wrap it in another lambda...
 
-```lisp
-(lambda () (lambda (n) (+ n n)))
+```javascript
+() => n => n + n
 ```
 
 ... then calling it will return the original lambda...
 
-```lisp
-((lambda () (lambda (n) (+ n n)))) ; => (lambda (n) (+ n n))
+```javascript
+(() => n => n + n)()
 ```
 
 Which behaves in the same way as the original expression.
 
-```lisp
-(((lambda () (lambda (n) (+ n n)))) 4 ) ; => 8
+```javascript
+(() => n => n + n)()(4)
+// 8
 ```
 
 ### 2. Introduce a Binding ###
 
-Taking a similar situation as above (but now in Clojure), we here we have the
-same function wrapped in a lambda:
+Taking a similar situation as above, here we have the same function wrapped in
+a lambda:
 
-```clojure
-((fn [] (fn [n] (+ n n)))) ; => (fn [k] (+ n n))
+```javascript
+(() => n => n + n)()
+// n => n + n
 ```
 
 We can introduce a binding to the outer lambda without affecting the lambda that
 is returned...
 
-```clojure
-(fn [bob] (fn [n] (+ n n)) 22) ; => (fn [n] (+ n n))
+```javascript
+(bob => n => n + n)(22)
+// n => n + n
 ```
 
-... which can then be called - the '55' has no effect on any result.
+... which can then be called - the '22' has no effect on any result.
 
-```clojure
-(((fn [bob] (fn [n] (+ n n))) 55) 8) ; => 16
+```javascript
+(bob => n => n + n)(22)(8)
+// 16
 ```
 
 We don't even have to be too careful about the binding's name if it's unused in
 the inner lambda - the variable just gets rebound.
 
-```clojure
-(((fn [n] (fn [n] (+ n n))) 55) 8) ; => 16
+```javascript
+(n => n => n + n)(22)(8)
+// 16
 ```
 
-### 3. Wrap Function ###
+But this is _maybe_ not the best idea for readability...
 
-Here's our favourite <del>lambda</del> anonymous function again, this time
-in JavaScript:
+We could also add an extra binding to the double function itself, as long as we're
+happy to call it with an extra argument:[^1]
 
 ```javascript
-function (n) { return n + n }
+((n, bob) => n + n)(8, 'blah')
+// 16
+```
+
+### 3. η-conversion ###
+
+I'm calling this one "η-conversion" as that's the name it has as one of the
+three basic reductions in the Lambda calculus. But it could easily be called
+'wrap function', which is what Jim does.
+
+Here's our double function again:
+
+```javascript
+n => n + n
 ```
 
 Let's wrap it up in another lambda - and bind a variable to it. But now let's
 use that variable to call the inner lambda:
 
 ```javascript
-function (n) { return function (n) { return n + n }(n) }
+(a => (n => n + n)(a))
 ```
 
 The outer lambda now has the same behaviour as the inner lambda - when we call
@@ -83,40 +114,53 @@ the outer lambda with parameter, it's carried through and used to call the inner
 lambda:
 
 ```javascript
-function (n) { return function (n) { return n + n }(n) }(8) // => 16
+(a => (n => n + n)(a))(8)
+// 16
 ```
 
 The behaviour of the code remains the same - and so we have a true refactoring.
 
 ### 4. Inline Definition ###
 
-Finally, here's Ruby's lambda syntax given a quick workout. We're going to name
-a couple of lambdas this time. The doubler is back again, but let's also have
-a lambda that adds one to its argument:
+We're going to name a couple of lambdas this time. The doubler is back again,
+but let's also have a lambda that adds one to its argument:
 
-```ruby
-doubler = ->(n) { n + n }
-addOne = ->(n) { n + 1 }
+```javascript
+const doubler = n => n + n
+const addOne = n => n + 1
 ```
 
 We can run them together as you'd expect:
 
-```ruby
-doubler.(addOne.(3)) # => 8
+```javascript
+doubler(addOne(3))
+// => 8
 ```
 
 Inline definition, in this case, means that we can... well, inline the
 definitions of each of the lambdas and preserve the behaviour of the expression.
 So we can start by inlining the definition of `doubler`:
 
-```ruby
-->(n) { n + n }.(addOne(3) # => 8
+```javascript
+(n => n + n)(addOne(3))
+// 8
 ```
 
 And then do the same with `addOne`:
 
-```ruby
-->(n) { n + n }.(->(n) { n + 1 }.(3)) # => 8
+```javascript
+(n => n + n)((n => n + 1)(3))
+// 8
 ```
 
 The behaviour is preserved - a true refactoring.
+
+## Flip Mode
+
+Remember you can always flip these refactorings around - inlining becomes
+extraction, you can remove bindings as well as add them, you can unwrap
+functions as well as wrap them. As long as you stick to these patterns you can't
+change the way your code behaves.
+
+
+[^1]: Of course, in JavaScript we can get away with just ignoring the second argument and calling anonymous function with one argument, but this won't work with most languages.
