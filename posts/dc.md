@@ -1,5 +1,5 @@
 ---
-title: "`dc`: an Introduction to Stack Based Programming"
+title: "`dc` and Stack Based Programming"
 published: false
 date: 2019-06-05 20:33:31
 description: The unknown pleasures of the Unix desk calculator
@@ -26,26 +26,26 @@ $ dc
 ```
 
 Nothing. Absolutely nothing. Now the faint of heart would, at this point, give
-up. Perhaps a quick `^C` to make the problem goes away.
+up. Perhaps a quick `^C` to make the problem goes away...
 
 But _you_ are made of bolder stuff! Let me assure you that you've struck _gold_!
 Ancient wisdom, layed down by the wise Unix masters for us to find. `dc` comes
-from a noble heritage, holds many secrets, and has much to teach us. Come!  come
+from a noble heritage, holds many secrets, and has much to teach us. Come! Come
 with me friends! Let us explore the wonders of `dc`.
 
 But first...
 
-... what is it?
+... what is `dc`?
 
 ## `dc`, Your Friendly Neighbourhood Reverse Polish Desk Calculator
 
-`dc` is a _desk calculator_, as opposed to a _pocket_ calculator[^1] or a computer.
-In fact, when `dc` was first written there really weren't very many pocket
-calculators: it was 1969.
+`dc` is a _desk calculator_, as opposed to a _pocket_ calculator[^1] or
+a computer.  In fact, when `dc` was first written there really weren't very many
+pocket calculators: it was 1969.
 
 (At this point feel free to cosplay a little to get you in the mood. Wear an
 afghan coat, put some flowers in your hair, listen to Jefferson Airplane, drop
-a little acid or stare at a mandala, whatever, man...)
+a little acid, stare at a mandala, or, whatever, man...)
 
 So it's a desk calculator. So I can do sums with it, right?
 
@@ -57,24 +57,24 @@ dc: stack empty
 
 eh?
 
-`dc` is a _reverse polish_ desk calculator; it uses Reverse Polish Notation
+`dc` is a _reverse Polish_ desk calculator; it uses Reverse Polish Notation
 (RPN). What's Reverse Polish Notation you ask? Well, it's like Polish Notation
 only backwards.
 
-Sorry, sorry - it's an easy joke to make, which is why I did.
+Sorry, sorry - it's an easy joke to make, which is why I made it.
 
 Polish Notation is also known as _prefix notation_. Instead of all the
-mathematical operations appearing in between the numbers (infix notation - `2 + 3`),
-in Polish notation they appear at the beginning (`+ 2 3`).
+mathematical operators like `+` and `-` `appearing in between the numbers (infix
+notation - `2 + 3`), in Polish notation they appear at the beginning (`+ 2 3`).
 
 The genius of Polish notation is that _it doesn't require parentheses or
-operator prescedence_  to organise an expression.[^1] Let me demonstrate: take
+operator prescedence to organise an expression.[^1] Let me demonstrate: take
 the sum (in infix notation), `2 * (3 + 5)`. We know the answer to be `16`. But
 if we shift the parentheses `(2 * 3) + 5` we get `11` instead. To make the
 expression unambiguous we need the parentheses to show which numbers belong to
 which operator.
 
-But in Polish Notation we can do the same without the parentheses. The first
+But in Polish Notation we can do the same _without_ the parentheses. The first
 expression becomes `* 2 + 3 5`; the second `+ * 2 3 5`.
 
 Seems a bit funny, doesn't it? The way to think of it is that, everytime you
@@ -104,7 +104,7 @@ left - which are now a `2` and the new `8`, and spits out the answer, `16`.
 
 Think of the numbers on the right being left on a plate in a row. An operator
 turns up on the right and - YOMP! - it eats as many inputs as it needs and
-becomes a result (and joins the delicious numbers on the plate as a result).
+becomes a result (and joins the delicious numbers on the plate).
 
 So we can perform arithmetic in Reverse Polish Notation with `dc`. Try it! Type
 in `3 5 +` and hit return!
@@ -219,14 +219,26 @@ implementation of the RSA algorithm in the late 90s. The US government had, in
 its infinite wisdom, passed a law to restrict the publication and sharing of
 cryptographic tools - including algorithms. Hacker types weren't too pleased
 about this - it was essentially making maths illegal - and so they took to
-sharing RSA in some fairly inventive ways: putting it on ties etc.[^4]
+[sharing RSA in some fairly inventive ways][rsa]: putting it on ties etc.[^4]
+
+Here it is:
+
+```perl
+print pack"C*",split/\D+/,`echo "16iII*o\U@{$/=$z;[(pop,pop,unpack"H*",<>
+)]}\EsMsKsN0[lN*1lK[d2%Sa2/d0<X+d*lMLa^*lN%0]dsXx++lMlN/dsM0<J]dsJxp"|dc`
+```
+
+Fairly hard to spot it, but the `|dc` at the end is taking the input before and
+piping it into `dc`. Quite incredible for a program that's fifty years old.
 
 
-[^1]: For those of you too young to remember, a pocket calculator is like the
-  calculator app on your phone, but you can't make phone calls on it and it's
-  got more buttons.
-[^2]: Ironically, the most popular family of programming languages that uses
-  Polish Notation is Lisp, _which is full of parentheses_. There are reasons.
+
+
+[^1]: For those of you too young to remember, a pocket calculator is like the calculator app on your phone, but you can't make phone calls on it and it's got more buttons.
+[^2]: Ironically, the most popular family of programming languages that uses Polish Notation is Lisp, _which is full of parentheses_. There are reasons.
 [^3]: And also ripped off from the Factor tutorial which ships with the very comprehensive and usable Factor IDE, which you should [download today](https://factorcode.org)
 [^3]: Well, 'popular' as far as fifty year old command line tools go.
 [^4]: These days there'd be a whole Red Bubble store devoted to it.
+
+
+[rsa]: http://www.cypherspace.org/rsa/
