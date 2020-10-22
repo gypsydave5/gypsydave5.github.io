@@ -1,0 +1,188 @@
+#+TITLE: Fizz-buzz in TypeScript
+#+DATE: <2020-10-22 Thu>
+#+TAGS: typescript javascript type fun
+#+PUBLISHED: true
+
+Often as software developers we are asked to demonstrate basic competence with a programming language in order to secure employment. TypeScript's current popularity means it's very important that we are comfortable writing simple exercises in it. This post will show you how to write 'fizz-buzz' in pure TypeScript, without relying on any other languages or libraries.[fn:1]
+
+** What is 'fizz-buzz'
+
+'Fizz-buzz' is a simple game you can play in company. Players take turns counting from one upwards, but must apply the following rules:
+
+1. If a number is divisible by three, say "Fizz!" instead
+2. If a number is divisible by five, say "Buzz!" instead
+3. If a number is divisible by three and by five, say "Fizz-Buzz!"
+4. Otherwise, just say the number as you would normally
+
+This is often translated into an exercise where, when you provide your program with a number, it responds with correct thing to say were it playing a game of 'fizz buzz'.
+
+** Step One: Numbers
+
+First of all we will need some numbers. Unfortunately, TypeScript does not come with any predefined number system so we will have to write our own, including some literals. Happily we only need the natural numbers, which are [[https://en.wikipedia.org/wiki/Peano_axioms][easily defined]]:
+
+#+begin_src typescript
+type N = Z | S
+type Z = { prev: null }
+type S = { prev: N }
+#+end_src
+
+Using this we can quickly define enough numeric literals for our purposes:
+
+#+begin_src typescript
+type N1 = { prev: Z }
+type N2 = { prev: N1 }
+// ...
+type N14 = { prev: N13 }
+type N15 = { prev: N14 }
+#+end_src
+
+We will need only one operation on these numbers, a way of subtracting one from a number:
+
+#+begin_src typescript
+type Sub1<Na> = Na extends S ? Na['prev'] : Z
+#+end_src
+
+The other arithmetic operations (which we don't need for this example) are left as an exercise for the reader.
+
+To test whether this is all working, we need to run our program through the TypeScript interpreter. The fastest way to do this is to write the following expression into VSCode:[fn:3]
+
+#+begin_src typescript
+type TEST = Sub1<N3>
+#+end_src
+
+and hovering the cursor over ~TEST~. You should see the interpreted expression displayed.
+
+** Step Two: Truth
+
+In order to test for properties of our numbers using checks like 'equal' or 'less than' we will need some algebra to express truth in. Again, unfortunately, TypeScript comes with no built in booleans, but writing this is child's play compared to creating numbers from thin air:
+
+#+begin_src typescript
+type BOOL = TRUE | FALSE
+type TRUE = { bool: 'true' }
+type FALSE = { bool: 'false' }
+#+end_src
+
+This gives us enough to define ~Equal~ and ~LessThan~ recursively for our numbers:[fn:2]
+
+#+begin_src typescript
+type Equal<Na, Nb> = {
+    0: Nb extends Z ? TRUE : FALSE
+    1: {
+        0: FALSE,
+        1: Na extends S ? Nb extends S ? Equal<Sub1<Na>, Sub1<Nb>> : never : never
+    }[Nb extends Z ? 0 : 1]
+}[Na extends Z ? 0 : 1]
+
+type LessThan<Na, Nb> = {
+    0: FALSE,
+    1: Na extends Z ? TRUE : Na extends S ? Nb extends S ? LessThan<Sub1<Na>, Sub1<Nb>> : never : never
+}[Nb extends Z ? 0 : 1]
+#+end_src
+
+Again, we can manually test this:
+
+#+begin_src typescript
+type TEST = Equal<N1, N1>
+#+end_src
+
+** Step three: predicates
+
+The two important predicates we need to implement fizz-buzz are ~IsMultipleOfThree~:
+
+#+begin_src typescript
+type IsMultipleOfThree<T> = {
+    1: TRUE
+    0: {
+        0: FALSE,
+        1: IsMultipleOfThree<Sub1<Sub1<Sub1<T>>>>
+    }[LessThan<T, N3> extends TRUE ? 0 : 1]
+}[Equal<T, N3> extends TRUE ? 1 : 0]
+#+end_src
+
+and the very similar ~IsMultipleOfFive~:
+
+#+begin_src typescript
+type IsMultipleOfFive<T> = {
+    1: TRUE
+    0: {
+        0: FALSE,
+        1: IsMultipleOfFive<Sub1<Sub1<Sub1<Sub1<Sub1<T>>>>>>
+    }[LessThan<T, N5> extends TRUE ? 0 : 1]
+}[Equal<T, N5> extends TRUE ? 1 : 0]
+#+end_src
+
+You may demonstrate that the above works by writing a test in a similar way to those above.
+
+** Refactor
+
+A pattern is occurring repeatedly in our code, which we can extract out into its own operation:
+
+#+begin_src typescript
+type Ternary<B extends BOOL, P, Q> = {
+    1: P,
+0: Q
+}[B extends TRUE ? 1 : 0]
+#+end_src
+
+We can now use it to increase the readability of some of our previous definitions:[fn:4]
+
+#+begin_src typescript
+type IsMultipleOfThree<T> = {
+    1: TRUE
+    0: Ternary<LessThan<T, N3>, FALSE, T extends S ? IsMultipleOfThree<Sub1<Sub1<Sub1<T>>>> : never>
+}[Equal<T, N3> extends TRUE ? 1 : 0]
+#+end_src
+
+** Step four: fizz-buzz
+
+Now finally we can write our fizz-buzz program. We will need to define the possible outputs:
+
+#+begin_src typescript
+type FIZZ = {fb: 'FIZZ'}
+type BUZZ = {fb: 'BUZZ'}
+type FIZZBUZZ = {fb: 'FIZZBUZZ'}
+#+end_src
+
+This, along with our previously defined ~Ternary~ function, allows us to write the fizz-buzz program very succinctly and expressively:
+
+#+begin_src
+type FB<N> = Ternary<IsMultipleOfThree<N>,
+    Ternary<IsMultipleOfFive<N>, FIZZBUZZ, FIZZ>,
+    Ternary<IsMultipleOfFive<N>, BUZZ, N>>
+#+end_src
+
+and can be tested (and used) as we have seen above:
+
+#+begin_src typescript
+type TEST = FB<N15>
+#+end_src
+
+** Step five: going further
+
+This simple program could be improved by adding some error messages and error handling. For instance, at present if we subtract one from zero we get zero, when really we should be seeing some sort of error. We should also think about ways in which we can handle these errors.
+
+In addition, many fizz-buzz exercises require the operation to be applied to more than one number at once, held in some sort of list structure. Such a structure is, again, not present in TypeScript but can be quite quickly defined using methods similar to the above.
+
+** Final thoughts
+
+Less experienced developers may be tempted to solve fizz-buzz by using JavaScript, the language which TypeScript parsitizes and also embeds within its syntax. For instance:
+
+#+begin_src typescript
+const fb = (n: number): number | string => (n % 3 === 0)
+    ? ((n % 5 === 0) ? 'fizzbuzz' : 'fizz')
+    : ((n % 5 === 0) ? 'buzz' : n)
+#+end_src
+
+but obviously this code is just written in JavaScript, using TypeScript built in values as some sort of rudimentary type checker, and not in TypeScript, which is, as we all know, a dynamically typed and interpreted programming language.
+
+This post is heavily inspired by [[https://aphyr.com/posts/342-typing-the-technical-interview][this post]] by Kyle Kingsbury, which showed me the light.
+
+* Footnotes
+
+[fn:1] TypeScript's syntax for generating tagged types may look a little like JavaScript 'objects', but I assure you that they're quite different...
+
+[fn:2] Some of the peculiarities of the TypeScript syntax mean that we need to introduce a little indirection in order to write recursively. This is again unfortunate.
+
+[fn:3] VSCode is by far the best TypeScript interpreter available, as it correctly evaluates our expressions. IntelliJ, in contrast, is buggy and cannot evaluate expressions that are even slightly recursive or nested. The ergonomics of these interpreters are all peculiar, it would be good if someone could write a simple TypeScript interpreter that wasn't embedded in an editor.
+
+[fn:4] Again, the peculiarities of TypeScript mean that we cannot _entirely_ do away with the ~{0:... 1:}[ ... ? 0 : 1]~ syntax, as it gets huffy when the defined symbol is referenced directly in the same expression outside of a 'block', but it's still an improvement.
