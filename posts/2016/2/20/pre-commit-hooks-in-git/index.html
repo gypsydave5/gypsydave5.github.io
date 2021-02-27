@@ -1,0 +1,170 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+          inlineMath: [['$','$'], ['\\(','\\)']],
+          processEscapes: true,
+      },
+      displayAlign: "left",
+      displayIndent: "1em",
+      CommonHTML: { linebreaks: { automatic: true } },
+      "HTML-CSS": { linebreaks: { automatic: true } },
+      SVG       : { linebreaks: { automatic: true } }
+    });
+</script>
+<script type="text/javascript"
+        async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+  <link rel="stylesheet" href="/css/style.css">
+  <title>Pre-commit Hooks in Git</title>
+</head>
+
+  <body>
+    <main>
+    
+<header>
+  <section class="top">
+    <h1><a href="/">gypsydave5</a></h1>
+    <p>The blog of David Wickes, software developer</p>
+  </section>
+
+  <ul class="links">
+    <li><a href="/pages/about/">about</a></li>
+    <li><a href="/posts/">posts</a></li>
+  </ul>
+</header>
+
+    
+<article>
+  <h1>Pre-commit Hooks in Git</h1>
+  <time datetime="2016-02-20T21:08" >Feb 20, 2016</time>
+  <p>Remembering to run your tests before you commit is hard:</p>
+
+<pre><code class="language-bash">* 84f7e2e 2016-02-06 | Another typo. And test[David Wickes]
+* ef215f8 2016-02-06 | OMFG semicolons WAAAAAT [David Wickes]
+* c20b65d 2016-02-06 | Typo [David Wickes]
+* fca4aa8 2016-02-06 | Another fix for the same test[David Wickes]
+* f0206a9 2016-02-06 | Fixes failing test [David Wickes]
+* 657cc48 2016-02-06 | Amazing new feature [David Wickes]
+</code></pre>
+
+<p>Yes, I suck. It&rsquo;s even worse when you&rsquo;ve just pushed that <em>teensy-tiny,
+insignificant</em> change to the CI pipeline and it throws a strop because the JS
+linter is <em>super</em> fussy about semi-colons.</p>
+
+<p>Don&rsquo;t get angry. Get even.</p>
+
+<p>Wait, wut? Don&rsquo;t get even. Automate all the things!</p>
+
+<p>Inside the unexamined recesses of the <code>.git</code> directory of every repo
+is a folder called <code>hooks</code>. You should look inside it.</p>
+
+<pre><code class="language-bash">applypatch-msg.sample
+commit-msg.sample
+post-update.sample
+pre-applypatch.sample
+pre-commit.sample # &lt;--- This one here!
+pre-push.sample
+pre-rebase.sample
+prepare-commit-msg.sample
+update.sample
+</code></pre>
+
+<p>You&rsquo;ll see some pretty self-explanatory instructions on what it does, but the
+tl;dr is:</p>
+
+<ul>
+<li>It is a shell script that runs before you commit</li>
+<li>You activate it by removing the <code>.sample</code> bit.</li>
+</ul>
+
+<p>So say we have a Node project we&rsquo;re working on. A cool pre-commit hook would
+look like:</p>
+
+<pre><code class="language-bash">#!/bin/sh
+
+npm test
+</code></pre>
+
+<p>Pop that in a file called <code>pre-commit</code> inside that <code>hooks</code> directory - make sure
+it&rsquo;s executable like the sample ones - and see what you get.</p>
+
+<p>So as long as you&rsquo;ve set up you <code>package.json</code> file sensibly to run tests when
+you run <code>npm test</code> you&rsquo;re golden. Same idea holds for <code>rake</code> or <code>gradle</code> or
+whatever you&rsquo;re using as a task runner.</p>
+
+<p>But you&rsquo;d hate to do that for every project, right? Automate that too.</p>
+
+<p>Try this:</p>
+
+<pre><code class="language-bash">$ git config --global init.templatedir '~/.git-templates'
+$ mkdir -p ~/.git-templates/hooks
+</code></pre>
+
+<p>Inside the equally unexamined <code>.gitsettings</code> in your home directory you should
+now see:</p>
+
+<pre><code>[init]
+    templatedir = ~/.git-templates
+</code></pre>
+
+<p>(you could&rsquo;ve just written that in there by hand&hellip; but here we are)</p>
+
+<p>What this&rsquo;ll do is copy the contents of <code>.git-templates</code> to the <code>.git</code>
+directories of new projects you clone or initialize.</p>
+
+<p>We now need to make our hook more generic. Let&rsquo;s save the below off in
+<code>~/.git-templates/hooks/pre-commit</code>:</p>
+
+<pre><code class="language-bash">#!/bin/sh
+
+if [ -f package.json ]; then
+    echo &quot;detected package.json... running npm test&quot;
+    npm test
+else
+    echo &quot;no testable project detected... so no tests before commit&quot;
+fi
+</code></pre>
+
+<p><code>[ -f package.json ]</code> asks if there&rsquo;s a file called <code>package.json</code>, and if there
+is we run <code>npm test</code>. The rest of the script is just a little logging so we can
+see what&rsquo;s happening. Just remember to make it executable<sup class="footnote-ref" id="fnref:1"><a rel="footnote" href="#fn:1">1</a></sup> before you start to
+use it.</p>
+
+<p>There we have it - the bare bones of a &ldquo;generic&rdquo; pre-commit hook. You can easily
+embelish this with more tests and other exciting/useful/amusing things to
+execute (is there a <code>Rakefile</code> present? Do any of the files I&rsquo;m commiting still
+contain a <code>console.log</code> or a <code>puts</code>?).</p>
+
+<p>As I said, this template will get added to everything that gets <code>clone</code>ed or
+<code>init</code>ialized by Git from now on. For those projects that have already been
+started, just run <code>git init</code> again to pull in the template.</p>
+
+<p>And there we are - have fun exploring the other sample templates, <a href="https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks">read the
+docs</a>, and experiment with other useful scripts. Then tell me about them
+on Twitter so I can use them.</p>
+
+<div class="footnotes">
+
+<hr />
+
+<ol>
+<li id="fn:1"><code>chmod a+x pre-commit</code> - you didn&rsquo;t need telling, but just in case.</li>
+</ol>
+
+</div>
+
+</article>
+
+    </main>
+  </body>
+</html>

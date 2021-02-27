@@ -1,0 +1,110 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+          inlineMath: [['$','$'], ['\\(','\\)']],
+          processEscapes: true,
+      },
+      displayAlign: "left",
+      displayIndent: "1em",
+      CommonHTML: { linebreaks: { automatic: true } },
+      "HTML-CSS": { linebreaks: { automatic: true } },
+      SVG       : { linebreaks: { automatic: true } }
+    });
+</script>
+<script type="text/javascript"
+        async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+  <link rel="stylesheet" href="/css/style.css">
+  <title>Java</title>
+</head>
+
+  <body>
+    <main>
+    
+<header>
+  <section class="top">
+    <h1><a href="/">gypsydave5</a></h1>
+    <p>The blog of David Wickes, software developer</p>
+  </section>
+
+  <ul class="links">
+    <li><a href="/pages/about/">about</a></li>
+    <li><a href="/posts/">posts</a></li>
+  </ul>
+</header>
+
+    
+<article>
+  <h1>Java</h1>
+  <time datetime="2014-11-12T12:20" >Nov 12, 2014</time>
+  <p>Java. Java is the
+(<a href="http://www.tiobe.com/index.php/content/paperinfo/tpci/index.html">second</a>)
+most popular programming language in the world. Java is over twenty years old.
+Java is everywhere.</p>
+
+<p>Java is giving me a headache.</p>
+
+<p>Based on a job opportunity I started to try and learn Java last week. Flailing
+around for guidance, Enrique told me to install an IDE. <a href="https://www.jetbrains.com/idea/">IntelliJ</a> to be
+precise - mainly to get something to manage my dependencies for me.. That&rsquo;s
+a whole story in itself, but I hacked around a bit, ran some tutorials, and
+eventually I got a <code>Hello World</code> out into the world. Finally
+I understood why things in Java could be <code>public static void</code>, finally
+I understood the syntax. Squint a little and it just looks like JavaScript. Ish.</p>
+
+<p>Step two: testing. <a href="http://junit.org/">jUnit</a> turned out to be a testing framework for Java
+and should not be confused with <a href="http://en.wikipedia.org/wiki/G-Unit">G-Unit</a>.  This I also got going, but not
+without reservations. Turns out I don&rsquo;t like IDEs, for some reason they make me
+feel seperated from the code I&rsquo;m writing.  Also I felt ike I didn&rsquo;t have the
+time to learn a whole new environment. I use <a href="http://www.vim.org/">Vim</a>, and I use it on the command
+line, and I like it that way.</p>
+
+<p>So I thought I&rsquo;d try it from the command line. Not my greatest decision. You&rsquo;ve
+got two choices about how to manage dependencies and builds from the terminal:
+<a href="http://maven.apache.org/">Maven</a> and <a href="http://www.gradle.org/">Gradle</a>. Maven uses XML to describe the project, one of my
+least favourite formats to read (I think I&rsquo;m faster reading binary), so
+I settled rapidly on Gradle, which is actually written in <a href="https://www.google.co.uk/webhp?sourceid=chrome-instant&amp;ion=1&amp;espv=2&amp;ie=UTF-8#q=groovy">Groovy</a>, a dynamic
+language based on Java.</p>
+
+<p>But back to the command line. I did manage to manage my projects from there -
+and it did give me a feeling of greater control than through the IDE. But it
+also revealed what a lot of work the IDE was doing. I feel like I&rsquo;ve been
+relatively spoiled using <a href="https://www.npmjs.org/">npm</a> and <a href="http://bundler.io/">Bundler</a> - just <code>require</code> what you
+need and it&rsquo;s there - magick. Java - even with <a href="http://www.gradle.org/">Gradle</a>&rsquo;s help - is horrible
+to look at. A long mess of <code>com.something.somethingElse.someMethodHere</code>, each
+individual damn thing being summoned individually. And me with no idea
+of how it all works. I can only imagine what it would be like without
+a dependency manager helping out.</p>
+
+<p>I (by the end) managed to deploy a horrifically simple and untested app to
+the <a href="http://aws.amazon.com/elasticbeanstalk/">AWS Elastic Beanstalk</a>. But I never managed to get mocks in <a href="https://code.google.com/p/mockito/">Mockito</a>
+off the ground. And I never really felt like I knew what I was doing.</p>
+
+<p>But after a week of Java, and a week helping out with <a href="http://nodejs.org/">Node</a> at Makers,
+getting my hands back on Ruby was lke coming home. How do I feel after
+experiencing my first <a href="http://en.wikipedia.org/wiki/Strong_and_weak_typing">strongly typed</a>, <a href="http://en.wikipedia.org/wiki/Compiled_language">compiled</a> programming language?
+Overall I&rsquo;m OK. I learned a lot about <a href="http://en.wikipedia.org/wiki/Software_design_pattern">design patterns</a> and the <a href="http://en.wikipedia.org/wiki/SOLID_(object-oriented_design)">SOLID</a>
+principles - chiefly about where they&rsquo;re from. A lot of the language about
+interfaces makes a lot more sense when you&rsquo;re building an interface seperately
+and implementing it in one of perhaps many classes. And forcing me to declare
+the type of returned object for each method (if any), and the type of each
+argument, and especially whether they&rsquo;re public or private, made me think harder
+about methods in general.</p>
+
+<p>Travel broadens the mind!</p>
+
+</article>
+
+    </main>
+  </body>
+</html>

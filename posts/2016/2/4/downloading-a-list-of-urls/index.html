@@ -1,0 +1,206 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+          inlineMath: [['$','$'], ['\\(','\\)']],
+          processEscapes: true,
+      },
+      displayAlign: "left",
+      displayIndent: "1em",
+      CommonHTML: { linebreaks: { automatic: true } },
+      "HTML-CSS": { linebreaks: { automatic: true } },
+      SVG       : { linebreaks: { automatic: true } }
+    });
+</script>
+<script type="text/javascript"
+        async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+  <link rel="stylesheet" href="/css/style.css">
+  <title>Downloading a list of URLs</title>
+</head>
+
+  <body>
+    <main>
+    
+<header>
+  <section class="top">
+    <h1><a href="/">gypsydave5</a></h1>
+    <p>The blog of David Wickes, software developer</p>
+  </section>
+
+  <ul class="links">
+    <li><a href="/pages/about/">about</a></li>
+    <li><a href="/posts/">posts</a></li>
+  </ul>
+</header>
+
+    
+<article>
+  <h1>Downloading a list of URLs</h1>
+  <time datetime="2016-02-04T21:43" >Feb 04, 2016</time>
+  <p>Say you&rsquo;ve got a list of URLs - a long list of URLs - each of which points to
+a file. Perhaps they&rsquo;re a set of logs, or backups, or something similar. The
+file looks like this:</p>
+
+<pre><code>http:/www.somedomain.com/my/file/number-one.txt
+http:/www.somedomain.com/my/file/number-two.txt
+http:/www.somedomain.com/my/file/number-three.txt
+...
+http:/www.somedomain.com/my/file/number-five-hundred-and-x-ity-x.txt
+</code></pre>
+
+<p>Now what we don&rsquo;t want to do is copy and paste each of those file names into
+a browser to download the file. That would suck. What would be ideal is to drop
+the file into a magic box, and that magic box just work through the list,
+downloading the files until they&rsquo;re all done.</p>
+
+<p>Happily every *nix command line comes with its very own tooling to build a magic
+box like this.</p>
+
+<h3><code>wget</code></h3>
+
+<p>My first instinct would be to use <a href="https://www.gnu.org/software/wget/">wget</a>, which is certainly the friendliest way
+I&rsquo;ve seen to download files on the command line. Taking a short read of the
+manual with <code>man wget</code> we can see the following:</p>
+
+<pre><code>-i file
+   --input-file=file
+       Read URLs from a local or external file.  If - is specified as file,
+       URLs are read from the standard input.  (Use ./- to read from a file
+       literally named -.)
+</code></pre>
+
+<p>So the job is incredibly simple - we just type:</p>
+
+<pre><code>$ wget -i file-with-list-of-urls.txt
+</code></pre>
+
+<p>and we just let wget do its magic.</p>
+
+<h3><code>url</code> and <code>xargs</code></h3>
+
+<p>That was too easy - I love <code>wget</code> and usually wind up installing it on any
+system I use for longer than 30 seconds. But sometimes it&rsquo;s unavailable - maybe
+there&rsquo;s no package manager, or you have no rights to install packages because
+you&rsquo;re remoting in to a tiny machine running a very skinny Linux distro. In
+these cases we&rsquo;re going to have to rely on <code>wget</code>&rsquo;s older, less forgiving but far
+more flexible sibling <a href="https://curl.haxx.se/">curl</a>.</p>
+
+<p>The quick and generic <code>curl</code> command to download a URL is:</p>
+
+<pre><code>$ curl http://www.file.com/file.txt -LO
+</code></pre>
+
+<p><code>curl</code> has a wealth of uses and options - we&rsquo;re barely scraping the surface with
+what we&rsquo;re doing here. Take a look at the full <code>man</code> page and you&rsquo;ll see what
+I mean.</p>
+
+<p>But for this command: the <code>-L</code> flag tells curl to follow redirects - if it
+wasn&rsquo;t there we&rsquo;d get the <code>30x</code> response saved rather than the file at the
+location we&rsquo;re being redirected to. The <code>-O</code> flag means that curl uses the name
+of the remote file to name the file it&rsquo;s saved as, saving us the bother of
+naming the output.</p>
+
+<p>In order to pass each of the URLs into curl one after another we get to use
+<a href="https://en.wikipedia.org/wiki/Xargs">xargs</a>, which is a wonderful piece of witchcraft you can use to pass lines
+from <code>STDIN</code> in as arguments to another command.</p>
+
+<p>The full command looks like this:</p>
+
+<pre><code>$ cat file-with-list-of-urls.txt | xargs -n 1 curl -LO
+</code></pre>
+
+<p><code>cat</code> we should be comfortable with, it sends each line of a file out to <code>STDIN</code>
+one at a time. Here we&rsquo;re piping out each line to <code>xargs</code>.</p>
+
+<p><code>-n 1</code> tells <code>xargs</code> that it should be expecting one and only one argument for
+each execution from <code>STDIN</code> - in other words each of the URLs will be used as
+a sindle extra argument to <code>curl</code>. If we didn&rsquo;t do this, how would <code>xargs</code> know
+how many additional arguments <code>curl</code> wanted? It could just use every URL as an
+extra argument to a single <code>curl</code> execution. Which would suck.</p>
+
+<p>So we take in an extra argument from <code>STDIN</code>, here being piped in by <code>cat</code>, and
+we apply it to the end of <code>curl -LO</code>. <code>xargs</code> will now run <code>curl</code> for each of
+the URLs.</p>
+
+<h3>Optimization</h3>
+
+<p>Five hundred or so files is going to take a long time to download. Try passing
+<code>-P 24</code> to <code>xargs</code>, which tells it to run the multiple curls as 24 parallel
+processes. That&rsquo;ll whip along nicely (if your machine can take it).</p>
+
+<p>Another nice feature would be the ability to output to a filename that was not
+the same as the remote file - the path could be really annoying and long. Using
+<code>xargs</code> we&rsquo;d be somewhat limited, and would have to change the input file to
+include not only the new file name but also an extra argument to curl, <code>-o</code>,
+which gives the output file name.</p>
+
+<p>The URL file list would look like this:</p>
+
+<pre><code>    http:/www.somedomain.com/my/file/number-one.txt
+    -o
+    number-one.txt
+    http:/www.somedomain.com/my/file/number-two.txt
+    -o
+    number-two.txt
+</code></pre>
+
+<p>and the command would be</p>
+
+<pre><code>$ cat file-with-list-of-urls.txt | xargs -n 3 curl -L
+</code></pre>
+
+<p>But the same can be achieved without changing the original file list using <a href="http://www.gnu.org/software/parallel/">GNU
+parallel</a>, which is a distinct improvement (apart from the three extra
+characters).</p>
+
+<pre><code>$ cat file-with-list-of-urls.txt | parallel curl -L {} -o {/}
+</code></pre>
+
+<p>which passes the original URL to the <code>{}</code> and then removes the path from it with
+the <code>{/}</code>. There&rsquo;s plenty more you can do with <code>parallels</code> - take a look at <a href="https://www.gnu.org/software/parallel/parallel_tutorial.html">the
+tutorial</a>.</p>
+
+<p>Finally, it would be remiss of me not to mention that all the uses of <code>cat</code>
+above are entirely superfluous - the same could have been achieved with:</p>
+
+<pre><code>$ &lt;file-with-list-of-urls.txt parallel curl -L {} -o {/}
+</code></pre>
+
+<h3>Update</h3>
+
+<p>And if you want to avoid reading all those logs and just get on with your life,
+try sending the whole process to the background and redirecting <code>stdin</code> and
+<code>stdout</code> to a file.</p>
+
+<pre><code>$ nohup cat filelist | xargs -n4 curl -L &amp;&gt;output &amp;
+</code></pre>
+
+<p><code>nohup</code> protects the process from being interrupted by the session closing. So
+it&rsquo;ll keep on going even when you close your terminal or SSH connection. Don&rsquo;t
+worry, you can still <code>kill</code> it if you&rsquo;ve made a mistake.</p>
+
+<p>And the <em>four</em> arguments?</p>
+
+<pre><code>    http:/www.somedomain.com/my/file/number-one.txt
+    --create-dirs
+    -o
+    a-directory/hierarchy/number-one.txt
+</code></pre>
+
+<p>You get <code>curl</code> to make you a directory structure too.</p>
+
+</article>
+
+    </main>
+  </body>
+</html>

@@ -1,0 +1,191 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+          inlineMath: [['$','$'], ['\\(','\\)']],
+          processEscapes: true,
+      },
+      displayAlign: "left",
+      displayIndent: "1em",
+      CommonHTML: { linebreaks: { automatic: true } },
+      "HTML-CSS": { linebreaks: { automatic: true } },
+      SVG       : { linebreaks: { automatic: true } }
+    });
+</script>
+<script type="text/javascript"
+        async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+  <link rel="stylesheet" href="/css/style.css">
+  <title>Lambda Calculus 1 - Syntax</title>
+</head>
+
+  <body>
+    <main>
+    
+<header>
+  <section class="top">
+    <h1><a href="/">gypsydave5</a></h1>
+    <p>The blog of David Wickes, software developer</p>
+  </section>
+
+  <ul class="links">
+    <li><a href="/pages/about/">about</a></li>
+    <li><a href="/posts/">posts</a></li>
+  </ul>
+</header>
+
+    
+<article>
+  <h1>Lambda Calculus 1 - Syntax</h1>
+  <time datetime="2017-09-11T20:54" >Sep 11, 2017</time>
+  <p>The word &lsquo;lambda&rsquo; comes up more and more the longer you work as a
+programmer. There it is as a keyword in Python for an anonymous function. Same
+again in Scheme. Oh look, there it is in Ruby. Look at the logos for Racket,
+Clojure, MIT. Lambdas everywhere. The interest/obsession goes back to the
+mathematical roots of Lisp, specifically Alonzo Church&rsquo;s <em>lambda calculus</em>.</p>
+
+<h2>Why?</h2>
+
+<p>Church was researching the foundations of mathematics - particularly
+computation. The notation he came up with is a way of expressing any computation
+at all - if a computer can do it, it can be written in the syntax of the lambda
+calculus. But, interestingly for us, it is not concerned about <em>how</em> he
+computer does it; rather it just has some simple rules about <em>what</em> a
+computer can do. It is, if you like, a very simple declarative programming
+language.</p>
+
+<h2>Syntax</h2>
+
+<p>The lambda calculus gets its name from its use of the Greek letter lambda -
+$\lambda$ to represent a function that takes a single argument.</p>
+
+<p>After the $\lambda$ comes the name that that single argument is bound to - say $x$.</p>
+
+<p>And after that we write a $.$ to say that we&rsquo;re inside the &lsquo;body&rsquo; of the function.</p>
+
+<p>The $x$ is a bound variable - it stands for some value that the function can be
+applied to.</p>
+
+<p>And to apply a value to a function, you call it by putting them next to each
+other (maybe with some brackets to make it clearer what&rsquo;s the value and what&rsquo;s
+the body).</p>
+
+<p>That&rsquo;s it. That&rsquo;s everything in the lambda calculus - it&rsquo;s a syntax for writing
+about functions of one argument.</p>
+
+<p>So where in JavaScript we have:</p>
+
+<pre><code class="language-javascript">x =&gt; x + 1
+</code></pre>
+
+<p>and in Scheme we have</p>
+
+<pre><code class="language-scheme">(lambda (x) (+ x 1))
+</code></pre>
+
+<p>in the lambda calculus syntax we have:</p>
+
+<p>$$ \lambda x.x + 1 $$</p>
+
+<h2>Only one argument?</h2>
+
+<p>So you might see some limitations here.Only one argument, you may say, what
+if I need another one? Happily we can just return another function to bind a new
+argument. Hooray - everything is <a href="/posts/2015/2/19/%28not-quite%29-currying-in-javascript/">curryed</a>.</p>
+
+<p>So where in JavaScript:</p>
+
+<pre><code class="language-javascript">x =&gt; y =&gt; x + y
+</code></pre>
+
+<p>and in Scheme:</p>
+
+<pre><code class="language-scheme">(lambda (x) (lambda (y) (+ x y)))
+</code></pre>
+
+<p>so in the lambda calculus we have:</p>
+
+<p>$$ \lambda x.\lambda y.x + y $$</p>
+
+<p>Although usually<sup class="footnote-ref" id="fnref:1"><a rel="footnote" href="#fn:1">1</a></sup> we&rsquo;d just write:</p>
+
+<p>$$ \lambda xy.x + y $$</p>
+
+<p>But we would of course remember that, if the function had only one argument
+applied to it, it would return a function that expected the next argument.</p>
+
+<h2>$\alpha$-conversion, $\beta$-reduction</h2>
+
+<p>These terms do absolutely nothing to dispell the feeling that the lambda
+calculus is a bit elitist. Look, even more Greek letters - it must be
+complicated and clever because just writing about it requires me to know how to
+say $\alpha$!</p>
+
+<p>Really though, these are just big words for &lsquo;substitution&rsquo; and &lsquo;application&rsquo;,
+the basics of which you probably picked up in high school algebra.</p>
+
+<p>&lsquo;α-conversion&rsquo; (alpha-conversion) just means that we can change the name of a
+bound variable in a Lambda expression. So if we&rsquo;ve got:</p>
+
+<p>$$ \lambda xy.x + y $$</p>
+
+<p>We can just change all the $x$s to $a$s</p>
+
+<p>$$ \lambda ay.a + y $$</p>
+
+<p>And the expression hasn&rsquo;t changed its meaning one iota.<sup class="footnote-ref" id="fnref:2"><a rel="footnote" href="#fn:2">2</a></sup></p>
+
+<p>&lsquo;β-reduction&rsquo; (beta-reduction) is a little more complicated - what it means is
+that, when a value is applied to a function, we can substitute all the variables
+that name that argument with the value the function is applied to. For instance,
+in JavaScript:</p>
+
+<pre><code class="language-javascript">(x =&gt; y =&gt; x + y)(5)
+</code></pre>
+
+<p>under β-reduction becomes</p>
+
+<pre><code class="language-javascript">y =&gt; 5 + y
+</code></pre>
+
+<p>We unwrap the outer function and replace occurances of its variable with the
+supplied value. In lambda land:</p>
+
+<p>$$ (\lambda xy. x + y)\ 5 $$</p>
+
+<p>Becomes</p>
+
+<p>$$ \lambda y. 5 + y $$</p>
+
+<p>(I threw some parentheses around that other Lambda expression to make it clear
+that the $5$ was getting applied to the whole function and to separate it from
+the body $x + y$ - there&rsquo;s no hard and fast rules as far as that goes).</p>
+
+<p>Next up - <a href="/posts/2017/9/13/lambda-calculus-2---church-numbers/">numbers made of functions</a>. Wait, what?</p>
+
+<div class="footnotes">
+
+<hr />
+
+<ol>
+<li id="fn:1">To save on the world&rsquo;s dwindling supply of $\lambda$s</li>
+
+<li id="fn:2">Greek alphabet pun. BOOM!</li>
+</ol>
+
+</div>
+
+</article>
+
+    </main>
+  </body>
+</html>

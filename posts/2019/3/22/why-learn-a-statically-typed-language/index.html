@@ -1,0 +1,418 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+          inlineMath: [['$','$'], ['\\(','\\)']],
+          processEscapes: true,
+      },
+      displayAlign: "left",
+      displayIndent: "1em",
+      CommonHTML: { linebreaks: { automatic: true } },
+      "HTML-CSS": { linebreaks: { automatic: true } },
+      SVG       : { linebreaks: { automatic: true } }
+    });
+</script>
+<script type="text/javascript"
+        async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+  <link rel="stylesheet" href="/css/style.css">
+  <title>Why learn… a statically typed language?</title>
+</head>
+
+  <body>
+    <main>
+    
+<header>
+  <section class="top">
+    <h1><a href="/">gypsydave5</a></h1>
+    <p>The blog of David Wickes, software developer</p>
+  </section>
+
+  <ul class="links">
+    <li><a href="/pages/about/">about</a></li>
+    <li><a href="/posts/">posts</a></li>
+  </ul>
+</header>
+
+    
+<article>
+  <h1>Why learn&hellip; a statically typed language?</h1>
+  <time datetime="2019-03-22T19:12" >Mar 22, 2019</time>
+  <p>Most people&rsquo;s first programming language is a dynamically typed, interpreted
+language - JavaScript, Python or Ruby. These are good languages to learn
+programming with, and you can be productive with all three of them. But there&rsquo;s
+a separate category of languages in widespread use: statically typed, compiled
+languages - C, Go, Java, C# and others. This article will try to explain the
+difference between the two language categories, look at their advantages and
+disadvantages, and then consider what would be a good choice of statically typed
+language for a programmer who is only familiar with dynamically typed languages
+to learn.</p>
+
+<ul>
+<li><a href="#who-is-this-for">Who is this for?</a></li>
+<li><a href="#what-is-a-statically-typed-compiled-language">What is a statically typed, compiled
+language?</a></li>
+<li><a href="#advantages">Advantages</a></li>
+<li><a href="#disadvantages">Disadvantages</a></li>
+<li><a href="#where-should-i-start">Where should I start?</a></li>
+</ul>
+
+<h2>Who is this for?</h2>
+
+<p>The target audience of this article is someone who is comfortable with
+programming in a dynamically typed language and who is interested in learning a
+statically typed language, and wants to know why it is worth while. The examples
+are in JavaScript, TypeScript, Python and Go, but no knowledge of these
+languages is required. This is based on my own experience of being a
+self-taught developer who started working in Ruby and JavaScript and has
+extended to languages like Go, TypeScript, Kotlin and Rust.</p>
+
+<h2>What is a statically typed, compiled language?</h2>
+
+<p>There are two pairs of opposites to look at here: <em>dynamically typed</em>
+vs. <em>statically typed</em>, and <em>compiled</em> vs. <em>interpreted</em>. Let&rsquo;s go through them
+in that order.</p>
+
+<h3>Dynamic vs Static typing</h3>
+
+<p>If someone asked you:</p>
+
+<blockquote>
+<p>What&rsquo;s five added to a banana?</p>
+</blockquote>
+
+<p>You would be confused - what do they mean? It looks like they&rsquo;ve made a
+mistake. Maybe they don&rsquo;t know what the meaning of &lsquo;add&rsquo; is, or what a &lsquo;banana&rsquo;
+is. Maybe they have a different meaning of &lsquo;add&rsquo; to us. Something has gone wrong
+somewhere though, as their question doesn&rsquo;t make sense to us.<sup class="footnote-ref" id="fnref:1"><a rel="footnote" href="#fn:1">1</a></sup></p>
+
+<p>Programming languages have a way of telling us that an expression written in the
+language do or do not make sense. They do this by using the <em>type</em> that every
+value in a programming language has. In dynamically typed languages we only
+really become aware of types when we use a value of one type in the wrong way -
+when we say something that doesn&rsquo;t &lsquo;make sense&rsquo;.</p>
+
+<p>For instance, in Python we can write this:</p>
+
+<pre><code class="language-python">5 + &quot;banana&quot;
+</code></pre>
+
+<p>Try saving that in a file called <code>typecheck.py</code> and executing it with <code>python
+typecheck.py</code>. You should get the following error in your terminal:</p>
+
+<pre><code>Traceback (most recent call last):
+  File &quot;typecheck.py&quot;, line 1, in &lt;module&gt;
+    5 + &quot;banana&quot;
+TypeError: unsupported operand type(s) for +: 'int' and 'str'
+</code></pre>
+
+<p>This is a type error - you can tell that from the way it says <code>TypeError</code> in the
+error message. The error is telling you that you can&rsquo;t <code>+</code> the types <code>int</code> and
+<code>str</code> together. Which is fair enough; just like you don&rsquo;t know how to add
+together 5 and a banana, neither does Python.</p>
+
+<p>The type error is thrown by a <em>type checker</em>, which checks that all the types in
+an expression are being used in the right way. The type checker kicks in when
+the Python program runs and checks that the two things that are being <code>+</code>ed
+together are of the right type.<sup class="footnote-ref" id="fnref:2"><a rel="footnote" href="#fn:2">2</a></sup></p>
+
+<p>Type checking can happen at one of two times: when the program is running
+(commonly called &lsquo;run time&rsquo;) or sometime before then. Dynamically typed
+languages have their types checked at run time - this is what happened with the
+Python program we ran above; the type error become apparent when the program was
+run. Statically typed languages have their types checked before they are run.</p>
+
+<h4>Type annotations</h4>
+
+<p>In order for the type checker to accurately check the types in a statically
+typed language, you will often have to explicitly declare the type of a variable
+through a <em>type annotation</em>. A type annotation is a little extra information you
+add to a variable to say what type it is. In English we can imagine adding type
+annotations to our nouns and verbs as extra information in parentheses. So our
+simple sentence:</p>
+
+<blockquote>
+<p>What&rsquo;s five added to a banana?</p>
+</blockquote>
+
+<p>Becomes</p>
+
+<blockquote>
+<p>What&rsquo;s five (which is a number) added (adding is something you do to numbers)
+to a banana (which is a fruit)?</p>
+</blockquote>
+
+<p>Which might be good evidence that natural language is not a place for type
+annotations.</p>
+
+<p>With these English type annotations we don&rsquo;t need to know what &lsquo;five&rsquo; is, what a
+&lsquo;banana&rsquo; is, and what &lsquo;addition&rsquo; is, to know that this sentence doesn&rsquo;t make
+sense. We don&rsquo;t even need to know what a &lsquo;number&rsquo; is. We just know that the verb
+in the middle needs two nouns to be of the type &lsquo;number&rsquo; for this sentence to be
+valid. We could perform this kind of check automatically just by looking at the
+words without having to know anything about their meaning - we can&rsquo;t do &lsquo;adding&rsquo;
+to a &lsquo;fruit&rsquo;. The type checker in a statically typed language works in the same
+way.<sup class="footnote-ref" id="fnref:3"><a rel="footnote" href="#fn:3">3</a></sup></p>
+
+<p>Let&rsquo;s see a type annotation in TypeScript, a statically typed variation of
+JavaScript:</p>
+
+<pre><code class="language-typescript">var theNumberFive: number = 5
+</code></pre>
+
+<p>This declares that the variable <code>theNumberFive</code> has the type <code>number</code>, and
+assigns the value <code>5</code> to it.</p>
+
+<p>The equivalent in JavaScript would be:</p>
+
+<pre><code class="language-javascript">var theNumberFive = 5
+</code></pre>
+
+<p>Exactly the same, only without the type annotation.</p>
+
+<p>We can also add type declarations to function signatures. The function <code>add</code> in
+JavaScript:</p>
+
+<pre><code class="language-javascript">function add(n1, n2) {
+    return n1 + n2
+}
+</code></pre>
+
+<p>looks like this in TypeScript:</p>
+
+<pre><code class="language-typescript">function add(n1: number, n2: number): number {
+    return n1 + n2
+}
+</code></pre>
+
+<p>We&rsquo;re saying that the function <code>add</code> takes two arguments, <code>n1</code> which is a
+<code>number</code> and <code>n2</code> which is a <code>number</code>, and returns a value which is also a
+<code>number</code>.</p>
+
+<p>These annotations will be used by the TypeScript type checker, which runs when
+the TypeScript is <em>compiled</em>.</p>
+
+<h3>Compiled / Interpreted</h3>
+
+<p>In an interpreted language such as JavaScript each line of the program is read
+and executed in sequence, one after the other,<sup class="footnote-ref" id="fnref:4"><a rel="footnote" href="#fn:4">4</a></sup> by an interpreter, which
+builds up the running process from the program you wrote, line by line.</p>
+
+<p>Compilation is the act of turning the program you&rsquo;ve written in one language
+into another language. For TypeScript, the target language is JavaScript. And
+during the compilation - at &lsquo;compile time&rsquo; - the type checker will analyze the
+TypeScript program for any errors.</p>
+
+<p>Compilers are usually used to translate a high level programming language (like
+JavaScript) into a lower level language like an assembly language or machine
+code. In the case of TypeScript, the compiler outputs another high level
+language - JavaScript.<sup class="footnote-ref" id="fnref:5"><a rel="footnote" href="#fn:5">5</a></sup></p>
+
+<p>Compiled vs. interpreted is barely ever a cut and dried distinction when with a
+particular programming language - an interpreter will sometimes have a
+compilation step which runs just before the code executes,<sup class="footnote-ref" id="fnref:6"><a rel="footnote" href="#fn:6">6</a></sup> and the output
+of a compiler will have to be run by an interpreter. In addition, being compiled
+or interpreted is not a property of the language itself. There are compilers for
+languages that are normally interpreted, and interpreters
+for languages that are normally compiled.</p>
+
+<p>For a statically typed, compiled language, the compilation step is where the
+type checker runs. Type checking is useful for the compiler as it allows it to
+make optimizations in the performance of the software - if a variable is always
+going to be a <code>number</code> it can optimize the memory locations used.</p>
+
+<h2>Advantages</h2>
+
+<h3>Type checking catches mistakes</h3>
+
+<p>Let&rsquo;s put this all together and write our example natural language &lsquo;expression&rsquo;
+in both JavaScript and TypeScript we will soon see one of the advantages of a
+statically typed language</p>
+
+<pre><code class="language-javascript">var five = 5
+var banana = &quot;banana&quot;
+
+function add(n1, n2) {
+    return n1 + n2
+}
+
+add(five, banana)
+</code></pre>
+
+<p>which will give us the result</p>
+
+<pre><code class="language-javascript">'5banana'
+</code></pre>
+
+<p>Oh JavaScript&hellip; more than happy to <code>+</code> <em>anything</em> together.<sup class="footnote-ref" id="fnref:7"><a rel="footnote" href="#fn:7">7</a></sup> It&rsquo;s easy to
+laugh at this sort of error, but I&rsquo;ve seen teams working on JavaScript bugs for
+days based on a number being stored as a string. It&rsquo;s an easy mistake to
+make. It&rsquo;s also the sort of bug that will <em>never, ever</em> happen to you - until it
+happens to you.</p>
+
+<p>But if we try to replicate the same bug in TypeScript</p>
+
+<pre><code class="language-typescript">var five: number = 5
+var banana: string = &quot;banana&quot;
+
+function add(n1: number, n2: number): number {
+    return n1 + n2
+}
+
+add(five, banana)
+</code></pre>
+
+<p>When we compile this with the TypeScript compiler<sup class="footnote-ref" id="fnref:8"><a rel="footnote" href="#fn:8">8</a></sup></p>
+
+<pre><code>add.ts:8:11 - error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+
+8 add(five, banana)
+            ~~~~~~
+
+
+Found 1 error.
+</code></pre>
+
+<p>The TypeScript compiler has caught our mistake and has even underlined where we
+went wrong - we can&rsquo;t put a <code>string</code> where a <code>number</code> is meant to go.</p>
+
+<p>This is the biggest advantage of static typing from the programmer&rsquo;s
+perspective; the type checker makes sure that we&rsquo;re not doing anything <em>stupid</em>
+like using a <code>string</code> like it&rsquo;s a <code>number</code>. All of a sudden we&rsquo;ve got a new
+level of certainty about how the program we&rsquo;ve written will work - without even
+running it.</p>
+
+<h3>Editor integration</h3>
+
+<p>But the fun of type checking doesn&rsquo;t end with compilation - far from it. Because
+a type checker can run even before you compile your program it can integrate
+with your text editor, to giving you information about your program as you&rsquo;re
+writing it. Because the type annotations declare what the type of a variable is,
+the editor can now tell you useful things like which methods are available to
+use on it.<sup class="footnote-ref" id="fnref:9"><a rel="footnote" href="#fn:9">9</a></sup></p>
+
+<h3>Compiled code runs faster</h3>
+
+<p>Compilation doesn&rsquo;t just translate one language into another; the compiler also
+looks at your program and tries to work out ways to make it run faster or more
+efficiently. Recursive function calls get turned into simple loops, for
+instance.</p>
+
+<h2>Disadvantages</h2>
+
+<p>This all sounds good - but what are the downsides of using a statically typed,
+compiled language?</p>
+
+<h3>Compilation takes time</h3>
+
+<p>Compilation of a program can take a long time. Less time these days with fast
+computers and good compilers, but still something like two or three minutes in
+the worst cases I&rsquo;ve experienced. If your workflow is reliant on fast, tight
+feedback loops then you might start to find a compiler annoying you as your
+program increases in size.</p>
+
+<h3>Types need more syntax</h3>
+
+<p>If you&rsquo;re used to a dynamically typed language, the verbosity of a statically
+typed language can be off-putting. Having to declare the types of every variable
+and function parameter can become wearing on the eyes. A modern language will
+try to take away the strain of this by inferring the type of variables where it
+can, but older statically typed languages like Java, C#, C++ and C can look
+verbose.</p>
+
+<h3>The world isn&rsquo;t typed</h3>
+
+<p>The verbosity of a statically typed language is made clear at the
+boundaries of a program - where it interacts with &lsquo;the world&rsquo;. A number of extra
+steps are required to wrangle the data coming into your system. This becomes
+apparent when parsing JSON - to get the full benefit of types in your system
+you&rsquo;ll have to take the general <code>JSON</code> type and turn it into one of your types,
+which can be pretty arduous. A dynamic language makes this a lot easier
+(although more open to type errors as seen above).</p>
+
+<h3>No REPL based development</h3>
+
+<p>Most compiled languages do not have support for a Read-Evaluate-Print-Loop,<sup class="footnote-ref" id="fnref:10"><a rel="footnote" href="#fn:10">10</a></sup>
+and do not lend themselves to the sort of interactive development seen in
+languages such as Clojure. If you work in this way you&rsquo;ll miss it - if you don&rsquo;t
+it won&rsquo;t make a bit of difference to you.</p>
+
+<h2>Where should I start?</h2>
+
+<p>So what&rsquo;s a good statically typed, compiled language to start with?</p>
+
+<p>If I had a lot of experience with JavaScript then there might be a good argument
+to try TypeScript, but I find that languages that compile to JavaScript
+introduce a layer of overhead and tooling that can stop you focusing on the
+language.</p>
+
+<p>I would advise steering away from Java as there&rsquo;s a lot of unnecessary cruft and
+complication in the language, some of which is a hangover from C. For instance,
+compare</p>
+
+<pre><code class="language-java">User user = new User()
+</code></pre>
+
+<p>in Java, which always makes me feel like I&rsquo;ve written the word <code>user</code> at least
+two too many times, to this in Go</p>
+
+<pre><code class="language-go">user := NewUser()
+</code></pre>
+
+<p>If you <em>did</em> want to look at a statically typed language built on the JVM,
+Kotlin is a good choice.</p>
+
+<p>The best choice in my opinion is the <a href="https://golang.org/">Go programming language</a>. It has a
+simple type system (there are no generic types to worry about), the language&rsquo;s
+syntax is small and easy to learn, the tooling and documentation are best in
+class, and it&rsquo;s increasingly popular. Take a look at the <a href="https://gobyexample.com/">Go By Example</a> or <a href="https://github.com/quii/learn-go-with-tests">Learn Go With Tests</a>.</p>
+
+<h2>What do you think?</h2>
+
+<p>Do you have any experience of transitioning from dynamically typed languages to
+statically typed languages. Or vice versa? What were the hardest parts? What
+advice would you offer? Which language(s) do you think make the best
+introduction to static typing?</p>
+
+<div class="footnotes">
+
+<hr />
+
+<ol>
+<li id="fn:1">We could say that the sentence is syntactically correct, but is semantically nonsense.</li>
+
+<li id="fn:2">Try and imagine what would happen if there were <em>no types</em> in a language. All you would have is bits floating around in memory. How would you know where the &lsquo;number&rsquo; started? Or ended? Or which bits of the memory were the program? This is why all programming languages are typed - programming would be impossible without them.</li>
+
+<li id="fn:3">Although often the type checker <em>does</em> know the types of the values it&rsquo;s looking at - it will know that <code>1</code> is a number. This is how type inference works, helping statically typed languages become a lot less verbose. For instance in Go we can just say <code>x := 1</code> and the type checker will be able to infer the type of <code>x</code> to be a number.</li>
+
+<li id="fn:4">There are some subtleties to this - often a language interpreter will compile parts of the code on the fly, and compiled languages can have sections of code whose types can only be worked out after compilation when we run the program (at &lsquo;run time&rsquo;).</li>
+
+<li id="fn:5">This is sometimes called <em>transpilation</em>.</li>
+
+<li id="fn:6">This is called a &lsquo;just in time&rsquo; compiler for obvious reasons.</li>
+
+<li id="fn:7">If you&rsquo;ve not watched Gary Bernhardt&rsquo;s <a href="https://www.destroyallsoftware.com/talks/wat">JavaScriptWAT</a> video, now would be a good time.</li>
+
+<li id="fn:8">If you&rsquo;re interested in seeing this for yourself, you will need a NodeJS environment on your computer. Then you will need to install the TypeScript compiler from NPM by running <code>npm install -g typescript</code>. To compile a TypeScript file, i.e. one called <code>add.ts</code>, run <code>tsc add.ts</code>. The compiled JavaScript output will be in a file called <code>add.js</code> if there are no compilation errors.</li>
+
+<li id="fn:9">This sort of assistance <em>is</em> available in dynamically typed languages, but not to the same degree.</li>
+
+<li id="fn:10">There is, of course, some nuance to this. For instance languages that run, on the Java Virtual Machine (JVM) <em>can</em> support a REPL by sending the compiled Java Byte Code emitted from the REPL directly to a running instance of the JVM.</li>
+</ol>
+
+</div>
+
+</article>
+
+    </main>
+  </body>
+</html>

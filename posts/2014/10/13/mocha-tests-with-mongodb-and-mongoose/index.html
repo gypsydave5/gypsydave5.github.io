@@ -1,0 +1,147 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+          inlineMath: [['$','$'], ['\\(','\\)']],
+          processEscapes: true,
+      },
+      displayAlign: "left",
+      displayIndent: "1em",
+      CommonHTML: { linebreaks: { automatic: true } },
+      "HTML-CSS": { linebreaks: { automatic: true } },
+      SVG       : { linebreaks: { automatic: true } }
+    });
+</script>
+<script type="text/javascript"
+        async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+  <link rel="stylesheet" href="/css/style.css">
+  <title>Mocha tests with MongoDB and Mongoose</title>
+</head>
+
+  <body>
+    <main>
+    
+<header>
+  <section class="top">
+    <h1><a href="/">gypsydave5</a></h1>
+    <p>The blog of David Wickes, software developer</p>
+  </section>
+
+  <ul class="links">
+    <li><a href="/pages/about/">about</a></li>
+    <li><a href="/posts/">posts</a></li>
+  </ul>
+</header>
+
+    
+<article>
+  <h1>Mocha tests with MongoDB and Mongoose</h1>
+  <time datetime="2014-10-13T21:23" >Oct 13, 2014</time>
+  <p>I&rsquo;ve been continuing my assault on Node.js - I refuse to let it lie. I decided
+two weeks ago to try and get a version of the Makers Academy chitter project (a
+twitter clone) up and running using Node, Express and - because you may as well
+go straight in at the deep end - MongoDB. Let&rsquo;s call it &lsquo;Chitter.js&rsquo;.</p>
+
+<p>The biggest pain I&rsquo;ve had is getting the tests to run. This may not sound like
+a big deal to someone on the outside, but without tests I feel a little lost &ndash;
+I mean, how do you know if what you&rsquo;re doing is working? Or your refactoring
+hasn&rsquo;t changed anything?</p>
+
+<p>Anyway, enough of the TDD rant - and maybe let&rsquo;s just approach this as an
+intellectual exercise. Mocha is the test framework we&rsquo;re using &ndash; along with
+the Chai library of assertion (so I can write <code>expect</code>) a lot.</p>
+
+<p>Now the first thing to bear in mind is just how asynchronous <em>everything</em> is
+when working in JavaScript. You may <em>think</em> you understand, but you proaably
+don&rsquo;t. My entire cohort at Makers is replete with tales about testing in Mocha
+(&ldquo;It passed one time &ndash; but then it didn&rsquo;t&rdquo; &hellip; &ldquo;I ran it, it should&rsquo;ve failed.
+But it passed. Twice.&rdquo;).</p>
+
+<p>Happily Mocha gives us <code>done</code>. You can pass any test block (OK, not block,
+anonymous function. But I&rsquo;m Ruby till I die) an argument of <code>done</code>, which is
+a function you can call when the test is&hellip; well, when the test is done. It
+basically means that you can make thinga happen when you want them to happen,
+and not in faster-than-a-speeding-bullet JS timeframes.</p>
+
+<p>So, here&rsquo;s a test straight out of my actual project. The key thing to note is
+the fact that the expectations are sitting in the callback for the <code>save</code>
+function - you&rsquo;ll only want to test the database once the save has saved (i.e.
+once its calledback).</p>
+
+<p>(The following is all in CoffeeScript - which I&rsquo;m agnostic about. It definitely
+has the advantage of brevity, which is a quality all of its own.)</p>
+
+<pre><code class="language-coffee">it 'saves users', (done) -&gt;
+    bob = new user {username: &quot;bob&quot;, password: &quot;pisswird&quot;}
+    bob.save (error, saved_bob) -&gt;
+        expect(saved_bob.username).to.equal &quot;bob&quot;
+        expect(saved_bob.password).to.equal &quot;pisswird&quot;
+        done()
+</code></pre>
+
+<p>You would expect this to run, test the expectations, and then let you know it&rsquo;s
+all finished with the <code>done()</code> call at the end of the callback. And it does do
+exactly that &ndash; but only so long as the expectations pass. If they don&rsquo;t the
+whole thing just times out - which is not what we&rsquo;re after.</p>
+
+<p>I tried a number of solutions to this problem (in fact the above <em>is</em> one of
+those solutions - the first attempts were even more worthless), including a few
+experiments with the <a href="http://chaijs.com/plugins/chai-as-promised">Chai as
+Promised</a> library which includes
+such great statements as <code>to.eventually.deep.equal</code> But the problem wasn&rsquo;t
+resolved until I hit upon the following pattern:</p>
+
+<pre><code class="language-coffee">  it 'saves users', (done) -&gt;
+    user = new User {username: &quot;bob&quot;, password: &quot;pisswird&quot;}
+    user.save (error, saved_user) -&gt;
+      try
+        expect( saved_user.username ).to.eql &quot;bob&quot;
+        done()
+      catch error
+        done(error)
+</code></pre>
+
+<p>What wizardry is this? Let me try to explain&hellip;</p>
+
+<ol>
+<li>The reason everything timed out on the expectation failing was that the
+expectation statement is no longer in the scope of the <code>it()</code>.</li>
+<li>Expectations pass when they pass &ndash; but when they fail they raise an
+exception which is caught by the <code>it()</code> function the whole lot is wrapped in.</li>
+<li>So when the statement goes out of scope, it means that the error never
+&lsquo;bubbles up&rsquo; to the <code>it</code>, the <code>done()</code> never gets called, and the whole thing
+just times out.</li>
+<li>So we need a way to send the error for the failed expectation up to the <code>it()</code>.</li>
+<li>This is where the <code>try/catch</code> comes in - if the expectation fails it raises an
+error that then gets passed to the <code>done</code> function in the catch - which the
+<code>done</code> then dutifully carries back up to the <code>it</code> with the essential error
+information about what exactly went wrong.</li>
+</ol>
+
+<p>And so now we can write tests. Hurrah! But, more importantly, we&rsquo;ve gained an
+insight into how testing frameworks work. When I first encountered testing in
+RSpec I went through the various patterns of test as ritual &ndash; &lsquo;this is how you
+do it&rsquo; &ndash; but the more I work with tests the more I&rsquo;m respecting the hard work
+that&rsquo;s gone in to making them look like magick.</p>
+
+<p>So I&rsquo;m really greateful for Mocha being a bit of a pain to test with over the
+last few weeks, as it&rsquo;s made me have to think a bit harder about testing in
+general and the dark arts of JS.</p>
+
+<p>That said, it&rsquo;s not done much for the development of chitter.js&hellip;</p>
+
+</article>
+
+    </main>
+  </body>
+</html>

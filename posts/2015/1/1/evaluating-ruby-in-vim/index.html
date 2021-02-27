@@ -1,0 +1,96 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+          inlineMath: [['$','$'], ['\\(','\\)']],
+          processEscapes: true,
+      },
+      displayAlign: "left",
+      displayIndent: "1em",
+      CommonHTML: { linebreaks: { automatic: true } },
+      "HTML-CSS": { linebreaks: { automatic: true } },
+      SVG       : { linebreaks: { automatic: true } }
+    });
+</script>
+<script type="text/javascript"
+        async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+  <link rel="stylesheet" href="/css/style.css">
+  <title>Evaluating Ruby in Vim</title>
+</head>
+
+  <body>
+    <main>
+    
+<header>
+  <section class="top">
+    <h1><a href="/">gypsydave5</a></h1>
+    <p>The blog of David Wickes, software developer</p>
+  </section>
+
+  <ul class="links">
+    <li><a href="/pages/about/">about</a></li>
+    <li><a href="/posts/">posts</a></li>
+  </ul>
+</header>
+
+    
+<article>
+  <h1>Evaluating Ruby in Vim</h1>
+  <time datetime="2015-01-01T21:28" >Jan 01, 2015</time>
+  <p>I was watching <a href="https://twitter.com/avdi">Avdi Grimm</a>&rsquo;s <a href="http://www.rubytapas.com/">Ruby Tapas</a> videos - well, trying to watch them.
+I got stuck when I saw him do something in <del>Vim</del> Emacs that I&rsquo;d not seen before.
+Something magical.</p>
+
+<p>On screen he had an expression - something like this:</p>
+
+<pre><code class="language-ruby">p = Point.new(2,3)
+</code></pre>
+
+<p>In one keypress it became:</p>
+
+<pre><code class="language-ruby">p = Point.new(2,3) # =&gt;
+</code></pre>
+
+<p>And then quick as a flash:</p>
+
+<pre><code class="language-ruby">p = Point.new(3,5) # =&gt; #&lt;Point:0x000000038862d0 @x=3 @y=5&gt;
+</code></pre>
+
+<p>I immediately stopped paying attention to the <a href="http://www.rubytapas.com/episodes/7-Constructors?filter=free">excellent video about
+constructors</a> and started to look up what was going on. So here we go down the
+Vim rabbit hole again&hellip;</p>
+
+<p>The magic is performed by either <a href="http://rubygems.org/gems/rcodetools">rcodetools</a>&rsquo; xmpfilter tool or
+<a href="https://github.com/JoshCheek/seeing_is_believing">seeing_is_believing</a>, hooked up to Vim via <a href="https://github.com/t9md/vim-ruby-xmpfilter">vim-ruby-xmpfilter</a>, (which works
+for both) or <a href="https://github.com/hwartig/vim-seeing-is-believing">vim-seeing-is-believing</a>. Take your pick as I can&rsquo;t really see the
+difference at the moment.</p>
+
+<p>I&rsquo;ve got xmpfilter set up with the following in my <code>.vimrc</code></p>
+
+<pre><code class="language-vim">autocmd FileType ruby nmap &lt;buffer&gt; &lt;F4&gt; &lt;Plug&gt;(xmpfilter-mark)
+autocmd FileType ruby xmap &lt;buffer&gt; &lt;F4&gt; &lt;Plug&gt;(xmpfilter-mark)
+autocmd FileType ruby imap &lt;buffer&gt; &lt;F4&gt; &lt;Plug&gt;(xmpfilter-mark)
+
+autocmd FileType ruby nmap &lt;buffer&gt; &lt;F5&gt; &lt;Plug&gt;(xmpfilter-run)
+autocmd FileType ruby xmap &lt;buffer&gt; &lt;F5&gt; &lt;Plug&gt;(xmpfilter-run)
+autocmd FileType ruby imap &lt;buffer&gt; &lt;F5&gt; &lt;Plug&gt;(xmpfilter-run)
+</code></pre>
+
+<p>Now you too can evaluate Ruby code on the fly in Vim. And I can get back to
+watching more of Avdi.</p>
+
+</article>
+
+    </main>
+  </body>
+</html>

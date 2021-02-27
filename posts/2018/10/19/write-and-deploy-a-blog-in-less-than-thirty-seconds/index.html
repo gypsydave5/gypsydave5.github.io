@@ -1,0 +1,165 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+          inlineMath: [['$','$'], ['\\(','\\)']],
+          processEscapes: true,
+      },
+      displayAlign: "left",
+      displayIndent: "1em",
+      CommonHTML: { linebreaks: { automatic: true } },
+      "HTML-CSS": { linebreaks: { automatic: true } },
+      SVG       : { linebreaks: { automatic: true } }
+    });
+</script>
+<script type="text/javascript"
+        async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+  <link rel="stylesheet" href="/css/style.css">
+  <title>Write and deploy a blog in less than thirty seconds</title>
+</head>
+
+  <body>
+    <main>
+    
+<header>
+  <section class="top">
+    <h1><a href="/">gypsydave5</a></h1>
+    <p>The blog of David Wickes, software developer</p>
+  </section>
+
+  <ul class="links">
+    <li><a href="/pages/about/">about</a></li>
+    <li><a href="/posts/">posts</a></li>
+  </ul>
+</header>
+
+    
+<article>
+  <h1>Write and deploy a blog in less than thirty seconds</h1>
+  <time datetime="2018-10-19T15:18" >Oct 19, 2018</time>
+  <p>What&rsquo;s the fastest way to start a blog? Wordpress? Jekyll?</p>
+
+<p>Nah, it&rsquo;s <code>pandoc</code> and <code>now</code>.</p>
+
+<h2>What&rsquo;s <code>pandoc</code>?</h2>
+
+<p><a href="http://pandoc.org/">Pandoc</a> is a &lsquo;universal document converter&rsquo; - a swiss army knife fordefault-text-scale
+changing document type a into document type b. It&rsquo;s good for lots of things, but
+today it&rsquo;s going to be good for turning Markdown (what we like writing in) into
+HTML (what we read on a website).</p>
+
+<h2>What&rsquo;s <code>now</code>?</h2>
+
+<p><a href="https://zeit.co/now">Now</a> is a useful product from Zeit.com for deploying an application
+<em>really</em> quickly. It&rsquo;s great for throwing up something to see how it works. It
+will serve up Docker images, NodeJS applications and static sites. Today, we use
+it for a static site. You can install it with a simple <code>npm i -g now</code>.</p>
+
+<h2>On your marks, get set&hellip;</h2>
+
+<p>So, make sure that you&rsquo;ve got <code>pandoc</code> and <code>now</code> installed, that you&rsquo;re in
+a nice clean directory and that you&rsquo;ve got a connection to the Internet. And
+that you know what your favourite editor is. If you don&rsquo;t have a favourite, pick
+the one you hate the least.</p>
+
+<h2>&hellip; GO!</h2>
+
+<p>Quickly - open a file called <code>hello-world.md</code> in your favourite editor and write
+something like this:</p>
+
+<pre><code># Hello World
+
+Hello world, this is the world's fastest blog!
+</code></pre>
+
+<p>Save it - faster, faster! And now run this in the terminal. What? I didn&rsquo;t tell
+you to open a terminal session? Quickly, open one and run:</p>
+
+<pre><code class="language-shell">pandoc -o=index.html -to=html5 --standalone hello-world.md
+</code></pre>
+
+<p>IGNORE THE WARNINGS, we don&rsquo;t have time to explain! Now&hellip; SHIP IT!</p>
+
+<pre><code class="language-shell">now
+</code></pre>
+
+<p><code>now</code> will put your <code>index.html</code> on the Internet. It&rsquo;ll even put the URL it
+uploaded it to in your clipboard. Now, open your least hated web browser and
+open the URL.</p>
+
+<p>Success!</p>
+
+<p>The other fifteen seconds is to bask in the glow of your achievement - you&rsquo;ve
+earned it.</p>
+
+<h2>More?</h2>
+
+<p>What, you want more than one blog post in your blog? Are you crazy or greedy? Or
+both? Such luxury, millenials are so spoiled and entitled yadda yadda yadda&hellip;</p>
+
+<p>Sure! Try this: open a new file called <code>my-second-post.md</code> and write your second
+post in it - I don&rsquo;t care what you write about!</p>
+
+<p>Now write <code>index.md</code> - like this:</p>
+
+<pre><code># My Quick Blog
+
+- [Hello World][hello-world.html]
+- [My second post][my-second-post.html]
+</code></pre>
+
+<p>and now</p>
+
+<pre><code class="language-shell">pandoc -o=index.html --to=html5 --standalone index-world.md
+</code></pre>
+
+<pre><code class="language-shell">pandoc -ohello-world.html --to=html5 --standalone hello-world.md
+</code></pre>
+
+<pre><code class="language-shell">pandoc -omy-second-post.html --to=html5 --standalone my-second-post.md
+</code></pre>
+
+<p>finally, once again</p>
+
+<pre><code class="language-shell">now
+</code></pre>
+
+<p>Paste the new URL in your browser and&hellip;</p>
+
+<p>BOOM! You now have a blog with an index page and two posts. Do a little dance!</p>
+
+<h2>Things you can now try out</h2>
+
+<ul>
+<li>We&rsquo;re programmers - we don&rsquo;t like to do things twice! Write something to loop
+over the <code>.md</code> files in your directory to turn them into <code>.html</code> with <code>pandoc</code>
+rather than doing every file by hand. Bash, Ruby, JavaScript - whatever is
+easiest!</li>
+<li>It&rsquo;s not fun to have to change the URL of your blog every time you deploy it.
+<code>now</code> has a way you can alias a deployment to a permanent URL - why not take
+a look at how that&rsquo;s done.</li>
+<li>Your blog is <em>ugly</em>. Not going to lie. You should add some CSS. <code>pandoc</code> has
+a way to include a CSS file in the html - you need to add the flag
+<code>--css=file.css</code> to your <code>pandoc</code> call (once you&rsquo;ve written some good looking
+CSS that is)</li>
+<li>Stop ignorning the warnings! Take a look at how to add metadata to your Pandoc
+markdown - it&rsquo;s all in the Pandoc documentation</li>
+</ul>
+
+<p>Have fun</p>
+
+</article>
+
+    </main>
+  </body>
+</html>

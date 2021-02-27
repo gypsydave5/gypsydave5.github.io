@@ -1,0 +1,114 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+          inlineMath: [['$','$'], ['\\(','\\)']],
+          processEscapes: true,
+      },
+      displayAlign: "left",
+      displayIndent: "1em",
+      CommonHTML: { linebreaks: { automatic: true } },
+      "HTML-CSS": { linebreaks: { automatic: true } },
+      SVG       : { linebreaks: { automatic: true } }
+    });
+</script>
+<script type="text/javascript"
+        async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+  <link rel="stylesheet" href="/css/style.css">
+  <title>Backing up your Homebrew packages</title>
+</head>
+
+  <body>
+    <main>
+    
+<header>
+  <section class="top">
+    <h1><a href="/">gypsydave5</a></h1>
+    <p>The blog of David Wickes, software developer</p>
+  </section>
+
+  <ul class="links">
+    <li><a href="/pages/about/">about</a></li>
+    <li><a href="/posts/">posts</a></li>
+  </ul>
+</header>
+
+    
+<article>
+  <h1>Backing up your Homebrew packages</h1>
+  <time datetime="2015-10-16T20:39" >Oct 16, 2015</time>
+  <p><em>Update: while this is a good template to do a quick backup, a more flexible solution exists in the
+<a href="https://github.com/Homebrew/homebrew-bundle">Brew Bundle</a> project. Thanks <a href="https://github.com/Homebrew/homebrew-bundle">@MacHomebrew</a> for the pointer!</em></p>
+
+<p>It&rsquo;s a good idea to keep track of what packages you&rsquo;ve got installed in
+Homebrew - good for provisioning a new Mac, good for recovering from a disaster.</p>
+
+<p>To get a list of the current packages is as simple as</p>
+
+<pre><code class="language-bash">brew ls
+</code></pre>
+
+<p>but that gives us everything, dependencies and all. If we just want what we
+explicitly installed, we should go for</p>
+
+<pre><code class="language-bash">brew leaves
+</code></pre>
+
+<p>like the leaves of our dependency tree.</p>
+
+<p>Just pipe that out into a file</p>
+
+<pre><code class="language-bash">brew leaves &gt; homebrew-packages.txt
+</code></pre>
+
+<p>for safekeeping and get it under version control along with the rest of you
+configuration files.</p>
+
+<p>When it comes to recovery, we can save time and effort by using <code>xargs</code> to pipe
+out each of the lines as an argument to <code>brew install</code></p>
+
+<pre><code class="language-bash">cat homebrew-packages.txt | xargs brew install
+</code></pre>
+
+<p>and everything will (re)install in one go. It may take some time.</p>
+
+<p>Maybe you want to add to the list from one machine without overwriting the
+current list? I just did (for one reason or another), and it&rsquo;s fairly easy to
+handle. Instead of overwriting the text file, append to the end of it</p>
+
+<pre><code class="language-bash">brew leaves &gt;&gt; homebrew-packages.txt
+</code></pre>
+
+<p>Now you might have some repetitions in that file - get rid of them with</p>
+
+<pre><code class="language-bash">sort homebrew-packages.txt | uniq
+</code></pre>
+
+<p>This sorts the original list into order, then removes any lines that are
+repetitions of the one before, leaving only one. Pipe that out to a new file</p>
+
+<pre><code class="language-bash">sort homebrew-packages.txt | uniq &gt; homebrew-packages-reconciled.txt
+</code></pre>
+
+<p>and overwrite the old one if you need to (just don&rsquo;t do it in the pipe - it
+doesn&rsquo;t like it and the file becomes blank. Boo.)</p>
+
+<p>Did I mention that <a href="/posts/2015/10/7/text-processing-with-ruby-by-rob-miller/">Text Processing with Ruby</a> was an amazing book?
+I worked out how to do the above from what I read in the section on
+Unix tools. Nice.</p>
+
+</article>
+
+    </main>
+  </body>
+</html>
