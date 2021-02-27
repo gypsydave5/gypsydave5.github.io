@@ -24,13 +24,14 @@ jobs:
      - uses: actions/setup-go@v1
      
      - name: install blawg
-       run: go get github.com/gypsydave5/blawg/blawg
+       run: go install github.com/gypsydave5/blawg/blawg
 
      - name: debugging
        run: |
          ls -l
          pwd
          echo $GOBIN
+         echo $GOPATH
       
      - name: build site
        run: $GOBIN/blawg
