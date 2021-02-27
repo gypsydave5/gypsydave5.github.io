@@ -26,7 +26,7 @@ jobs:
      - name: install blawg
        run: go get github.com/gypsydave5/blawg/blawg
 
-    - name: debugging
+     - name: debugging
        run: |
          ls -l
          pwd
