@@ -24,17 +24,18 @@ jobs:
      - uses: actions/setup-go@v1
      
      - name: install blawg
-       run: go install github.com/gypsydave5/blawg/blawg
+       run: go get -u github.com/gypsydave5/blawg/blawg
 
      - name: debugging
        run: |
          ls -l
          pwd
+         echo $GOROOT
          echo $GOBIN
          echo $GOPATH
       
      - name: build site
-       run: $GOBIN/blawg
+       run: $GOROOT/bin/blawg
        
      - name: publish to s3
        uses: jakejarvis/s3-sync-action@master
