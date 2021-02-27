@@ -173,7 +173,3 @@ do before you start messing with it. Exception: you may have a dark
 background if you do all your work in a pitch black room. But maybe
 ask yourself why you're doing all your coding in a pitch black room.
 Are you OK? Would you like to talk to someone?
-
----
-
-Cover Image: _The Golden Calf_ by [Herrad of Landsberg](https://en.wikipedia.org/wiki/Herrad_of_Landsberg)
