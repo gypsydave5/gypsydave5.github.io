@@ -28,11 +28,9 @@ jobs:
 
      - name: debugging
        run: |
-         ls -l
-         pwd
          echo $GOROOT
-         echo $GOBIN
-         echo $GOPATH
+         echo $PATH
+         ls $GOROOT
       
      - name: build site
        run: $GOROOT/bin/blawg
