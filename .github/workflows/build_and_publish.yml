@@ -25,9 +25,14 @@ jobs:
      
      - name: install blawg
        run: go get github.com/gypsydave5/blawg/blawg
+
+    - name: debugging
+       run: |
+         ls -l
+         pwd
       
      - name: build site
-       run: blawg
+       run: $GOPATH/bin/blawg
        
      - name: publish to s3
        uses: jakejarvis/s3-sync-action@master
