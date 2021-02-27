@@ -30,9 +30,10 @@ jobs:
        run: |
          ls -l
          pwd
+         echo $GOBIN
       
      - name: build site
-       run: $GOPATH/bin/blawg
+       run: $GOBIN/blawg
        
      - name: publish to s3
        uses: jakejarvis/s3-sync-action@master
