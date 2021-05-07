@@ -2,7 +2,7 @@
 title: Three Books
 description: What even is a senior developer anyway?
 published: true 
-date: 2021-05-07
+date: 2021-05-07 15:04:05
 ---
 
 So I was kicking around some ideas with partner-in-crime and work friend
