@@ -1,0 +1,289 @@
+#+TITLE: Lambda Calculus 2 - Church Numbers
+
+#+DATE: [2017-09-13]
+
+** Counting without numbers?
+   :PROPERTIES:
+   :CUSTOM_ID: counting-without-numbers
+   :END:
+
+In the [[/posts/2017/9/11/lambda-calculus-1---syntax/][first post I
+wrote about the lambda calculus]] we looked at the basic syntax and a
+simple function that took two numbers and added them together:
+
+$$
+\lambda x.\lambda y.x + y
+$$
+
+This might all look OK until I tell you that, in the untyped lambda
+calculus, the only primitive data type is a function.
+
+A function. Not a bit, a byte, a string; not a number - a function.
+
+So we should be a little suspicious of $\,\lambda x.\lambda y.x + y$ as
+this $+$ symbol needs to be defined as a function. Fair enough -
+addition feels like a the sort of thing that could easily be a function.
+
+But what would we apply to it? We need a number - like one or two. But
+we need to make them out of functions.
+
+Wait, what? We need to make numbers /out of functions?!/
+
+And this is where things start to get weird.
+
+** So what's a number anyway?
+   :PROPERTIES:
+   :CUSTOM_ID: so-whats-a-number-anyway
+   :END:
+
+You will now be inducted into a sacred mystery that will allow you to
+make and understand Lisp jokes on the Internet. Be brave.
+
+In a universe which only has functions - how would we count? Well, we'd
+have to do it with functions, obviously.
+
+OK, sure - but that's not really getting us anywhere - let's take $2$ as
+a concrete example. How do I write a function that represents $2$?
+
+Simple - we could just give it a name - like it was JavaScript:
+
+#+BEGIN_EXAMPLE
+  const two = () => {}
+#+END_EXAMPLE
+
+Now you're obviously shouting "But that's cheating! What are these
+'names' of which you speak? Are they made of functions too?"
+
+And you'd be right. The thing is, we don't just want a /symbol/ for
+$2$ - the numeral. What we want is a function that represents, in some
+way, the very essence of two-ness.
+
+What I'm trying to get across here (without jumping to the solution
+immediately) is that the representation of numbers in the lambda
+calculus are not mere symbols; they capture a key behaviour that we
+associate with the idea of 'number'.
+
+And that behaviour is /repetition/. When we say 'look at those two
+apples', we're expecting there to be an apple, and then /another/ apple.
+In Church arithmetic a number is represented by a function that takes
+two values, and then applies the first value to the second value $n$
+times, where $n$ is the number being represented.
+
+** Church numbers
+   :PROPERTIES:
+   :CUSTOM_ID: church-numbers
+   :END:
+
+So much for the theory, let's take a look at some real numbers.[fn:1]
+First up, the number one:
+
+$$ \lambda f.\lambda x. f(x) $$
+
+We accept a variable called $f$, we take another one called $x$, and we
+call $f$ with $x$ once. We're kinda hoping that $f$ turns out to be a
+function that takes a single argument, but as this is the lambda
+calculus and /everything/ is a function that takes a single argument, we
+can be +fairly+ absolutely certain it is.
+
+In JavaScript:
+
+#+BEGIN_EXAMPLE
+  f => x => f(x)
+#+END_EXAMPLE
+
+And Scheme:
+
+#+BEGIN_SRC scheme
+  (lambda (f) (lambda (x) (f x)))
+#+END_SRC
+
+So if that's one, we can probably work out what two is, right?
+
+$$ \lambda fx. f\ (f\ x) $$
+
+And three?
+
+$$ \lambda fx. f\ (f\ (f\ x)) $$
+
+OK, so no peeking now. What's zero?
+
+...
+
+...
+
+...
+
+...
+
+...
+
+Did you work it out?
+
+$$ \lambda fx. x $$
+
+It's just ignoring the original function and returning the value it
+would've been applied to. The function $f$ has been applied to $x$ zero
+times.
+
+** Function composition and functional powers
+   :PROPERTIES:
+   :CUSTOM_ID: function-composition-and-functional-powers
+   :END:
+
+There's a neater way of talking about this, with just a litte more
+notation. We can abstract the idea of "first apply $f$, then apply $f$
+to that result, then apply $f$..." out to the idea of /function
+composition/, which you might have seen in some languages. This is just
+building a new function out of two functions. The new function does
+exactly the same thing as calling one function after the other (in
+right-to-left order). This is usually written using the $\circ$ symbol:
+
+$$ (f \circ f)\ x = f\ (f\ x) $$
+
+And so three could become the (slightly) easier to read:
+
+$$ \lambda f.\lambda x.\ (f \circ f \circ f)\ x $$
+
+But we can go further. The idea of composing a function with itself
+so-many times can be written as a /functional power/ - a 'function to
+the $n$'. Just like we can say $2^3 = 8$, so we can say:
+
+$$
+\lambda f.\lambda x.\ (f\ (f\ (f\ x)))\quad=\quad \lambda fx. (f\circ f\circ f)\ x\quad=\quad \lambda fx. f^3\ x
+$$
+
+Implementing composition and powers of functions is left as an exercise
+for the reader in their favourite language.[fn:2]
+
+** Playing around with the computer
+   :PROPERTIES:
+   :CUSTOM_ID: playing-around-with-the-computer
+   :END:
+
+I find there to be two +productive+ interesting ways to play around with
+the lambda calculus and Church numbers when I'm trying to understand
+what's going on.
+
+Firstly, and probably more obviously, try plugging around with them in
+your favourite language (as long as it has some sort of anonymous
+function type). Say Python - if we were to write three as a Church
+numeral we'd have:
+
+#+BEGIN_SRC python
+  three = lambda f: lambda x: f(f(f(x)))
+#+END_SRC
+
+If we want to test this - to see if it does what we think it does - we
+just need a function to be $f$:
+
+#+BEGIN_SRC python
+  increment = lambda x: x + 1
+#+END_SRC
+
+and some value to play the role of $x$
+
+#+BEGIN_SRC python
+  zero = 0
+#+END_SRC
+
+So then we just plug in those values:
+
+#+BEGIN_SRC python
+  three(increment)(0) #=> 3
+#+END_SRC
+
+We used three variables to hold the values above, but we could just
+inline them to get to something that looks a little more lambda-y:
+
+#+BEGIN_SRC python
+  (lambda f: lambda x: f(f(f(x))))(lambda x: x + 1)(0) #=> 3
+#+END_SRC
+
+Which translates to:
+
+$$ (\lambda f.\lambda x.\ f\ (f\ (f\ x)))\ (\lambda x. x + 1)\ 0 = 3 $$
+
+Both =zero= and =increment= use Python's built in number system. But we
+don't have to use numbers to test Church numbers. All we need are values
+that behave in the required way.[fn:3] For instance:
+
+#+BEGIN_SRC scheme
+  (define inc (lambda (x) (cons '() x)))
+
+  (define zero '())
+
+  (((lambda (f) (lambda (x) (f x))) inc) zero) ;;=> (())
+  (((lambda (f) (lambda (x) (f (f x)))) inc) zero) ;;=> (() ())
+  (((lambda (f) (lambda (x) (f (f (f x))))) inc) zero) ;;=> (() () ())
+#+END_SRC
+
+Lots of things will work - experiment!
+
+** Playing around with pen and paper
+   :PROPERTIES:
+   :CUSTOM_ID: playing-around-with-pen-and-paper
+   :END:
+
+The second way I like to play with lambdas is with pen and paper. The
+simplicity of the syntax, and the very few transformations allowed on an
+expression,[fn:4] mean that it's possible to do the evaluation yourself.
+Let's try it with the above. I'm going to go through it step by step,
+and I'm going to note which of the reductions steps being performed at
+each line.
+
+$$
+\\begin{array}{ c | l | c}
+& Expression & Reduction \\\\
+\hline
+0 & (\lambda fx.\ f\ (f\ (f\ x)))\ (\lambda x. x + 1)\ 0 \\\\
+1 & (\lambda x.\ (\lambda x.\ x + 1)\ ((\lambda x.\ x + 1)\ ((\lambda x.\ x + 1)\ x)))\ 0 & \beta \\\\
+2 & (\lambda x. (\lambda a.\ a + 1)\ ((\lambda b.\ b + 1)\ ((\lambda c.\ c + 1)\ x)))\ 0 & \alpha \\\\
+3 & (\lambda a.\ a + 1)\ ((\lambda b.\ b + 1)\ ((\lambda c.\ c + 1)\ 0)) & \beta \\\\
+4 & (\lambda a.\ a + 1)\ ((\lambda b.\ b + 1)\ 1) & \beta \\\\
+5 & (\lambda a.\ a + 1)\ 2 & \beta \\\\
+6 & 3 & \beta
+\\end{array}
+$$
+
+This is fun to try out, and while it's not much help when the expression
+is relatively simple as the one above, it gets pretty vital for me when
+I want to discover how more complicated expressions work.
+
+In summary, the computer is great for checking that a lambda expression
+works, but I prefer to do get the pen and paper out if I want to get a
+feel for what's going on - for what makes it work.
+
+** But ...
+   :PROPERTIES:
+   :CUSTOM_ID: but
+   :END:
+
+But what about the $+$ and $1$ and $0$ above? I said that there were
+only functions in the lambda calculus, aren't we still cheating a little
+bit?
+
+We are. So in the
+[[/posts/2017/9/23/lambda-calculus-3---arithmetic-with-church-numbers/][next
+post]] let's define =increment=, =add=, =multiply= and maybe even
+=exponentiation= in terms of lambdas. Things are certain to get weirder.
+
+Oh, and - you were promised the ability to undestand jokes on the
+internet? Take a look at
+[[http://www.schemers.org/Miscellaneous/imagine.txt][this]] - hopefully
+it makes some sense now you know what $one$ is.
+
+[fn:1] I mean, actually these are the
+       [[https://en.wikipedia.org/wiki/Natural_number][natural numbers]]
+       including zero, not actually the
+       [[https://en.wikipedia.org/wiki/Real_number][real numbers]]. Yay,
+       maths joke!
+
+[fn:2] I've always wanted to say that. But, seriously - implement them.
+       It's fun!
+
+[fn:3] I am thoroughly in debt to the amazing book
+       [[https://mitpress.mit.edu/books/little-schemer][/The Little
+       Schemer/]] for the this example.
+
+[fn:4] $\alpha$-conversion and $\beta$-reduction - see
+       [[/posts/2017/9/11/lambda-calculus-1---syntax/][the first post]]

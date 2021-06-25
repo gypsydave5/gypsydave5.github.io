@@ -1,0 +1,192 @@
+#+TITLE: Makers: day 5
+
+#+DATE: [2014-08-09]
+
+I thought I'd be writing a blog post everyday about my experience at
+[[http://www.makersacademy.com/][Makers]]. Or at least every two days.
+That went out of the window pretty damn quickly. Things move quickly, so
+let's go for a quick update and review before I get along with my
+Saturday...
+
+** Day -2
+   :PROPERTIES:
+   :CUSTOM_ID: day--2
+   :END:
+
+Headed to the graduation of the cohort 12 weeks ahead of ours and met
+some of the guys joining me in the August group, as well as the
+'seniors' (that's seniors by a full 6 weeks -- I don't thinks they'll be
+taking my lunch money). Got to see the different final projects that had
+been created -- really beautiful stuff such as the artist portfolio
+site, and a fun way to work out which film to watch with your friends
+using the IMDB API. I was struck with how polished these projects
+looked - fleshed out and beautiful.
+
+** Day 0
+   :PROPERTIES:
+   :CUSTOM_ID: day-0
+   :END:
+
+First day. Start early and meet everyone. We all introduce each other
+with interesting facts (much antipathy towards mushrooms), and the
+Makers team do the same. Many of the names have sinces wondered off into
+the sunset of my memory, but we're mainly being taught by
+[[https://github.com/ecomba][Enrique]],
+[[https://github.com/Stephen_lloyd][Stephen]] and
+[[https://github.com/roidriscoll][Roi]] who's the TA (and who has /only
+just finished the course/ -- amazing) at the moment.
+
+Our first challenge is to get set up and create a web app that generates
+motivational posters from a Google image search. In one day. And,
+amazingly, we all manage it. There's some pretty hairy moments to begin
+with (imagine a room full of people all downloading the same software at
+the same time using the same WiFi). But it happens.
+
+I asked Enrique whether I should stick with the Linux laptop or try out
+one of the MacBook Pros the Makers kindly offer for students to borrow
+during the course. He used to use Linux himself but was converted in a
+single day having borrowed a friend's. So I thought I'd try it out...
+
+I'm typing this on the Mac. Enough said.
+
+** Day 1
+   :PROPERTIES:
+   :CUSTOM_ID: day-1
+   :END:
+
+And it's straight into the first project - creating a student directory
+for our cohort using Ruby and the command line. We're all at different
+levels of experience at the moment - I'd describe myself as confident
+with a CLI and Ruby having prepared (over-prepared?) extensively for the
+last few... months (I was just looking at GitHub and I've been pushing
+there since February. Time flies!). The exercises are kept as a text
+document on GitHub with links to pills on how to use Git and the Unix
+command line. I pair with [[https://github.com/flickoid][Chris]] who I'd
+met on the open day. We have a great time getting through the work.
+
+** Day 2
+   :PROPERTIES:
+   :CUSTOM_ID: day-2
+   :END:
+
+There are lectures throughout the day -- one in the morning and one in
+the afternoon -- with additional talks during the day from other people
+coming in to the building. Today was the turn of the technology heads
+from [[http://www.typematrix.com/][Compare the Market.com]] to talk to
+us. It was interesting to hear them talk about how their technology and
+culture had chnged over the last ten years, especially the shift to an
+Agile culture. The more I hear and read about Agile the more excited it
+makes me feel about working as a programmer - not just writing code but
+having a wide-ranging input into what is being developed. It was also
+cool to hear the coders described as being, essentially,
+'customer-facing' -- that they were the closest staff memebers to actual
+customer experience and so were expectd to both feedback as such,
+generate ideas, and importantly care for the web app all the time, with
+flexible working hours. I'd never thought of it that way, but in a world
+where a company's only contact with their customers is through the web,
+coders become the customer facing members of staff with all th
+responsibility that entails.
+
+We also get talks from the cohort above us -- the seniors. It's great
+seeing these guys wanting to pass on the knowledge, the hints, the
+tricks -- everything they've picked up in the last few weeks, on to us.
+This tradition started spontaneously but fits so well with the ethos of
+Makers. I'm looking forward to maybe doing one myself.
+
+Erique talks about his keyboard layout for five minutes today -- well
+maybe more than five minutes. Not only is he a Vi(m) weezard but he also
+uses (1) COLMAC layout on both (2) the MacBook if he's out and about or
+(3) the [[http://www.typematrix.com/][scariest keyboard in the world]]
+if he's wanting to type a lot.
+
+Vim is enough for me, although Andy in our cohort borrows the keyboard
+for a day and starts to learn Colemak. Brave.
+
+** Day 3
+   :PROPERTIES:
+   :CUSTOM_ID: day-3
+   :END:
+
+I'm ahead. A few of us are ahead. In fact a few of us are wondering why
+we're not useing OOP methods to write this code because, frankly, it's
+looking a bit messy right now. My code is particularly awful until [Ben]
+and I chat about it and he suggests refactoring to make more but shorter
+methods with much better names. I kick myself -- I knew that! -- but bad
+habits die hard.
+
+But I don't mind being ahead -- I'm not straining at the bit. At the
+beginning Enrique and Stephen said that we're as strong as our weakest
+member, and that we should never leave a man behind. I think of my
+cohort as a team, and I'm responsible. So I float around answering
+questions and trying to help out where I can. I had a great moment in
+the morning with [[https://github.com/ruthearle][Ruth]] in which we both
+learned new things about symbols, and I've enjoyed speaking to
+[[https://github.com/silver-io][Javier]] about -- well lots of things.
+We have pretty similar motivations for getting in to Makers; we both
+want a better, more fulfilling work life. I'm more sure now that I've
+found it.
+
+And I like talking about code! I hadn't realised that this is what I was
+missing so much. Talking and working everyday in Ruby has increased my
+confidence and my knowledge. Helping others helps yourself, teachers
+learn more from their students. The last time I felt this way was at
+University, and it's a great feeling.
+
+Stephen and Roi introduce the finer points of using Git today in a
+fantastic lecture. I've found myself getting tangled up in my own
+branches so much that it was good to have things explained carefully and
+accurately, and with a demonstration as well. I learned a lot.
+
+** Day 4
+   :PROPERTIES:
+   :CUSTOM_ID: day-4
+   :END:
+
+Test Driven Developmet (TDD) drops with a bang today as Enrique and
+Stephen introduce [[http://rspec.info/][RSpec]] and a completely
+different way of writing code. Really. I'd heard of TDD, I'd heard
+people moan about or praise it -- but I'd not seen it until Enrique
+started hammering away at Vim on the projector to create
+[[https://ithub.com/gypsydave5/fizzbuzz][FizzBuzz]] by first defining
+what the code ought to be doing and then making it do it, then expanding
+the spec', making the code fail, making the code pass, expanding the
+spec'... repeat, rinse... it was amazing. He hooked it up with the idea
+of both the scientific method and a good doctor washing their hands. And
+it made sense -- declaring where you're going and then getting there,
+rather than just blindly, messily, hacking around until something drops
+out.
+
+We should be able to repeat these steps, write a FizzBuzz implementation
+using TDD, in less that five minutes. My first try was 33. I think it's
+a great way to practice.
+
+We also had a talk by [[https://twitter.com/rubenkostucki][Reuben]] and
+Sam who both work to get Makers students placements when they graduate.
+It was a really good idea to have them introduce themselves and talk
+about what we could do to make their lives (and so our lives) easier.
+Which boiled down to:
+
+1. Pair. A Lot.
+2. Always TDD. Always.
+3. Push often and always to GitHub.
+4. Don't worry about the job. Do the course.
+
+Which was a load off everyone's mind.
+
+The Friday Challenge was CLI based, so I waltzed blithly through (and
+had a really good time remembering some fun commands). Excitingly it was
+marked with an RSpec file which checked whether your changes 'passed' --
+literally. Unfortunately the file was written in an earlier version of
+the RSpec syntax and so the tests failed even when they should've
+passed. So [[https://github.com/spike01][Spike]] and I got to do our own
+Friday Challenge and fix the RSpec file. I say challenge -- we made more
+of a mountain out of that molehill than maybe we should've, but we
+learned a lot about octal, binary, Unix permissions and bitwise
+operators on the way, as well as Rspec.
+
+Mulling over what was going on with =permissions & 0000100= while
+leaning on a beanbag, talking the problem through with a new friend
+while drinking a cold beer at six-thirty on a Friday, I felt happier
+than I have in years. In the last week I've literally eaten and slept
+code (I dreamed in Ruby one night. It was odd) almost every hour of the
+day. And I love it.

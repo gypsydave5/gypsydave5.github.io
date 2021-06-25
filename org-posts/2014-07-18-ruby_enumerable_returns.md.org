@@ -1,0 +1,146 @@
+#+TITLE: Many Enumerable Returns
+
+#+DATE: [2014-07-18]
+
+As threatened then, here's the followup to my
+[[file:posts/2014/7/12/destructuring-in-a-method-block/][last post]] on
+the =#Enumerables= section from [[https://rubymonk.com/][Ruby Monk]],
+how I felt like a bit of an idiot for a few hours, and what I learned
+from that.
+
+tl;dr - enumerable blocks aren't magic; =yield= is magic.
+
+This question is a little further along from the last, and was framed
+so:
+
+#+BEGIN_QUOTE
+  Try implementing a method called occurrences that accepts a string
+  argument and uses inject to build a Hash. The keys of this hash should
+  be unique words from that string. The value of those keys should be
+  the number of times this word appears in that string.
+#+END_QUOTE
+
+So far so, so good. So I wrote this:
+
+#+BEGIN_SRC ruby
+  def occurrences(str)
+    str.scan(/\w+/).inject(Hash.new(0)) do |hashy, i|
+      hashy[i.downcase] += 1
+    end
+  end
+#+END_SRC
+
+Which spat out:
+
+#+BEGIN_QUOTE
+  =TypeError can't convert String into Integer=
+#+END_QUOTE
+
+And left me confused for a good few minutes. OK, getting on for a
+quarter of an hour. What was going on? - what I'd written was very
+similar to the example above:
+
+#+BEGIN_SRC ruby
+  [4, 8, 15, 16, 23, 42].inject({}) { |a, i| a.update(i => i) }
+#+END_SRC
+
+So I caved and looked at the answer:
+
+#+BEGIN_SRC ruby
+  def occurrences(str)
+      str.scan(/\w+/).inject(Hash.new(0)) do |build, word|
+          build[word.downcase] +=1
+          build
+      end
+  end
+#+END_SRC
+
+Which left me none the wiser. Why was the block re-iterating the
+accumulator function at the end? To test this I played around with
+=p=-ing the lines of the block... and discovered something interesting.
+Namely,
+
+#+BEGIN_SRC ruby
+  a.update(i => i) # => a
+#+END_SRC
+
+* But...
+  :PROPERTIES:
+  :CUSTOM_ID: but
+  :END:
+
+#+BEGIN_SRC ruby
+  build[word.downcase] +=1 # => build[word.downcase], the new value of that key
+#+END_SRC
+
+The block /needs to return the accumulator/ - the first example is just
+lucky that it does so already!
+
+The only reason the accumulator in an =Enumerable#inject= accumulates is
+that /it's returned from the block on each iteration/. In other words,
+somewhere in the definition of =#inject= for each class that can be made
+enumerable, the method =yield=s to the block, and then keeps the value
+returned to be passed in again as the new accumulator argument.
+
+I'd previously thought of =#inject= as working by /magic/, whereas in
+fact it was working by a method I could probably write myself given
+enough time. Something like this...
+
+#+BEGIN_SRC ruby
+  bob = [1,2,3,4,5,6]
+
+  def bob.inject(default = nil)
+    accumulator = default || self[0]
+    if default
+      self.each do |element|
+        accumulator = yield(accumulator, element)
+      end
+    else
+      self.drop(1).each do |element|
+        accumulator = yield(accumulator, element)
+      end
+    end
+    puts "all adds up to: "   # just to prove it's this method being
+                              # called, not the superclasses...
+    p accumulator
+  end
+#+END_SRC
+
+Which gives us such fun as:
+
+#+BEGIN_SRC ruby
+  bob.inject() {|a,e| a += e}
+  # => all adds up to: 21
+  bob.inject(10) {|a,e| a += e}
+  # => all adds up to: 31
+  bob.inject([]) {|a,e| a << e**2}
+  # => all adds up to: [1, 4, 9, 16, 25, 36]
+  bob.inject({}) {|a,e| a[e] = "x"*e; a}
+  # => {5=>"xxxxx", 6=>"xxxxxx", 1=>"x", 2=>"xx", 3=>"xxx", 4=>"xxxx"}
+#+END_SRC
+
+I relied on =#each= here, but we could easily write an =each= method
+using a =for... in...= loop or similar. The genius is in =yield=, which
+is the /real magic/ that's going on here.
+
+[[https://rubymonk.com/][Ruby Monk]] has more about the
+[[http://rubymonk.com/learning/books/1/chapters/34-lambdas-and-blocks-in-ruby/lessons/78-blocks-in-ruby][magic
+of yield]], and why it's weird in a language that professes that
+everything is an object. Like a lot in Ruby, I discovered a small thing
+didn't work, patiently played with it until I found out why, and then
+'worked' that small new piece of knowledge to give me greater insight
+into what was going on. I'm finding this to be the most satisfying
+method to learn by, both because it makes me feel like I'm learning to a
+deeper degree than I would by just reading the answers out of a book,
+and in addition, when the books do cover the subject, I can better apply
+what's written there to what I've seen in action.
+
+*** /postscipt/ - 27/714
+    :PROPERTIES:
+    :CUSTOM_ID: postscipt---27714
+    :END:
+
+Of course, David Black covers the same ground, but better (gets =each=
+off the ground using a =for= loop), in chapter 6 of
+[[http://www.manning.com/black2/][/The Well Grounded Rubyist/]]. Love
+that book.

@@ -1,0 +1,157 @@
+#+TITLE: Kotlin is Terrible
+
+#+DATE: [2018-01-09]
+
+I've been writing a lot of Kotlin at work for the last three months.
+Nice shiny new job, nice shiny new language. And for the most part it is
+nice and shiny. Think Groovy meets Scala with a sprinkling of something
+like Rust or Go.
+
+But I'm intolerant in my old age. If you're going to create a new
+language in the 21st Century it'd be nice if you didn't make design
+decisions that make me want to scream.
+
+** How do you say 'function'?
+   :PROPERTIES:
+   :CUSTOM_ID: how-do-you-say-function
+   :END:
+
+Kotlin is partly sold as a more 'functional' Java. Not as functional as
+Scala, but getting there.
+
+So how do you write a function?
+
+#+BEGIN_EXAMPLE
+  fun addTwo (number: Int): Int {
+    return number + 2
+  }
+#+END_EXAMPLE
+
+That's nice and easy - just like C or Go or Java!
+
+But maybe that's a bit too verbose - we could just return the result
+as... an assignment?
+
+#+BEGIN_EXAMPLE
+  fun addTwo (number: Int): Int = number + 2
+#+END_EXAMPLE
+
+So now I'd like to use this nice named function to =map= over a list.
+
+#+BEGIN_EXAMPLE
+  val listOfNumbers = listOf(1, 2, 3, 4)
+  listOfNumbers.map(addTwo)
+#+END_EXAMPLE
+
+This, of course, doesn't work. Because ... wait, what? Why doesn't this
+work?
+
+Well even though that thing looks like a function, it's going to get
+compiled down to some Java bytecode which will turn it into a method on
+a class. I have no idea how that happens - but I imagine it's something
+like using a different lookup table for variables and functions like we
+get in Common Lisp.
+
+So we need to reference the function like this:
+
+#+BEGIN_EXAMPLE
+  val listOfNumbers = listOf(1, 2, 3, 4)
+  listOfNumbers.map(::addTwo)
+#+END_EXAMPLE
+
+Just... just do it. Don't ask why.
+
+But what if I just wanted to inline =addTwo=, like I was writing a
+futuristic language like JavaScript?
+
+Easy - you just pass in a =lambda=. These just look like they do in
+Groovy, but in Groovy they were called closures.
+
+#+BEGIN_EXAMPLE
+  val listOfNumbers = listOf(1, 2, 3, 4)
+  listOfNumbers.map({number -> number + 2})
+#+END_EXAMPLE
+
+You don't even need to use the parenthesese if the last argument to your
+function is a Lambda - it can look just like Ruby.
+
+#+BEGIN_EXAMPLE
+  val listOfNumbers = listOf(1, 2, 3, 4)
+  listOfNumbers.map { number -> number + 2 }
+#+END_EXAMPLE
+
+And to really round off the fun, we can get rid of =number= and replace
+it with the default receiver - =it=. Like Groovy!
+
+#+BEGIN_EXAMPLE
+  val listOfNumbers = listOf(1, 2, 3, 4)
+  listOfNumbers.map { it + 2 }
+#+END_EXAMPLE
+
+Notice how there's no =return= in a lambda? It's just like Rust or Ruby
+or whatever - each lambda just evaluates to the final expression.
+
+In fact, if you /do/ return from a lambda, you'll actually be returning
+from the outer function. How useful is that! You'll end up only mapping
+over /one/ of the numbers.
+
+If you really /want/ to return from the lambda - or block, did I say
+that they're sometimes called blocks when they're the last argument?
+It's good to have more that one name for the same thing, right? So if
+you really want to return early you can use the =return@map= syntax.
+
+Or, you know, use an anonymous function.
+
+Oh, did I not mention anonymous functions? They're just like functions,
+and lambdas, and closures, and blocks except they have a different
+syntax /and return works/.
+
+#+BEGIN_EXAMPLE
+  val listOfNumbers = listOf(1, 2, 3, 4)
+  listOfNumbers.map(fun (number: Int): Int { return number + 2 })
+#+END_EXAMPLE
+
+Or we make it an expression ... in which case we don't have to return
+it...
+
+#+BEGIN_EXAMPLE
+  val listOfNumbers = listOf(1, 2, 3, 4)
+  listOfNumbers.map(fun (number: Int): Int = number + 2)
+#+END_EXAMPLE
+
+And I've not even mentioned that it's possible to stick an =invoke=
+method on objects to make them behave like functions á la Scala:
+
+#+BEGIN_EXAMPLE
+  object addTwo {
+      invoke(number: Int) = number + 2
+  }
+
+  val listOfNumbers = listOf(1, 2, 3, 4)
+  listOfNumbers.map(addTwo)
+#+END_EXAMPLE
+
+** So what, Dave?
+   :PROPERTIES:
+   :CUSTOM_ID: so-what-dave
+   :END:
+
+Am I against having different solutions to problems? Certainly not? Do I
+hate either implicit or explicit returns? No, nothing that specific.
+
+What's grinding my gears is the confusion between the 'Lambda' syntax
+and the 'Anonymous Function' syntax. Here the language is letting you
+write the same concept - the anonymous function - in two different ways.
+And the only discernable advantage of one syntax over the other is the
+introduction of the keyword =return= - the behaviour of each is (or at
+least can be made) identical.
+
+The saddening part of this that the language has taken the core
+(arguably) functional language primitive and made it into two different
+things. Both syntaxes reference the same programming concept, but just
+by there being two of them the language is introducing an unnecessary
+confusion.
+
+And that confusion is important, because a (programming) language is a
+language we should be able to express ourselves in clearly, without
+ambiguity.

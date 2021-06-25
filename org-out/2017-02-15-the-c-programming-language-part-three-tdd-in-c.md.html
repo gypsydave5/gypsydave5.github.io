@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="alternate"
+      type="application/rss+xml"
+      href="rss.xml"
+      title="RSS feed for "/>
+<title>Learning the C Programming Language</title>
+<meta name="author" content="John Dow">
+<meta name="referrer" content="no-referrer">
+<link href= "static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="static/favicon.ico">
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2020 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="preamble" class="status">
+<div class="header">
+  <a href="https://staticblog.org">My Static Org Blog</a>
+</div></div>
+<div id="content">
+<div class="post-date">16 Sep 2020</div><h1 class="post-title"><a href="/2017-02-15-the-c-programming-language-part-three-tdd-in-c.md.html">Learning the C Programming Language</a></h1>
+<div class="HTML">
+<p>
+&lt;h2&gt;
+</p>
+
+</div>
+
+<p>
+Part Three: Modules and TDD in C
+</p>
+
+<div class="HTML">
+<p>
+&lt;/h2&gt;
+</p>
+
+</div>
+
+<p>
+/This post follows on from my
+<a href="file:///posts/2016/12/3/learning-the-c-programming-language-part-two:-types/">second
+post about the C programming language</a>, and is the third in a series of
+posts about learning C/
+</p>
+
+<p>
+When I was thinking about writing tests in C, it led me to almost
+entirely reevaluate the way I think about tests. If you just want to see
+how to test in C (or how I do it anyway), skip to the end. Otherwise&#x2026;
+</p>
+
+<div id="outline-container-org73360a0" class="outline-2">
+<h2 id="there-is-no-magic">There is no magic</h2>
+<div class="outline-text-2" id="text-there-is-no-magic">
+<p>
+When I learned to practice test-driven development (TDD), I learned in
+Ruby using RSpec. It was wonderful! RSpec has a delightful syntax,
+reading like English. Like this:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-ruby">describe <span style="color: #666666;">"add"</span> <span style="color: #333333; font-weight: bold;">do</span>
+    it <span style="color: #666666;">"knows that five plus two makes seven"</span> <span style="color: #333333; font-weight: bold;">do</span>
+        expect(add 2, 5).to equal 7
+    <span style="color: #333333; font-weight: bold;">end</span>
+<span style="color: #333333; font-weight: bold;">end</span>
+</pre>
+</div>
+
+<p>
+It's worth bearing in mind that it took a long time to recognize that
+this was a series of nested function calls, each with its own code
+block. Definitely the start of this was when I started writing tests in
+JavaScript using the Mocha framework:
+</p>
+
+<pre class="example">
+describe('add', function () {
+    it('knows that five plus two makes seven', function() {
+        expect(add(2, 5)).to.equal(7);
+    });
+});
+</pre>
+
+<p>
+The anonymous =function=s made it much more obvious to me: this is just
+JavaScript; there is no magic.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org1c0244e" class="outline-2">
+<h2 id="back-to-basics">Back to basics</h2>
+<div class="outline-text-2" id="text-back-to-basics">
+<p>
+When I saw a pair of experienced developers hacking on Python for the
+first time, I asked them what sort of testing framework they were
+using - I was curious! "We're not using a framework," they said, "we're
+just using <code>assert</code>."
+</p>
+
+<p>
+This reminded me of my nightmare first experience with Java, where I
+abused the JUnit version of <code>assert</code> all over the place. But I hadn't
+realized that it came 'for free' in some languages. In fact, in most
+languages.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org6c36d13" class="outline-2">
+<h2 id="what-is-a-test">What is a test?</h2>
+<div class="outline-text-2" id="text-what-is-a-test">
+<p>
+A test is a way of saying whether something works or not. We could do
+this in a repl, we could do it by running a program and using it -
+manual testing. But more commonly we write another program to use the
+first program. This is what a test framework is - a program that tests
+your program.
+</p>
+
+<p>
+Given this, we need a way to communicate a description of our program to
+the test program - this is what we can see in the Ruby and JavaScript
+examples above. We're making a statement about our program ('two plus
+five equals seven') in the test framework's domain language, and saying
+that this should be true. At root, all tests come down to this: is
+something true or not?
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgecf23b0" class="outline-2">
+<h2 id="enter-assert">Enter <code>assert</code></h2>
+<div class="outline-text-2" id="text-enter-assert">
+<p>
+The original intention of <code>assert</code> in C was as an assertion that could
+be included inside the program itself. You would be able to compile your
+program either with the assertions turned on, or turned off by disabling
+debugging.
+</p>
+
+<p>
+This way of using <code>assert</code> doesn't really work for TDD - you can't run
+the assertion without having the code in the first place. In addition,
+you don't get what for me is one of the chief advantages of TDD, namely
+enforced separation of concerns.
+</p>
+</div>
+
+<div id="outline-container-org5cc0158" class="outline-3">
+<h3 id="wait-separation-of-concerns">Wait, separation of concerns?</h3>
+<div class="outline-text-3" id="text-wait-separation-of-concerns">
+<p>
+In order to test some aspect of your software on its own, it needs to be
+separable from the rest of the code; the testing will drive this. As you
+build each new part, you test it separately from the rest.
+</p>
+
+<p>
+So how to we break up a C program? The first step should be familiar to
+most developers: wrap everything in a function.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orga54f295" class="outline-3">
+<h3 id="functions-in-c">Functions in C</h3>
+<div class="outline-text-3" id="text-functions-in-c">
+<p>
+We've already seen a function in C - the <code>main</code> function. Declaring our
+own is a doddle; let's do some addition:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C"><span style="color: #cdad00; font-weight: bold;">#include</span> <span style="color: #666666;">&lt;stdio.h&gt;</span>
+
+<span style="color: #333333; font-weight: bold; font-style: italic;">int</span> <span style="color: #333333; font-weight: bold;">add</span>(<span style="color: #333333; font-weight: bold; font-style: italic;">int</span> <span style="color: #333333;">a</span>, <span style="color: #333333; font-weight: bold; font-style: italic;">int</span> <span style="color: #333333;">b</span>) {
+    <span style="color: #333333; font-weight: bold;">return</span> a + b;
+}
+
+<span style="color: #333333; font-weight: bold; font-style: italic;">int</span> <span style="color: #333333; font-weight: bold;">main</span>() {
+    <span style="color: #333333; font-weight: bold; font-style: italic;">int</span> <span style="color: #333333;">answer</span> = add(1, 1);
+    printf(<span style="color: #666666;">"one plus one is: %d"</span>, answer);
+}
+</pre>
+</div>
+
+<p>
+This stuff shouldn't be too surprising. The only things worth mentioning
+are that there is no magic function declaration keyword like <code>function</code>
+or <code>def</code>. In C it's the presence of the parentheses after the name that
+make it into a function. We do need to declare the return type - in both
+instances it's an <code>int</code> like we saw in
+<a href="file:///posts/2016/8/9/learning-the-c-programming-language-part-1:-hello,-world/">the
+first post</a>. This is the first time we've seen arguments in a function
+though - and it's probably not surprising that they've typed as well. In
+C the type goes before the name.<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup> So <code>add</code> takes two =int=s and
+returns an int. Hooray.
+</p>
+
+<p>
+Oh, and like JavaScript we have to remember to <code>return</code> the result.
+</p>
+</div>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara"><p class="footpara">
+A fact regretted by Rob Pike and
+<a href="https://blog.golang.org/gos-declaration-syntax">rectified in
+Go</a>
+</p></div></div>
+
+
+</div>
+</div><div class="taglist"></div></div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="https://staticblog.org/archive.html">Other posts</a>
+</div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+</body>
+</html>

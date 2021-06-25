@@ -1,0 +1,100 @@
+#+TITLE: Kotlin a Go Go
+
+#+DATE: [2017-10-21]
+
+** Say 'Hello, Kotlin!'
+   :PROPERTIES:
+   :CUSTOM_ID: say-hello-kotlin
+   :END:
+
+As a part of my (fantastic) new job I've had the opportunity to use
+fresh and exciting new programming language, Kotlin.
+
+Cooked up by the people who make IntelliJ IDEA - JetBrains - Kotlin is
+yet another JVM language that wants to be a nice Java. Yes, I know, it
+feels like this sort of thing happens once every six months. But I've
+spent a good month with Kotlin an I think it's got some great ideas.
+
+Let me show off a quick example using a neat http library (it's barely a
+framework), called HTTP4K.
+
+** Say 'Hello, HTTP4K'
+   :PROPERTIES:
+   :CUSTOM_ID: say-hello-http4k
+   :END:
+
+I can't mention HTTP4K without mentioning it's central cleverness: it
+treats clients and servers as functions that deal with the same sort of
+objects - the http request goes in, http response comes out. A server is
+a function that waits for an http request and, when it gets one, returns
+an http response. And a client is a function that sends an http request
+over the wire, and then returns with an http response.
+
+The insight here is that they're the /same function/ in different
+contexts. To make a server, just plug your =request -> response=
+function into a server context. To make a client, plug the same function
+into a client.
+
+HTTP4K calls these functions handlers. On the server side, a bundle of
+these handlers tied to a collection of different routes is, perhaps
+unsurprisingly, called a =router=.
+
+** First take at adding some routes
+   :PROPERTIES:
+   :CUSTOM_ID: first-take-at-adding-some-routes
+   :END:
+
+A project I'm working on has a collection of routes for internal use
+only - you know the sort of thing =/internal/ping -> OK=,
+=/internal/owner -> DAVE=,
+=/internal/config -> {"owner": "DAVE", "team": "Dave Team"}=, along with
+the normal app routes like =/sum?n=1&n=2 -> 3=. That could look
+something like this in Kotlin with HTTP4K:
+
+#+BEGIN_EXAMPLE
+  fun router(config: Config): HttpHandler =
+      routes(
+          "/sum" bind GET to {request: Request ->
+              val numbers = request.queries("n").map { it?.toInt() ?: 0 }
+              Response(OK).body(numbers.sum().toString())
+          },
+          "/product" bind GET to {request: Request ->
+              val numbers = request.queries("n").map { it?.toInt() ?: 1 }
+              Response(OK).body(numbers.product().toString())
+          },
+          "/interal/config" bind GET to { _ -> Response(OK).body(config.toString()) },
+          "/internal/ping" bind GET to { _ -> Response(OK).body("OK") },
+          "/internal/owner" bind GET to { _ -> Response(OK).body(config.owner) }
+      )
+#+END_EXAMPLE
+
+Now there are a number of improvements that can be made here (duplicated
+code, a radical lack of error handling), but what I'd like to look at
+here is separating the =/internal= routes out from the routes that the
+app actually uses. This is a really good practice as it stops your main
+router looking like a godawful dumping ground of every route under the
+sun, and also (in HTTP4K) it will let you test each collection of routes
+in isolation.
+
+So what I want is something like
+
+#+BEGIN_EXAMPLE
+  fun router(config: Config): HttpHandler =
+      routes(
+          "/" bind AppRoutes(),
+          "/internal" bind InternalRoutes(config)
+      )
+#+END_EXAMPLE
+
+** Extracting internal routes
+   :PROPERTIES:
+   :CUSTOM_ID: extracting-internal-routes
+   :END:
+
+#+BEGIN_EXAMPLE
+  class InternalRoutes(val config: Config) {
+      "/config" bind GET to { _ -> Response(OK).body(config.toString()) },
+      "/ping" bind GET to { _ -> Response(OK).body("OK") },
+      "/owner" bind GET to { _ -> Response(OK).body(config.owner) }
+  }
+#+END_EXAMPLE

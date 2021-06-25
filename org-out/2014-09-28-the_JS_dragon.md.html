@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="alternate"
+      type="application/rss+xml"
+      href="rss.xml"
+      title="RSS feed for "/>
+<title>Slaying The JavaScript Dragon</title>
+<meta name="author" content="John Dow">
+<meta name="referrer" content="no-referrer">
+<link href= "static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="static/favicon.ico">
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2020 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="preamble" class="status">
+<div class="header">
+  <a href="https://staticblog.org">My Static Org Blog</a>
+</div></div>
+<div id="content">
+<div class="post-date">16 Sep 2020</div><h1 class="post-title"><a href="/2014-09-28-the_JS_dragon.md.html">Slaying The JavaScript Dragon</a></h1>
+<blockquote>
+<p>
+Hey folks!
+</p>
+
+<p>
+The Node and JavaScript dragons have been hard to fight&#x2026; Do you
+remember you used to look at precious stones?
+</p>
+</blockquote>
+
+<p>
+That's how Enrique's email introduced the Friday challenge at the end of
+week 8 at Makers. Week 8 has been Hell Week. It was a beasting. It was
+hard. It was NodeJS.
+</p>
+
+<p>
+I was looking forward to this week more than any other - it's a great
+idea. More and more devs and companies are using Node, Rails is so
+opinionated as to be stifiling - so why not do another week of
+JavaScript dedicated to Node? Throw some CoffeeScript in there for good
+measure along with a seasoning of WebSockets and you've got a recipe for
+succeess.
+</p>
+
+<p>
+Nope. See above. You've got a recipe for Hell Week.
+</p>
+
+<p>
+JavaScript was a severe shock to the system for everyone. I was already
+relatively comfortable with the language - it wasn't entirely new to me.
+But I still struggled with getting Express and Node.
+</p>
+
+<p>
+I knew that JS was asynchronous - but I didn't really <i>know</i> it, if you
+take my meaning. The difference between Sinatra and Express became
+apparent from the beginning. Where on Sinatra it was fairly easy to get
+RSpec and Capybara performing tests out of the box, with Mocha it felt
+like I was contantly and actively fighting against the framework.
+Callbacks came back unexpectedly or not at all. Tests passed - twice -
+when they should've failed.
+</p>
+
+<p>
+The final straw came when we collectively couldn't get read/write
+operations working consistently. I suddenly realised how spoiled I've
+been by using Ruby, RSpec et al &#x2013; these are really mature pieces of
+software that act as you expect. I feel that Node and Express are
+amazing - don't get me wrong. But I've found it nigh-on impossible to
+test them.
+</p>
+
+<p>
+And if you can't test it, then it doesn't exist.
+</p>
+
+<p>
+I'm still pressing on with Node/Express on the side, because I do really
+enjoy the environment to work in. I just need to slay the Mocha dragon
+and everything will be fine.
+</p>
+
+<p>
+The Ruby refresher that was presented as the weekend work was like a
+beautiful sorbet - so refreshing after the hard week. As I answered the
+questions with simple one-liner methods I realised exactly how much I'd
+learned in the last eight weeks. I feel like I've got a firm foothold in
+the Ruby world.
+</p>
+
+<p>
+Now on to the Mocha.
+</p>
+<div class="taglist"></div></div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="https://staticblog.org/archive.html">Other posts</a>
+</div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+</body>
+</html>

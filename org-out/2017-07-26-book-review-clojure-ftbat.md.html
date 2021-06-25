@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="alternate"
+      type="application/rss+xml"
+      href="rss.xml"
+      title="RSS feed for "/>
+<title>Book Review: Clojure for the Brave and True</title>
+<meta name="author" content="John Dow">
+<meta name="referrer" content="no-referrer">
+<link href= "static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="static/favicon.ico">
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2020 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="preamble" class="status">
+<div class="header">
+  <a href="https://staticblog.org">My Static Org Blog</a>
+</div></div>
+<div id="content">
+<div class="post-date">16 Sep 2020</div><h1 class="post-title"><a href="/2017-07-26-book-review-clojure-ftbat.md.html">Book Review: Clojure for the Brave and True</a></h1>
+<p>
+One line review: <a href="http://www.braveclojure.com/"><i>Clojure for the Brave
+and True</i></a> by <a href="https://twitter.com/nonrecursive">Daniel Higginbotham</a>
+is a pretty good intro to Clojure, if you can get past the undergraduate
+humour.
+</p>
+
+<p>
+<i>Clojure for the Brave and True</i> could be thought of as a part of a
+loose trilogy of books, including <a href="http://landoflisp.com/"><i>Land of
+Lisp</i></a> and <a href="http://realmofracket.com/"><i>Realm of Racket</i></a>,<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup> that
+explore modern Lisps in a light hearted way with cartoons.
+</p>
+
+<p>
+The first problem with this comparison is that <i>Brave &amp; True</i> is nowhere
+near as good as <i>Land of Lisp</i> - Barski's jokes are funnier, his
+cartoons are better, the content is both deeper and broader. <i>Land of
+Lisp</i> has a chapter called "Let's build a Web Server from Scratch" and
+it's not lying. Whereas <i>Brave &amp; True</i> won't even show you the ropes on
+something like <a href="https://github.com/weavejester/compojure">Compojure</a>.
+</p>
+
+<p>
+The best chapters in <i>Brave and True</i>, which are also the most useful
+ones, are the ones where you're being walked through a piece of code
+line by line. The
+'<a href="https://www.braveclojure.com/functional-programming/">Peg thing</a>'
+game is a great example of a interactive command-line game written using
+a series of pure functions. This chapter gives you a real idea of how to
+get some Clojure code doing stuff in the world - a practical toolkit to
+let you get writing something.
+</p>
+
+<p>
+The other great thing about this book is its opinionated introduction to
+editors. I struggled mightily setting up something to do my Lisps in,
+having gone through a variety of Vim and Emacs setups with every damn
+plugin you can imagine. <i>Brave and True</i> has
+<a href="https://www.braveclojure.com/do-things/">an entire chapter dedicated
+to getting a decent Emacs environment</a> (you can download the
+configuration), complete with Cider and Paredit. It's not going to teach
+you everything you want to know, but once you're done you will be
+immediately productive and able to get along with the more serious task
+of actually writing some Clojure.
+</p>
+
+<p>
+But I often found the sense of humour in this book grating. It is as if
+I was forced to hang around with my fourteen-year-old self.<sup><a id="fnr.2" class="footref" href="#fn.2">2</a></sup> The
+one who'd memorized a lot of <i>Monty Python</i> and <i>The Hitchhiker's Guide
+to the Galaxy</i> and thought that quoting it back at my friends was the
+height of sophisticated humour. The examples feel contrived to fit the
+humour, often to the detriment of the point that is trying to be made.
+</p>
+
+<p>
+The poorest chapters are the ones where an idea is introduced but not
+fully explored. When introduced to protocols and records it would be
+nice to understand how they are used to leverage polymorphism in
+something more practical than the contrived Richard-Simmons-as-Werewolf
+examples that felt even less useful than the usual Object Oriented Guide
+to Animal Taxonomy we're forced to endure.
+</p>
+
+<p>
+<i>Brave and True</i> is a good book, and is worth buying and reading (and if
+you want to sample the content it's all available on
+<a href="http://www.braveclojure.com/">the book's excellent website</a>). It's
+filled me with confidence to write Clojure (probably before other
+languages) and to read more books on Clojure. I just wish that it had
+spent less time crapping around with spurious examples and more time
+showing me how and why Clojure is the best.
+</p>
+
+<p>
+Now I'm going to read <a href="http://landoflisp.com/">my favourite
+introduction to Lisp</a> again (keep scrolling) and maybe finish <i>Land of
+Lisp</i>.
+</p>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara"><p class="footpara">
+Guess they couldn't find an appropriate name for an area starting
+with 'C'. <i>Castle of Clojure</i>? <i>Continent</i>? <i>Cave</i>?
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2">2</a></sup> <div class="footpara"><p class="footpara">
+Bah, OK. My 20 year old self too. I can still sing all of <i>The
+Philosophers' Song</i>, I just know I shouldn't.
+</p></div></div>
+
+
+</div>
+</div><div class="taglist"></div></div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="https://staticblog.org/archive.html">Other posts</a>
+</div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+</body>
+</html>

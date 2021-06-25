@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="alternate"
+      type="application/rss+xml"
+      href="rss.xml"
+      title="RSS feed for "/>
+<title>async/await in JavaScript in Five Minutes</title>
+<meta name="author" content="John Dow">
+<meta name="referrer" content="no-referrer">
+<link href= "static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="static/favicon.ico">
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2020 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="preamble" class="status">
+<div class="header">
+  <a href="https://staticblog.org">My Static Org Blog</a>
+</div></div>
+<div id="content">
+<div class="post-date">16 Sep 2020</div><h1 class="post-title"><a href="/2017-08-06-async-await.md.html">async/await in JavaScript in Five Minutes</a></h1>
+<p>
+When I first heard about async/await in JavaScript I was quite excited.
+Now I know about it I'm not. Let me explain; instead of doing some Lisp
+this evening I decided to find out what async/await fuss was about, and
+I think I can put it in a single sentence.
+</p>
+
+<blockquote>
+<p>
+async/await is syntactic sugar to make Promises look more sequential
+</p>
+</blockquote>
+
+<p>
+That's it. If you have the most basic understanding of Promises in
+JavaScript then you should be able to use async/await in about thirty
+seconds. There is nothing surprising here, which is a relief.
+</p>
+
+<div id="outline-container-org4f554f1" class="outline-2">
+<h2 id="async">async</h2>
+<div class="outline-text-2" id="text-async">
+<p>
+Think of this as an annotation to a function - a way of saying that,
+within this lexically scoped block, we'll be living in async/await
+world.
+</p>
+
+<pre class="example">
+async function asyncAwaitLand () {
+ // blah blah fishcakes
+}
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org4c96155" class="outline-2">
+<h2 id="await">await</h2>
+<div class="outline-text-2" id="text-await">
+<p>
+In async/await world, <code>.then()</code> is spelt <code>await</code>. And it's another
+annotation, this time to to an expression. What larks. Here it is in
+Promise-speak:
+</p>
+
+<pre class="example">
+function normalPromiseLand () {
+    Promise.resolve('some value')
+        .then(theResultOfAPromise =&gt; console.log(theResultOfAPromise))
+}
+</pre>
+
+<p>
+And here's the same thing in nuspeak async/await
+</p>
+
+<pre class="example">
+async function asyncAwaitLand () {
+ const theResultOfAPromise = await Promise.resolve('some value')
+ console.log(theResultOfAPromise)
+}
+</pre>
+</div>
+</div>
+
+<div id="outline-container-orgdcef045" class="outline-2">
+<h2 id="playing-nicely-with-promises">Playing nicely with Promises</h2>
+<div class="outline-text-2" id="text-playing-nicely-with-promises">
+<p>
+<code>async</code> functions <i>return</i> Promises, so if you want to start chaining
+them all together be my guest:
+</p>
+
+<pre class="example">
+const arrowAsync = async () =&gt; {
+    return 'the async annotation works with anonymous arrow functions too'
+}
+
+arrowAsync()
+    .then(string =&gt; console.log(string))
+</pre>
+</div>
+</div>
+
+<div id="outline-container-orgf289310" class="outline-2">
+<h2 id="errors-and-rejects">Errors and Rejects</h2>
+<div class="outline-text-2" id="text-errors-and-rejects">
+<p>
+But how do you <code>.catch()</code> those long-=await=ed Promises when they go
+horribly wrong? Would it surprise you at all if I told you that you just
+use the normal sequential JavaScript error handling construct of
+<code>try/catch</code>?
+</p>
+
+<pre class="example">
+function rejectedPromise () {
+    return Promise.reject(new Error('boom'))
+}
+
+async function asyncAwaitLand () {
+    try {
+        const nope = await rejectedPromise()
+        console.log('will never happen', nope)
+    } catch (error) {
+        console.log('I caught a rejected Promise:', error.message)
+    }
+}
+</pre>
+
+<p>
+So how do you <code>reject()</code> in an <code>async</code> function? You can guess right?
+You just <code>throw</code> like it's sequential code.
+</p>
+
+<pre class="example">
+async function throwingAsync () {
+    throw new Error('boom')
+}
+
+function promiseLand () {
+    throwingAsync()
+        .then(nope =&gt; console.log('will never happen', nope))
+        .catch(error =&gt; console.log('I caught an async throw:', error.message))
+}
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org67f8467" class="outline-2">
+<h2 id="are-you-still-reading-this">Are you still reading this?</h2>
+<div class="outline-text-2" id="text-are-you-still-reading-this">
+<p>
+async/await is <i>boring</i> - thank goodness. A pretty piece of syntactic
+sugaring that extends the language not one jot. If you understand
+Promises then you should already have some ideas for how you're going to
+use it - more of a way of tidying up some ugly looking bits of code than
+a complete rethink of your codebase.
+</p>
+
+<p>
+If you don't understand Promises - stop reading articles about
+async/await and start reading articles about Promises.
+</p>
+</div>
+</div>
+<div class="taglist"></div></div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="https://staticblog.org/archive.html">Other posts</a>
+</div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+</body>
+</html>

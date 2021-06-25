@@ -1,0 +1,187 @@
+#+TITLE: Downloading a list of URLs
+
+#+DATE: [2016-02-04]
+
+Say you've got a list of URLs - a long list of URLs - each of which
+points to a file. Perhaps they're a set of logs, or backups, or
+something similar. The file looks like this:
+
+#+BEGIN_EXAMPLE
+  http:/www.somedomain.com/my/file/number-one.txt
+  http:/www.somedomain.com/my/file/number-two.txt
+  http:/www.somedomain.com/my/file/number-three.txt
+  ...
+  http:/www.somedomain.com/my/file/number-five-hundred-and-x-ity-x.txt
+#+END_EXAMPLE
+
+Now what we don't want to do is copy and paste each of those file names
+into a browser to download the file. That would suck. What would be
+ideal is to drop the file into a magic box, and that magic box just work
+through the list, downloading the files until they're all done.
+
+Happily every *nix command line comes with its very own tooling to build
+a magic box like this.
+
+*** =wget=
+    :PROPERTIES:
+    :CUSTOM_ID: wget
+    :END:
+
+My first instinct would be to use
+[[https://www.gnu.org/software/wget/][wget]], which is certainly the
+friendliest way I've seen to download files on the command line. Taking
+a short read of the manual with =man wget= we can see the following:
+
+#+BEGIN_EXAMPLE
+  -i file
+     --input-file=file
+         Read URLs from a local or external file.  If - is specified as file,
+         URLs are read from the standard input.  (Use ./- to read from a file
+         literally named -.)
+#+END_EXAMPLE
+
+So the job is incredibly simple - we just type:
+
+#+BEGIN_EXAMPLE
+  $ wget -i file-with-list-of-urls.txt
+#+END_EXAMPLE
+
+and we just let wget do its magic.
+
+*** =url= and =xargs=
+    :PROPERTIES:
+    :CUSTOM_ID: url-and-xargs
+    :END:
+
+That was too easy - I love =wget= and usually wind up installing it on
+any system I use for longer than 30 seconds. But sometimes it's
+unavailable - maybe there's no package manager, or you have no rights to
+install packages because you're remoting in to a tiny machine running a
+very skinny Linux distro. In these cases we're going to have to rely on
+=wget='s older, less forgiving but far more flexible sibling
+[[https://curl.haxx.se/][curl]].
+
+The quick and generic =curl= command to download a URL is:
+
+#+BEGIN_EXAMPLE
+  $ curl http://www.file.com/file.txt -LO
+#+END_EXAMPLE
+
+=curl= has a wealth of uses and options - we're barely scraping the
+surface with what we're doing here. Take a look at the full =man= page
+and you'll see what I mean.
+
+But for this command: the =-L= flag tells curl to follow redirects - if
+it wasn't there we'd get the =30x= response saved rather than the file
+at the location we're being redirected to. The =-O= flag means that curl
+uses the name of the remote file to name the file it's saved as, saving
+us the bother of naming the output.
+
+In order to pass each of the URLs into curl one after another we get to
+use [[https://en.wikipedia.org/wiki/Xargs][xargs]], which is a wonderful
+piece of witchcraft you can use to pass lines from =STDIN= in as
+arguments to another command.
+
+The full command looks like this:
+
+#+BEGIN_EXAMPLE
+  $ cat file-with-list-of-urls.txt | xargs -n 1 curl -LO
+#+END_EXAMPLE
+
+=cat= we should be comfortable with, it sends each line of a file out to
+=STDIN= one at a time. Here we're piping out each line to =xargs=.
+
+=-n 1= tells =xargs= that it should be expecting one and only one
+argument for each execution from =STDIN= - in other words each of the
+URLs will be used as a sindle extra argument to =curl=. If we didn't do
+this, how would =xargs= know how many additional arguments =curl=
+wanted? It could just use every URL as an extra argument to a single
+=curl= execution. Which would suck.
+
+So we take in an extra argument from =STDIN=, here being piped in by
+=cat=, and we apply it to the end of =curl -LO=. =xargs= will now run
+=curl= for each of the URLs.
+
+*** Optimization
+    :PROPERTIES:
+    :CUSTOM_ID: optimization
+    :END:
+
+Five hundred or so files is going to take a long time to download. Try
+passing =-P 24= to =xargs=, which tells it to run the multiple curls as
+24 parallel processes. That'll whip along nicely (if your machine can
+take it).
+
+Another nice feature would be the ability to output to a filename that
+was not the same as the remote file - the path could be really annoying
+and long. Using =xargs= we'd be somewhat limited, and would have to
+change the input file to include not only the new file name but also an
+extra argument to curl, =-o=, which gives the output file name.
+
+The URL file list would look like this:
+
+#+BEGIN_EXAMPLE
+      http:/www.somedomain.com/my/file/number-one.txt
+      -o
+      number-one.txt
+      http:/www.somedomain.com/my/file/number-two.txt
+      -o
+      number-two.txt
+#+END_EXAMPLE
+
+and the command would be
+
+#+BEGIN_EXAMPLE
+  $ cat file-with-list-of-urls.txt | xargs -n 3 curl -L
+#+END_EXAMPLE
+
+But the same can be achieved without changing the original file list
+using [[http://www.gnu.org/software/parallel/][GNU parallel]], which is
+a distinct improvement (apart from the three extra characters).
+
+#+BEGIN_EXAMPLE
+  $ cat file-with-list-of-urls.txt | parallel curl -L {} -o {/}
+#+END_EXAMPLE
+
+which passes the original URL to the ={}= and then removes the path from
+it with the ={/}=. There's plenty more you can do with =parallels= -
+take a look at
+[[https://www.gnu.org/software/parallel/parallel_tutorial.html][the
+tutorial]].
+
+Finally, it would be remiss of me not to mention that all the uses of
+=cat= above are entirely superfluous - the same could have been achieved
+with:
+
+#+BEGIN_EXAMPLE
+  $ <file-with-list-of-urls.txt parallel curl -L {} -o {/}
+#+END_EXAMPLE
+
+*** Update
+    :PROPERTIES:
+    :CUSTOM_ID: update
+    :END:
+
+And if you want to avoid reading all those logs and just get on with
+your life, try sending the whole process to the background and
+redirecting =stdin= and =stdout= to a file.
+
+#+BEGIN_EXAMPLE
+  $ nohup cat filelist | xargs -n4 curl -L &>output &
+#+END_EXAMPLE
+
+=nohup= protects the process from being interrupted by the session
+closing. So it'll keep on going even when you close your terminal or SSH
+connection. Don't worry, you can still =kill= it if you've made a
+mistake.
+
+And the /four/ arguments?
+
+#+BEGIN_EXAMPLE
+      http:/www.somedomain.com/my/file/number-one.txt
+      --create-dirs
+      -o
+      a-directory/hierarchy/number-one.txt
+#+END_EXAMPLE
+
+You get =curl= to make you a directory structure too.

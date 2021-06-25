@@ -1,0 +1,30 @@
+#+TITLE: "Brew Cask"
+#+DATE: <2015-03-21 Sat>
+
+
+[[http://brew.sh/][Homebrew]] is wonderful, and if you're using a Mac to
+develop on and aren't using it to manage your command line applications
+then I'd be surprised. Actually, I'd assume you were using
+[[https://www.macports.org/][MacPorts]].
+
+I've recently started to take advantage of an additonal library of
+prebuilt binaries for Homebrew called
+[[https://github.com/caskroom/homebrew-cask][Cask]]. This gives access
+to many (if not all) of the larger, often graphical, applications that
+you need, such as Chrome, IntelliJ, Vagrant... it's a long list.
+
+It even integrates well with my favourite Mac productivity tool,
+[[http://www.alfredapp.com/][Alfred]]. And, yes, you can install that
+with Cask too.
+
+Set up with:
+
+#+BEGIN_SRC sh
+  brew install caskroom/cask/brew-cask
+#+END_SRC
+
+and then install software with:
+
+#+BEGIN_SRC sh
+  brew cask install alfred
+#+END_SRC

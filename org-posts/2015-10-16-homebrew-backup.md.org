@@ -1,0 +1,77 @@
+#+TITLE: Backing up your Homebrew packages
+
+#+DATE: [2015-10-16]
+
+/Update: while this is a good template to do a quick backup, a more
+flexible solution exists in the
+[[https://github.com/Homebrew/homebrew-bundle][Brew Bundle]] project.
+Thanks [@MacHomebrew](https://github.com/Homebrew/homebrew-bundle) for
+the pointer!/
+
+It's a good idea to keep track of what packages you've got installed in
+Homebrew - good for provisioning a new Mac, good for recovering from a
+disaster.
+
+To get a list of the current packages is as simple as
+
+#+BEGIN_SRC sh
+  brew ls
+#+END_SRC
+
+but that gives us everything, dependencies and all. If we just want what
+we explicitly installed, we should go for
+
+#+BEGIN_SRC sh
+  brew leaves
+#+END_SRC
+
+like the leaves of our dependency tree.
+
+Just pipe that out into a file
+
+#+BEGIN_SRC sh
+  brew leaves > homebrew-packages.txt
+#+END_SRC
+
+for safekeeping and get it under version control along with the rest of
+you configuration files.
+
+When it comes to recovery, we can save time and effort by using =xargs=
+to pipe out each of the lines as an argument to =brew install=
+
+#+BEGIN_SRC sh
+  cat homebrew-packages.txt | xargs brew install
+#+END_SRC
+
+and everything will (re)install in one go. It may take some time.
+
+Maybe you want to add to the list from one machine without overwriting
+the current list? I just did (for one reason or another), and it's
+fairly easy to handle. Instead of overwriting the text file, append to
+the end of it
+
+#+BEGIN_SRC sh
+  brew leaves >> homebrew-packages.txt
+#+END_SRC
+
+Now you might have some repetitions in that file - get rid of them with
+
+#+BEGIN_SRC sh
+  sort homebrew-packages.txt | uniq
+#+END_SRC
+
+This sorts the original list into order, then removes any lines that are
+repetitions of the one before, leaving only one. Pipe that out to a new
+file
+
+#+BEGIN_SRC sh
+  sort homebrew-packages.txt | uniq > homebrew-packages-reconciled.txt
+#+END_SRC
+
+and overwrite the old one if you need to (just don't do it in the pipe -
+it doesn't like it and the file becomes blank. Boo.)
+
+Did I mention that
+[[/posts/2015/10/7/text-processing-with-ruby-by-rob-miller/][Text
+Processing with Ruby]] was an amazing book? I worked out how to do the
+above from what I read in the section on Unix tools. Nice.

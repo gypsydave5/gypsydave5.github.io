@@ -1,0 +1,100 @@
+#+TITLE: Method length: a good metric, a bad target
+
+#+DATE: [2017-08-07]
+
+So I saw this series of tweets a few days ago
+
+#+BEGIN_HTML
+  <blockquote class="twitter-tweet" data-lang="en">
+#+END_HTML
+
+#+BEGIN_HTML
+  <p lang="en" dir="ltr">
+#+END_HTML
+
+Pro tip: if your method is 225 lines long, then you should probably
+refactor your code ASAP. I frown at methods over 50 lines.
+
+#+BEGIN_HTML
+  </p>
+#+END_HTML
+
+--- Anna Filina (@afilina) August 2, 2017
+
+#+BEGIN_HTML
+  </blockquote>
+#+END_HTML
+
+#+BEGIN_HTML
+  <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+#+END_HTML
+
+#+BEGIN_HTML
+  <blockquote class="twitter-tweet" data-lang="en">
+#+END_HTML
+
+#+BEGIN_HTML
+  <p lang="en" dir="ltr">
+#+END_HTML
+
+IMO ten is too long in most cases. https://t.co/ayPb9Ly76I
+
+#+BEGIN_HTML
+  </p>
+#+END_HTML
+
+--- Ron Jeffries (@RonJeffries) August 3, 2017
+
+#+BEGIN_HTML
+  </blockquote>
+#+END_HTML
+
+#+BEGIN_HTML
+  <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+#+END_HTML
+
+#+BEGIN_HTML
+  <blockquote class="twitter-tweet" data-lang="en">
+#+END_HTML
+
+#+BEGIN_HTML
+  <p lang="en" dir="ltr">
+#+END_HTML
+
+In my Ruby code, half of my methods are just one or two lines long. 93%
+are under 10.https://t.co/Qs8BoapjoP https://t.co/ymNj7al57j
+
+#+BEGIN_HTML
+  </p>
+#+END_HTML
+
+--- Martin Fowler (@martinfowler) August 3, 2017
+
+#+BEGIN_HTML
+  </blockquote>
+#+END_HTML
+
+#+BEGIN_HTML
+  <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+#+END_HTML
+
+Always nice to see an escalation.
+
+Martin's article on the Bliki is nice, but I think it's still missing
+the point.
+
+#+BEGIN_QUOTE
+  Small functions like this only work if the names are good, so you need
+  to pay good attention to naming.
+#+END_QUOTE
+
+Short methods are good -> but they are hard to name, so work hard on the
+names...
+
+Is this accurate? It almost feels like we're putting the cart before the
+horse.
+
+Here is a piece of code I can extract -> Here it is on its own -> What
+the hell do I call it?
+
+This chimed with something I saw in the SICP lecture course.

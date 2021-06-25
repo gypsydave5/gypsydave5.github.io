@@ -1,0 +1,61 @@
+#+TITLE: Double Dash
+
+#+DATE: [2016-05-26]
+
+If you're anything like me you'll find your directories liberally
+scattered with some pretty strange directory and file names.
+
+#+BEGIN_EXAMPLE
+  $ ls -la
+
+  -rw-r--r--   1 gypsydave5  1482096370   647 11 Oct 20:15 :w
+  drwxr-xr-x   2 gypsydave5  1482096370    68 10 Feb 08:55 -p/
+  -rw-r--r--   1 gypsydave5  1482096370  2900 11 Oct 20:15 \(
+#+END_EXAMPLE
+
+Hopefully you're nothing like me and you never get this, but I'm both a
+sloppy and impatient typist and so I will occasionally often mash the
+keyboard in Vim and name a file after the write command, or somehow
+create a directory called =-p= because I was using the recursive flag on
+=mkdir=.[fn:1]
+
+On that subject, let's try and get rid of the =-p= directory:
+
+#+BEGIN_EXAMPLE
+  $ rm -rf -p
+
+  rm: illegal option -- p
+  usage: rm [-f | -i] [-dPRrvW] file ...
+         unlink file
+#+END_EXAMPLE
+
+Hmmm, that sucks. What about...
+
+#+BEGIN_EXAMPLE
+  $ rm -rf "-p"
+
+  rm: illegal option -- p
+  usage: rm [-f | -i] [-dPRrvW] file ...
+         unlink file
+#+END_EXAMPLE
+
+Boo. Happily there's a *nix convention to help with these situations:
+=--=. Double-dash tells the command you're running that everything that
+comes after it is not to be treated as a command option, but is instead
+a filename. So:
+
+#+BEGIN_EXAMPLE
+  $ rm -rf -- -p
+  $ ls -la
+
+  -rw-r--r--   1 gypsydave5  1482096370   647 11 Oct 20:15 :w
+  -rw-r--r--   1 gypsydave5  1482096370  2900 11 Oct 20:15 (
+#+END_EXAMPLE
+
+DISCO!
+
+This behaviour is implemented in most of the command line tools you'll
+use on a *nix system - it's useful to know.
+
+[fn:1] I'm /still/ not sure how I managed this. But I'm staring at the
+       evidence now, so I know it must've happened.

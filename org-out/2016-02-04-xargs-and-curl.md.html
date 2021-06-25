@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="alternate"
+      type="application/rss+xml"
+      href="rss.xml"
+      title="RSS feed for "/>
+<title>Downloading a list of URLs</title>
+<meta name="author" content="John Dow">
+<meta name="referrer" content="no-referrer">
+<link href= "static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="static/favicon.ico">
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2020 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="preamble" class="status">
+<div class="header">
+  <a href="https://staticblog.org">My Static Org Blog</a>
+</div></div>
+<div id="content">
+<div class="post-date">16 Sep 2020</div><h1 class="post-title"><a href="/2016-02-04-xargs-and-curl.md.html">Downloading a list of URLs</a></h1>
+<p>
+Say you've got a list of URLs - a long list of URLs - each of which
+points to a file. Perhaps they're a set of logs, or backups, or
+something similar. The file looks like this:
+</p>
+
+<pre class="example">
+http:/www.somedomain.com/my/file/number-one.txt
+http:/www.somedomain.com/my/file/number-two.txt
+http:/www.somedomain.com/my/file/number-three.txt
+...
+http:/www.somedomain.com/my/file/number-five-hundred-and-x-ity-x.txt
+</pre>
+
+<p>
+Now what we don't want to do is copy and paste each of those file names
+into a browser to download the file. That would suck. What would be
+ideal is to drop the file into a magic box, and that magic box just work
+through the list, downloading the files until they're all done.
+</p>
+
+<p>
+Happily every *nix command line comes with its very own tooling to build
+a magic box like this.
+</p>
+
+<div id="outline-container-orga5a4900" class="outline-2">
+<h2 id="wget"><code>wget</code></h2>
+<div class="outline-text-2" id="text-wget">
+<p>
+My first instinct would be to use
+<a href="https://www.gnu.org/software/wget/">wget</a>, which is certainly the
+friendliest way I've seen to download files on the command line. Taking
+a short read of the manual with <code>man wget</code> we can see the following:
+</p>
+
+<pre class="example">
+-i file
+   --input-file=file
+       Read URLs from a local or external file.  If - is specified as file,
+       URLs are read from the standard input.  (Use ./- to read from a file
+       literally named -.)
+</pre>
+
+<p>
+So the job is incredibly simple - we just type:
+</p>
+
+<pre class="example">
+$ wget -i file-with-list-of-urls.txt
+</pre>
+
+<p>
+and we just let wget do its magic.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org83f11e1" class="outline-2">
+<h2 id="url-and-xargs"><code>url</code> and <code>xargs</code></h2>
+<div class="outline-text-2" id="text-url-and-xargs">
+<p>
+That was too easy - I love <code>wget</code> and usually wind up installing it on
+any system I use for longer than 30 seconds. But sometimes it's
+unavailable - maybe there's no package manager, or you have no rights to
+install packages because you're remoting in to a tiny machine running a
+very skinny Linux distro. In these cases we're going to have to rely on
+<code>wget</code>'s older, less forgiving but far more flexible sibling
+<a href="https://curl.haxx.se/">curl</a>.
+</p>
+
+<p>
+The quick and generic <code>curl</code> command to download a URL is:
+</p>
+
+<pre class="example">
+$ curl http://www.file.com/file.txt -LO
+</pre>
+
+<p>
+<code>curl</code> has a wealth of uses and options - we're barely scraping the
+surface with what we're doing here. Take a look at the full <code>man</code> page
+and you'll see what I mean.
+</p>
+
+<p>
+But for this command: the <code>-L</code> flag tells curl to follow redirects - if
+it wasn't there we'd get the <code>30x</code> response saved rather than the file
+at the location we're being redirected to. The <code>-O</code> flag means that curl
+uses the name of the remote file to name the file it's saved as, saving
+us the bother of naming the output.
+</p>
+
+<p>
+In order to pass each of the URLs into curl one after another we get to
+use <a href="https://en.wikipedia.org/wiki/Xargs">xargs</a>, which is a wonderful
+piece of witchcraft you can use to pass lines from <code>STDIN</code> in as
+arguments to another command.
+</p>
+
+<p>
+The full command looks like this:
+</p>
+
+<pre class="example">
+$ cat file-with-list-of-urls.txt | xargs -n 1 curl -LO
+</pre>
+
+<p>
+<code>cat</code> we should be comfortable with, it sends each line of a file out to
+<code>STDIN</code> one at a time. Here we're piping out each line to <code>xargs</code>.
+</p>
+
+<p>
+<code>-n 1</code> tells <code>xargs</code> that it should be expecting one and only one
+argument for each execution from <code>STDIN</code> - in other words each of the
+URLs will be used as a sindle extra argument to <code>curl</code>. If we didn't do
+this, how would <code>xargs</code> know how many additional arguments <code>curl</code>
+wanted? It could just use every URL as an extra argument to a single
+<code>curl</code> execution. Which would suck.
+</p>
+
+<p>
+So we take in an extra argument from <code>STDIN</code>, here being piped in by
+<code>cat</code>, and we apply it to the end of <code>curl -LO</code>. <code>xargs</code> will now run
+<code>curl</code> for each of the URLs.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgc4a4a4c" class="outline-2">
+<h2 id="optimization">Optimization</h2>
+<div class="outline-text-2" id="text-optimization">
+<p>
+Five hundred or so files is going to take a long time to download. Try
+passing <code>-P 24</code> to <code>xargs</code>, which tells it to run the multiple curls as
+24 parallel processes. That'll whip along nicely (if your machine can
+take it).
+</p>
+
+<p>
+Another nice feature would be the ability to output to a filename that
+was not the same as the remote file - the path could be really annoying
+and long. Using <code>xargs</code> we'd be somewhat limited, and would have to
+change the input file to include not only the new file name but also an
+extra argument to curl, <code>-o</code>, which gives the output file name.
+</p>
+
+<p>
+The URL file list would look like this:
+</p>
+
+<pre class="example">
+http:/www.somedomain.com/my/file/number-one.txt
+-o
+number-one.txt
+http:/www.somedomain.com/my/file/number-two.txt
+-o
+number-two.txt
+</pre>
+
+<p>
+and the command would be
+</p>
+
+<pre class="example">
+$ cat file-with-list-of-urls.txt | xargs -n 3 curl -L
+</pre>
+
+<p>
+But the same can be achieved without changing the original file list
+using <a href="http://www.gnu.org/software/parallel/">GNU parallel</a>, which is
+a distinct improvement (apart from the three extra characters).
+</p>
+
+<pre class="example">
+$ cat file-with-list-of-urls.txt | parallel curl -L {} -o {/}
+</pre>
+
+<p>
+which passes the original URL to the <code>{}</code> and then removes the path from
+it with the <code>{/}</code>. There's plenty more you can do with <code>parallels</code> -
+take a look at
+<a href="https://www.gnu.org/software/parallel/parallel_tutorial.html">the
+tutorial</a>.
+</p>
+
+<p>
+Finally, it would be remiss of me not to mention that all the uses of
+<code>cat</code> above are entirely superfluous - the same could have been achieved
+with:
+</p>
+
+<pre class="example">
+$ &lt;file-with-list-of-urls.txt parallel curl -L {} -o {/}
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org6d0528b" class="outline-2">
+<h2 id="update">Update</h2>
+<div class="outline-text-2" id="text-update">
+<p>
+And if you want to avoid reading all those logs and just get on with
+your life, try sending the whole process to the background and
+redirecting <code>stdin</code> and <code>stdout</code> to a file.
+</p>
+
+<pre class="example">
+$ nohup cat filelist | xargs -n4 curl -L &amp;&gt;output &amp;
+</pre>
+
+<p>
+<code>nohup</code> protects the process from being interrupted by the session
+closing. So it'll keep on going even when you close your terminal or SSH
+connection. Don't worry, you can still <code>kill</code> it if you've made a
+mistake.
+</p>
+
+<p>
+And the <i>four</i> arguments?
+</p>
+
+<pre class="example">
+http:/www.somedomain.com/my/file/number-one.txt
+--create-dirs
+-o
+a-directory/hierarchy/number-one.txt
+</pre>
+
+<p>
+You get <code>curl</code> to make you a directory structure too.
+</p>
+</div>
+</div>
+<div class="taglist"></div></div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="https://staticblog.org/archive.html">Other posts</a>
+</div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+</body>
+</html>

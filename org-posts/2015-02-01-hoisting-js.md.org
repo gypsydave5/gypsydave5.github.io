@@ -1,0 +1,67 @@
+#+TITLE: Hoisting in JavaScript
+
+#+DATE: [2015-02-01]
+
+Working at [[http://www.mergermarket.com/info/][Mergermarket]] is fun.
+Not only am I getting to grips with a new language,
+[[http://groovy.codehaus.org/][Groovy]], in a nice, agile environment,
+on a project that's challenging but to which I can make some small and
+increasing contributions to. Not only that, but I'm also working with
+some damn clever and patient people who are happy to explain things to
+me as we go along.
+
+So my next thsee posts will be about some of what I've learned about
+JavaScript in the last month with Mat, Mike, Danielle, Nick and many
+others.
+
+###Hoisting At the top of my list of "words I'd heard associated with JS
+but didn't have the foggiest", /hoisting/ or, more transparently,
+variable hoisting. Behold the following:
+
+#+BEGIN_EXAMPLE
+  function printThis(showLog) {
+
+      if(showLog === true){
+          var logMessage = 'MESSAGE!';
+          console.log(logMessage);
+      }
+
+      console.log(logMessage);
+  }
+#+END_EXAMPLE
+
+Which you may be inclined to think would return two outputs to the
+console when called with =printThis(true)=, one of =MESSAGE!= and then
+the ubiquitous JS =undefined=. Because =logMessage= isn't defined at the
+second =console.log()=.
+
+Does it?
+
+#+BEGIN_EXAMPLE
+  MESSAGE!
+  MESSAGE!
+#+END_EXAMPLE
+
+Because the interpreter looks at the code and does this to it:
+
+#+BEGIN_EXAMPLE
+  function a(showLog) {
+
+      var logMessage;
+
+      if(showLog === true){
+          logMessage = 'MESSAGE!';
+          console.log(logMessage);
+      }
+
+      console.log(logMessage);
+  }
+#+END_EXAMPLE
+
+The variable is 'hoisted' out of its declaration in the block and
+created at the top of the function. The assignment still takes place in
+the same place, but because the scope of =logMessage= is the entire
+function, the variable is still available at the last =console.log=.
+This is because (motto alert) *JS has function-level scope, not
+block-level scope*. The interpreter just ignores those little ={= and
+=}= unless they're backed up with a function declaration.

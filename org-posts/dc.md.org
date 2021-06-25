@@ -1,0 +1,261 @@
+#+TITLE: =dc= and Stack Based Programming
+
+#+DATE: [2019-06-05]
+
+Maybe this story is familiar to you: you're working away, hotshot
+terminal user that you are. You're a pretty fast typist - not the
+/fastest/ for sure, but you're confident. Confident... but not always
+super accurate.
+
+So you're hacking away, moving in and out of directories with =cd= (and
+then immediately typing =ls= because that's what you do), except this
+time you slip and instead of typing =cd= you somehow typed =dc=.
+
+And then this happens:
+
+#+BEGIN_EXAMPLE
+  $ dc
+#+END_EXAMPLE
+
+Nothing. Absolutely nothing. Now the faint of heart would, at this
+point, give up. Perhaps a quick =^C= to make the problem goes away...
+
+But /you/ are made of bolder stuff! Let me assure you that you've struck
+/gold/! Ancient wisdom, layed down by the wise Unix masters for us to
+find. =dc= comes from a noble heritage, holds many secrets, and has much
+to teach us. Come! Come with me friends! Let us explore the wonders of
+=dc=.
+
+But first...
+
+... what is =dc=?
+
+** =dc=, Your Friendly Neighbourhood Reverse Polish Desk Calculator
+   :PROPERTIES:
+   :CUSTOM_ID: dc-your-friendly-neighbourhood-reverse-polish-desk-calculator
+   :END:
+
+=dc= is a /desk calculator/, as opposed to a /pocket/ calculator[fn:1]
+or a computer. In fact, when =dc= was first written there really weren't
+very many pocket calculators: it was 1969.
+
+(At this point feel free to cosplay a little to get you in the mood.
+Wear an afghan coat, put some flowers in your hair, listen to Jefferson
+Airplane, drop a little acid, stare at a mandala, or, whatever, man...)
+
+So it's a desk calculator. So I can do sums with it, right?
+
+#+BEGIN_EXAMPLE
+  $ dc
+  2 + 3
+  dc: stack empty
+#+END_EXAMPLE
+
+eh?
+
+=dc= is a /reverse Polish/ desk calculator; it uses Reverse Polish
+Notation (RPN). What's Reverse Polish Notation you ask? Well, it's like
+Polish Notation only backwards.
+
+Sorry, sorry - it's an easy joke to make, which is why I made it.
+
+Polish Notation is also known as /prefix notation/. Instead of all the
+mathematical operators like =+= and =-=
+=appearing in between the numbers (infix notation -=2 +
+3=), in Polish notation they appear at the beginning (=+ 2 3`).
+
+The genius of Polish notation is that _it doesn't require parentheses or
+operator prescedence to organise an expression.[fn:2] Let me
+demonstrate: take the sum (in infix notation), =2 * (3 + 5)=. We know
+the answer to be =16=. But if we shift the parentheses =(2 * 3) + 5= we
+get =11= instead. To make the expression unambiguous we need the
+parentheses to show which numbers belong to which operator.
+
+But in Polish Notation we can do the same /without/ the parentheses. The
+first expression becomes =* 2 + 3 5=; the second =+ * 2 3 5=.
+
+Seems a bit funny, doesn't it? The way to think of it is that, everytime
+you introduce a new operator like =+= or =*=, you start waiting for
+enough nubers to arrive on the right hand side for the operator to be
+applied.
+
+For the first sum we start with =*=, we then get a =2= - so whatever
+comes next is going to get multiplied by =2=. But what's next is a =+= -
+so now we have to wait for the =+= to get enough numbers given to it for
+it to become a number. Happily we get a =3= and a =5=, so the =+= turns
+out to be a =8=, which we can then immediately multiply by =2=.
+
+So that's Polish Notation - think of each operator as 'waiting around'
+for enough input from the right to do something... and then - 'YOMP!' -
+it eats the input and becomes a result.
+
+Reverse Polish Notation works in exactly the same way, /only backwards/.
+This is what our two sums would look like in RPN: =2 3 5 + *= (which
+evaluates to =16=), and =2 3 * 5 += (which evaluates to =11=).
+
+Instead of each operator waiting for new things on the right, they 'eat
+up' things that have already appeared on the left. Looking at the first
+sum again, we 'serve up' a =2=, then a =3=, then a =5=. Then a =+=
+appears; it eats the two numbers closest to it on the left - the =3= and
+=5= - and becomes an =8=. Then the =*= appears at the end. It also eats
+the two numbers closest to it on the left - which are now a =2= and the
+new =8=, and spits out the answer, =16=.
+
+Think of the numbers on the right being left on a plate in a row. An
+operator turns up on the right and - YOMP! - it eats as many inputs as
+it needs and becomes a result (and joins the delicious numbers on the
+plate).
+
+So we can perform arithmetic in Reverse Polish Notation with =dc=. Try
+it! Type in =3 5 += and hit return!
+
+#+BEGIN_EXAMPLE
+  $ dc
+  3 5 +
+#+END_EXAMPLE
+
+Ummm... still nothing. Did we break it? Did we do something wrong? No,
+there's just one snag: the result is still 'on the plate' - to see it we
+need to print it out with the command =p=. Type it in and hit return
+again:
+
+#+BEGIN_EXAMPLE
+  $ dc
+  3 5 +
+  p
+  8
+#+END_EXAMPLE
+
+Amazing!
+
+Now, here's the next amazing thing: you don't have to type out your sum
+all in one go; you can put each number on the plate in order, then send
+in an operator to consume them. So we can write the above =dc=
+calculation as:
+
+#+BEGIN_EXAMPLE
+  3
+  5
+  +
+  p
+  8
+#+END_EXAMPLE
+
+hitting return after each line until it prints an =8= for us.
+
+Next fun fact: the =8= is still on the plate, waiting for us to go on.
+So we can keep going with our calculation even after we've printed it:
+
+#+BEGIN_EXAMPLE
+  3
+  5
+  +
+  p
+  8
+  2
+  *
+  p
+  16
+#+END_EXAMPLE
+
+And there we have it - building up a calculation by pushing things on to
+a /stack/ - because that's what this plate really is - and then pulling
+them off every time we perform an operation.
+
+=dc= isn't just a calculator - it belongs to a family of /stack based
+programming languages/.
+
+** Stack Based Programming
+   :PROPERTIES:
+   :CUSTOM_ID: stack-based-programming
+   :END:
+
+We're used to programming using /variables/, as arguments to functions
+and as the subject of operations. We add two numbers - assign the result
+to a variable. We return values from functions. We maintain the 'state'
+of our program either through keeping it in variables, or passing it
+around as an argument to functions. No really.
+
+In stack based programming, the state is ever present as a stack. You
+call a function - it takes the stack, does something with a number of
+its values by =popping= them off the end, and then =pushes= some values
+on again. There are no 'arguments', there is no 'result', there are no
+'variables'. There's just this one beautiful stack representing the
+state and progress of your program.
+
+Even if you're used to programming in different styles and paradigms,
+stack based programming is pretty freaky. It blows your mind a little
+bit - and that's fun. It's also /ridiculously terse/ - because there's
+no assignment going on, or function arguments being bound, all you're
+seeing are pure functions being applied to the stack. For instance,
+here's a 'simple' pallindrome detector written in the language
+Factor:[fn:3]
+
+#+BEGIN_EXAMPLE
+  : palindrome? ( string -- ? ) dup reverse = ;
+#+END_EXAMPLE
+
+Breaking it down, we have
+
+- =palindrome?= is the name of the function
+- =( string -- ? )= is the function signature - it takes a string from
+  the stack and puts on a boolean - =?=
+- =dup= duplicates the value on the stack
+- =reverse= reverses the first string on the stack in place
+- === takes two values off the stack and puts on a boolean, true if
+  they're equal, false otherwise
+- and =;= is the end of the function!
+
+** =bc=, =dc='s Younger, Better Looking, More Successful Brother
+   :PROPERTIES:
+   :CUSTOM_ID: bc-dcs-younger-better-looking-more-successful-brother
+   :END:
+
+Now it's possible that, even after this /amazing/ introduction to stack
+based programming and Reverse Polish Notation, you're still not
+/completely/ in love with the idea of the =+= coming at the end of
+adding two numbers up. And I can totally understand that.
+
+So you'll be happy to learn that your needs were catered for by the
+creation of =bc= - which is just =dc= but with infix notation. =1 + 1=
+really will add up to =2= in =bc= (but it's a little more complicated to
+use - have a read of the =man= page).
+
+** =dc= in Popular Culture[fn:4]
+   :PROPERTIES:
+   :CUSTOM_ID: dc-in-popular-culture3
+   :END:
+
+=dc= had its fifteen minutes of fame when it was used as part of the
+one-line implementation of the RSA algorithm in the late 90s. The US
+government had, in its infinite wisdom, passed a law to restrict the
+publication and sharing of cryptographic tools - including algorithms.
+Hacker types weren't too pleased about this - it was essentially making
+maths illegal - and so they took to
+[[http://www.cypherspace.org/rsa/][sharing RSA in some fairly inventive
+ways]]: putting it on ties etc.[fn:5]
+
+Here it is:
+
+#+BEGIN_SRC perl
+  print pack"C*",split/\D+/,`echo "16iII*o\U@{$/=$z;[(pop,pop,unpack"H*",<>
+  )]}\EsMsKsN0[lN*1lK[d2%Sa2/d0<X+d*lMLa^*lN%0]dsXx++lMlN/dsM0<J]dsJxp"|dc`
+#+END_SRC
+
+Fairly hard to spot it, but the =|dc= at the end is taking the input
+before and piping it into =dc=. Quite incredible for a program that's
+fifty years old.
+
+[fn:1] For those of you too young to remember, a pocket calculator is
+       like the calculator app on your phone, but you can't make phone
+       calls on it and it's got more buttons.
+
+[fn:2] For those of you too young to remember, a pocket calculator is
+       like the calculator app on your phone, but you can't make phone
+       calls on it and it's got more buttons.
+
+[fn:3] Well, 'popular' as far as fifty year old command line tools go.
+
+[fn:4] Well, 'popular' as far as fifty year old command line tools go.
+
+[fn:5] These days there'd be a whole Red Bubble store devoted to it.

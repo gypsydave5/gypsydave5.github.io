@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="alternate"
+      type="application/rss+xml"
+      href="rss.xml"
+      title="RSS feed for "/>
+<title>Modularity is its own reward</title>
+<meta name="author" content="John Dow">
+<meta name="referrer" content="no-referrer">
+<link href= "static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="static/favicon.ico">
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2020 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="preamble" class="status">
+<div class="header">
+  <a href="https://staticblog.org">My Static Org Blog</a>
+</div></div>
+<div id="content">
+<div class="post-date">16 Sep 2020</div><h1 class="post-title"><a href="/2017-06-24-modularity.md.html">Modularity is its own reward</a></h1>
+<p>
+A while back an friend and I were talking about programming. They'd
+recently taken it up in the job he was doing and were relatively fresh
+to the discipline. Asking for a code review from a collegue, they'd been
+told that their Python was pretty good but that it could do with
+breaking out into smaller functions.
+</p>
+
+<p>
+My friend couldn't see the point of this - the code worked, it did the
+job, what's the problem? I had a crack at explaining why. Didn't do very
+well.
+</p>
+
+<p>
+More recently I was getting some feedback for something small I'd
+written. It was, of course, awesome - like all the code I write.<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>
+They said they liked it, but the modularity wasn't entirely necessary
+because the individual modular parts wouldn't be reused.
+</p>
+
+<p>
+So this is just a scratch piece to try to explain why I think modularity
+is the most imortant thing
+</p>
+
+<p>
+Oh and the title is an homage to my favourite xkcd comic:
+</p>
+
+
+<figure>
+<img src="https://imgs.xkcd.com/comics/functional.png" alt="functional.png">
+
+<figcaption><span class="figure-number">Figure 1: </span>tail recursion is its own reward</figcaption>
+</figure>
+
+<div id="outline-container-orgdbb235b" class="outline-2">
+<h2 id="wait-modularity">Wait, modularity?</h2>
+<div class="outline-text-2" id="text-wait-modularity">
+<p>
+When I say 'modular', I mean small and isolated and independent. A class
+that's a few lines long, the one line method in Ruby, the short
+function. At a larger level I mean, well, larger small things. A file
+with one class in it, or one function in it. Maybe I mean microservices.
+Maybe not.
+</p>
+
+<p>
+Look, I mean small things. That's all. But why do I think that they're
+their own reward? Well, I don't<sup><a id="fnr.2" class="footref" href="#fn.2">2</a></sup> - but I think that, most of the
+time, more good things come out of keeping the code smaller than larger.
+Such as&#x2026;
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgc00e703" class="outline-2">
+<h2 id="easier-to-test">Easier to Test</h2>
+<div class="outline-text-2" id="text-easier-to-test">
+<p>
+What sort of tests do you love? When there are hundreds of them - which
+ones make you happy inside? In my (admittedly limited) experience, it
+tends to be the ones that run really quickly and don't randomly fail.
+Sure, the ones that exercise the whole system are nice and necessary,
+but the ones that make me smirk a little are the unit tests that whizz
+by in the blink of an eye.
+</p>
+
+<p>
+And in order to have those fast little tests, you need small little bits
+of code to test.
+</p>
+
+<p>
+TDD makes us write the tests first - and the easiest tests to write are
+the ones that cover single, simple ideas that you want to implement. TDD
+wants us to write small tests that consequently should lead us to write
+small pieces of code.
+</p>
+
+<p>
+Performing TDD produces code with tests - this is a given. But I find
+that people celebrate this more that what I think the bigger prize is:
+you have been forced into writing your code modularly, bringing with it
+other and possibly greater advantages.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgf1dd320" class="outline-2">
+<h2 id="easier-to-comprehend">Easier to Comprehend</h2>
+<div class="outline-text-2" id="text-easier-to-comprehend">
+<p>
+This is probably the most important one. If your code is small and
+independent, then there is a much higher chance of you and everyone else
+understanding what it does. If a single function / class / method is
+longer than a screen, I would go so far as to say that it's near
+impossible to understand what it does.
+</p>
+
+<p>
+If you're programming in small, easy to comprehend<sup><a id="fnr.3" class="footref" href="#fn.3">3</a></sup> parts, then
+there is more chance that you'll be understood - if only because you'll
+have had to give them names. Possibly bad names, but names all the same.
+Names you'll be able to read and know what they mean and so what the
+parts do. Or at the worst, names that you read, don't understand, and
+then read the code, understand that because it's short, and then rename
+it with something (hopefully) better.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org504602d" class="outline-2">
+<h2 id="easier-to-reuse">Easier to Reuse</h2>
+<div class="outline-text-2" id="text-easier-to-reuse">
+<p>
+Yes, reuse is good - it's a good benefit of small pieces of code. You
+write that Fibonacci function, you can use it everywhere that you need a
+Fibonacci number. It is part of the wonderful magic of small,
+independent things.
+</p>
+
+<p>
+Whether you do reuse a part of code is often by the by - it can often
+come later on when you have a better idea about the thing that you're
+trying to build.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org26c3ccd" class="outline-2">
+<h2 id="this-all-sounds-familiar">This all sounds familiar&#x2026;</h2>
+<div class="outline-text-2" id="text-this-all-sounds-familiar">
+<p>
+Look, if you've heard this before then you probably have - hell, I just
+worked out what I was talking about when I got to the end of writing it.
+It's basically the first two bulletpoints of the
+<a href="https://en.wikipedia.org/wiki/Unix_philosophy">Unix philosophy</a> - do
+one thing well, and integrate with other programs.
+</p>
+
+<p>
+But as we're not writing programs - we're just writing parts of
+programs - we don't have to worry about the requirement for
+generalization (that can come later if at all). That integration is
+eased internally if we make the modules truely independent of each
+other.
+</p>
+
+<p>
+Like Lego blocks - some are small and general (think a 3x4 flat piece),
+or small and specific (think a laser gun), but they're all small and
+easy to integrate with each other.
+</p>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara"><p class="footpara">
+For 'awesome' read 'adequate'.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2">2</a></sup> <div class="footpara"><p class="footpara">
+Barely anything is its own reward. Maybe pizza.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3">3</a></sup> <div class="footpara"><p class="footpara">
+From the Latin <i>com</i> together, and <i>prehendere</i> grasp. It's
+literally easier to hold stuff together when it's small.
+</p></div></div>
+
+
+</div>
+</div><div class="taglist"></div></div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="https://staticblog.org/archive.html">Other posts</a>
+</div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+</body>
+</html>

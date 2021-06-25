@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="alternate"
+      type="application/rss+xml"
+      href="rss.xml"
+      title="RSS feed for "/>
+<title>Evaluating Ruby in Vim</title>
+<meta name="author" content="John Dow">
+<meta name="referrer" content="no-referrer">
+<link href= "static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="static/favicon.ico">
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2020 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="preamble" class="status">
+<div class="header">
+  <a href="https://staticblog.org">My Static Org Blog</a>
+</div></div>
+<div id="content">
+<div class="post-date">16 Sep 2020</div><h1 class="post-title"><a href="/2015-01-01-Ruby-Eval-in-Vim.md.html">Evaluating Ruby in Vim</a></h1>
+<p>
+I was watching <a href="https://twitter.com/avdi">Avdi Grimm</a>'s
+<a href="http://www.rubytapas.com/">Ruby Tapas</a> videos - well, trying to watch
+them. I got stuck when I saw him do something in Vim Emacs that I'd not
+seen before. Something magical.
+</p>
+
+<p>
+On screen he had an expression - something like this:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-ruby">p = <span style="color: #333333; font-weight: bold; font-style: italic;">Point</span>.new(2,3)
+</pre>
+</div>
+
+<p>
+In one keypress it became:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-ruby">p = <span style="color: #333333; font-weight: bold; font-style: italic;">Point</span>.new(2,3) <span style="color: #d9d9d9;"># </span><span style="color: #7f7f7f;">=&gt;</span>
+</pre>
+</div>
+
+<p>
+And then quick as a flash:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-ruby">p = <span style="color: #333333; font-weight: bold; font-style: italic;">Point</span>.new(3,5) <span style="color: #d9d9d9;"># </span><span style="color: #7f7f7f;">=&gt; #&lt;Point:0x000000038862d0 @x=3 @y=5&gt;</span>
+</pre>
+</div>
+
+<p>
+I immediately stopped paying attention to the
+<a href="http://www.rubytapas.com/episodes/7-Constructors?filter=free">excellent
+video about constructors</a> and started to look up what was going on. So
+here we go down the Vim rabbit hole again&#x2026;
+</p>
+
+<p>
+The magic is performed by either
+<a href="http://rubygems.org/gems/rcodetools">rcodetools</a>' xmpfilter tool or
+<a href="https://github.com/JoshCheek/seeing_is_believing">seeing<sub>is</sub><sub>believing</sub></a>,
+hooked up to Vim via
+<a href="https://github.com/t9md/vim-ruby-xmpfilter">vim-ruby-xmpfilter</a>,
+(which works for both) or
+<a href="https://github.com/hwartig/vim-seeing-is-believing">vim-seeing-is-believing</a>.
+Take your pick as I can't really see the difference at the moment.
+</p>
+
+<p>
+I've got xmpfilter set up with the following in my <code>.vimrc</code>
+</p>
+
+<pre class="example">
+autocmd FileType ruby nmap &lt;buffer&gt; &lt;F4&gt; &lt;Plug&gt;(xmpfilter-mark)
+autocmd FileType ruby xmap &lt;buffer&gt; &lt;F4&gt; &lt;Plug&gt;(xmpfilter-mark)
+autocmd FileType ruby imap &lt;buffer&gt; &lt;F4&gt; &lt;Plug&gt;(xmpfilter-mark)
+
+autocmd FileType ruby nmap &lt;buffer&gt; &lt;F5&gt; &lt;Plug&gt;(xmpfilter-run)
+autocmd FileType ruby xmap &lt;buffer&gt; &lt;F5&gt; &lt;Plug&gt;(xmpfilter-run)
+autocmd FileType ruby imap &lt;buffer&gt; &lt;F5&gt; &lt;Plug&gt;(xmpfilter-run)
+</pre>
+
+<p>
+Now you too can evaluate Ruby code on the fly in Vim. And I can get back
+to watching more of Avdi.
+</p>
+<div class="taglist"></div></div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="https://staticblog.org/archive.html">Other posts</a>
+</div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+</body>
+</html>

@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="alternate"
+      type="application/rss+xml"
+      href="rss.xml"
+      title="RSS feed for "/>
+<title>On Developer Fetishes</title>
+<meta name="author" content="John Dow">
+<meta name="referrer" content="no-referrer">
+<link href= "static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="static/favicon.ico">
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2020 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="preamble" class="status">
+<div class="header">
+  <a href="https://staticblog.org">My Static Org Blog</a>
+</div></div>
+<div id="content">
+<div class="post-date">16 Sep 2020</div><h1 class="post-title"><a href="/on-developer-fetishes.md.html">On Developer Fetishes</a></h1>
+
+<div id="outline-container-orgce8bfee" class="outline-2">
+<h2 id="caveat-lector">Caveat Lector</h2>
+<div class="outline-text-2" id="text-caveat-lector">
+<p>
+What follows is more of a stream of consciousneess that fell out a few
+nights ago pretty much unedited and very unpolished. Please don't take
+it too seriously, or personally (that would be too ironic) - it's as
+much directed at me as it is anyone. I'm publishing it <i>with regret</i>.
+</p>
+</div>
+
+<div id="outline-container-org956d382" class="outline-3">
+<h3 id="programming-languages-do-not-care-about-you">Programming languages do not care about you</h3>
+<div class="outline-text-3" id="text-programming-languages-do-not-care-about-you">
+<p>
+You love your language. You've spent hours, days - <i>months</i> - learning
+its intricacies inside out. You are the grand wizard of JavaScript. You
+are the shining Ruby of Rubyists. You are the P in PHP, the Hoss of
+Haskell, the rustiest Rustacean, the goofiest Gopher, the biggest,
+steamiest, hottest cup of Java in the JVM shop.
+</p>
+
+<p>
+So what.
+</p>
+
+<p>
+Your language is really just a set of blinkers around what you can do.
+You are ultimately limited by your language; trust me, it cannot do
+everything you want it to do.
+</p>
+
+<p>
+What's vital for a language isn't the language - its features, its
+warts, its amazing syntax for one line anonymous function calls, or
+array destructuring, or pattern matching&#x2026;
+</p>
+
+<p>
+Or its beautiful landing page, its cod philosophy, its ridiculously cute
+rodent mascot.
+</p>
+
+<p>
+It's not even what it teaches you, about the world and about computers.
+That's important, and useful, but it isn't the most important thing.
+</p>
+
+<p>
+The most important thing about a language is the people who speak it and
+the problems they solve with it. Try to keep it that way.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org9ef8be4" class="outline-3">
+<h3 id="you-are-not-the-framework-you-use">You are not the framework you use</h3>
+<div class="outline-text-3" id="text-you-are-not-the-framework-you-use">
+<p>
+If it's true for languages, it's doubly true for frameworks. But it's
+usually these artefacts that are the cause of the greatest and most
+vociferous developer fetishism - yes, I'm talking to you, front end
+JavaScript developers of 2019.
+</p>
+
+<p>
+Nobody cares if your website is made in React. Or Angular. Or Vue. Or
+Preact. Or Bumfle. You haven't heard of Bumfle? I just made it up. My
+website is written in Bumfle. It's the best. I'm a Bumfle developer.
+Been one for the past twenty seconds. I'm the best at Bumfle. Please
+sign up for my free Bumfle training course. We in the Bumfle community
+welcome all Bumfle contributors. Also, I've just changed the Bumfle API
+to use Bumfle hooks which I'm calling Books. Saga Books now because I've
+read the DDD book. All your Bumfle code is now broken because of this.
+You are welcome. Also, Bumfle is now called Fumble. Also I'm now
+building the next Fumble. It's called Brian.
+</p>
+
+<p>
+Nobody cares if you love a framework more than the last version of
+React, or whether it is simpler or easier to use than the next version
+of Vue. Especially not the framework.
+</p>
+
+<p>
+Because in two minutes time the subject of all your passion and effort
+and love and time will evaporate through the whimsy of a maintainer, an
+exciting change in fashion, an update to 3.6.6.6, a new API that
+introduces every other term from the DDD book&#x2026;
+</p>
+
+<p>
+(Bumfle objects are now called Baggregates. You are welcome.)
+</p>
+
+<p>
+Do not get attached to a framework. Do not fall in love with these
+ephemera. The most important thing a framework can do is solve
+particular problem. Try and solve more problems, stop finding problems
+to solve with your favourite magic box. Stop inventing problems to solve
+with your favourite magic box.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org7cedab3" class="outline-3">
+<h3 id="your-text-editor-does-not-define-you">Your text editor does not define you</h3>
+<div class="outline-text-3" id="text-your-text-editor-does-not-define-you">
+<p>
+Vim is fun. You feel like you've passed a small exam every time you
+remember a command correctly. You get a small dopamine hit. You are a
+successful individual and a powerful software developer. At least a 5X.
+You must be because you know how to <code>d=elete =a</code> =w=ord. You then want
+to tell your friends about your huge triumph in writing a macro that
+adds a comma to the end of each line.
+</p>
+
+<p>
+Try and suppress this desire. Maybe suck on something sugary for five
+minutes instead. It will pass.
+</p>
+
+<p>
+Who cares how quickly you can delete a word? Or a line? Or cut and paste
+a paragraph? Is the speed at which you can surround a single word with
+quotation marks <i>really</i> the limiting factor on your work? You were
+unable to write your algorithm because it took you too long to do the
+copying and pasting? Your startup failed because you weren't typing fast
+enough? <i>Really?</i>
+</p>
+
+<p>
+All those plugins - this goes for the VS Code people too - do you use
+them? They seemed like a good idea when you installed them. Free stuff.
+But do you ever <i>use</i> them? Are they just filling your screen with more
+noise? Was it worth spending those three hours choosing the right colour
+scheme?
+</p>
+
+<p>
+Take a good, long, hard look at what you actually do when you write
+code. Is there really that much that you're doing that couldn't be
+achieved with Windows Notepad?
+</p>
+
+<p>
+Your text editor is <i>just another tool</i>. It's a means to an end. It is
+not a status symbol. If you're spending more than one percent of your
+time setting up an editor&#x2026; stop.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgb5e4a2b" class="outline-3">
+<h3 id="your-terminal-does-not-express-your-individuality">Your terminal does not express your individuality</h3>
+<div class="outline-text-3" id="text-your-terminal-does-not-express-your-individuality">
+<p>
+The perfect font. The perfect colour scheme. The perfect shell.
+</p>
+
+<p>
+Bash of course. No, not bash. Nobody uses bash any more. Who are you.
+Get out of here. No, we use zsh. No, we don't know how to pronounce it
+either. But we use it. Or fish. Or something else. It's amazing.
+</p>
+
+<p>
+We use tmux. Mainly so we can see a big clock. We have a custom prompt.
+It tells us how many minutes until our JavaScript framework becomes
+obsolete. We have a terminal emulator that emits fireworks as we type.
+With a black background. Because we are 10x developers and it's just
+like Mr. Robot.
+</p>
+
+<p>
+Stop. Please. It's a terminal. It's a shell. You can spend a month
+customising it and in the end you'll not be a better developer. You'll
+just hate the look of whatever abomination you've created and spend
+another month making it better. And another. And another&#x2026;
+</p>
+
+<p>
+Stop worrying about how it looks and just use it. To do some
+development. You know. What you were meant to be doing.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orga537427" class="outline-2">
+<h2 id="solutions">Solutions</h2>
+<div class="outline-text-2" id="text-solutions">
+<p>
+I've been told that just moaning about all of this stuff without
+supplying any solutions isn't very nice. So I'll try and be nicer.
+</p>
+
+<ul class="org-ul">
+<li>Languages. Learn more than one. Learn more than two. Travel broadens
+the mind. You will learn to love your first language more. You will be
+forced to think of new ways of solving old problems. You will
+understand computers better. When you talk about languages, talk about
+how they differ and how it's nice to do things in different ways.
+Caveat: don't just learn how to write <code>hello world</code> in twenty
+languages; learn a handful of distinct ones to a good degree. This is
+not a waste of time.</li>
+
+<li>Frameworks. If your framework isn't giving you skills and knowledge
+you can transfer to the real world, I'd worry. Make sure you know how
+it works 'under the hood'. Don't get trapped. Every framework is a
+sinking ship. Every single one. And, yes, we are all rats. Don't learn
+more than one at a time. Forget everything you can about it when it
+finally dumps you.</li>
+
+<li>Editors. This isn't so much advice as some ideas. Delete your plugins,
+turn off syntax highlighting, and give it a week. Find ways of using
+your skill at programming (you're a programmer, right?) to extend your
+editor by using its interactions with the shell. Try changing editors
+for a month to try something else. Try using <code>ed</code> for a week.</li>
+
+<li>Terminals. Use the out of the box settings for whatever computer
+you're using and wait until you <i>can't</i> do something you <i>need</i> to do
+before you start messing with it. Exception: you may have a dark
+background if you do all your work in a pitch black room. But maybe
+ask yourself why you're doing all your coding in a pitch black room.
+Are you OK? Would you like to talk to someone?</li>
+</ul>
+
+<hr>
+
+<p>
+Cover Image: <i>The Golden Calf</i> by
+<a href="https://en.wikipedia.org/wiki/Herrad_of_Landsberg">Herrad of
+Landsberg</a>
+</p>
+</div>
+</div>
+<div class="taglist"></div></div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="https://staticblog.org/archive.html">Other posts</a>
+</div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+</body>
+</html>

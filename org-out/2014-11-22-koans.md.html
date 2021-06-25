@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="alternate"
+      type="application/rss+xml"
+      href="rss.xml"
+      title="RSS feed for "/>
+<title>Programming Language Koans</title>
+<meta name="author" content="John Dow">
+<meta name="referrer" content="no-referrer">
+<link href= "static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="static/favicon.ico">
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2020 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="preamble" class="status">
+<div class="header">
+  <a href="https://staticblog.org">My Static Org Blog</a>
+</div></div>
+<div id="content">
+<div class="post-date">16 Sep 2020</div><h1 class="post-title"><a href="/2014-11-22-koans.md.html">Programming Language Koans</a></h1>
+<p>
+I finished the <a href="https://github.com/neo/ruby_koans">Ruby Koans</a> today.
+I'd been pretty close to the end before I started study at Makers
+Academy, but it's good to have them done. I noticed I flew through the
+last few regardng metaprogramming - I've been taught well.
+</p>
+
+<p>
+Koans are an interesting tool to learn a language. Instead of teaching a
+fact, they instead encourage solving a problem. The problems are koans
+in the sense that the solution to each one reveals a new aspect of Ruby
+to the student. This starts with simple operators and ends with
+metaprogramming techniques. The solution tends to be of the 'fill in the
+blank' form, although sometimes they require editing a class.
+</p>
+
+<p>
+What I admire about this technique is the following:
+</p>
+
+<ul class="org-ul">
+<li>Each problem is, in effect, a test. TDD is baked in from the
+beginning, even if you don't happen to know what testing is. Think of
+it as test driven learning.</li>
+
+<li>The lessons are inseperable from the questions. Simply by answering
+the question you are learning. There is no text with a list of
+questions at the end to ensure understanding.</li>
+
+<li>Hands on keyboard. You're reading, and writing, code in an active way.
+There is no passive learning with writing koans.</li>
+</ul>
+
+<p>
+If you've not tried out a set of koans, here's a short an incresingly
+long list to try out:
+</p>
+
+<ul class="org-ul">
+<li><a href="https://github.com/marcinbunsch/bash_koans">Bash</a></li>
+<li><a href="https://github.com/torbjoernk/CppKoans">C++</a></li>
+<li><a href="https://github.com/functional-koans/clojure-koans">Clojure</a></li>
+<li><a href="https://github.com/liammclennan/coffeescript-koans">CoffeeScript</a></li>
+<li><a href="https://github.com/google/lisp-koans">Common Lisp</a></li>
+<li><a href="https://github.com/butlermatt/dart_koans">Dart</a></li>
+<li><a href="https://github.com/CoryFoy/DotNetKoans">DotNet</a></li>
+<li><a href="https://github.com/dojo-toulouse/elixir-koans">Elixir</a></li>
+<li><a href="https://github.com/patrickgombert/erlang-koans">Erlang</a></li>
+<li><a href="https://github.com/ChrisMarinos/FSharpKoans">F#</a></li>
+<li><a href="https://github.com/cdarwin/go-koans">Go</a></li>
+<li><a href="https://github.com/cjudd/groovy_koans">Groovy</a></li>
+<li><a href="https://github.com/HaskVan/HaskellKoans">Haskell</a></li>
+<li><a href="https://github.com/liammclennan/JavaScript-Koans">JavaScript</a></li>
+<li><a href="https://github.com/matyb/java-koans">Java</a></li>
+<li><a href="https://github.com/kikito/lua_missions">Lua</a></li>
+<li><a href="https://github.com/chicagoruby/MongoDB_Koans">MongoDB</a></li>
+<li><a href="https://github.com/forcedotcom/PerlKoans">Perl</a></li>
+<li><a href="https://github.com/neo/ruby_koans">Ruby</a></li>
+<li><a href="https://github.com/mankyKitty/rust-koans">Rust</a></li>
+<li><a href="http://scalakoans.webfactional.com/">Scala</a></li>
+<li><a href="https://www.hpi.uni-potsdam.de/hirschfeld/trac/SqueakCommunityProjects/wiki/smalltalk_koans">Squeak/Pharo
+Smalltalk</a></li>
+<li><a href="https://www.hpi.uni-potsdam.de/hirschfeld/trac/SqueakCommunityProjects/wiki/smalltalk_koans">GNU
+Smalltalk</a></li>
+</ul>
+
+<p>
+I've started the
+<a href="https://github.com/functional-koans/clojure-koans">Clojure Koans</a>.
+Where the Ruby Koans were verbose, these are terse. I like terse. Very
+often I felt like I was being told what to write as the answer to the
+Ruby Koans. That was right for Ruby, but not for Clojure.
+</p>
+
+<p>
+So - go learn something new today!
+</p>
+<div class="taglist"></div></div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="https://staticblog.org/archive.html">Other posts</a>
+</div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+</body>
+</html>

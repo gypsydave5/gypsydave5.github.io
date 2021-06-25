@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="alternate"
+      type="application/rss+xml"
+      href="rss.xml"
+      title="RSS feed for "/>
+<title>Why learn about... bits, bytes and binary</title>
+<meta name="author" content="John Dow">
+<meta name="referrer" content="no-referrer">
+<link href= "static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="static/favicon.ico">
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2020 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="preamble" class="status">
+<div class="header">
+  <a href="https://staticblog.org">My Static Org Blog</a>
+</div></div>
+<div id="content">
+<div class="post-date">16 Sep 2020</div><h1 class="post-title"><a href="/why.md.html">Why learn about... bits, bytes and binary</a></h1>
+<p>
+One of the goals of computer programming is to provide the user of our
+software with a good <i>abstraction</i>; we don't want our web browsers to be
+forcing us to think about HTTP requests, we want to click links and see
+pages. We don't want to know how an object is created in memory in
+JavaScript, we just want to use it to display cat videos in our browser.
+</p>
+
+<p>
+But often we're exposed to some of the hideous truths buried beneath our
+comfortable abstractions. Perhaps because of an error in our code. Or
+because we're having to work with our computers at a more fundamental
+level. Or it's because some clever sod decided that all the user
+entitlements would be modelled using a bit mask.<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>
+</p>
+
+<p>
+Anyway, this is an article about bits, bytes and binary. It's also about
+octal and hexadecimal, but that doesn't make for as catchy a title.
+</p>
+
+<div id="outline-container-orgc90d58f" class="outline-2">
+<h2 id="who-is-this-for">Who is this for?</h2>
+<div class="outline-text-2" id="text-who-is-this-for">
+<p>
+This is for any software developer, but will probably be of most use to
+those who (like me) do not have a computer science background. It would
+be helpful if they have some experience of using a Unix-like system
+(OSX, Linux), and of writing colours in CSS. But this is not necessary.
+</p>
+
+<p>
+The focus is on understanding the meaning of a bit and a byte, and on
+reading and understanding binary, octal and hexidecimal numbers. The
+skills developed are meant to be practical; they are applicable to a
+wide range of subjects that are encountered by a software developer:
+</p>
+
+<ul class="org-ul">
+<li>file permissions</li>
+<li>IP addresses and networking</li>
+<li>Reading stack traces</li>
+<li>CSS colours</li>
+</ul>
+
+<p>
+We will not examine less applicatble topics like binary arithmetic.
+</p>
+
+<p>
+Oh and it might be fun in a geeky kinda way.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org44e54a3" class="outline-2">
+<h2 id="a-bit">A Bit</h2>
+<div class="outline-text-2" id="text-a-bit">
+<p>
+What's a bit? It's fundamentally a pun - a contraction of the words
+<i>binary digit</i>. A bit is a digit in <i>binary</i>. Let's get back to bits in
+a minute - what's binary?
+</p>
+</div>
+</div>
+
+<div id="outline-container-orge2f084d" class="outline-2">
+<h2 id="binary">Binary</h2>
+<div class="outline-text-2" id="text-binary">
+<p>
+You can count - I'm assuming you can count. In the decimal counting
+system using Arab numerals - the counting system that's been popular in
+Western Europe (and then the rest of the world) since the
+Renaissance,<sup><a id="fnr.2" class="footref" href="#fn.2">2</a></sup> there are ten digits:
+</p>
+
+<pre class="example">
+0 1 2 3 4 5 6 7 8 9
+</pre>
+
+<p>
+When we represent <i>any</i> number in decimal, we use these numerals. But we
+don't just write them in any order; the position of each numeral tell us
+how many of a power of ten goes in to make the number.
+</p>
+
+<p>
+For instance
+</p>
+
+<pre class="example">
+1337
+</pre>
+
+<p>
+Is a number made up of
+</p>
+
+<ul class="org-ul">
+<li>one lot of the third power of ten - 'ten to the three' - a thousand</li>
+<li>three lots of the second power of ten - 'ten to the two' - three
+hundreds</li>
+<li>three lots of the first power of ten - 'ten to the one'- three tens</li>
+<li>and seven lots of the zeroth power of ten - 'ten to the zero' - seven
+ones</li>
+</ul>
+
+<p>
+It might seem a bit odd to think of the final digit representing <code>n</code>
+lots of the zeroth power of ten, but I hope you can see how it fits in
+with the rest of the digits. This is probably how you've been counting
+for most of your life, but probably without thinking of each of the
+digits as representing a count of a power of ten.
+</p>
+
+<p>
+But why represent numbers using ten digits?<sup><a id="fnr.3" class="footref" href="#fn.3">3</a></sup> Why not, say, two?
+</p>
+
+<pre class="example">
+0 1
+</pre>
+
+<p>
+And so we have <i>binary</i>, a number system based on using two digits to
+represent every number. Each digit in a binary number represents a
+<i>power of two</i>, just as every digit in a decimal number represented a
+<i>power of ten</i>.
+</p>
+
+<p>
+So
+</p>
+
+<pre class="example">
+1101
+</pre>
+
+<p>
+Means
+</p>
+
+<ul class="org-ul">
+<li>one lot of the third power of two (1 * 2<sup>3</sup> = 1 * 8 = 8)</li>
+<li>one lotof the second power of two (1 * 2<sup>2</sup> = 1 * 4 = 4)</li>
+<li>zero lots of thefirst power of two (0 * 2<sup>1</sup> = 0 * 2 = 0)</li>
+<li>and one lot of the zeroth power of two (1 * 2<sup>0</sup> = 1 * 1 = 1)</li>
+</ul>
+
+<p>
+So the number represented by <code>1101</code> is 8 + 4 + 1 &#x2013; it's 13
+</p>
+</div>
+</div>
+
+<div id="outline-container-org1c36649" class="outline-2">
+<h2 id="back-to-the-bits">Back to the Bits</h2>
+<div class="outline-text-2" id="text-back-to-the-bits">
+<p>
+So now we have an answer to the question 'what is a bit?' - it's a
+binary digit, or in other words it's a <code>0</code> or a <code>1</code>. Actually, why is it
+either of those symbols? We could choose anything - we could use 🙂 and
+🙃, or 👍 and 👎, or <i>anything</i> we like. Remember, it's just a
+<i>representation</i> of a number - it's not actually a number itself.<sup><a id="fnr.4" class="footref" href="#fn.4">4</a></sup>
+</p>
+
+<p>
+Now, inside your computer, at any one time, everything that's going on
+is kept as a series of high- and low-voltage ???registers??? in memory
+and (solid state) disk. We use these many millions of ???boxes with
+voltages in??? to represent <i>everything</i> that we ever do on a computer.
+</p>
+
+<p>
+And when we represent these voltages, we do so as binary digits - as
+bits. We say the low-voltage ???box??? is <code>0</code> and the high voltage
+???box??? is <code>1</code>. This, if you like, is the original abstraction of all
+computing - the moment it stops being elecronic engineering and becomes
+something else - we can stop thinking about the hardware and start
+thinking about&#x2026; bits.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgda10f33" class="outline-2">
+<h2 id="practical-one-integers">Practical one: integers</h2>
+<div class="outline-text-2" id="text-practical-one-integers">
+<p>
+It probably won't surprise you that one of the easiest things to encode
+into bits are integers - whole numbers. We've pretty much done it above.
+So we know that the number
+</p>
+
+<pre class="example">
+1101
+</pre>
+
+<p>
+is thirteen.
+</p>
+
+<p>
+But how do we write <i>negative</i> integers? We can't just write
+</p>
+
+<pre class="example">
+-1101
+</pre>
+
+<p>
+because all we have to play with is =0=s and =1=s? The obvious answer is
+to just use a zero or one to mark a number as being positive or
+negative. So we could have <code>0</code> means positive, and <code>1</code> means negative,
+giving us
+</p>
+
+<pre class="example">
+01101
+</pre>
+
+<p>
+for thirteen and
+</p>
+
+<pre class="example">
+11101
+</pre>
+
+<p>
+for minus thirteen.<sup><a id="fnr.5" class="footref" href="#fn.5">5</a></sup>
+</p>
+
+<p>
+But it doesn't take a genius to see a problem here: how can we tell the
+difference between <code>11101</code> as "minus thirteen" and <code>11101</code> as
+"twenty-nine" - which is what we'd get if we counted that first <code>1</code> as
+one lot of two to the power of four (sixteen) - ?
+</p>
+
+<p>
+This is an example of a bigger problem: when do we stop reading the
+bits? What tells us - or the computer - that this bit is the end of a
+number (or a character, or a string, or a an object) and the next one is
+the beginning of another?
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgd5f1d8c" class="outline-2">
+<h2 id="bytes">Bytes</h2>
+<div class="outline-text-2" id="text-bytes">
+<p>
+This is where <i>bytes</i> come in. A byte is a collection of bits - yes,
+this is definitely a pun about biting things. In every computer you will
+come across a byte is made up of <i>eight</i> bits:<sup><a id="fnr.6" class="footref" href="#fn.6">6</a></sup>
+</p>
+
+<pre class="example">
+10101010
+</pre>
+
+<p>
+or
+</p>
+
+<pre class="example">
+11111111
+</pre>
+
+<p>
+A byte gives us a way of knowing when to stop - think of it like a word
+in a natural language; if all the letters were mushed together without
+spaces we'd find it hard to know when one word stopped and the next one
+began.<sup><a id="fnr.7" class="footref" href="#fn.7">7</a></sup>
+</p>
+
+<p>
+So now we can store unsigned integers (without a plus or a minus sign)
+in a byte. Hooray! We can successfully count all the way up to&#x2026;
+two-hundred and fifty-five. Well, that sucks, as I'm pretty sure I can
+think of bigger numbers. This is why we can use more than one byte when
+we're representing a number.
+</p>
+
+<p>
+If we use two bytes
+</p>
+
+<pre class="example">
+11111111 11111111
+</pre>
+
+<p>
+We can get up to sixty-five thousand five hundred and thirty-five. Don't
+trust me - go and count for yourself. I'll wait.
+</p>
+
+<p>
+Throw another two bytes at the problem
+</p>
+
+<pre class="example">
+11111111 11111111 11111111 11111111
+</pre>
+
+<p>
+And we can reach the heady heights of&#x2026; 4294967295. Which is a very big
+number.
+</p>
+
+<p>
+I'll let you in to a trick: the biggest number that you can represent
+using binary is 2<sup>n</sup> -1, where n is the number of digits in your number.
+So I calculated the above number by working out 2<sup>16</sup> - 1. Don't worry: I
+didn't use my fingers&#x2026;<sup><a id="fnr.8" class="footref" href="#fn.8">8</a></sup>
+</p>
+
+<p>
+Great, so now we can calculate big numbers, and we know when to stop
+reading the numbers - we just need to know how many bytes they're made
+of. But what about those pesky negative integers? How do we know whether
+</p>
+
+<pre class="example">
+11111111
+</pre>
+
+<p>
+is two-hundred and fifty-five or minus one-hundred and twenty-seven?
+</p>
+
+<p>
+This is why computers - and computer programming languages - have
+<i>types</i>. Yes, there are other reasons to have types - please, Haskell
+programmers, don't have a fit. But this is the most general case A type
+will tell you not only how many bytes a 'thing' takes up in memory, but
+also what sort of a thing it is. So if you know that <i>those</i> four bytes
+over there are a signed integer:
+</p>
+
+<pre class="example">
+10000000 00000000 00000000 00000100
+</pre>
+
+<p>
+Then you know that it's the number -4. But if it's an <i>unsigned</i> integer
+then it's the number 2147483652. And if it's a floating point number, or
+a string, or perhaps an object&#x2026;
+</p>
+
+<p>
+A lot of programming languages do you, me and everyone else the
+significant service of hiding all of this from our eyes - Ruby will
+automatically turn one size of integer into another size of integer when
+it gets too big to be stored in a certain number of bytes. Other
+languages side step the issue by having only <i>one</i> type for all numbers;
+JavaScript uses a 64 bit double precision float for every number.<sup><a id="fnr.9" class="footref" href="#fn.9">9</a></sup>
+</p>
+
+<p>
+Some programming languages - usually lower level ones - will tell you
+<i>exactly</i> how much space in memory one of your values is taking up,
+which can give a programmer more control over the amount of memory the
+program is using. In Rust, for instance, you can have a <code>uint32</code> - an
+unsigned, thirty-two bit integer. That information, combined with what
+we've learned above, gives us enough information to know
+</p>
+
+<ul class="org-ul">
+<li>that the value takes up four bytes (32 / 8 = 4)</li>
+<li>that the maximum value of a <code>uint32</code> is 4294967295 (2 ^ 32 - 1)</li>
+</ul>
+
+<p>
+Sometimes this is useful, sometimes it's not. But it's always good to
+know.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org1e0e4cf" class="outline-2">
+<h2 id="not-just-binary-1-css-and-hexadecimal">Not just binary 1: CSS and Hexadecimal</h2>
+<div class="outline-text-2" id="text-not-just-binary-1-css-and-hexadecimal">
+<p>
+Binary 'thinking' leaks out of lower level programs and out into the way
+we write things that, on the face of it, really shouldn't be related.
+For instance, one of the first things I ever wrote as a program probably
+looked something like
+</p>
+
+<pre class="example">
+body {
+  background-color: #FFFFFF;
+}
+</pre>
+
+<p>
+Yes, CSS! What the hell were all the Fs about? Why on earth was that
+<i>white</i>? I remember experimenting with different values to see what
+worked and what didn't - the joy of programming!
+</p>
+
+<p>
+What's weird is that one of the first things we do in simple web
+programming turns out to be a great example of binary numbers making a
+surprise appearance. You see, <code>FFFFFF</code> is actually a twenty-four bit
+number, represented in <i>hexadecimal</i> notation.
+</p>
+
+<p>
+Hexadecimal is just counting in base sixteen ('hexa' like six, as in
+hexagon, 'decimal' like ten - it's Greek&#x2026;). Now when we used binary we
+got rid of a lot of digits - everything that wasn't <code>1</code> or <code>0</code>. But for
+base sixeteen we need another six digits to make the total up to
+sixteen. So we just start counting using letters! <code>A</code> is ten, <code>B</code> is
+eleven and so on up to <code>F</code> being fifteen.
+</p>
+
+<p>
+So we can count up to twenty like this (starting at zero, naturally):
+</p>
+
+<pre class="example">
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+A
+B
+C
+D
+E
+F
+10
+11
+12
+13
+14
+</pre>
+
+<p>
+Big woop. So what? Why on earth would you use a base of sixteen when
+you've got decimal - everybody's favourite and universally popular?
+</p>
+
+<p>
+Hexadecimal is useful because it <i>plays nicely with binary</i>. Sounds
+weird, right? Let me explain: because sixteen is the fourth power of two
+('two to the four'), each hexadecimal digit can represent <i>four</i> binary
+digits - with no carry over.
+</p>
+
+<p>
+When we represent a binary number in decimal we can never be sure how
+many binary digits will be used for one decimal digit.
+</p>
+
+<pre class="example">
+1001
+</pre>
+
+<p>
+becomes
+</p>
+
+<pre class="example">
+9
+</pre>
+
+<p>
+only one digit
+</p>
+
+<pre class="example">
+1010
+</pre>
+
+<p>
+becomes
+</p>
+
+<pre class="example">
+10
+</pre>
+
+<p>
+two digits!
+</p>
+
+<p>
+But because the first four bits in a binary number are for all numbers
+from zero to fifteen, they map perfectly on to a single hexadecimal
+digit.<sup><a id="fnr.10" class="footref" href="#fn.10">10</a></sup>
+</p>
+
+<p>
+For instance
+</p>
+
+<pre class="example">
+|                    |        |        |        |        |        |        |        |        |        |
+</pre>
+
+<ul class="org-ul">
+<li><p>
+#+BEGIN<sub>EXAMPLE</sub>
+</p>
+<table>
+
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">:-:</td>
+<td class="org-left">:-:</td>
+<td class="org-left">:-:</td>
+<td class="org-left">:-:</td>
+<td class="org-left">:-:</td>
+<td class="org-left">:-:</td>
+<td class="org-left">:-:</td>
+<td class="org-left">:-:</td>
+<td class="org-left">:-:</td>
+<td class="org-left">:-:</td>
+<td class="org-left">:-:</td>
+</tr>
+</tbody>
+</table>
+<p>
+#+END<sub>EXAMPLE</sub>
+</p>
+
+<p>
+binary | <code>1101</code> | <code>1110</code> | <code>1010</code> | <code>1101</code> | <code>1011</code> | <code>1110</code> | <code>1110</code>
+</p>
+<table>
+
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+
+<col  class="org-right">
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left"><code>1111</code></td>
+<td class="org-left"><code>0001</code></td>
+<td class="org-left"><code>0000</code></td>
+<td class="org-left"><code>0001</code> decimal</td>
+<td class="org-right">13</td>
+<td class="org-right">14</td>
+<td class="org-right">10</td>
+<td class="org-right">13</td>
+<td class="org-right">11</td>
+</tr>
+</tbody>
+</table>
+<p>
+14 | 14 | 15 | 1 | 0 | 1 hexadecimal | D | E | A | D | B | E | E | F |
+1 | 0 | 1
+</p></li>
+</ul>
+
+<p>
+This demonstrates another useful aspect of hexadecimal: writing fun
+messages.
+</p>
+
+<p>
+So hexadecimal is really good at representing known 'blocks' of binary
+information - four bits to each hexadecimal digit.
+</p>
+
+<p>
+And if there are two digits, then there are eight bits&#x2026; it's a byte!
+So what we're seeing here is a three byte - twenty-four bit - number,
+written out in hexadecimal notation.
+</p>
+
+<p>
+But&#x2026; why do this for a <i>colour</i>?
+</p>
+
+<p>
+Each of those bytes represents a component of the colour being
+described - red, green and blue. So by writin it out in hexadecimal you
+get some visual indication of when each element begins and ends - it's
+two hex digits - and you also know that the length of the number will
+always be six digits. And it's one hell of a lot easier to read than it
+would be in decimal (0 to 16777215 anyone&#x2026;?).
+</p>
+</div>
+</div>
+
+<div id="outline-container-org493c331" class="outline-2">
+<h2 id="not-just-binary-2-file-permissions-and-octal">Not just binary 2: File Permissions and Octal</h2>
+<div class="outline-text-2" id="text-not-just-binary-2-file-permissions-and-octal">
+<p>
+The other number system that comes up with some regularity (although
+less than hexidecimal) is <i>octal</i>, which uses eight as the base. Again,
+this base is no accident; a single octal digit can represent <i>three</i>
+bits:
+</p>
+
+<pre class="example">
+        |          |          |          |
+-       | :-:      | :-:      | :-:      | :-:
+binary  | `101101` | `110110` | `010010` | `111111`
+decimal | 45       | 54       | 18       | 63
+octal   | 55       | 66       | 22       | 77
+</pre>
+
+<p>
+A single octal digit can represent numbers from 0 to 7, and two of them
+can represent numbers from 0 to 63.
+</p>
+
+<p>
+One of the strangest, but also most interesting, uses of octal is in
+representing file permissions in Unix. If you're in front of a Linux or
+Mac computer right now, open a terminal session and type <code>ls -l</code>. You
+should see something like this:
+</p>
+
+<pre class="example">
+total 80
+-rw-r--r--   1 davidwic  1482096370    897  9 Jun 22:06 README.md
+-rw-r--r--   1 davidwic  1482096370    127 20 Jun 08:45 config.toml
+drwxr-xr-x  27 davidwic  1482096370    864  9 Jun 22:06 drafts
+drwxr-xr-x   8 davidwic  1482096370    256 19 Jun 01:42 extras
+drwxr-xr-x   6 davidwic  1482096370    192  5 Jun 21:24 images
+drwxr-xr-x   3 davidwic  1482096370     96  9 Jun 22:06 pages
+drwxr-xr-x  66 davidwic  1482096370   2112 13 Jul 00:16 posts
+-rwxr-xr-x   1 davidwic  1482096370    138 19 Jun 00:26 publish-on-s3.sh
+-rwxr-xr-x   1 davidwic  1482096370    334  9 Jun 22:12 publish.sh
+-rw-r--r--   1 davidwic  1482096370    259 17 Jun 21:45 serve.go
+drwxr-xr-x  12 davidwic  1482096370    384 19 Jun 22:48 site
+drwxr-xr-x   3 davidwic  1482096370     96 19 Jun 00:24 templates
+-rw-r--r--@  1 davidwic  1482096370  18110 30 Jun 23:33 test.html
+</pre>
+
+<p>
+The column on the right represents the <i>file permissions</i> for each file.
+The first character shows whether its a directory (a <code>d</code>), and the other
+nine show =r=ead, =w=rite and e=x=ecute permissions for the owner, the
+owner's group and everyone else.
+</p>
+
+<p>
+So if a directory could be read, written and executed by the owner it
+would say
+</p>
+
+<pre class="example">
+drwx------
+</pre>
+
+<p>
+And if a file could be read by everyone
+</p>
+
+<pre class="example">
+-r--r--r--
+</pre>
+
+<p>
+Fun times.
+</p>
+
+<p>
+But we don't really need the letters - the position of the flags give us
+all the information we need. If we say that <code>0</code> represents disabled, and
+<code>1</code> represents enabled, and ignoring the directory flag, we could write
+the file permission above as
+</p>
+
+<pre class="example">
+100100100
+</pre>
+
+<p>
+Oh hey look - a binary number!
+</p>
+
+<p>
+Now look at the repeating pattern - it goes Read, Write and Execute
+three times. We could break this up into groups of three bits:
+</p>
+
+<pre class="example">
+100 100 100
+</pre>
+
+<p>
+But after our brush with hexidecimal we know that each of those groups
+of three binary numerals can be written as a single octal numeral:
+</p>
+
+<pre class="example">
+444
+</pre>
+
+<p>
+For that one, but for the directory that can only be used by the owner:
+</p>
+
+<pre class="example">
+700
+</pre>
+
+<p>
+These magic octal file permission numbers come up <i>disturbingly</i> often -
+more often than you'd think was necessary in the twenty first century.
+For instance, exciting modern programming language Go
+<a href="https://golang.org/pkg/os/#FileMode">needed to model file
+permissions</a>, it did so by using as 32 bit <i>number</i> where the nine
+'least significant bits' (i.e. the end of the number) represented
+<code>rwxrwxrwx</code> permissions as above. The same occurs in Python, and
+<a href="https://nodejs.org/api/fs.html#fs_file_modes">NodeJS</a>.
+</p>
+
+<p>
+Treating numbers as flags has some exciting - or gnarly - side effects.
+For instance, if you wanted to make creating permissions a bit more
+readable you could do something like
+</p>
+
+<pre class="example">
+owner_read = 0400
+owner_write = 0200
+group_read = 0040
+other_read = 0004
+
+permission = owner_read + owner_write + group_read + other_read // =&gt; 0644
+</pre>
+
+<p>
+Which reads better - but we don't want to do this:
+</p>
+
+<pre class="example">
+permission = other_read + other_read + other_read // =&gt; 0020 - group write!
+</pre>
+
+<p>
+But there <i>is</i> a way around this - we can use a special set of operators
+that work on numbers <i>at the bit</i> level, treating each bit as a boolean
+flag.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org12f686a" class="outline-2">
+<h2 id="bitwise-operations">Bitwise Operations</h2>
+<div class="outline-text-2" id="text-bitwise-operations">
+<p>
+Look, I'm not sure I should be telling you this - it's pretty low level
+and nasty. But we've come this far and we can't turn back now.
+</p>
+
+<p>
+So you're used to booleans when you're programming - things like <code>True</code>
+and <code>False</code> - and the operations that we can perform on them - things
+like <i>and</i> and <i>or</i>. They probably look something like this in your
+language (this is in Ruby):
+</p>
+
+<div class="org-src-container">
+<pre class="src src-ruby"><span style="color: #333333; font-weight: bold;">true</span> &amp;&amp; <span style="color: #333333; font-weight: bold;">true</span> == <span style="color: #333333; font-weight: bold;">true</span>
+<span style="color: #333333; font-weight: bold;">false</span> &amp;&amp; <span style="color: #333333; font-weight: bold;">true</span> == <span style="color: #333333; font-weight: bold;">false</span>
+<span style="color: #333333; font-weight: bold;">false</span> || <span style="color: #333333; font-weight: bold;">true</span> == <span style="color: #333333; font-weight: bold;">true</span>
+<span style="color: #333333; font-weight: bold;">false</span> || <span style="color: #333333; font-weight: bold;">false</span> == <span style="color: #333333; font-weight: bold;">false</span>
+</pre>
+</div>
+
+<p>
+<code>&amp;&amp;</code> is the boolean 'and' operator, and <code>||</code> is the boolean 'or'
+operator. There are others (like 'not'), but let's focus on these two.
+</p>
+
+<p>
+What if we treated the binary digit <code>0</code> as false, and the binary digit
+<code>1</code> as true?<sup><a id="fnr.11" class="footref" href="#fn.11">11</a></sup> We could do something very similar:
+</p>
+
+<pre class="example">
+1 &amp; 1 == 1
+1 &amp; 0 == 0
+1 | 0 == 1
+0 | 0 == 0
+</pre>
+
+<p>
+Most programming languages will have these operators - <code>&amp;</code> is 'bitwise
+and', and <code>|</code> is 'bitwise or'. They work by looking at numbers as a
+series of bits and comparing the bits at the equivalent positions. They
+then treat the two bits they're comparing like booleans above, and they
+use the resulting bit to construct a new number - the result. It's
+probably easier to see than to describe - let's stick another two digits
+on to the examples above:
+</p>
+
+<pre class="example">
+001 &amp; 101 == 001 // only the last bit is set in both numbers
+101 &amp; 111 == 101 // only the first and last bits are set in both numbers
+100 | 010 == 110 // the first or the second bits are set in both numbers
+001 | 000 == 001 // are you getting the hang of it now?
+</pre>
+
+<p>
+By using the <code>|</code> operator when constructing file permissions as above,
+we can avoid the bits 'overflowing' into the next digit and changing the
+permission - we can think of <code>|</code> as having the meaning 'apply
+permission' in this context.<sup><a id="fnr.12" class="footref" href="#fn.12">12</a></sup>
+</p>
+
+<pre class="example">
+permission =  004 | 004 | 004 // =&gt; 004 - no matter how many times you 'apply' it!
+</pre>
+
+<p>
+and <code>&amp;</code> makes a funky way to test for which file permissions have been
+set.
+</p>
+
+<pre class="example">
+other_execute = 0001
+if current_file.permissions &amp; other_execute != other_execute {
+  // don't have execute permission!
+}
+</pre>
+
+<p>
+This works because, if the last bit isn't set in the
+<code>current_file.permissions</code>, the result of <code>&amp;=ing it with =0001</code> will
+<i>always</i> be <code>0</code>
+</p>
+
+<pre class="example">
+0000 &amp; 0001 // =&gt; 0000
+0006 &amp; 0001 // =&gt; 0000
+0742 &amp; 0001 // =&gt; 0000
+0001 &amp; 0001 // =&gt; 0001
+0777 &amp; 0001 // =&gt; 0001
+</pre>
+
+<p>
+There are other bitwise operators - really, really funky ones that
+produce an 'exclusive or', shift bits to the left and right, and invert
+all the bits in a number ('bitwise not'). Take a look at them if you
+have time.<sup><a id="fnr.13" class="footref" href="#fn.13">13</a></sup>
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgb29de51" class="outline-2">
+<h2 id="conclusion">Conclusion</h2>
+<div class="outline-text-2" id="text-conclusion">
+<p>
+Bits are useful as they're pretty much as low level as you <i>can</i> go when
+programming. When you know that an integer is stored in 64 bits, it will
+give you a good idea of just how large that number can be.
+</p>
+
+<p>
+Bytes are probably the smallest abstraction that you'll work with on a
+day to day basis. You'll usually see them when dealing with raw
+information - byte arrays and byte streams. They form the building block
+of larger data structures, like strings.
+</p>
+
+<p>
+Number systems like hexadecimal and octal are a common way to show data
+of a number of bytes conveniently. They let you reason about the size of
+the data (the number of bits needed), while also providing a convenient
+way of showing that data.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org56effd5" class="outline-2">
+<h2 id="appendix-using-dc-to-handle-conversion">Appendix: using <code>dc</code> to handle conversion</h2>
+<div class="outline-text-2" id="text-appendix-using-dc-to-handle-conversion">
+<p>
+Working with binary, octal and hexadecimal - and converting between them
+all and decimal - can be a pain in backside. To avoid trying to do all
+the maths on your fingers (and toes), I recommend using some sort of
+calculator. Vavious tools are available online to do this for you, but a
+tool is available at your fingertips if you're on a Unix-like system:
+<code>dc</code>, the desk calculator.
+</p>
+
+<p>
+We can tell <code>dc</code> to use different bases for input and output by using
+the <code>i</code> and <code>o</code> commands - so
+</p>
+
+<pre class="example">
+2 i 16 o
+</pre>
+
+<p>
+will tell <code>dc</code> to use binary as its input and to output numbers in
+hexadecimal. We can then input a binary number and then use <code>p</code> to print
+it out as hexadecimal.
+</p>
+
+<pre class="example">
+16 o 2 i 1111 p
+</pre>
+
+<p>
+will return
+</p>
+
+<pre class="example">
+f
+</pre>
+
+<p>
+You can run this calculation through <code>dc</code> either by running it
+interactively (start <code>dc</code> and then type in the expression), or by
+sending the expression in with a flag
+</p>
+
+<pre class="example">
+dc -e '16 o 2 i 1111 p'
+</pre>
+
+<p>
+or piping it through on standard input
+</p>
+
+<pre class="example">
+echo '16 o 2 i 1111 p' | dc
+</pre>
+
+<p>
+It's a quick way to do the conversion, although it does takes some
+practice to remember how to use <code>dc</code>.
+</p>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara"><p class="footpara">
+I've worked at that company - the clever sod left years ago, but
+he is still 'fondly' remembered&#x2026;
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2">2</a></sup> <div class="footpara"><p class="footpara">
+As opposed to Roman numerals, which are only really popular now
+on clocks and copyright notices.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3">3</a></sup> <div class="footpara"><p class="footpara">
+There are <i>great</i> reasons to do this, not least because we've got
+ten fingers.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.4" class="footnum" href="#fnr.4">4</a></sup> <div class="footpara"><p class="footpara">
+Not wanting to get too philosophical about this, but it's
+interesting how quickly we can get to some vary rarified ideas
+when we talk about computers - questions like "what <i>is</i> a
+number?" don't come up very often in everyday conversation. This
+should be a hint to us that we're either doing something very
+clever and difficult, or something completely pointless.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.5" class="footnum" href="#fnr.5">5</a></sup> <div class="footpara"><p class="footpara">
+This is <i>not</i> how it works in real computers - I'm sorry to
+mislead you. If you're <i>really</i> interested in this stuff - and I
+mean really interested, as I think I'm pretty interested but even
+I find this a bit tedious - you should read some articles on
+<a href="https://en.wikipedia.org/wiki/Two%27s_complement">two's
+complement</a>. The reason you use two's complement rather than
+another way of encoding numbers is to permit the performance of
+binary arithmetic on the bits in identical ways whether the
+number is positive or negative. But as I'm not covering that here
+then I'm happy to gloss over it and push on with the more useful
+stuff.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.6" class="footnum" href="#fnr.6">6</a></sup> <div class="footpara"><p class="footpara">
+There is no <i>necessity</i> behind having eight bits in a byte, and
+in fact a lot of early computer systems used six or seven bits as
+their <i>byte size</i>. But eight is standard these days. To avoid
+confusion an eight bit byte is often referred to as an 'octet'.
+This can also <i>increase</i> confusion so I'm not going to do that
+here.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.7" class="footnum" href="#fnr.7">7</a></sup> <div class="footpara"><p class="footpara">
+Hard&#x2026; but not impossible. Ancient Greek was written in ALL
+CAPITALS WITHTHESPACESREMOVED. And you think it's
+hardReadingThingsInCamelCase&#x2026;
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.8" class="footnum" href="#fnr.8">8</a></sup> <div class="footpara"><p class="footpara">
+I used <code>dc</code>, the standard Unix desk calculator. More about it
+later.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.9" class="footnum" href="#fnr.9">9</a></sup> <div class="footpara"><p class="footpara">
+Which leads to a lot of craziness.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.10" class="footnum" href="#fnr.10">10</a></sup> <div class="footpara"><p class="footpara">
+We actually do something very similar everyday with decimal
+numbers: it is customary to group the digits of large numbers
+into threes, making them easier to read - i.e. =1 345 383 398=.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.11" class="footnum" href="#fnr.11">11</a></sup> <div class="footpara"><p class="footpara">
+This should not be too much of a leap for those of you familiar
+with JavaScript's definition of truth&#x2026;
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.12" class="footnum" href="#fnr.12">12</a></sup> <div class="footpara"><p class="footpara">
+This should not be too much of a leap for those of you familiar
+with JavaScript's definition of truth&#x2026;
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.13" class="footnum" href="#fnr.13">13</a></sup> <div class="footpara"><p class="footpara">
+'Bit shifting' makes for an efficient, if obscure, way of
+multiplying and dividing by two while rounding down.
+</p></div></div>
+
+
+</div>
+</div><div class="taglist"></div></div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="https://staticblog.org/archive.html">Other posts</a>
+</div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+</body>
+</html>

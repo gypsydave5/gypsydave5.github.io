@@ -1,0 +1,55 @@
+#+TITLE: Evaluating Ruby in Vim
+
+#+DATE: [2015-01-01]
+
+I was watching [[https://twitter.com/avdi][Avdi Grimm]]'s
+[[http://www.rubytapas.com/][Ruby Tapas]] videos - well, trying to watch
+them. I got stuck when I saw him do something in Vim Emacs that I'd not
+seen before. Something magical.
+
+On screen he had an expression - something like this:
+
+#+BEGIN_SRC ruby
+  p = Point.new(2,3)
+#+END_SRC
+
+In one keypress it became:
+
+#+BEGIN_SRC ruby
+  p = Point.new(2,3) # =>
+#+END_SRC
+
+And then quick as a flash:
+
+#+BEGIN_SRC ruby
+  p = Point.new(3,5) # => #<Point:0x000000038862d0 @x=3 @y=5>
+#+END_SRC
+
+I immediately stopped paying attention to the
+[[http://www.rubytapas.com/episodes/7-Constructors?filter=free][excellent
+video about constructors]] and started to look up what was going on. So
+here we go down the Vim rabbit hole again...
+
+The magic is performed by either
+[[http://rubygems.org/gems/rcodetools][rcodetools]]' xmpfilter tool or
+[[https://github.com/JoshCheek/seeing_is_believing][seeing_is_believing]],
+hooked up to Vim via
+[[https://github.com/t9md/vim-ruby-xmpfilter][vim-ruby-xmpfilter]],
+(which works for both) or
+[[https://github.com/hwartig/vim-seeing-is-believing][vim-seeing-is-believing]].
+Take your pick as I can't really see the difference at the moment.
+
+I've got xmpfilter set up with the following in my =.vimrc=
+
+#+BEGIN_EXAMPLE
+  autocmd FileType ruby nmap <buffer> <F4> <Plug>(xmpfilter-mark)
+  autocmd FileType ruby xmap <buffer> <F4> <Plug>(xmpfilter-mark)
+  autocmd FileType ruby imap <buffer> <F4> <Plug>(xmpfilter-mark)
+
+  autocmd FileType ruby nmap <buffer> <F5> <Plug>(xmpfilter-run)
+  autocmd FileType ruby xmap <buffer> <F5> <Plug>(xmpfilter-run)
+  autocmd FileType ruby imap <buffer> <F5> <Plug>(xmpfilter-run)
+#+END_EXAMPLE
+
+Now you too can evaluate Ruby code on the fly in Vim. And I can get back
+to watching more of Avdi.

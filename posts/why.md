@@ -355,7 +355,7 @@ hexadecimal notation.
 But... why do this for a _colour_?
 
 Each of those bytes represents a component of the colour being
-described - red, green and blue. So by writin it out in hexadecimal
+described - red, green and blue. So by writing it out in hexadecimal
 you get some visual indication of when each element begins and ends
 - it's two hex digits - and you also know that the length of the
 number will always be six digits. And it's one hell of a lot easier
@@ -488,7 +488,7 @@ are others (like 'not'), but let's focus on these two.
 What if we treated the binary digit `0` as false, and the binary digit `1`
 as true?[^11] We could do something very similar:
 
-```
+```ruby
 1 & 1 == 1
 1 & 0 == 0
 1 | 0 == 1
@@ -502,7 +502,7 @@ they're comparing like booleans above, and they use the resulting bit to
 construct a new number - the result. It's probably easier to see than to
 describe - let's stick another two digits on to the examples above:
 
-```
+```ruby
 001 & 101 == 001 // only the last bit is set in both numbers
 101 & 111 == 101 // only the first and last bits are set in both numbers
 100 | 010 == 110 // the first or the second bits are set in both numbers

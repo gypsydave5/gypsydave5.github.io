@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="alternate"
+      type="application/rss+xml"
+      href="rss.xml"
+      title="RSS feed for "/>
+<title>Lambda Calculus 2 - Church Numbers</title>
+<meta name="author" content="John Dow">
+<meta name="referrer" content="no-referrer">
+<link href= "static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="static/favicon.ico">
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2020 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="preamble" class="status">
+<div class="header">
+  <a href="https://staticblog.org">My Static Org Blog</a>
+</div></div>
+<div id="content">
+<div class="post-date">16 Sep 2020</div><h1 class="post-title"><a href="/2017-09-13-church-numbers.md.html">Lambda Calculus 2 - Church Numbers</a></h1>
+
+<div id="outline-container-orge347b38" class="outline-2">
+<h2 id="counting-without-numbers">Counting without numbers?</h2>
+<div class="outline-text-2" id="text-counting-without-numbers">
+<p>
+In the <a href="file:///posts/2017/9/11/lambda-calculus-1---syntax/">first post I
+wrote about the lambda calculus</a> we looked at the basic syntax and a
+simple function that took two numbers and added them together:
+</p>
+
+<p>
+\[
+\lambda x.\lambda y.x + y
+\]
+</p>
+
+<p>
+This might all look OK until I tell you that, in the untyped lambda
+calculus, the only primitive data type is a function.
+</p>
+
+<p>
+A function. Not a bit, a byte, a string; not a number - a function.
+</p>
+
+<p>
+So we should be a little suspicious of \(\,\lambda x.\lambda y.x + y\) as
+this \(+\) symbol needs to be defined as a function. Fair enough -
+addition feels like a the sort of thing that could easily be a function.
+</p>
+
+<p>
+But what would we apply to it? We need a number - like one or two. But
+we need to make them out of functions.
+</p>
+
+<p>
+Wait, what? We need to make numbers <i>out of functions?!</i>
+</p>
+
+<p>
+And this is where things start to get weird.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org093a32c" class="outline-2">
+<h2 id="so-whats-a-number-anyway">So what's a number anyway?</h2>
+<div class="outline-text-2" id="text-so-whats-a-number-anyway">
+<p>
+You will now be inducted into a sacred mystery that will allow you to
+make and understand Lisp jokes on the Internet. Be brave.
+</p>
+
+<p>
+In a universe which only has functions - how would we count? Well, we'd
+have to do it with functions, obviously.
+</p>
+
+<p>
+OK, sure - but that's not really getting us anywhere - let's take \(2\) as
+a concrete example. How do I write a function that represents \(2\)?
+</p>
+
+<p>
+Simple - we could just give it a name - like it was JavaScript:
+</p>
+
+<pre class="example">
+const two = () =&gt; {}
+</pre>
+
+<p>
+Now you're obviously shouting "But that's cheating! What are these
+'names' of which you speak? Are they made of functions too?"
+</p>
+
+<p>
+And you'd be right. The thing is, we don't just want a <i>symbol</i> for
+\(2\) - the numeral. What we want is a function that represents, in some
+way, the very essence of two-ness.
+</p>
+
+<p>
+What I'm trying to get across here (without jumping to the solution
+immediately) is that the representation of numbers in the lambda
+calculus are not mere symbols; they capture a key behaviour that we
+associate with the idea of 'number'.
+</p>
+
+<p>
+And that behaviour is <i>repetition</i>. When we say 'look at those two
+apples', we're expecting there to be an apple, and then <i>another</i> apple.
+In Church arithmetic a number is represented by a function that takes
+two values, and then applies the first value to the second value \(n\)
+times, where \(n\) is the number being represented.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org8836291" class="outline-2">
+<h2 id="church-numbers">Church numbers</h2>
+<div class="outline-text-2" id="text-church-numbers">
+<p>
+So much for the theory, let's take a look at some real numbers.<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>
+First up, the number one:
+</p>
+
+<p>
+\[ \lambda f.\lambda x. f(x) \]
+</p>
+
+<p>
+We accept a variable called \(f\), we take another one called \(x\), and we
+call \(f\) with \(x\) once. We're kinda hoping that \(f\) turns out to be a
+function that takes a single argument, but as this is the lambda
+calculus and <i>everything</i> is a function that takes a single argument, we
+can be <del>fairly</del> absolutely certain it is.
+</p>
+
+<p>
+In JavaScript:
+</p>
+
+<pre class="example">
+f =&gt; x =&gt; f(x)
+</pre>
+
+<p>
+And Scheme:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-scheme"><span style="color: #40883f;">(</span><span style="color: #333333; font-weight: bold;">lambda</span> <span style="color: #0287c8;">(</span>f<span style="color: #0287c8;">)</span> <span style="color: #0287c8;">(</span><span style="color: #333333; font-weight: bold;">lambda</span> <span style="color: #b85c57;">(</span>x<span style="color: #b85c57;">)</span> <span style="color: #b85c57;">(</span>f x<span style="color: #b85c57;">)</span><span style="color: #0287c8;">)</span><span style="color: #40883f;">)</span>
+</pre>
+</div>
+
+<p>
+So if that's one, we can probably work out what two is, right?
+</p>
+
+<p>
+\[ \lambda fx. f\ (f\ x) \]
+</p>
+
+<p>
+And three?
+</p>
+
+<p>
+\[ \lambda fx. f\ (f\ (f\ x)) \]
+</p>
+
+<p>
+OK, so no peeking now. What's zero?
+</p>
+
+<p>
+&#x2026;
+</p>
+
+<p>
+&#x2026;
+</p>
+
+<p>
+&#x2026;
+</p>
+
+<p>
+&#x2026;
+</p>
+
+<p>
+&#x2026;
+</p>
+
+<p>
+Did you work it out?
+</p>
+
+<p>
+\[ \lambda fx. x \]
+</p>
+
+<p>
+It's just ignoring the original function and returning the value it
+would've been applied to. The function \(f\) has been applied to \(x\) zero
+times.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org604bb71" class="outline-2">
+<h2 id="function-composition-and-functional-powers">Function composition and functional powers</h2>
+<div class="outline-text-2" id="text-function-composition-and-functional-powers">
+<p>
+There's a neater way of talking about this, with just a litte more
+notation. We can abstract the idea of "first apply \(f\), then apply \(f\)
+to that result, then apply \(f\)&#x2026;" out to the idea of <i>function
+composition</i>, which you might have seen in some languages. This is just
+building a new function out of two functions. The new function does
+exactly the same thing as calling one function after the other (in
+right-to-left order). This is usually written using the \(\circ\) symbol:
+</p>
+
+<p>
+\[ (f \circ f)\ x = f\ (f\ x) \]
+</p>
+
+<p>
+And so three could become the (slightly) easier to read:
+</p>
+
+<p>
+\[ \lambda f.\lambda x.\ (f \circ f \circ f)\ x \]
+</p>
+
+<p>
+But we can go further. The idea of composing a function with itself
+so-many times can be written as a <i>functional power</i> - a 'function to
+the \(n\)'. Just like we can say \(2^3 = 8\), so we can say:
+</p>
+
+<p>
+\[
+\lambda f.\lambda x.\ (f\ (f\ (f\ x)))\quad=\quad \lambda fx. (f\circ f\circ f)\ x\quad=\quad \lambda fx. f^3\ x
+\]
+</p>
+
+<p>
+Implementing composition and powers of functions is left as an exercise
+for the reader in their favourite language.<sup><a id="fnr.2" class="footref" href="#fn.2">2</a></sup>
+</p>
+</div>
+</div>
+
+<div id="outline-container-org06f56ec" class="outline-2">
+<h2 id="playing-around-with-the-computer">Playing around with the computer</h2>
+<div class="outline-text-2" id="text-playing-around-with-the-computer">
+<p>
+I find there to be two <del>productive</del> interesting ways to play around with
+the lambda calculus and Church numbers when I'm trying to understand
+what's going on.
+</p>
+
+<p>
+Firstly, and probably more obviously, try plugging around with them in
+your favourite language (as long as it has some sort of anonymous
+function type). Say Python - if we were to write three as a Church
+numeral we'd have:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #333333;">three</span> = <span style="color: #333333; font-weight: bold;">lambda</span> f: <span style="color: #333333; font-weight: bold;">lambda</span> x: f(f(f(x)))
+</pre>
+</div>
+
+<p>
+If we want to test this - to see if it does what we think it does - we
+just need a function to be \(f\):
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #333333;">increment</span> = <span style="color: #333333; font-weight: bold;">lambda</span> x: x + 1
+</pre>
+</div>
+
+<p>
+and some value to play the role of \(x\)
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #333333;">zero</span> = 0
+</pre>
+</div>
+
+<p>
+So then we just plug in those values:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python">three(increment)(0) <span style="color: #d9d9d9;">#</span><span style="color: #7f7f7f;">=&gt; 3</span>
+</pre>
+</div>
+
+<p>
+We used three variables to hold the values above, but we could just
+inline them to get to something that looks a little more lambda-y:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python">(<span style="color: #333333; font-weight: bold;">lambda</span> f: <span style="color: #333333; font-weight: bold;">lambda</span> x: f(f(f(x))))(<span style="color: #333333; font-weight: bold;">lambda</span> x: x + 1)(0) <span style="color: #d9d9d9;">#</span><span style="color: #7f7f7f;">=&gt; 3</span>
+</pre>
+</div>
+
+<p>
+Which translates to:
+</p>
+
+<p>
+\[ (\lambda f.\lambda x.\ f\ (f\ (f\ x)))\ (\lambda x. x + 1)\ 0 = 3 \]
+</p>
+
+<p>
+Both <code>zero</code> and <code>increment</code> use Python's built in number system. But we
+don't have to use numbers to test Church numbers. All we need are values
+that behave in the required way.<sup><a id="fnr.3" class="footref" href="#fn.3">3</a></sup> For instance:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-scheme"><span style="color: #40883f;">(</span><span style="color: #333333; font-weight: bold;">define</span> <span style="color: #333333; font-weight: bold;">inc</span> <span style="color: #0287c8;">(</span><span style="color: #333333; font-weight: bold;">lambda</span> <span style="color: #b85c57;">(</span>x<span style="color: #b85c57;">)</span> <span style="color: #b85c57;">(</span>cons '<span style="color: #709870;">()</span> x<span style="color: #b85c57;">)</span><span style="color: #0287c8;">)</span><span style="color: #40883f;">)</span>
+
+<span style="color: #40883f;">(</span><span style="color: #333333; font-weight: bold;">define</span> <span style="color: #333333; font-weight: bold;">zero</span> '<span style="color: #0287c8;">()</span><span style="color: #40883f;">)</span>
+
+<span style="color: #40883f;">(</span><span style="color: #0287c8;">(</span><span style="color: #b85c57;">(</span><span style="color: #333333; font-weight: bold;">lambda</span> <span style="color: #709870;">(</span>f<span style="color: #709870;">)</span> <span style="color: #709870;">(</span><span style="color: #333333; font-weight: bold;">lambda</span> <span style="color: #907373;">(</span>x<span style="color: #907373;">)</span> <span style="color: #907373;">(</span>f x<span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #b85c57;">)</span> inc<span style="color: #0287c8;">)</span> zero<span style="color: #40883f;">)</span> <span style="color: #d9d9d9;">;;</span><span style="color: #7f7f7f;">=&gt; (())</span>
+<span style="color: #40883f;">(</span><span style="color: #0287c8;">(</span><span style="color: #b85c57;">(</span><span style="color: #333333; font-weight: bold;">lambda</span> <span style="color: #709870;">(</span>f<span style="color: #709870;">)</span> <span style="color: #709870;">(</span><span style="color: #333333; font-weight: bold;">lambda</span> <span style="color: #907373;">(</span>x<span style="color: #907373;">)</span> <span style="color: #907373;">(</span>f <span style="color: #6276ba;">(</span>f x<span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #b85c57;">)</span> inc<span style="color: #0287c8;">)</span> zero<span style="color: #40883f;">)</span> <span style="color: #d9d9d9;">;;</span><span style="color: #7f7f7f;">=&gt; (() ())</span>
+<span style="color: #40883f;">(</span><span style="color: #0287c8;">(</span><span style="color: #b85c57;">(</span><span style="color: #333333; font-weight: bold;">lambda</span> <span style="color: #709870;">(</span>f<span style="color: #709870;">)</span> <span style="color: #709870;">(</span><span style="color: #333333; font-weight: bold;">lambda</span> <span style="color: #907373;">(</span>x<span style="color: #907373;">)</span> <span style="color: #907373;">(</span>f <span style="color: #6276ba;">(</span>f <span style="color: #858580;">(</span>f x<span style="color: #858580;">)</span><span style="color: #6276ba;">)</span><span style="color: #907373;">)</span><span style="color: #709870;">)</span><span style="color: #b85c57;">)</span> inc<span style="color: #0287c8;">)</span> zero<span style="color: #40883f;">)</span> <span style="color: #d9d9d9;">;;</span><span style="color: #7f7f7f;">=&gt; (() () ())</span>
+</pre>
+</div>
+
+<p>
+Lots of things will work - experiment!
+</p>
+</div>
+</div>
+
+<div id="outline-container-org550ca0c" class="outline-2">
+<h2 id="playing-around-with-pen-and-paper">Playing around with pen and paper</h2>
+<div class="outline-text-2" id="text-playing-around-with-pen-and-paper">
+<p>
+The second way I like to play with lambdas is with pen and paper. The
+simplicity of the syntax, and the very few transformations allowed on an
+expression,<sup><a id="fnr.4" class="footref" href="#fn.4">4</a></sup> mean that it's possible to do the evaluation yourself.
+Let's try it with the above. I'm going to go through it step by step,
+and I'm going to note which of the reductions steps being performed at
+each line.
+</p>
+
+<p>
+\[
+\\begin{array}{ c | l | c}
+& Expression & Reduction \\\\
+\hline
+0 & (\lambda fx.\ f\ (f\ (f\ x)))\ (\lambda x. x + 1)\ 0 \\\\
+1 & (\lambda x.\ (\lambda x.\ x + 1)\ ((\lambda x.\ x + 1)\ ((\lambda x.\ x + 1)\ x)))\ 0 & \beta \\\\
+2 & (\lambda x. (\lambda a.\ a + 1)\ ((\lambda b.\ b + 1)\ ((\lambda c.\ c + 1)\ x)))\ 0 & \alpha \\\\
+3 & (\lambda a.\ a + 1)\ ((\lambda b.\ b + 1)\ ((\lambda c.\ c + 1)\ 0)) & \beta \\\\
+4 & (\lambda a.\ a + 1)\ ((\lambda b.\ b + 1)\ 1) & \beta \\\\
+5 & (\lambda a.\ a + 1)\ 2 & \beta \\\\
+6 & 3 & \beta
+\\end{array}
+\]
+</p>
+
+<p>
+This is fun to try out, and while it's not much help when the expression
+is relatively simple as the one above, it gets pretty vital for me when
+I want to discover how more complicated expressions work.
+</p>
+
+<p>
+In summary, the computer is great for checking that a lambda expression
+works, but I prefer to do get the pen and paper out if I want to get a
+feel for what's going on - for what makes it work.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org477687b" class="outline-2">
+<h2 id="but">But &#x2026;</h2>
+<div class="outline-text-2" id="text-but">
+<p>
+But what about the \(+\) and \(1\) and \(0\) above? I said that there were
+only functions in the lambda calculus, aren't we still cheating a little
+bit?
+</p>
+
+<p>
+We are. So in the
+<a href="file:///posts/2017/9/23/lambda-calculus-3---arithmetic-with-church-numbers/">next
+post</a> let's define <code>increment</code>, <code>add</code>, <code>multiply</code> and maybe even
+<code>exponentiation</code> in terms of lambdas. Things are certain to get weirder.
+</p>
+
+<p>
+Oh, and - you were promised the ability to undestand jokes on the
+internet? Take a look at
+<a href="http://www.schemers.org/Miscellaneous/imagine.txt">this</a> - hopefully
+it makes some sense now you know what \(one\) is.
+</p>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara"><p class="footpara">
+I mean, actually these are the
+<a href="https://en.wikipedia.org/wiki/Natural_number">natural numbers</a>
+including zero, not actually the
+<a href="https://en.wikipedia.org/wiki/Real_number">real numbers</a>. Yay,
+maths joke!
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2">2</a></sup> <div class="footpara"><p class="footpara">
+I've always wanted to say that. But, seriously - implement them.
+It's fun!
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3">3</a></sup> <div class="footpara"><p class="footpara">
+I am thoroughly in debt to the amazing book
+<a href="https://mitpress.mit.edu/books/little-schemer"><i>The Little
+Schemer</i></a> for the this example.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.4" class="footnum" href="#fnr.4">4</a></sup> <div class="footpara"><p class="footpara">
+$&alpha;$-conversion and $&beta;$-reduction - see
+<a href="file:///posts/2017/9/11/lambda-calculus-1---syntax/">the first post</a>
+</p></div></div>
+
+
+</div>
+</div><div class="taglist"></div></div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="https://staticblog.org/archive.html">Other posts</a>
+</div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+</body>
+</html>

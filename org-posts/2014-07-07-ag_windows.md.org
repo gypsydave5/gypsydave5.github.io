@@ -1,0 +1,19 @@
+#+TITLE: Windows Silver Surfer
+
+#+DATE: [2014-07-07 Mon]
+
+Adding to my list of [[/posts/2014/7/4/surviving-windows/][ways to fix
+the Windows experience]], I have to pay due respect to
+[[http://blog.kowalczyk.info/][Krystoff Kowalcyzk]], a developer who has
+ported
+[[http://geoff.greer.fm/2011/12/27/the-silver-searcher-better-than-ack/][Ag
+(aka The Silver Surfer)]] over to Windows. He's also authored a really
+elegant (and for elegant please read lightweight and customizable) PDF
+viewer
+[[http://blog.kowalczyk.info/software/sumatrapdf/free-pdf-reader.html][SumatraPDF]].
+Both of these have improved my life today.
+
+I've been looking at alternatives to Adobe Reader on the Ubuntu box as
+well - currently I'm enjoying the simplicity of
+[[http://www.mupdf.com/][muPDF]], but there are many other options out
+there.

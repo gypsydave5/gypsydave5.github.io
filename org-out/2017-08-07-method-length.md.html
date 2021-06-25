@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="alternate"
+      type="application/rss+xml"
+      href="rss.xml"
+      title="RSS feed for "/>
+<title>Method length: a good metric, a bad target</title>
+<meta name="author" content="John Dow">
+<meta name="referrer" content="no-referrer">
+<link href= "static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="static/favicon.ico">
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2020 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="preamble" class="status">
+<div class="header">
+  <a href="https://staticblog.org">My Static Org Blog</a>
+</div></div>
+<div id="content">
+<div class="post-date">16 Sep 2020</div><h1 class="post-title"><a href="/2017-08-07-method-length.md.html">Method length: a good metric, a bad target</a></h1>
+<p>
+So I saw this series of tweets a few days ago
+</p>
+
+<div class="HTML">
+<p>
+&lt;blockquote class="twitter-tweet" data-lang="en"&gt;
+</p>
+
+</div>
+
+<div class="HTML">
+<p>
+&lt;p lang="en" dir="ltr"&gt;
+</p>
+
+</div>
+
+<p>
+Pro tip: if your method is 225 lines long, then you should probably
+refactor your code ASAP. I frown at methods over 50 lines.
+</p>
+
+<div class="HTML">
+<p>
+&lt;/p&gt;
+</p>
+
+</div>
+
+<p>
+&#x2014; Anna Filina (@afilina) August 2, 2017
+</p>
+
+<div class="HTML">
+<p>
+&lt;/blockquote&gt;
+</p>
+
+</div>
+
+<div class="HTML">
+<p>
+&lt;script async src="//platform.twitter.com/widgets.js" charset="utf-8"&gt;&lt;/script&gt;
+</p>
+
+</div>
+
+<div class="HTML">
+<p>
+&lt;blockquote class="twitter-tweet" data-lang="en"&gt;
+</p>
+
+</div>
+
+<div class="HTML">
+<p>
+&lt;p lang="en" dir="ltr"&gt;
+</p>
+
+</div>
+
+<p>
+IMO ten is too long in most cases. <a href="https://t.co/ayPb9Ly76I">https://t.co/ayPb9Ly76I</a>
+</p>
+
+<div class="HTML">
+<p>
+&lt;/p&gt;
+</p>
+
+</div>
+
+<p>
+&#x2014; Ron Jeffries (@RonJeffries) August 3, 2017
+</p>
+
+<div class="HTML">
+<p>
+&lt;/blockquote&gt;
+</p>
+
+</div>
+
+<div class="HTML">
+<p>
+&lt;script async src="//platform.twitter.com/widgets.js" charset="utf-8"&gt;&lt;/script&gt;
+</p>
+
+</div>
+
+<div class="HTML">
+<p>
+&lt;blockquote class="twitter-tweet" data-lang="en"&gt;
+</p>
+
+</div>
+
+<div class="HTML">
+<p>
+&lt;p lang="en" dir="ltr"&gt;
+</p>
+
+</div>
+
+<p>
+In my Ruby code, half of my methods are just one or two lines long. 93%
+are under 10.<a href="https://t.co/Qs8BoapjoP">https://t.co/Qs8BoapjoP</a> <a href="https://t.co/ymNj7al57j">https://t.co/ymNj7al57j</a>
+</p>
+
+<div class="HTML">
+<p>
+&lt;/p&gt;
+</p>
+
+</div>
+
+<p>
+&#x2014; Martin Fowler (@martinfowler) August 3, 2017
+</p>
+
+<div class="HTML">
+<p>
+&lt;/blockquote&gt;
+</p>
+
+</div>
+
+<div class="HTML">
+<p>
+&lt;script async src="//platform.twitter.com/widgets.js" charset="utf-8"&gt;&lt;/script&gt;
+</p>
+
+</div>
+
+<p>
+Always nice to see an escalation.
+</p>
+
+<p>
+Martin's article on the Bliki is nice, but I think it's still missing
+the point.
+</p>
+
+<blockquote>
+<p>
+Small functions like this only work if the names are good, so you need
+to pay good attention to naming.
+</p>
+</blockquote>
+
+<p>
+Short methods are good -&gt; but they are hard to name, so work hard on the
+names&#x2026;
+</p>
+
+<p>
+Is this accurate? It almost feels like we're putting the cart before the
+horse.
+</p>
+
+<p>
+Here is a piece of code I can extract -&gt; Here it is on its own -&gt; What
+the hell do I call it?
+</p>
+
+<p>
+This chimed with something I saw in the SICP lecture course.
+</p>
+<div class="taglist"></div></div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="https://staticblog.org/archive.html">Other posts</a>
+</div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+</body>
+</html>

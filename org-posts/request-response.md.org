@@ -1,0 +1,359 @@
+#+TITLE: HTTP - Request and Response Message
+
+The goal of this article is to examine and explain the HyperText
+Transfer Protocol (HTTP) message types for a request and a response. Why
+learn about HTTP? Because it's /fundamental/ to a lot of the software we
+build today - if it wasn't for HTTP
+
+- your JavaScript application in the browser wouldn't work
+- your API wouldn't be able to be used, let alone be RESTful
+- none of the 100s of microservice you've created could talk to each
+  other
+
+** Who is this for?
+   :PROPERTIES:
+   :CUSTOM_ID: who-is-this-for
+   :END:
+
+This is for every software developer, but especially for /web/
+developers; people who build software either in the browser, or as
+backend web servers. Especially for them as their programs are almost
+entirely dependent upon HTTP to work.
+
+This first part will cover the basics of HTTP, and an overview of the
+HTTP message structure, both request and response. I've tried to make it
+practical so there's some examples you can run on the command line in a
+Unix like system (Linux, BSD, OSX), but which should work given some
+tweaking for a Windows system.
+
+By then end we should have covered
+
+- the difference between the Internet and the (World Wide) Web
+- How HTTP is built on top of Internet protocols
+- how to use netcat to send TCP messages
+- using netcat to send and receive HTTP messages, and their anatomy
+- understood the benefits of plain text in communication
+
+** What is the Internet? What is the web?
+   :PROPERTIES:
+   :CUSTOM_ID: what-is-the-internet-what-is-the-web
+   :END:
+
+First up, the Internet is /not/ the same as the web.
+
+/An/ internet is a collection of computer networks that are connected
+together.
+
+/The/ Internet is /all/ the computer networks in the world that are
+connected to each other. Every. Damn. One.
+
+And the web is... well, we'll get to that.
+
+In the beginning... there weren't many computers at all. Maybe five? And
+they were used for exciting things like calculating the yield of nuclear
+bombs. But people realised they could do more with them if they could
+communicate with each other. My computer could ask your computer to do
+some of the work, and we'd get done in half the time.
+
+But to communicate you need to share something - a language, a set of
+signs. When someone says 'Hello' and they hold out their hand, what you
+do next communicates a meaning - you can shake hands, or you can refuse.
+You understand what the outheld hand means, you know what the
+conventional responses are, and the other party knows what you mean when
+you shake (or don't).
+
+This is /protocol/ - a series of conventions that govern communication.
+The only other place that we talk about protocols tend to be when
+interacting with royalty - we call the Queen "your Majesty" the first
+time we address her, "ma'am" to rhyme with "ham" afterwards, and /we
+never touch her/. This is how we behave to get along with the Queen.
+
+Another protocol: you walk into a cafe, you sit down. And ... then what
+happens? You expect the waiter to come over and take your order. They
+will say something like 'Hi, what would you like to drink?', and you'll
+say 'a coffee, please', and maybe there'll be a quick chat about milk,
+sugar, or which one of the hundreds of different coffees you'd like.
+What you don't do is walk into the cafe, walk up to the register and say
+'skinny mocha to go please'... or do you? It depends - you can tell what
+you're meant to do when you walk in to most cafes and coffeeshops. We
+learn the correct protocol very quickly (we often copy others) and then
+we know what we're meant to do.
+
+The early Internet was built on a series of protocols - the Internet
+Protocol suite. For instance, one of these is the Internet Protocol
+(IP) - a set of rules that the computers could conform to, to allow them
+to communicate with each other no matter what operating system they were
+using.
+
+Protocols can stack up on top of each other. Say we walk into the cafe,,
+sit down, the waiter comes over and says "Bonjour, qu'est-ce que vous
+voulez boire"... we know we're using the "ordering coffee in a cafe"
+protocol, but instead of using the English 'protocol' to communicate it
+the waiter is doing it in French. Why? Well, maybe you're in France.
+What's interesting is that, even if you don't speak French, you kinda
+know what they're saying because, well, it's a cafe - you know the
+protocol. Instead of using the 'English' protocol, the waiter is using
+'French' to communicate the 'Cafe' protocol - they hope you understand
+French, and that you know what to do in a cafe.
+
+The Transmission Communication Protocol (TCP) is another protocol that's
+usually implemented on top of the Internet Protocol - and written as
+"TCP/IP" ("TCP over IP"). TCP is a protocol that we should care about,
+as it's the protocol that is used to implement the HyperText
+Transmission Protocol - HTTP.
+
+And that's the Web - things built on HTTP. Things like websites, and
+webservices and your browser and all of this wonderful world we get to
+live in 'online'.
+
+** World's Simplest Chat: netcat (=nc=)
+   :PROPERTIES:
+   :CUSTOM_ID: worlds-simplest-chat-netcat-nc
+   :END:
+
+Communication is often a two way thing - in TCP it definitely is.
+
+To communicate we need two more pieces of information: who is going to
+start the conversation, and where they are going to talk to. You may
+have experienced the awkwardness when both people are waiting for the
+other one to say something - luckily humans have quick ways to escape
+this impasse, but computers need to be explicit.
+
+In networking we call the computer waiting for messages a /server/ (like
+the waiter, giving you things), and the computer sending the messages a
+/client/ (like a ... client).
+
+The 'where' is the IP address of a computer, and a /port/ on that
+computer. The IP address is a big number uniquely identifies a computer
+on a network, and a port is like a port for a country - a place where
+things go in and out. This is also a number. Computers have more than
+one port because it's nice for a computer to talk to more than one
+computer at once.
+
+netcat "is used for just about anything under the sun involving TCP" -
+we can use it to see what sending and receiving messages over TCP
+actually looks like by starting a server and a client on our computer.
+
+But /we/ are going to be the client and the server!
+
+--------------
+
+Demo netcat and play along!
+
+server: =nc -l 8000= client: =nc localhost 8000=
+
+Send some messages See them pop up in the other session
+
+--------------
+
+** Question:
+   :PROPERTIES:
+   :CUSTOM_ID: question
+   :END:
+
+- What do you think HTTP looks like, if it uses TCP?
+- How could you find out using netcat?
+
+1. Client on the web is something like a /web browser/
+2. A Server is a webserver - what we do every day
+3. The web works over TCP - just like what we saw with netcat
+4. What if we changed the client to a browser?
+
+** The HTTP Request Message
+   :PROPERTIES:
+   :CUSTOM_ID: the-http-request-message
+   :END:
+
+We should see something like...
+
+#+BEGIN_EXAMPLE
+  GET / HTTP/1.1
+  Host: localhost:8080
+  Upgrade-Insecure-Requests: 1
+  Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+  User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.1.2 Safari/605.1.15
+  Accept-Language: en-gb
+  Accept-Encoding: gzip, deflate
+  Connection: keep-alive
+#+END_EXAMPLE
+
+Every time you request a page with your browser, this is what it sends
+to a server.
+
+Which, although it's pretty gnarly, you can read pretty easily if you
+know how.
+
+There are /three/ parts to the request message:
+
+- the /request line/, which is the first line of the message
+- the /headers/, which are every line after the request line. These are
+  optional
+- and, after a blank line, an optional /body/.
+
+*** Request line
+    :PROPERTIES:
+    :CUSTOM_ID: request-line
+    :END:
+
+Has three parts, each separated by a space.
+
+- The /request method/ (=GET=)
+- The /request target/ or path (=/=)
+- The /HTTP version/ (=HTTP/1.1=)
+
+Cool. But what should we send back to the browser?
+
+** The HTTP Response Message
+   :PROPERTIES:
+   :CUSTOM_ID: the-http-response-message
+   :END:
+
+*** Q: What do we send back? How can we find out what a valid response
+message looks
+    :PROPERTIES:
+    :CUSTOM_ID: q-what-do-we-send-back-how-can-we-find-out-what-a-valid-response-message-looks
+    :END:
+
+like?
+
+1. A server on the web is a domain name (like =example.com=)
+2. The web works over TCP - just like what we saw with netcat
+3. What if we changed the server to a webserver on the internet?
+4. We just need to point our netcat client at something other than
+   localhost
+
+client: =nc -c -v example.com 80=
+
+Why port 80? Because this is the conventional port for servers to be
+listening on for HTTP requests. When you use a browser it always
+/assumes/ you want port 80 of the server you're communicating with. So
+we're opening up a connection to the server at example.com.
+
+- the =-v= makes netcat /verbose/ - so that we know it's working!
+- the =-c= fixes the line endings so that they conform with HTTP - don't
+  worry about it
+
+We know what a valid HTTP request message looks like, but let's send an
+invalid one for now
+
+#+BEGIN_EXAMPLE
+  bum
+#+END_EXAMPLE
+
+We get back the response:
+
+#+BEGIN_EXAMPLE
+  HTTP/1.1 400 Bad Request
+  Server: squid
+  Mime-Version: 1.0
+  Date: Fri, 06 Sep 2019 07:51:41 GMT
+  Content-Type: text/html;charset=utf-8
+  Content-Length: 3836
+  X-Squid-Error: ERR_INVALID_REQ 0
+  X-Cache: MISS from IMP-cache
+  X-Cache-Lookup: NONE from IMP-cache:3128
+  Via: 1.1 IMP-cache (squid)
+  Connection: close
+
+
+  <html><head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>ERROR: The requested URL could not be retrieved</title>
+
+  ...
+#+END_EXAMPLE
+
+Once again, this breaks down into three parts:
+
+- the /status line/
+- some (optional) headers
+- an optional body after an empty line
+
+the body should be familiar - it's the HyperText Markup Language (HTML)!
+
+*** Status line
+    :PROPERTIES:
+    :CUSTOM_ID: status-line
+    :END:
+
+is once again very similar to the request line. It's made of
+
+- The /HTTP version/ (=HTTP/1.1=)
+- The /status code/ (=200=)
+- The a description of the status code or path (=/=)
+
+** Back to the Browser: Response
+   :PROPERTIES:
+   :CUSTOM_ID: back-to-the-browser-response
+   :END:
+
+- Start your server again, but this time on port 80.
+- Send an HTTP GET request using the browser - notice you don't need the
+  port!
+
+Now lets send something back!
+
+#+BEGIN_EXAMPLE
+  HTTP/1.1 200 OK
+
+  Hello, world!
+#+END_EXAMPLE
+
+One gotcha - the browser needs to know that your message has finished -
+you could have more lines of body to add. To do this you need to send a
+special signal called End of File (EOF), which we can type by pressing
+Ctrl-D.
+
+Now look at your browser.
+
+** A REST API written in netcat
+   :PROPERTIES:
+   :CUSTOM_ID: a-rest-api-written-in-netcat
+   :END:
+
+- Now let's pretend you're a simple server that responds with a hello
+  message for a particular path
+- so =/hello/chris= sends a message back that says "Hello, Chris"
+- Can you be that server with netcat?
+
+** Examining a Request in the Browser
+   :PROPERTIES:
+   :CUSTOM_ID: examining-a-request-in-the-browser
+   :END:
+
+We make HTTP requests every day, most obviously when browsing the Web.
+The content of these requests is usually well hidden by the browser as
+they're irrelevant to the everyday use, but it's easy to see what's
+going on.
+
+Browsers usually have a set of 'developer tools'
+
+- open up a browser
+- open up the 'developer tools'
+- find the network tab
+- make a request for the URL =https://developer.mozilla.org/en-US/=
+
+** Questions?
+   :PROPERTIES:
+   :CUSTOM_ID: questions
+   :END:
+
+**** Q: Why =-c= for the netcat client?
+     :PROPERTIES:
+     :CUSTOM_ID: q-why--c-for-the-netcat-client
+     :END:
+
+Because the HTTP protocol requires that each line be terminated by two
+invisible characters - carriage-return and line-finish (LF CR). On most
+computers, hitting return will only emit one character (LF), so =-c=
+tells netcat to add in the extra CR. You will hit this problem
+repeatedly in your careers, mostly around files saved on Windows
+machines (which use CRLF by convention).
+
+** Further Reading
+   :PROPERTIES:
+   :CUSTOM_ID: further-reading
+   :END:
+
+[[https://tools.ietf.org/html/rfc7230#section-3][RFC7230 Hypertext
+Transfer Protocol (HTTP/1.1): Message Syntax and Routing]]

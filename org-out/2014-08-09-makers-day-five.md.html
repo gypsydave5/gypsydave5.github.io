@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="alternate"
+      type="application/rss+xml"
+      href="rss.xml"
+      title="RSS feed for "/>
+<title>Makers: day 5</title>
+<meta name="author" content="John Dow">
+<meta name="referrer" content="no-referrer">
+<link href= "static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="static/favicon.ico">
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2020 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="preamble" class="status">
+<div class="header">
+  <a href="https://staticblog.org">My Static Org Blog</a>
+</div></div>
+<div id="content">
+<div class="post-date">16 Sep 2020</div><h1 class="post-title"><a href="/2014-08-09-makers-day-five.md.html">Makers: day 5</a></h1>
+<p>
+I thought I'd be writing a blog post everyday about my experience at
+<a href="http://www.makersacademy.com/">Makers</a>. Or at least every two days.
+That went out of the window pretty damn quickly. Things move quickly, so
+let's go for a quick update and review before I get along with my
+Saturday&#x2026;
+</p>
+
+<div id="outline-container-orgbd5c1af" class="outline-2">
+<h2 id="day--2">Day -2</h2>
+<div class="outline-text-2" id="text-day--2">
+<p>
+Headed to the graduation of the cohort 12 weeks ahead of ours and met
+some of the guys joining me in the August group, as well as the
+'seniors' (that's seniors by a full 6 weeks &#x2013; I don't thinks they'll be
+taking my lunch money). Got to see the different final projects that had
+been created &#x2013; really beautiful stuff such as the artist portfolio
+site, and a fun way to work out which film to watch with your friends
+using the IMDB API. I was struck with how polished these projects
+looked - fleshed out and beautiful.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org33770c1" class="outline-2">
+<h2 id="day-0">Day 0</h2>
+<div class="outline-text-2" id="text-day-0">
+<p>
+First day. Start early and meet everyone. We all introduce each other
+with interesting facts (much antipathy towards mushrooms), and the
+Makers team do the same. Many of the names have sinces wondered off into
+the sunset of my memory, but we're mainly being taught by
+<a href="https://github.com/ecomba">Enrique</a>,
+<a href="https://github.com/Stephen_lloyd">Stephen</a> and
+<a href="https://github.com/roidriscoll">Roi</a> who's the TA (and who has <i>only
+just finished the course</i> &#x2013; amazing) at the moment.
+</p>
+
+<p>
+Our first challenge is to get set up and create a web app that generates
+motivational posters from a Google image search. In one day. And,
+amazingly, we all manage it. There's some pretty hairy moments to begin
+with (imagine a room full of people all downloading the same software at
+the same time using the same WiFi). But it happens.
+</p>
+
+<p>
+I asked Enrique whether I should stick with the Linux laptop or try out
+one of the MacBook Pros the Makers kindly offer for students to borrow
+during the course. He used to use Linux himself but was converted in a
+single day having borrowed a friend's. So I thought I'd try it out&#x2026;
+</p>
+
+<p>
+I'm typing this on the Mac. Enough said.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org96a70bc" class="outline-2">
+<h2 id="day-1">Day 1</h2>
+<div class="outline-text-2" id="text-day-1">
+<p>
+And it's straight into the first project - creating a student directory
+for our cohort using Ruby and the command line. We're all at different
+levels of experience at the moment - I'd describe myself as confident
+with a CLI and Ruby having prepared (over-prepared?) extensively for the
+last few&#x2026; months (I was just looking at GitHub and I've been pushing
+there since February. Time flies!). The exercises are kept as a text
+document on GitHub with links to pills on how to use Git and the Unix
+command line. I pair with <a href="https://github.com/flickoid">Chris</a> who I'd
+met on the open day. We have a great time getting through the work.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orge47f549" class="outline-2">
+<h2 id="day-2">Day 2</h2>
+<div class="outline-text-2" id="text-day-2">
+<p>
+There are lectures throughout the day &#x2013; one in the morning and one in
+the afternoon &#x2013; with additional talks during the day from other people
+coming in to the building. Today was the turn of the technology heads
+from <a href="http://www.typematrix.com/">Compare the Market.com</a> to talk to
+us. It was interesting to hear them talk about how their technology and
+culture had chnged over the last ten years, especially the shift to an
+Agile culture. The more I hear and read about Agile the more excited it
+makes me feel about working as a programmer - not just writing code but
+having a wide-ranging input into what is being developed. It was also
+cool to hear the coders described as being, essentially,
+'customer-facing' &#x2013; that they were the closest staff memebers to actual
+customer experience and so were expectd to both feedback as such,
+generate ideas, and importantly care for the web app all the time, with
+flexible working hours. I'd never thought of it that way, but in a world
+where a company's only contact with their customers is through the web,
+coders become the customer facing members of staff with all th
+responsibility that entails.
+</p>
+
+<p>
+We also get talks from the cohort above us &#x2013; the seniors. It's great
+seeing these guys wanting to pass on the knowledge, the hints, the
+tricks &#x2013; everything they've picked up in the last few weeks, on to us.
+This tradition started spontaneously but fits so well with the ethos of
+Makers. I'm looking forward to maybe doing one myself.
+</p>
+
+<p>
+Erique talks about his keyboard layout for five minutes today &#x2013; well
+maybe more than five minutes. Not only is he a Vi(m) weezard but he also
+uses (1) COLMAC layout on both (2) the MacBook if he's out and about or
+(3) the <a href="http://www.typematrix.com/">scariest keyboard in the world</a>
+if he's wanting to type a lot.
+</p>
+
+<p>
+Vim is enough for me, although Andy in our cohort borrows the keyboard
+for a day and starts to learn Colemak. Brave.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org3a80ad3" class="outline-2">
+<h2 id="day-3">Day 3</h2>
+<div class="outline-text-2" id="text-day-3">
+<p>
+I'm ahead. A few of us are ahead. In fact a few of us are wondering why
+we're not useing OOP methods to write this code because, frankly, it's
+looking a bit messy right now. My code is particularly awful until [Ben]
+and I chat about it and he suggests refactoring to make more but shorter
+methods with much better names. I kick myself &#x2013; I knew that! &#x2013; but bad
+habits die hard.
+</p>
+
+<p>
+But I don't mind being ahead &#x2013; I'm not straining at the bit. At the
+beginning Enrique and Stephen said that we're as strong as our weakest
+member, and that we should never leave a man behind. I think of my
+cohort as a team, and I'm responsible. So I float around answering
+questions and trying to help out where I can. I had a great moment in
+the morning with <a href="https://github.com/ruthearle">Ruth</a> in which we both
+learned new things about symbols, and I've enjoyed speaking to
+<a href="https://github.com/silver-io">Javier</a> about &#x2013; well lots of things.
+We have pretty similar motivations for getting in to Makers; we both
+want a better, more fulfilling work life. I'm more sure now that I've
+found it.
+</p>
+
+<p>
+And I like talking about code! I hadn't realised that this is what I was
+missing so much. Talking and working everyday in Ruby has increased my
+confidence and my knowledge. Helping others helps yourself, teachers
+learn more from their students. The last time I felt this way was at
+University, and it's a great feeling.
+</p>
+
+<p>
+Stephen and Roi introduce the finer points of using Git today in a
+fantastic lecture. I've found myself getting tangled up in my own
+branches so much that it was good to have things explained carefully and
+accurately, and with a demonstration as well. I learned a lot.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org7ab50e9" class="outline-2">
+<h2 id="day-4">Day 4</h2>
+<div class="outline-text-2" id="text-day-4">
+<p>
+Test Driven Developmet (TDD) drops with a bang today as Enrique and
+Stephen introduce <a href="http://rspec.info/">RSpec</a> and a completely
+different way of writing code. Really. I'd heard of TDD, I'd heard
+people moan about or praise it &#x2013; but I'd not seen it until Enrique
+started hammering away at Vim on the projector to create
+<a href="https://ithub.com/gypsydave5/fizzbuzz">FizzBuzz</a> by first defining
+what the code ought to be doing and then making it do it, then expanding
+the spec', making the code fail, making the code pass, expanding the
+spec'&#x2026; repeat, rinse&#x2026; it was amazing. He hooked it up with the idea
+of both the scientific method and a good doctor washing their hands. And
+it made sense &#x2013; declaring where you're going and then getting there,
+rather than just blindly, messily, hacking around until something drops
+out.
+</p>
+
+<p>
+We should be able to repeat these steps, write a FizzBuzz implementation
+using TDD, in less that five minutes. My first try was 33. I think it's
+a great way to practice.
+</p>
+
+<p>
+We also had a talk by <a href="https://twitter.com/rubenkostucki">Reuben</a> and
+Sam who both work to get Makers students placements when they graduate.
+It was a really good idea to have them introduce themselves and talk
+about what we could do to make their lives (and so our lives) easier.
+Which boiled down to:
+</p>
+
+<ol class="org-ol">
+<li>Pair. A Lot.</li>
+<li>Always TDD. Always.</li>
+<li>Push often and always to GitHub.</li>
+<li>Don't worry about the job. Do the course.</li>
+</ol>
+
+<p>
+Which was a load off everyone's mind.
+</p>
+
+<p>
+The Friday Challenge was CLI based, so I waltzed blithly through (and
+had a really good time remembering some fun commands). Excitingly it was
+marked with an RSpec file which checked whether your changes 'passed' &#x2013;
+literally. Unfortunately the file was written in an earlier version of
+the RSpec syntax and so the tests failed even when they should've
+passed. So <a href="https://github.com/spike01">Spike</a> and I got to do our own
+Friday Challenge and fix the RSpec file. I say challenge &#x2013; we made more
+of a mountain out of that molehill than maybe we should've, but we
+learned a lot about octal, binary, Unix permissions and bitwise
+operators on the way, as well as Rspec.
+</p>
+
+<p>
+Mulling over what was going on with <code>permissions &amp; 0000100</code> while
+leaning on a beanbag, talking the problem through with a new friend
+while drinking a cold beer at six-thirty on a Friday, I felt happier
+than I have in years. In the last week I've literally eaten and slept
+code (I dreamed in Ruby one night. It was odd) almost every hour of the
+day. And I love it.
+</p>
+</div>
+</div>
+<div class="taglist"></div></div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="https://staticblog.org/archive.html">Other posts</a>
+</div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+</body>
+</html>

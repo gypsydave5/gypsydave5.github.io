@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="alternate"
+      type="application/rss+xml"
+      href="rss.xml"
+      title="RSS feed for "/>
+<title>Destructuring in a Method Block</title>
+<meta name="author" content="John Dow">
+<meta name="referrer" content="no-referrer">
+<link href= "static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="static/favicon.ico">
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2020 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="preamble" class="status">
+<div class="header">
+  <a href="https://staticblog.org">My Static Org Blog</a>
+</div></div>
+<div id="content">
+<div class="post-date">16 Sep 2020</div><h1 class="post-title"><a href="/2014-07-12-destructuring.md.html">Destructuring in a Method Block</a></h1>
+<p>
+I went from genius to idiot - very rapidly - when looking at
+Enumerable#map and #inject in <a href="https://rubymonk.com/">Ruby Monk</a>, a
+free resource to help learn ruby that I've found really useful. Let's
+start with 'genius' (although not really genius, more wrong but lucky).
+</p>
+
+<p>
+The
+<a href="https://rubymonk.com/learning/books/4-ruby-primer-ascent/chapters/44-collections/lessons/98-iterate-filtrate-and-transform#solution4313">question</a>
+was as follows:
+</p>
+
+<blockquote>
+<p>
+Exploit the fact that map always returns an array: write a method
+<code>hash_keys</code> that accepts a hash and maps over it to return all the
+keys in a linear Array.
+</p>
+</blockquote>
+
+<p>
+Exciting, right?
+</p>
+
+<p>
+The solution that RM gave was this:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-ruby"><span style="color: #333333; font-weight: bold;">def</span> <span style="color: #333333; font-weight: bold;">hash_keys</span>(hash)
+    hash.map { |pair| pair.first }
+<span style="color: #333333; font-weight: bold;">end</span>
+</pre>
+</div>
+
+<p>
+But I went for:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-ruby"><span style="color: #333333; font-weight: bold;">def</span> <span style="color: #333333; font-weight: bold;">hash_keys</span>(hash)
+    hash.map {|key,value| key}
+<span style="color: #333333; font-weight: bold;">end</span>
+</pre>
+</div>
+
+<p>
+Not much difference, but enough. I had become confused when I entered my
+code, thinking more about the <code>each_with_index</code> method mentioned in the
+same page above. I was forgetting that <code>#map</code> would be sending back a
+single value, an array of the key-value pair. Ruby Monk's solution used
+that fact to use the method <code>#first</code> on the array, to get the first
+element (the key) out.
+</p>
+
+<p>
+But, by chance, my solution worked - it split the array by telling the
+block for map that it would be getting two arguments - checking with the
+good people on the #ruby channel on IRC (a chap called bannisterfiend to
+be precise), this is
+<a href="http://tony.pitluga.com/2011/08/08/destructuring-with-ruby.html"><i>destructuring</i></a>,
+binding a set of values to a corresponding set of values that you can
+normally bind to a single variable (that's the definition as given in
+<a href="http://www.cs.cmu.edu/Groups/AI/html/cltl/clm/node252.html">Common
+Lisp</a>, but makes sense here).
+</p>
+
+<p>
+What we're seeing is this:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-ruby">x, y = [1,2]
+x <span style="color: #d9d9d9;"># </span><span style="color: #7f7f7f;">=&gt; 1</span>
+y <span style="color: #d9d9d9;"># </span><span style="color: #7f7f7f;">=&gt; 2</span>
+</pre>
+</div>
+
+<p>
+But done as a loop for all the arrays pulled out of the hash by <code>#map</code>.
+Tony Pitluga sings the praises of destructuring block arguments (which
+is what this is) in his longer article on
+<a href="http://tony.pitluga.com/2011/08/08/destructuring-with-ruby.html">destructuring
+in Ruby</a>.
+</p>
+
+<p>
+There's an improvement in the semantics of the method (would you rather
+have <code>key</code> or <code>pair.first</code>?) and a saving of writing/time in any later
+work you might want to do on the values. Of course, we wouldn't want to
+do this to longer arrays - too many elements to bind to values.
+</p>
+
+<p>
+Unless we used the 'unarray' or, 'star' or (best name evar)
+<a href="http://endofline.wordpress.com/2011/01/21/the-strange-ruby-splat/">splat
+operator</a> to collect some of the other elements.
+</p>
+
+<p>
+Consider:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-ruby">x, *y = [1,2,3,4,5,6j
+x <span style="color: #d9d9d9;"># </span><span style="color: #7f7f7f;">=&gt; 1</span>
+y <span style="color: #d9d9d9;"># </span><span style="color: #7f7f7f;">=&gt; [2,3,4,5,6]</span>
+</pre>
+</div>
+
+<p>
+There's a lot more on the magic of the splat in the second edition of
+<a href="http://www.manning.com/black2/">The Well Rounded Rubyist</a> which has
+just been published (and which I'm enjoying immensely).
+</p>
+
+<p>
+OK, I'll write up my other mistake (the one that broke the <code>#map</code> block)
+later in the week.
+</p>
+
+<p>
+PS - noticed when getting links for this post that Ruby 2.0 introduces
+the double-splat operator for
+<a href="http://stackoverflow.com/questions/18289152/what-does-double-splat-operators-do-in-ruby">turning
+keyword-value pairs in argument lists into a hash</a>. Which is also
+exciting.
+</p>
+<div class="taglist"></div></div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="https://staticblog.org/archive.html">Other posts</a>
+</div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+</body>
+</html>

@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="alternate"
+      type="application/rss+xml"
+      href="rss.xml"
+      title="RSS feed for "/>
+<title>HTTP - Request and Response Message</title>
+<meta name="author" content="John Dow">
+<meta name="referrer" content="no-referrer">
+<link href= "static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="static/favicon.ico">
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2020 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="preamble" class="status">
+<div class="header">
+  <a href="https://staticblog.org">My Static Org Blog</a>
+</div></div>
+<div id="content">
+<div class="post-date">16 Sep 2020</div><h1 class="post-title"><a href="/request-response.md.html">HTTP - Request and Response Message</a></h1>
+<p>
+The goal of this article is to examine and explain the HyperText
+Transfer Protocol (HTTP) message types for a request and a response. Why
+learn about HTTP? Because it's <i>fundamental</i> to a lot of the software we
+build today - if it wasn't for HTTP
+</p>
+
+<ul class="org-ul">
+<li>your JavaScript application in the browser wouldn't work</li>
+<li>your API wouldn't be able to be used, let alone be RESTful</li>
+<li>none of the 100s of microservice you've created could talk to each
+other</li>
+</ul>
+
+<div id="outline-container-org99690bf" class="outline-2">
+<h2 id="who-is-this-for">Who is this for?</h2>
+<div class="outline-text-2" id="text-who-is-this-for">
+<p>
+This is for every software developer, but especially for <i>web</i>
+developers; people who build software either in the browser, or as
+backend web servers. Especially for them as their programs are almost
+entirely dependent upon HTTP to work.
+</p>
+
+<p>
+This first part will cover the basics of HTTP, and an overview of the
+HTTP message structure, both request and response. I've tried to make it
+practical so there's some examples you can run on the command line in a
+Unix like system (Linux, BSD, OSX), but which should work given some
+tweaking for a Windows system.
+</p>
+
+<p>
+By then end we should have covered
+</p>
+
+<ul class="org-ul">
+<li>the difference between the Internet and the (World Wide) Web</li>
+<li>How HTTP is built on top of Internet protocols</li>
+<li>how to use netcat to send TCP messages</li>
+<li>using netcat to send and receive HTTP messages, and their anatomy</li>
+<li>understood the benefits of plain text in communication</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org2a02ba1" class="outline-2">
+<h2 id="what-is-the-internet-what-is-the-web">What is the Internet? What is the web?</h2>
+<div class="outline-text-2" id="text-what-is-the-internet-what-is-the-web">
+<p>
+First up, the Internet is <i>not</i> the same as the web.
+</p>
+
+<p>
+<i>An</i> internet is a collection of computer networks that are connected
+together.
+</p>
+
+<p>
+<i>The</i> Internet is <i>all</i> the computer networks in the world that are
+connected to each other. Every. Damn. One.
+</p>
+
+<p>
+And the web is&#x2026; well, we'll get to that.
+</p>
+
+<p>
+In the beginning&#x2026; there weren't many computers at all. Maybe five? And
+they were used for exciting things like calculating the yield of nuclear
+bombs. But people realised they could do more with them if they could
+communicate with each other. My computer could ask your computer to do
+some of the work, and we'd get done in half the time.
+</p>
+
+<p>
+But to communicate you need to share something - a language, a set of
+signs. When someone says 'Hello' and they hold out their hand, what you
+do next communicates a meaning - you can shake hands, or you can refuse.
+You understand what the outheld hand means, you know what the
+conventional responses are, and the other party knows what you mean when
+you shake (or don't).
+</p>
+
+<p>
+This is <i>protocol</i> - a series of conventions that govern communication.
+The only other place that we talk about protocols tend to be when
+interacting with royalty - we call the Queen "your Majesty" the first
+time we address her, "ma'am" to rhyme with "ham" afterwards, and <i>we
+never touch her</i>. This is how we behave to get along with the Queen.
+</p>
+
+<p>
+Another protocol: you walk into a cafe, you sit down. And &#x2026; then what
+happens? You expect the waiter to come over and take your order. They
+will say something like 'Hi, what would you like to drink?', and you'll
+say 'a coffee, please', and maybe there'll be a quick chat about milk,
+sugar, or which one of the hundreds of different coffees you'd like.
+What you don't do is walk into the cafe, walk up to the register and say
+'skinny mocha to go please'&#x2026; or do you? It depends - you can tell what
+you're meant to do when you walk in to most cafes and coffeeshops. We
+learn the correct protocol very quickly (we often copy others) and then
+we know what we're meant to do.
+</p>
+
+<p>
+The early Internet was built on a series of protocols - the Internet
+Protocol suite. For instance, one of these is the Internet Protocol
+(IP) - a set of rules that the computers could conform to, to allow them
+to communicate with each other no matter what operating system they were
+using.
+</p>
+
+<p>
+Protocols can stack up on top of each other. Say we walk into the cafe,,
+sit down, the waiter comes over and says "Bonjour, qu'est-ce que vous
+voulez boire"&#x2026; we know we're using the "ordering coffee in a cafe"
+protocol, but instead of using the English 'protocol' to communicate it
+the waiter is doing it in French. Why? Well, maybe you're in France.
+What's interesting is that, even if you don't speak French, you kinda
+know what they're saying because, well, it's a cafe - you know the
+protocol. Instead of using the 'English' protocol, the waiter is using
+'French' to communicate the 'Cafe' protocol - they hope you understand
+French, and that you know what to do in a cafe.
+</p>
+
+<p>
+The Transmission Communication Protocol (TCP) is another protocol that's
+usually implemented on top of the Internet Protocol - and written as
+"TCP/IP" ("TCP over IP"). TCP is a protocol that we should care about,
+as it's the protocol that is used to implement the HyperText
+Transmission Protocol - HTTP.
+</p>
+
+<p>
+And that's the Web - things built on HTTP. Things like websites, and
+webservices and your browser and all of this wonderful world we get to
+live in 'online'.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org1431970" class="outline-2">
+<h2 id="worlds-simplest-chat-netcat-nc">World's Simplest Chat: netcat (<code>nc</code>)</h2>
+<div class="outline-text-2" id="text-worlds-simplest-chat-netcat-nc">
+<p>
+Communication is often a two way thing - in TCP it definitely is.
+</p>
+
+<p>
+To communicate we need two more pieces of information: who is going to
+start the conversation, and where they are going to talk to. You may
+have experienced the awkwardness when both people are waiting for the
+other one to say something - luckily humans have quick ways to escape
+this impasse, but computers need to be explicit.
+</p>
+
+<p>
+In networking we call the computer waiting for messages a <i>server</i> (like
+the waiter, giving you things), and the computer sending the messages a
+<i>client</i> (like a &#x2026; client).
+</p>
+
+<p>
+The 'where' is the IP address of a computer, and a <i>port</i> on that
+computer. The IP address is a big number uniquely identifies a computer
+on a network, and a port is like a port for a country - a place where
+things go in and out. This is also a number. Computers have more than
+one port because it's nice for a computer to talk to more than one
+computer at once.
+</p>
+
+<p>
+netcat "is used for just about anything under the sun involving TCP" -
+we can use it to see what sending and receiving messages over TCP
+actually looks like by starting a server and a client on our computer.
+</p>
+
+<p>
+But <i>we</i> are going to be the client and the server!
+</p>
+
+<hr>
+
+<p>
+Demo netcat and play along!
+</p>
+
+<p>
+server: <code>nc -l 8000</code> client: <code>nc localhost 8000</code>
+</p>
+
+<p>
+Send some messages See them pop up in the other session
+</p>
+
+<hr>
+</div>
+</div>
+
+<div id="outline-container-org293f2ba" class="outline-2">
+<h2 id="question">Question:</h2>
+<div class="outline-text-2" id="text-question">
+<ul class="org-ul">
+<li>What do you think HTTP looks like, if it uses TCP?</li>
+<li>How could you find out using netcat?</li>
+
+<li>Client on the web is something like a <i>web browser</i></li>
+<li>A Server is a webserver - what we do every day</li>
+<li>The web works over TCP - just like what we saw with netcat</li>
+<li>What if we changed the client to a browser?</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgd20e62e" class="outline-2">
+<h2 id="the-http-request-message">The HTTP Request Message</h2>
+<div class="outline-text-2" id="text-the-http-request-message">
+<p>
+We should see something like&#x2026;
+</p>
+
+<pre class="example">
+GET / HTTP/1.1
+Host: localhost:8080
+Upgrade-Insecure-Requests: 1
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.1.2 Safari/605.1.15
+Accept-Language: en-gb
+Accept-Encoding: gzip, deflate
+Connection: keep-alive
+</pre>
+
+<p>
+Every time you request a page with your browser, this is what it sends
+to a server.
+</p>
+
+<p>
+Which, although it's pretty gnarly, you can read pretty easily if you
+know how.
+</p>
+
+<p>
+There are <i>three</i> parts to the request message:
+</p>
+
+<ul class="org-ul">
+<li>the <i>request line</i>, which is the first line of the message</li>
+<li>the <i>headers</i>, which are every line after the request line. These are
+optional</li>
+<li>and, after a blank line, an optional <i>body</i>.</li>
+</ul>
+</div>
+
+<div id="outline-container-org3d74017" class="outline-3">
+<h3 id="request-line">Request line</h3>
+<div class="outline-text-3" id="text-request-line">
+<p>
+Has three parts, each separated by a space.
+</p>
+
+<ul class="org-ul">
+<li>The <i>request method</i> (<code>GET</code>)</li>
+<li>The <i>request target</i> or path (<code>/</code>)</li>
+<li>The <i>HTTP version</i> (<code>HTTP/1.1</code>)</li>
+</ul>
+
+<p>
+Cool. But what should we send back to the browser?
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org8586883" class="outline-2">
+<h2 id="the-http-response-message">The HTTP Response Message</h2>
+<div class="outline-text-2" id="text-the-http-response-message">
+</div>
+
+<div id="outline-container-orgf9ff130" class="outline-3">
+<h3 id="orgf9ff130">Q: What do we send back? How can we find out what a valid response</h3>
+<div class="outline-text-3" id="text-orgf9ff130">
+<p>
+message looks
+</p>
+<p>
+:CUSTOM<sub>ID</sub>: q-what-do-we-send-back-how-can-we-find-out-what-a-valid-response-message-looks
+</p>
+
+<p>
+like?
+</p>
+
+<ol class="org-ol">
+<li>A server on the web is a domain name (like <code>example.com</code>)</li>
+<li>The web works over TCP - just like what we saw with netcat</li>
+<li>What if we changed the server to a webserver on the internet?</li>
+<li>We just need to point our netcat client at something other than
+localhost</li>
+</ol>
+
+<p>
+client: <code>nc -c -v example.com 80</code>
+</p>
+
+<p>
+Why port 80? Because this is the conventional port for servers to be
+listening on for HTTP requests. When you use a browser it always
+<i>assumes</i> you want port 80 of the server you're communicating with. So
+we're opening up a connection to the server at example.com.
+</p>
+
+<ul class="org-ul">
+<li>the <code>-v</code> makes netcat <i>verbose</i> - so that we know it's working!</li>
+<li>the <code>-c</code> fixes the line endings so that they conform with HTTP - don't
+worry about it</li>
+</ul>
+
+<p>
+We know what a valid HTTP request message looks like, but let's send an
+invalid one for now
+</p>
+
+<pre class="example">
+bum
+</pre>
+
+<p>
+We get back the response:
+</p>
+
+<pre class="example">
+HTTP/1.1 400 Bad Request
+Server: squid
+Mime-Version: 1.0
+Date: Fri, 06 Sep 2019 07:51:41 GMT
+Content-Type: text/html;charset=utf-8
+Content-Length: 3836
+X-Squid-Error: ERR_INVALID_REQ 0
+X-Cache: MISS from IMP-cache
+X-Cache-Lookup: NONE from IMP-cache:3128
+Via: 1.1 IMP-cache (squid)
+Connection: close
+
+
+&lt;html&gt;&lt;head&gt;
+&lt;meta http-equiv="Content-Type" content="text/html; charset=utf-8"&gt;
+&lt;title&gt;ERROR: The requested URL could not be retrieved&lt;/title&gt;
+
+...
+</pre>
+
+<p>
+Once again, this breaks down into three parts:
+</p>
+
+<ul class="org-ul">
+<li>the <i>status line</i></li>
+<li>some (optional) headers</li>
+<li>an optional body after an empty line</li>
+</ul>
+
+<p>
+the body should be familiar - it's the HyperText Markup Language (HTML)!
+</p>
+</div>
+</div>
+
+<div id="outline-container-org114fd3a" class="outline-3">
+<h3 id="status-line">Status line</h3>
+<div class="outline-text-3" id="text-status-line">
+<p>
+is once again very similar to the request line. It's made of
+</p>
+
+<ul class="org-ul">
+<li>The <i>HTTP version</i> (<code>HTTP/1.1</code>)</li>
+<li>The <i>status code</i> (<code>200</code>)</li>
+<li>The a description of the status code or path (<code>/</code>)</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org7455cdb" class="outline-2">
+<h2 id="back-to-the-browser-response">Back to the Browser: Response</h2>
+<div class="outline-text-2" id="text-back-to-the-browser-response">
+<ul class="org-ul">
+<li>Start your server again, but this time on port 80.</li>
+<li>Send an HTTP GET request using the browser - notice you don't need the
+port!</li>
+</ul>
+
+<p>
+Now lets send something back!
+</p>
+
+<pre class="example">
+HTTP/1.1 200 OK
+
+Hello, world!
+</pre>
+
+<p>
+One gotcha - the browser needs to know that your message has finished -
+you could have more lines of body to add. To do this you need to send a
+special signal called End of File (EOF), which we can type by pressing
+Ctrl-D.
+</p>
+
+<p>
+Now look at your browser.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org8617ae7" class="outline-2">
+<h2 id="a-rest-api-written-in-netcat">A REST API written in netcat</h2>
+<div class="outline-text-2" id="text-a-rest-api-written-in-netcat">
+<ul class="org-ul">
+<li>Now let's pretend you're a simple server that responds with a hello
+message for a particular path</li>
+<li>so <code>/hello/chris</code> sends a message back that says "Hello, Chris"</li>
+<li>Can you be that server with netcat?</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org1b0577f" class="outline-2">
+<h2 id="examining-a-request-in-the-browser">Examining a Request in the Browser</h2>
+<div class="outline-text-2" id="text-examining-a-request-in-the-browser">
+<p>
+We make HTTP requests every day, most obviously when browsing the Web.
+The content of these requests is usually well hidden by the browser as
+they're irrelevant to the everyday use, but it's easy to see what's
+going on.
+</p>
+
+<p>
+Browsers usually have a set of 'developer tools'
+</p>
+
+<ul class="org-ul">
+<li>open up a browser</li>
+<li>open up the 'developer tools'</li>
+<li>find the network tab</li>
+<li>make a request for the URL <code>https://developer.mozilla.org/en-US/</code></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgc5c19c0" class="outline-2">
+<h2 id="questions">Questions?</h2>
+<div class="outline-text-2" id="text-questions">
+</div>
+
+<div id="outline-container-org4ff85ac" class="outline-4">
+<h4 id="q-why--c-for-the-netcat-client">Q: Why <code>-c</code> for the netcat client?</h4>
+<div class="outline-text-4" id="text-q-why--c-for-the-netcat-client">
+<p>
+Because the HTTP protocol requires that each line be terminated by two
+invisible characters - carriage-return and line-finish (LF CR). On most
+computers, hitting return will only emit one character (LF), so <code>-c</code>
+tells netcat to add in the extra CR. You will hit this problem
+repeatedly in your careers, mostly around files saved on Windows
+machines (which use CRLF by convention).
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orge1931c4" class="outline-2">
+<h2 id="further-reading">Further Reading</h2>
+<div class="outline-text-2" id="text-further-reading">
+<p>
+<a href="https://tools.ietf.org/html/rfc7230#section-3">RFC7230 Hypertext
+Transfer Protocol (HTTP/1.1): Message Syntax and Routing</a>
+</p>
+</div>
+</div>
+<div class="taglist"></div></div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="https://staticblog.org/archive.html">Other posts</a>
+</div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+</body>
+</html>

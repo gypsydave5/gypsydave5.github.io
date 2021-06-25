@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="alternate"
+      type="application/rss+xml"
+      href="rss.xml"
+      title="RSS feed for "/>
+<title>Clojure Dojo</title>
+<meta name="author" content="John Dow">
+<meta name="referrer" content="no-referrer">
+<link href= "static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="static/favicon.ico">
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2020 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="preamble" class="status">
+<div class="header">
+  <a href="https://staticblog.org">My Static Org Blog</a>
+</div></div>
+<div id="content">
+<div class="post-date">16 Sep 2020</div><h1 class="post-title"><a href="/2015-08-25-clojure-dojo.md.html">Clojure Dojo</a></h1>
+<p>
+I've just got back from
+<a href="http://www.londonclojurians.org/dojos.html">Clojure Dojo</a> over at the
+<a href="www.thoughtworks.com">Thoughtworks</a> offices in Soho. The Clojure
+Dojos have been run by the <a href="www.londonclojurians.html">London
+Clojurians</a> for about five years now and are still going strong. I've
+been meaning to go to one for a while, and tonight the stars were right.
+</p>
+
+<p>
+What's a Clojure Dojo? Developers gather in a room full of pizza<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>
+with computers and chat about which editors they use.<sup><a id="fnr.2" class="footref" href="#fn.2">2</a></sup> Then someone
+very sensibly says we should probably start.
+</p>
+
+<p>
+First we introduce ourselves, tell everyone how much we know about
+Clojure and what the first language we learned was.<sup><a id="fnr.3" class="footref" href="#fn.3">3</a></sup> There were a
+good mix of people in tonight, a few who had been doing Clojure for
+years, many for months, and a few like me who have been dabbling their
+toes in the water for a while. I was heartened to see a Maker there who
+had graduated on Friday - that takes some guts and enthusiasm.
+</p>
+
+<p>
+Then we pitch ideas to hack on for the evening. They were all great
+ideas, from Conway's Game of Life to Google Maps plugins that show
+extinct species. The winner was a Twitter Markov Generator - an awesome
+idea that generates new tweets based upon a history of tweets, picking
+the next word based upon the likely hood that it follows from the
+previous word in the history.
+</p>
+
+<p>
+We were split into random groups of 3-4 and - just got on with it. After
+about two hours the teams gathered together once more to show off their
+(completely unfinished) products. Then we all went home.
+</p>
+
+<p>
+The subject sounded fairly dry to me, but it turned out to be plenty to
+get my teeth stuck in to - I'd almost recommend it as a kata. I was
+working with three other devs - Fabio, who'd been working on Clojure for
+about a year and had the most wicked Emacs/Cider<sup><a id="fnr.4" class="footref" href="#fn.4">4</a></sup> set up that was a
+joy to watch him code with. There was also Francis who had been looking
+at Clojure 'for about two weeks', but had a Lisp background that just
+shone through. And happily we also had
+<a href="https://twitter.com/ctford">Chris</a>, the convener of the Dojo who had
+been working in Clojure for four years or so. He helped a lot, and was
+great to chat with about practices, concepts and the style of Clojure.
+</p>
+
+<p>
+I learned a lot in a short space of time, refreshing my brief exposure
+to the language quite quickly.<sup><a id="fnr.5" class="footref" href="#fn.5">5</a></sup> But the best bit was when we
+planned the data structure. Initially we were looking at nested hash-map
+arrangement, with the inner map indicating the percentage chance of each
+next word - something like:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-clojure">{ <span style="color: #666666;">"Word"</span> { <span style="color: #666666;">"nextWord1"</span> 1, <span style="color: #666666;">"nextWord2"</span> 10, <span style="color: #666666;">"nextWord3"</span> 79} }
+</pre>
+</div>
+
+<p>
+But then Francis suggested that we just hold a list of a hundred words
+that represented the probability distribution:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-clojure">{ <span style="color: #666666;">"Word"</span> [<span style="color: #666666;">"nextWord1"</span>
+          <span style="color: #666666;">"nextWord2"</span> <span style="color: #d9d9d9;">;; </span><span style="color: #7f7f7f;">ten times</span>
+          <span style="color: #666666;">"nextWord3"</span>] <span style="color: #d9d9d9;">;; </span><span style="color: #7f7f7f;">eighty odd times</span>
+}
+</pre>
+</div>
+
+<p>
+To which I responded that we may as well just collect up all of the next
+words and randomly sample from it. I thought this would make everyone go
+'oh, but that'd be too long' but, no, everyone liked it. So massive,
+massive vectors it was.
+</p>
+
+<p>
+My next favourite moment was when I wondered whether we'd be slowly
+feeding the tweets in one by one to a function to build the hash-map.
+No, Fabio (I think) said - we'll just combine them into one giant string
+and feed it in.
+</p>
+
+<p>
+One. Giant string. Of all the tweets. Mind blown. Not quite big data,
+but I loved the epic processing powers it felt like we were harnessing -
+lightning of the gods and all that good stuff.
+</p>
+
+<p>
+I discovered is all my practice in functional languages over the last
+few months means that I can put together a recursive function pretty
+quickly and accurately. Unfortunately I also discovered I can't come up
+with a decent name when typing - and I also found out that there's
+little appetite for a refactor in a Dojo. That function's name is my
+eternal shame.<sup><a id="fnr.6" class="footref" href="#fn.6">6</a></sup>
+</p>
+
+<p>
+We had something fairly decent by the end of the Dojo. More exiciting
+was seeing what the other teams had produced. One team had made this
+glorious and terse looking almost one liner (and it really could have
+done with being put on a few more lines) that seemed to have more
+functionality than I could believe. Another team practiced their
+TDD<sup><a id="fnr.7" class="footref" href="#fn.7">7</a></sup> and also created and elegant 'word shifting' move that
+provided the word-nextWord pairs without any recursion. And the final
+team wrote no code per se, but spent a productive few hours setting up a
+Clojure project and investigating the useful libraries that could help
+in the project.
+</p>
+
+<p>
+I feel that I could see more of what the fuss about Clojure was about.
+Each team had thought about the nature of the data they were going to
+create and work on, linking it to the functions they were using to
+translate the input into the output. The beauty came in the diverse
+implementations, both in data and functions, and just how terse yet
+expressive both were. It's left me wanting more.
+</p>
+
+<p>
+A friendly atmosphere, enthusiastic programmers, a great language and
+problem to play with - and did I mention the pizza? I'm already looking
+forward to the next one.
+</p>
+
+<p>
+Many, many thanks to <a href="https://twitter.com/ctford">Chris Ford</a> for
+organising and Thoughtworks for hosting!
+</p>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara"><p class="footpara">
+This is a widely used pattern that has proven highly performant
+in all languages&#x2026; 😉
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2">2</a></sup> <div class="footpara"><p class="footpara">
+Developer smalltalk equivalent of 'how did you travel here?'
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3">3</a></sup> <div class="footpara"><p class="footpara">
+One ML and one Turbo Pascal. Nice.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.4" class="footnum" href="#fnr.4">4</a></sup> <div class="footpara"><p class="footpara">
+I've also started to use Emacs - see the next footnote.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.5" class="footnum" href="#fnr.5">5</a></sup> <div class="footpara"><p class="footpara">
+I've been doing a lot of Lisp recently, which I'll get to
+blogging about soon enough.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.6" class="footnum" href="#fnr.6">6</a></sup> <div class="footpara"><p class="footpara">
+<code>reduce-sum</code> - seriously? It wasn't even summing anything 😢🐼
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.7" class="footnum" href="#fnr.7">7</a></sup> <div class="footpara"><p class="footpara">
+I'm not even going to get into whether we should have been TDDing
+or whether the repl can cover some of those requirements. I'll
+call it a massive spike for now and move on to TDDing it when I
+do it again.
+</p></div></div>
+
+
+</div>
+</div><div class="taglist"></div></div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="https://staticblog.org/archive.html">Other posts</a>
+</div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+</body>
+</html>

@@ -1,0 +1,48 @@
+#+TITLE: Silence is the Enemy
+
+#+DATE: [2014-10-07]
+
+I've been thinking about this post for a few weeks, but
+[[file:@benjilanyado][Benji Lanyado]] from
+[[https://www.picfair.com/][Picfair]] has just given a great talk about
+starting his business. Great for a number of reasons (he's a very
+charismatic speaker to begin with), but the key thing I'm taking home
+with me is what he's just said about, well - talking.
+
+#+BEGIN_QUOTE
+  Talk to everyone. Get out of your flat.
+#+END_QUOTE
+
+It's easy to forget that in a few weeks I'm not going to be around here
+at Makers. And that the best thing - the /best/ thing - about being here
+is talking to people.
+
+At every stage of coding - whether in solving a problem, learning a
+language, fixing a bug - silence is the enemy. You know your pairing is
+going wrong when nobody is saying anything. Say /something/, even if
+you're just restating the problem. Pairing is made to make you talk
+about what's going on - making your brain work around the problem by
+putting it in your mouth. How incredible is that?
+
+This becomes really apparent when you've been coding on your own for a
+while. You tend to find yourself going crazy over small bugs that are
+really apparent when you're looking at them in someone else's code. This
+is why [[http://c2.com/cgi/wiki?RubberDucking][rubber ducking]]
+happens - that experience you've had of going to someone for help and
+suddenly realizing the solution halfway through explaing the problem to
+them - they've become your rubber duck (remember to thank them with a
+quack).
+
+Same goes for teaching - the number of things I've got down solidly by
+having to explain it to someone, out loud. It's mind blowing. You can't
+skip over anything when you're talking, your brain can't trick you into
+false confidence by waving its hands over a bit you don't understand. I
+gave a talk about bitwise operators a few days ago - I thought I had it
+all covered, but when I got a question about
+[[http://en.wikipedia.org/wiki/Two's_complement][two's complement]] it
+became /really/ apparent that I didn't have a clue. Embarassing? Yes, a
+little - but now at least I know where I'm ignorant, rather than being
+surprised about it later.
+
+Silence is the enemy of good and happy coding. Keep talking - even if
+it's just to yourself.

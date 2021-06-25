@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="alternate"
+      type="application/rss+xml"
+      href="rss.xml"
+      title="RSS feed for "/>
+<title>Lessons Learned</title>
+<meta name="author" content="John Dow">
+<meta name="referrer" content="no-referrer">
+<link href= "static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="static/favicon.ico">
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2020 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="preamble" class="status">
+<div class="header">
+  <a href="https://staticblog.org">My Static Org Blog</a>
+</div></div>
+<div id="content">
+<div class="post-date">16 Sep 2020</div><h1 class="post-title"><a href="/2014-08-24-lessons_learned.md.html">Lessons Learned</a></h1>
+<p>
+Things I've learned so far from my teachers:
+</p>
+
+<div id="outline-container-org8392813" class="outline-2">
+<h2 id="stephen---succinct-semantics"><a href="https://twitter.com/Stephen_lloyd">Stephen</a> - Succinct Semantics</h2>
+<div class="outline-text-2" id="text-stephen---succinct-semantics">
+<p>
+I felt a little smug about my code when Steve sat next to me to see how
+I was doing. I was seeing if there were any broken bikes in an array,
+something like
+</p>
+
+<div class="org-src-container">
+<pre class="src src-ruby">bikes.select {|bike| bike.broken?}.count &gt; 1
+</pre>
+</div>
+
+<p>
+He took a quick look and pointed out that this was a little on the long
+side. Does Ruby have an <code>any?</code> method for <code>Array=s? Sure enough, there
+in =Enumerable</code>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-ruby">bikes.any? {|bike| bike.broken?}
+</pre>
+</div>
+
+<p>
+Better. I would have been happy. But Steve then says, try passing a the
+symbol for <code>broken?</code> as a proc - something I'd seen and not used.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-ruby">bikes.any?(&amp;<span style="color: #333333; font-weight: bold;">:broken?</span>)
+</pre>
+</div>
+
+<p>
+See how that's better? It says exactly what it does? Yes, I did. And I'd
+learned that you don't have to sacrifice succinctness to semantics and
+vice versa. Ruby has enough well-named methods and techniques to create
+a short statement that someone who didn't know Ruby would still
+understand. Lesson learned.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgc72825f" class="outline-2">
+<h2 id="mihai---delete-your-code"><a href="https://twitter.com/liviu_23">Mihai</a> - Delete Your Code</h2>
+<div class="outline-text-2" id="text-mihai---delete-your-code">
+<p>
+I asked Mihai for some help changing my tests for the Boris Bikes
+project. I was trying to change the RSpec tests I'd written from
+<a href="http://programmers.stackexchange.com/questions/123627/what-are-the-london-and-chicago-schools-of-tdd">Chicago
+to London style</a> having just been shown how to do doubles.
+</p>
+
+<p>
+Start again, Mihai said. Don't be precious or treasure what you've
+written - just get rid of it and start again. You'll learn more that
+way.
+</p>
+
+<p>
+Since then I've taken immense pleasure in wiping entire projects out.
+And learned more by doing that. Lesson learned.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgaa3d04a" class="outline-2">
+<h2 id="orgaa3d04a"><a href="https://twitter.com/ecomba">Enrique</a> - Cooking without ever</h2>
+<div class="outline-text-2" id="text-orgaa3d04a">
+<p>
+having have Eaten
+</p>
+<p>
+:CUSTOM<sub>ID</sub>: enrique&#x2014;cooking-without-ever-having-have-eaten
+</p>
+
+<p>
+Late in the day I asked Enrique about program design. I was worried,
+really worried, that I didn't know the right way to proceed with writing
+a program. He'd just introduced the idea of design patterns that day, so
+I asked him to recommend a book, or a checklist, or a mantra - the best
+way to learn some patterns.
+</p>
+
+<p>
+Even as I spoke, Enrique started moving him hands, miming typing in
+front of me. Remember what I said earlier, he said, about coding being
+entirely artificial. It's not like cooking where you know what food is
+and what it tastes like. It's like cooking when you've never eaten food,
+have no idea what good or bad food tastes like. The only way you'll
+learn is by writing code, a lot of code. Then your instincts, your taste
+and intuition, will improve.
+</p>
+
+<p>
+It was only later that I connected this advice up with
+<a href="http://en.wikipedia.org/wiki/Henri_Bergson#Creativity">Bergson's ideas
+about creativity, specifically the swimming example</a>. You wouldn't
+think a person could swim if you only ever saw them walk, the argument
+goes. For swimming to be intellectually comprehendable, you've got to
+throw yourself in the water first. You can't theorize about things you
+haven't done - intuition must take the lead, intelligence is a not a
+speculative faculty, but a practical one.
+</p>
+
+<p>
+Mind blown, I staggered home, ignored <i>The RSpec Book</i> and wrote more
+code. Lesson learned.
+</p>
+</div>
+</div>
+<div class="taglist"></div></div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="https://staticblog.org/archive.html">Other posts</a>
+</div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+</body>
+</html>

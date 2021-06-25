@@ -1,0 +1,37 @@
+#+TITLE: For fun!
+
+#+DATE: [2014-09-09]
+
+So the last post was a bit of a downer, right? I thought I'd get it down
+while things were still fresh in the mind.
+
+But things aren't bad at all. Makers remains a lot of fun - if you're in
+a bit of a funk the general environment of fun just pulls you through.
+With running (yeah, back to running) you're not just interested in
+making the distance - running in and of itself is fun. Believe me, the
+best days of running I've had are ones where I find a comfortable pace
+and just see where that quiet country lane will take me. Preferably in
+beautiful sunshine.
+
+Likewise coding. No, really.
+
+A few days ago [[https://twitter.com/optilude][Martin Aspell]] from
+[[http://www.deloittedigital.com/us/][Deloitte Digital]] came in and
+gave us a lunchtime presentation. The lunchtime presentations at Makers
+are one of the best perks of being here. You sit on beanbags while
+people from the industry come and talk to you for twenty minutes about
+what they do. This can be as diverse as data security, insurance
+databases, restaurant bookings and - I'll write about this later - and a
+fantastic talk from [[http://www.deloittedigital.com/us/][Rozemary
+King]] from Pivotal labs about Product Management (amazing insight into
+how an agile process is managed in the trenches).
+
+But back to Martin. He gave a talk about his life, what he's done and
+worked on and a little about Deloitte Digital as well. What stuck with
+me most was something he said about his relationship with writing code:
+he comapred it to an addiction. He finds it relaxing - he said it calms
+him down in the evening, like doing a crossword or sudoku.
+
+I thought it sounded a little mad, but he's right. The last few days
+I've been taking breaks from the course by rewriting the Battleships
+project, playing around with ideas and seeing what works. And for fun!

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="alternate"
+      type="application/rss+xml"
+      href="rss.xml"
+      title="RSS feed for "/>
+<title>(not quite) Currying in JavaScript</title>
+<meta name="author" content="John Dow">
+<meta name="referrer" content="no-referrer">
+<link href= "static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="static/favicon.ico">
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2020 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="preamble" class="status">
+<div class="header">
+  <a href="https://staticblog.org">My Static Org Blog</a>
+</div></div>
+<div id="content">
+<div class="post-date">16 Sep 2020</div><h1 class="post-title"><a href="/2015-02-19-not-quite-js-currying.md.html">(not quite) Currying in JavaScript</a></h1>
+<p>
+Currying, yet another <i>I've heard the cool kids saying that</i> word.
+Acually, having done some reading, it turns out the cool kids may be
+misusing it, but we'll get to that part later. Let's just spend a minute
+looking at the wonder of <code>.bind()</code>.
+</p>
+
+<p>
+Here's a function:
+</p>
+
+<pre class="example">
+function addition(a, b) {
+    return a + b
+}
+
+addition(1, 2) //=&gt; 3
+</pre>
+
+<p>
+Let's say we always wanted to be adding twenty-two - we could make
+ourselves a shiny new function, or we could build on the way <code>addition</code>
+works using <code>.bind()</code>
+</p>
+
+<pre class="example">
+var addTwentyTwo = addition.bind(this, 22)
+addTwentyTwo(1) //=&gt; 23
+</pre>
+
+<p>
+<code>bind()</code>, as you'll see in the
+<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind">MDN
+docs</a>, is a method you can call on a function in JavaScript. It creates
+a new function based on the old one, with the <code>this</code> keyword of the new
+function set to the first argument to <code>bind()</code>, and other arguments
+given being set to the arguments of the original function. Confusing,
+right? Well, it's probably best to ignore the first arpument, the <code>this</code>
+reassignment for now, unless there's a pressing need to change it, and
+focus on the rest. Here, let's do it again:
+</p>
+
+<pre class="example">
+var twentyFive = addTwentyTwo.bind(this, 3)
+twentyFive() //=&gt; 25
+</pre>
+
+<p>
+When we use <code>.bind()</code> we can change the <i>arity</i> (number of ardguments)
+of the function returned, setting the values of any of all of the
+arguments in the original function:
+</p>
+
+<pre class="example">
+var twoHundred = addition.bind(this, 50, 150)
+twoHundred() //=&gt; 200
+</pre>
+
+<p>
+What bind allows us to do is <i>partial application</i>, fixing values of a
+function and returning one of smaller arity:
+</p>
+
+<pre class="example">
+function addTheseFourUp(a, b, c, d) {
+    return a + b + c + d
+}
+
+var addTwoAndTheseThreeUp = addTheseFourUp(this, 2)
+
+addTwoAndTheseThreeUp(1, 2, 3) //=&gt; 8
+</pre>
+
+<p>
+This is technically not <i>currying</i>, which
+<a href="https://en.wikipedia.org/wiki/Currying#Contrast_with_partial_function_application">should
+only return functions with an arity of 1</a>. Currying <code>addTheseFourUp</code>
+would look something like this:
+</p>
+
+<pre class="example">
+function curriedFour(a) {
+    return function(b) {
+        return function(c) {
+            return function (d) {
+                return a + b + c + d
+            }
+        }
+    }
+}
+
+curriedFour(1)(2)(3)(4) //=&gt; 10
+</pre>
+
+<p>
+Which we could also play around with like this&#x2026;
+</p>
+
+<pre class="example">
+function applyFourTimes(fun) {
+    return function(num) {
+        return fun(fun(fun(fun(num))))
+    }
+}
+
+function double(num) {
+    return num + num
+}
+
+applyFourTimes(double)(3) //=&gt; 48
+</pre>
+
+<div id="outline-container-org565072e" class="outline-2">
+<h2 id="postscript">Postscript</h2>
+<div class="outline-text-2" id="text-postscript">
+<p>
+Not only is partial function application not currying - but currying
+should probably be called <i>Schönfinkelization</i> after its true
+originator,
+<a href="https://en.wikipedia.org/wiki/Moses_Sch%C3%B6nfinkel">Moses
+Schönfinkel</a>, to whom
+<a href="https://en.wikipedia.org/wiki/Haskell_Curry">Haskell Curry</a>
+attributed the concept. That said, W. V. O. Quine points out that the
+idea had already been hit upon by
+<a href="https://en.wikipedia.org/wiki/Moses_Sch%C3%B6nfinkel#Work">Frege</a>.
+</p>
+
+<p>
+From JavaScript to philosophy in but a few skips&#x2026;
+</p>
+</div>
+</div>
+<div class="taglist"></div></div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="https://staticblog.org/archive.html">Other posts</a>
+</div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+</body>
+</html>

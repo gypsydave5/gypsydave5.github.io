@@ -1,0 +1,65 @@
+#+TITLE: Programming Language Koans
+
+#+DATE: [2014-11-22]
+
+I finished the [[https://github.com/neo/ruby_koans][Ruby Koans]] today.
+I'd been pretty close to the end before I started study at Makers
+Academy, but it's good to have them done. I noticed I flew through the
+last few regardng metaprogramming - I've been taught well.
+
+Koans are an interesting tool to learn a language. Instead of teaching a
+fact, they instead encourage solving a problem. The problems are koans
+in the sense that the solution to each one reveals a new aspect of Ruby
+to the student. This starts with simple operators and ends with
+metaprogramming techniques. The solution tends to be of the 'fill in the
+blank' form, although sometimes they require editing a class.
+
+What I admire about this technique is the following:
+
+- Each problem is, in effect, a test. TDD is baked in from the
+  beginning, even if you don't happen to know what testing is. Think of
+  it as test driven learning.
+
+- The lessons are inseperable from the questions. Simply by answering
+  the question you are learning. There is no text with a list of
+  questions at the end to ensure understanding.
+
+- Hands on keyboard. You're reading, and writing, code in an active way.
+  There is no passive learning with writing koans.
+
+If you've not tried out a set of koans, here's a short an incresingly
+long list to try out:
+
+- [[https://github.com/marcinbunsch/bash_koans][Bash]]
+- [[https://github.com/torbjoernk/CppKoans][C++]]
+- [[https://github.com/functional-koans/clojure-koans][Clojure]]
+- [[https://github.com/liammclennan/coffeescript-koans][CoffeeScript]]
+- [[https://github.com/google/lisp-koans][Common Lisp]]
+- [[https://github.com/butlermatt/dart_koans][Dart]]
+- [[https://github.com/CoryFoy/DotNetKoans][DotNet]]
+- [[https://github.com/dojo-toulouse/elixir-koans][Elixir]]
+- [[https://github.com/patrickgombert/erlang-koans][Erlang]]
+- [[https://github.com/ChrisMarinos/FSharpKoans][F#]]
+- [[https://github.com/cdarwin/go-koans][Go]]
+- [[https://github.com/cjudd/groovy_koans][Groovy]]
+- [[https://github.com/HaskVan/HaskellKoans][Haskell]]
+- [[https://github.com/liammclennan/JavaScript-Koans][JavaScript]]
+- [[https://github.com/matyb/java-koans][Java]]
+- [[https://github.com/kikito/lua_missions][Lua]]
+- [[https://github.com/chicagoruby/MongoDB_Koans][MongoDB]]
+- [[https://github.com/forcedotcom/PerlKoans][Perl]]
+- [[https://github.com/neo/ruby_koans][Ruby]]
+- [[https://github.com/mankyKitty/rust-koans][Rust]]
+- [[http://scalakoans.webfactional.com/][Scala]]
+- [[https://www.hpi.uni-potsdam.de/hirschfeld/trac/SqueakCommunityProjects/wiki/smalltalk_koans][Squeak/Pharo
+  Smalltalk]]
+- [[https://www.hpi.uni-potsdam.de/hirschfeld/trac/SqueakCommunityProjects/wiki/smalltalk_koans][GNU
+  Smalltalk]]
+
+I've started the
+[[https://github.com/functional-koans/clojure-koans][Clojure Koans]].
+Where the Ruby Koans were verbose, these are terse. I like terse. Very
+often I felt like I was being told what to write as the answer to the
+Ruby Koans. That was right for Ruby, but not for Clojure.
+
+So - go learn something new today!

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="alternate"
+      type="application/rss+xml"
+      href="rss.xml"
+      title="RSS feed for "/>
+<title>Text Processing with Ruby by Rob Miller</title>
+<meta name="author" content="John Dow">
+<meta name="referrer" content="no-referrer">
+<link href= "static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="static/favicon.ico">
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2020 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="preamble" class="status">
+<div class="header">
+  <a href="https://staticblog.org">My Static Org Blog</a>
+</div></div>
+<div id="content">
+<div class="post-date">16 Sep 2020</div><h1 class="post-title"><a href="/2015-10-07-text-processing-with-ruby-review.md.html">Text Processing with Ruby by Rob Miller</a></h1>
+<p>
+Plain text is at the root of everything we can do as developers - we
+read it, we manipulate it, we write it back out as logs or files or
+HTML. We write it as code to do all that, and at the end of the day we
+use it to write blog posts like this. Rob Miller's
+<a href="https://robm.me.uk/text-processing-with-ruby/"><i>Text Processing with
+Ruby</i></a> shows you how to do it as quickly, and elegantly, as possible.
+</p>
+
+<p>
+A standout feature is the book's use of command line tools. While there
+are obviously ways to count the number of lines in a file in Ruby, none
+are going to be as quick and as easy as <code>cat file.txt | wc -l</code>.<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>
+The book breaks down and blurs the edges between shell tools, Ruby
+scripts and larger, more organised code in a really beautiful way.
+</p>
+
+<p>
+We're shown tools like <code>cat</code>, <code>grep</code> and <code>cut</code>, and how to interoperate
+them with Ruby code written straight into the command line. And as this
+builds up we're then shown how to handle standard input and output
+inside Ruby programs, allowing us to create our own command line tools
+that will play nicely as a part of a pipeline with the rest of the Unix
+tool chain.
+</p>
+
+<p>
+For me this stuff is worth reading the book alone. Leveraging forty
+years worth of text tools along side your Ruby code gets more done and
+faster. The part of the book that demonstrates how to pipe out of a
+process into <code>less</code> to generate paging output was one of the most
+amazing things I've seen done in Ruby to date
+</p>
+
+<p>
+Regular expressions are covered in greater depth than I have seen in
+other Ruby books, and with a strong emphasis on their real-world
+application. By the time I'd finished these sections I felt like a real
+regex ninja.
+</p>
+
+<p>
+The book also shows how to use Ruby's system variables (the ones
+starting with <code>$</code>) to keep regex and other code short. Some people (OK,
+my friend Andrea) dislike using anything starting with a <code>$</code> in their
+code, and I can see their point as it can look a little esoteric and
+obscure. But it felt right to me in the context of this book; maybe
+you'd not want to use the system variables in larger, more modular
+software, but they're perfect for the short, command line scripts often
+used to process text.
+</p>
+
+<p>
+We're also given a fun tour of parts of Ruby I've not seen - ERB
+templating (outside of a web framework), SimpleDelegator - and a few
+deep dives on popular text parsing and processing libraries such as the
+ever-present Nokogiri and StringScanner. Natural language processing and
+fuzzy matching using Phrasie and Text are shown off too.
+</p>
+
+<p>
+I've found <a href="https://robm.me.uk/text-processing-with-ruby/"><i>Text
+Processing with Ruby</i></a> a great exploration of working with text both
+inside and outside of Ruby. Reading it has extended my knowledge of Ruby
+significantly, while giving me a wealth of new techniques and tools to
+use to manipulate text.
+</p>
+
+<p>
+And that may be the biggest selling point of this book: I can apply it
+<i>right away</i> - I am literally using the things I've learned at work
+today. Perfect for the beginner to intermediate Rubyist, or any
+programmer who wants some standout techniques for handling text whatever
+language they're using.
+</p>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara"><p class="footpara">
+The author gave an interesting example of the power available in
+command line tools when I saw him speak at
+<a href="http://brightonruby.com/">Brighton Ruby</a>, comparing the
+processing speed of Hadoop against a laptop's UNIX tool chain
+using small (~2GB) data sets. You can read more about this
+comparison on
+<a href="http://aadrake.com/command-line-tools-can-be-235x-faster-than-your-hadoop-cluster.html">Adam
+Drake's blog</a>.
+</p></div></div>
+
+
+</div>
+</div><div class="taglist"></div></div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="https://staticblog.org/archive.html">Other posts</a>
+</div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+</body>
+</html>

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="alternate"
+      type="application/rss+xml"
+      href="rss.xml"
+      title="RSS feed for "/>
+<title>Pre-commit Hooks in Git</title>
+<meta name="author" content="John Dow">
+<meta name="referrer" content="no-referrer">
+<link href= "static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="static/favicon.ico">
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2020 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="preamble" class="status">
+<div class="header">
+  <a href="https://staticblog.org">My Static Org Blog</a>
+</div></div>
+<div id="content">
+<div class="post-date">16 Sep 2020</div><h1 class="post-title"><a href="/2016-02-20-pre-commit-hooks-in-git.md.html">Pre-commit Hooks in Git</a></h1>
+<p>
+Remembering to run your tests before you commit is hard:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sh">* 84f7e2e 2016-02-06 | Another typo. And test[David Wickes]
+* ef215f8 2016-02-06 | OMFG semicolons WAAAAAT [David Wickes]
+* c20b65d 2016-02-06 | Typo [David Wickes]
+* fca4aa8 2016-02-06 | Another fix for the same test[David Wickes]
+* f0206a9 2016-02-06 | Fixes failing test [David Wickes]
+* 657cc48 2016-02-06 | Amazing new feature [David Wickes]
+</pre>
+</div>
+
+<p>
+Yes, I suck. It's even worse when you've just pushed that <i>teensy-tiny,
+insignificant</i> change to the CI pipeline and it throws a strop because
+the JS linter is <i>super</i> fussy about semi-colons.
+</p>
+
+<p>
+Don't get angry. Get even.
+</p>
+
+<p>
+Wait, wut? Don't get even. Automate all the things!
+</p>
+
+<p>
+Inside the unexamined recesses of the <code>.git</code> directory of every repo is
+a folder called <code>hooks</code>. You should look inside it.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sh">applypatch-msg.sample
+commit-msg.sample
+post-update.sample
+pre-applypatch.sample
+pre-commit.sample <span style="color: #d9d9d9;"># </span><span style="color: #7f7f7f;">&lt;--- This one here!</span>
+pre-push.sample
+pre-rebase.sample
+prepare-commit-msg.sample
+update.sample
+</pre>
+</div>
+
+<p>
+You'll see some pretty self-explanatory instructions on what it does,
+but the tl;dr is:
+</p>
+
+<ul class="org-ul">
+<li>It is a shell script that runs before you commit</li>
+<li>You activate it by removing the <code>.sample</code> bit.</li>
+</ul>
+
+<p>
+So say we have a Node project we're working on. A cool pre-commit hook
+would look like:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sh"><span style="color: #d9d9d9;">#</span><span style="color: #7f7f7f;">!/bin/</span><span style="color: #333333; font-weight: bold;">sh</span>
+
+npm test
+</pre>
+</div>
+
+<p>
+Pop that in a file called <code>pre-commit</code> inside that <code>hooks</code> directory -
+make sure it's executable like the sample ones - and see what you get.
+</p>
+
+<p>
+So as long as you've set up you <code>package.json</code> file sensibly to run
+tests when you run <code>npm test</code> you're golden. Same idea holds for <code>rake</code>
+or <code>gradle</code> or whatever you're using as a task runner.
+</p>
+
+<p>
+But you'd hate to do that for every project, right? Automate that too.
+</p>
+
+<p>
+Try this:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sh">$ git config --global init.templatedir <span style="color: #666666;">'~/.git-templates'</span>
+$ mkdir -p ~/.git-templates/hooks
+</pre>
+</div>
+
+<p>
+Inside the equally unexamined <code>.gitsettings</code> in your home directory you
+should now see:
+</p>
+
+<pre class="example">
+[init]
+    templatedir = ~/.git-templates
+</pre>
+
+<p>
+(you could've just written that in there by hand&#x2026; but here we are)
+</p>
+
+<p>
+What this'll do is copy the contents of <code>.git-templates</code> to the <code>.git</code>
+directories of new projects you clone or initialize.
+</p>
+
+<p>
+We now need to make our hook more generic. Let's save the below off in
+<code>~/.git-templates/hooks/pre-commit</code>:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sh"><span style="color: #d9d9d9;">#</span><span style="color: #7f7f7f;">!/bin/</span><span style="color: #333333; font-weight: bold;">sh</span>
+
+<span style="color: #333333; font-weight: bold;">if</span> [ -f package.json ]; <span style="color: #333333; font-weight: bold;">then</span>
+    <span style="color: #333333; font-weight: bold;">echo</span> <span style="color: #666666;">"detected package.json... running npm test"</span>
+    npm test
+<span style="color: #333333; font-weight: bold;">else</span>
+    <span style="color: #333333; font-weight: bold;">echo</span> <span style="color: #666666;">"no testable project detected... so no tests before commit"</span>
+<span style="color: #333333; font-weight: bold;">fi</span>
+</pre>
+</div>
+
+<p>
+<code>[ -f package.json ]</code> asks if there's a file called <code>package.json</code>, and
+if there is we run <code>npm test</code>. The rest of the script is just a little
+logging so we can see what's happening. Just remember to make it
+executable<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup> before you start to use it.
+</p>
+
+<p>
+There we have it - the bare bones of a "generic" pre-commit hook. You
+can easily embelish this with more tests and other
+exciting/useful/amusing things to execute (is there a <code>Rakefile</code>
+present? Do any of the files I'm commiting still contain a <code>console.log</code>
+or a <code>puts</code>?).
+</p>
+
+<p>
+As I said, this template will get added to everything that gets
+<code>clone=ed or =init=ialized by Git from now on. For those projects that
+have already been started, just run =git init</code> again to pull in the
+template.
+</p>
+
+<p>
+And there we are - have fun exploring the other sample templates, [read
+the docs][docs], and experiment with other useful scripts. Then tell me
+about them on Twitter so I can use them.
+</p>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara"><p class="footpara">
+<code>chmod a+x pre-commit</code> - you didn't need telling, but just in
+case. [docs]:
+<a href="https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks">https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks</a>
+</p></div></div>
+
+
+</div>
+</div><div class="taglist"></div></div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="https://staticblog.org/archive.html">Other posts</a>
+</div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+</body>
+</html>

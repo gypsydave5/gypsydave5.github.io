@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="alternate"
+      type="application/rss+xml"
+      href="rss.xml"
+      title="RSS feed for "/>
+<title>=dc= and Stack Based Programming</title>
+<meta name="author" content="John Dow">
+<meta name="referrer" content="no-referrer">
+<link href= "static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="static/favicon.ico">
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2020 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="preamble" class="status">
+<div class="header">
+  <a href="https://staticblog.org">My Static Org Blog</a>
+</div></div>
+<div id="content">
+<div class="post-date">16 Sep 2020</div><h1 class="post-title"><a href="/dc.md.html">=dc= and Stack Based Programming</a></h1>
+<p>
+Maybe this story is familiar to you: you're working away, hotshot
+terminal user that you are. You're a pretty fast typist - not the
+<i>fastest</i> for sure, but you're confident. Confident&#x2026; but not always
+super accurate.
+</p>
+
+<p>
+So you're hacking away, moving in and out of directories with <code>cd</code> (and
+then immediately typing <code>ls</code> because that's what you do), except this
+time you slip and instead of typing <code>cd</code> you somehow typed <code>dc</code>.
+</p>
+
+<p>
+And then this happens:
+</p>
+
+<pre class="example">
+$ dc
+</pre>
+
+<p>
+Nothing. Absolutely nothing. Now the faint of heart would, at this
+point, give up. Perhaps a quick <code>^C</code> to make the problem goes away&#x2026;
+</p>
+
+<p>
+But <i>you</i> are made of bolder stuff! Let me assure you that you've struck
+<i>gold</i>! Ancient wisdom, layed down by the wise Unix masters for us to
+find. <code>dc</code> comes from a noble heritage, holds many secrets, and has much
+to teach us. Come! Come with me friends! Let us explore the wonders of
+<code>dc</code>.
+</p>
+
+<p>
+But first&#x2026;
+</p>
+
+<p>
+&#x2026; what is <code>dc</code>?
+</p>
+
+<div id="outline-container-org1abd44f" class="outline-2">
+<h2 id="dc-your-friendly-neighbourhood-reverse-polish-desk-calculator"><code>dc</code>, Your Friendly Neighbourhood Reverse Polish Desk Calculator</h2>
+<div class="outline-text-2" id="text-dc-your-friendly-neighbourhood-reverse-polish-desk-calculator">
+<p>
+<code>dc</code> is a <i>desk calculator</i>, as opposed to a <i>pocket</i> calculator<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>
+or a computer. In fact, when <code>dc</code> was first written there really weren't
+very many pocket calculators: it was 1969.
+</p>
+
+<p>
+(At this point feel free to cosplay a little to get you in the mood.
+Wear an afghan coat, put some flowers in your hair, listen to Jefferson
+Airplane, drop a little acid, stare at a mandala, or, whatever, man&#x2026;)
+</p>
+
+<p>
+So it's a desk calculator. So I can do sums with it, right?
+</p>
+
+<pre class="example">
+$ dc
+2 + 3
+dc: stack empty
+</pre>
+
+<p>
+eh?
+</p>
+
+<p>
+<code>dc</code> is a <i>reverse Polish</i> desk calculator; it uses Reverse Polish
+Notation (RPN). What's Reverse Polish Notation you ask? Well, it's like
+Polish Notation only backwards.
+</p>
+
+<p>
+Sorry, sorry - it's an easy joke to make, which is why I made it.
+</p>
+
+<p>
+Polish Notation is also known as <i>prefix notation</i>. Instead of all the
+mathematical operators like <code>+</code> and <code>-</code>
+<code>appearing in between the numbers (infix notation -=2 +
+3</code>), in Polish notation they appear at the beginning (=+ 2 3`).
+</p>
+
+<p>
+The genius of Polish notation is that _it doesn't require parentheses or
+operator prescedence to organise an expression.<sup><a id="fnr.2" class="footref" href="#fn.2">2</a></sup> Let me
+demonstrate: take the sum (in infix notation), <code>2 * (3 + 5)</code>. We know
+the answer to be <code>16</code>. But if we shift the parentheses <code>(2 * 3) + 5</code> we
+get <code>11</code> instead. To make the expression unambiguous we need the
+parentheses to show which numbers belong to which operator.
+</p>
+
+<p>
+But in Polish Notation we can do the same <i>without</i> the parentheses. The
+first expression becomes <code>* 2 + 3 5</code>; the second <code>+ * 2 3 5</code>.
+</p>
+
+<p>
+Seems a bit funny, doesn't it? The way to think of it is that, everytime
+you introduce a new operator like <code>+</code> or <code>*</code>, you start waiting for
+enough nubers to arrive on the right hand side for the operator to be
+applied.
+</p>
+
+<p>
+For the first sum we start with <code>*</code>, we then get a <code>2</code> - so whatever
+comes next is going to get multiplied by <code>2</code>. But what's next is a <code>+</code> -
+so now we have to wait for the <code>+</code> to get enough numbers given to it for
+it to become a number. Happily we get a <code>3</code> and a <code>5</code>, so the <code>+</code> turns
+out to be a <code>8</code>, which we can then immediately multiply by <code>2</code>.
+</p>
+
+<p>
+So that's Polish Notation - think of each operator as 'waiting around'
+for enough input from the right to do something&#x2026; and then - 'YOMP!' -
+it eats the input and becomes a result.
+</p>
+
+<p>
+Reverse Polish Notation works in exactly the same way, <i>only backwards</i>.
+This is what our two sums would look like in RPN: <code>2 3 5 + *</code> (which
+evaluates to <code>16</code>), and <code>2 3 * 5 +</code> (which evaluates to <code>11</code>).
+</p>
+
+<p>
+Instead of each operator waiting for new things on the right, they 'eat
+up' things that have already appeared on the left. Looking at the first
+sum again, we 'serve up' a <code>2</code>, then a <code>3</code>, then a <code>5</code>. Then a <code>+</code>
+appears; it eats the two numbers closest to it on the left - the <code>3</code> and
+<code>5</code> - and becomes an <code>8</code>. Then the <code>*</code> appears at the end. It also eats
+the two numbers closest to it on the left - which are now a <code>2</code> and the
+new <code>8</code>, and spits out the answer, <code>16</code>.
+</p>
+
+<p>
+Think of the numbers on the right being left on a plate in a row. An
+operator turns up on the right and - YOMP! - it eats as many inputs as
+it needs and becomes a result (and joins the delicious numbers on the
+plate).
+</p>
+
+<p>
+So we can perform arithmetic in Reverse Polish Notation with <code>dc</code>. Try
+it! Type in <code>3 5 +</code> and hit return!
+</p>
+
+<pre class="example">
+$ dc
+3 5 +
+</pre>
+
+<p>
+Ummm&#x2026; still nothing. Did we break it? Did we do something wrong? No,
+there's just one snag: the result is still 'on the plate' - to see it we
+need to print it out with the command <code>p</code>. Type it in and hit return
+again:
+</p>
+
+<pre class="example">
+$ dc
+3 5 +
+p
+8
+</pre>
+
+<p>
+Amazing!
+</p>
+
+<p>
+Now, here's the next amazing thing: you don't have to type out your sum
+all in one go; you can put each number on the plate in order, then send
+in an operator to consume them. So we can write the above <code>dc</code>
+calculation as:
+</p>
+
+<pre class="example">
+3
+5
++
+p
+8
+</pre>
+
+<p>
+hitting return after each line until it prints an <code>8</code> for us.
+</p>
+
+<p>
+Next fun fact: the <code>8</code> is still on the plate, waiting for us to go on.
+So we can keep going with our calculation even after we've printed it:
+</p>
+
+<pre class="example">
+3
+5
++
+p
+8
+2
+*
+p
+16
+</pre>
+
+<p>
+And there we have it - building up a calculation by pushing things on to
+a <i>stack</i> - because that's what this plate really is - and then pulling
+them off every time we perform an operation.
+</p>
+
+<p>
+<code>dc</code> isn't just a calculator - it belongs to a family of <i>stack based
+programming languages</i>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org0ad303f" class="outline-2">
+<h2 id="stack-based-programming">Stack Based Programming</h2>
+<div class="outline-text-2" id="text-stack-based-programming">
+<p>
+We're used to programming using <i>variables</i>, as arguments to functions
+and as the subject of operations. We add two numbers - assign the result
+to a variable. We return values from functions. We maintain the 'state'
+of our program either through keeping it in variables, or passing it
+around as an argument to functions. No really.
+</p>
+
+<p>
+In stack based programming, the state is ever present as a stack. You
+call a function - it takes the stack, does something with a number of
+its values by <code>popping</code> them off the end, and then <code>pushes</code> some values
+on again. There are no 'arguments', there is no 'result', there are no
+'variables'. There's just this one beautiful stack representing the
+state and progress of your program.
+</p>
+
+<p>
+Even if you're used to programming in different styles and paradigms,
+stack based programming is pretty freaky. It blows your mind a little
+bit - and that's fun. It's also <i>ridiculously terse</i> - because there's
+no assignment going on, or function arguments being bound, all you're
+seeing are pure functions being applied to the stack. For instance,
+here's a 'simple' pallindrome detector written in the language
+Factor:<sup><a id="fnr.3" class="footref" href="#fn.3">3</a></sup>
+</p>
+
+<pre class="example">
+: palindrome? ( string -- ? ) dup reverse = ;
+</pre>
+
+<p>
+Breaking it down, we have
+</p>
+
+<ul class="org-ul">
+<li><code>palindrome?</code> is the name of the function</li>
+<li><code>( string -- ? )</code> is the function signature - it takes a string from
+the stack and puts on a boolean - <code>?</code></li>
+<li><code>dup</code> duplicates the value on the stack</li>
+<li><code>reverse</code> reverses the first string on the stack in place</li>
+<li><code>=</code> takes two values off the stack and puts on a boolean, true if
+they're equal, false otherwise</li>
+<li>and <code>;</code> is the end of the function!</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org044f9e4" class="outline-2">
+<h2 id="bc-dcs-younger-better-looking-more-successful-brother"><code>bc</code>, <code>dc</code>'s Younger, Better Looking, More Successful Brother</h2>
+<div class="outline-text-2" id="text-bc-dcs-younger-better-looking-more-successful-brother">
+<p>
+Now it's possible that, even after this <i>amazing</i> introduction to stack
+based programming and Reverse Polish Notation, you're still not
+<i>completely</i> in love with the idea of the <code>+</code> coming at the end of
+adding two numbers up. And I can totally understand that.
+</p>
+
+<p>
+So you'll be happy to learn that your needs were catered for by the
+creation of <code>bc</code> - which is just <code>dc</code> but with infix notation. <code>1 + 1</code>
+really will add up to <code>2</code> in <code>bc</code> (but it's a little more complicated to
+use - have a read of the <code>man</code> page).
+</p>
+</div>
+</div>
+
+<div id="outline-container-org8cc321c" class="outline-2">
+<h2 id="dc-in-popular-culture3"><code>dc</code> in Popular Culture<sup><a id="fnr.4" class="footref" href="#fn.4">4</a></sup></h2>
+<div class="outline-text-2" id="text-dc-in-popular-culture3">
+<p>
+<code>dc</code> had its fifteen minutes of fame when it was used as part of the
+one-line implementation of the RSA algorithm in the late 90s. The US
+government had, in its infinite wisdom, passed a law to restrict the
+publication and sharing of cryptographic tools - including algorithms.
+Hacker types weren't too pleased about this - it was essentially making
+maths illegal - and so they took to
+<a href="http://www.cypherspace.org/rsa/">sharing RSA in some fairly inventive
+ways</a>: putting it on ties etc.<sup><a id="fnr.5" class="footref" href="#fn.5">5</a></sup>
+</p>
+
+<p>
+Here it is:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-perl">print pack<span style="color: #666666;">"C*"</span>,split<span style="color: #666666;">/\D+/</span>,<span style="color: #666666;">`echo "16iII*o\U@{$/=$z;[(pop,pop,unpack"H*",&lt;&gt;</span>
+<span style="color: #666666;">)]}\EsMsKsN0[lN*1lK[d2%Sa2/d0&lt;X+d*lMLa^*lN%0]dsXx++lMlN/dsM0&lt;J]dsJxp"|dc`</span>
+</pre>
+</div>
+
+<p>
+Fairly hard to spot it, but the <code>|dc</code> at the end is taking the input
+before and piping it into <code>dc</code>. Quite incredible for a program that's
+fifty years old.
+</p>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara"><p class="footpara">
+For those of you too young to remember, a pocket calculator is
+like the calculator app on your phone, but you can't make phone
+calls on it and it's got more buttons.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2">2</a></sup> <div class="footpara"><p class="footpara">
+For those of you too young to remember, a pocket calculator is
+like the calculator app on your phone, but you can't make phone
+calls on it and it's got more buttons.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3">3</a></sup> <div class="footpara"><p class="footpara">
+Well, 'popular' as far as fifty year old command line tools go.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.4" class="footnum" href="#fnr.4">4</a></sup> <div class="footpara"><p class="footpara">
+Well, 'popular' as far as fifty year old command line tools go.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.5" class="footnum" href="#fnr.5">5</a></sup> <div class="footpara"><p class="footpara">
+These days there'd be a whole Red Bubble store devoted to it.
+</p></div></div>
+
+
+</div>
+</div><div class="taglist"></div></div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="https://staticblog.org/archive.html">Other posts</a>
+</div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+</body>
+</html>

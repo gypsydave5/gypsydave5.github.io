@@ -1,0 +1,90 @@
+#+TITLE: How I Write Blog Posts These Days
+
+#+DATE: [2019-04-02]
+
+** 1. Editor: Vim
+   :PROPERTIES:
+   :CUSTOM_ID: editor-vim
+   :END:
+
+I write my Markdown in Vim. Or Emacs in Evil mode, which is Vim
+emulation in Emacs. Why? Well, I find the manipulation of text - any
+text - really quick and easy in Vim. Moving paragraphs, changing words,
+deleting sentences - Vim is aware of the structure of natural language,
+which makes using it to edit blog posts quite easy.
+
+** 2. Format: Markdown
+   :PROPERTIES:
+   :CUSTOM_ID: format-markdown
+   :END:
+
+Markdown is both wonderful and terrible. Wonderful as it's /everywhere/,
+is human readable, and supports the structures you want to use for
+technical writing - i.e. code blocks. Terrible because there is no
+standard and so the HTML you'll get out of the other end of a parser is
+not consistent between parsers.
+
+Think this isn't too much trouble? I have to join all the lines in a
+paragraph to a single line when I'm posting on Dev.to as the Markdown
+parser treats all the line breaks in a paragraph as hard breaks.[fn:1]
+
+It's this inconsistency in Markdown parsers that makes me avoid (or at
+least not rely on) Markdown linters and previewers in my editors. I tend
+to wait until the post is near finished before I see what it looks like
+with stage 5 (see below).
+
+Still, the benefits outweigh the drawbacks and so Markdown it is.
+
+*** 3. Grammar and Spelling: aspell, style and diction
+    :PROPERTIES:
+    :CUSTOM_ID: grammar-and-spelling-aspell-style-and-diction
+    :END:
+
+Markdown posts like this can be sent to
+[[http://aspell.net/][=aspell=]], a handy interactive and extensible
+spellchecker. Good editor integration for aspell exists in both Vim and
+Emacs.
+
+[[https://www.gnu.org/software/diction/diction.html][=style= and
+=diction=]] are a pair of tools that check for grammar mistakes and
+readability. =diction= picks up on clichés, doubled-words and potential
+misspellings. It's /sometimes/ wrong but it gets you thinking about
+whether you could word things better and so makes an excellent starting
+point.
+
+=style= describes how readable your document is through a series of
+scores -
+[[https://en.wikipedia.org/wiki/Flesch%E2%80%93Kincaid_readability_tests][Flesch-Kinkaid]]
+for instance. It's interesting information.
+
+*** 4. Storage: GitHub
+    :PROPERTIES:
+    :CUSTOM_ID: storage-github
+    :END:
+
+I keep my posts [[https://github.com/gypsydave5/gypsydave5.github.io][on
+GitHub]]. If someone spots a mistake in what I've written then at least
+this way they can open a pull request.
+
+*** 5. My Site: Static Site + GitHub Pages
+    :PROPERTIES:
+    :CUSTOM_ID: my-site-static-site-github-pages
+    :END:
+
+I've been using [[https://pages.github.com/][GitHub Pages]] to host my
+blog as a static site since forever. It's an easy enough hosting
+solution and you can use it with any number of static site generators to
+turn your Markdown into HTML.
+
+I wrote [[https://github.com/gypsydave5/blawg][my own static site
+generator]] because I found every one I tried a little too busy for my
+liking. It's /still/ too busy for my liking and I reckon it could be
+scrapped in favour of [[https://pandoc.org/][Pandoc]] and a few glue
+scripts, but it was fun to write. I wouldn't use it if I were you.
+
+I have a
+[[https://github.com/gypsydave5/gypsydave5.github.io/blob/source/publish.sh][horrible
+bash script]] to publish the blog, and it looks
+[[http://blog.gypsydave5.com/][like this]] when it's published.
+
+[fn:1] Would be annoying if it wasn't for Vim's =J=oin command...

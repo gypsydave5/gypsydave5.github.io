@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="alternate"
+      type="application/rss+xml"
+      href="rss.xml"
+      title="RSS feed for "/>
+<title>Hoisting in JavaScript</title>
+<meta name="author" content="John Dow">
+<meta name="referrer" content="no-referrer">
+<link href= "static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="static/favicon.ico">
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2020 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="preamble" class="status">
+<div class="header">
+  <a href="https://staticblog.org">My Static Org Blog</a>
+</div></div>
+<div id="content">
+<div class="post-date">16 Sep 2020</div><h1 class="post-title"><a href="/2015-02-01-hoisting-js.md.html">Hoisting in JavaScript</a></h1>
+<p>
+Working at <a href="http://www.mergermarket.com/info/">Mergermarket</a> is fun.
+Not only am I getting to grips with a new language,
+<a href="http://groovy.codehaus.org/">Groovy</a>, in a nice, agile environment,
+on a project that's challenging but to which I can make some small and
+increasing contributions to. Not only that, but I'm also working with
+some damn clever and patient people who are happy to explain things to
+me as we go along.
+</p>
+
+<p>
+So my next thsee posts will be about some of what I've learned about
+JavaScript in the last month with Mat, Mike, Danielle, Nick and many
+others.
+</p>
+
+<p>
+###Hoisting At the top of my list of "words I'd heard associated with JS
+but didn't have the foggiest", <i>hoisting</i> or, more transparently,
+variable hoisting. Behold the following:
+</p>
+
+<pre class="example">
+function printThis(showLog) {
+
+    if(showLog === true){
+        var logMessage = 'MESSAGE!';
+        console.log(logMessage);
+    }
+
+    console.log(logMessage);
+}
+</pre>
+
+<p>
+Which you may be inclined to think would return two outputs to the
+console when called with <code>printThis(true)</code>, one of <code>MESSAGE!</code> and then
+the ubiquitous JS <code>undefined</code>. Because <code>logMessage</code> isn't defined at the
+second <code>console.log()</code>.
+</p>
+
+<p>
+Does it?
+</p>
+
+<pre class="example">
+MESSAGE!
+MESSAGE!
+</pre>
+
+<p>
+Because the interpreter looks at the code and does this to it:
+</p>
+
+<pre class="example">
+function a(showLog) {
+
+    var logMessage;
+
+    if(showLog === true){
+        logMessage = 'MESSAGE!';
+        console.log(logMessage);
+    }
+
+    console.log(logMessage);
+}
+</pre>
+
+<p>
+The variable is 'hoisted' out of its declaration in the block and
+created at the top of the function. The assignment still takes place in
+the same place, but because the scope of <code>logMessage</code> is the entire
+function, the variable is still available at the last <code>console.log</code>.
+This is because (motto alert) <b>JS has function-level scope, not
+block-level scope</b>. The interpreter just ignores those little <code>{</code> and
+<code>}</code> unless they're backed up with a function declaration.
+</p>
+<div class="taglist"></div></div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="https://staticblog.org/archive.html">Other posts</a>
+</div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+</body>
+</html>

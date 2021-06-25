@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="alternate"
+      type="application/rss+xml"
+      href="rss.xml"
+      title="RSS feed for "/>
+<title>Write and deploy a blog in less than thirty seconds</title>
+<meta name="author" content="John Dow">
+<meta name="referrer" content="no-referrer">
+<link href= "static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="static/favicon.ico">
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2020 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="preamble" class="status">
+<div class="header">
+  <a href="https://staticblog.org">My Static Org Blog</a>
+</div></div>
+<div id="content">
+<div class="post-date">16 Sep 2020</div><h1 class="post-title"><a href="/2018-10-19-pandoc-blog.md.html">Write and deploy a blog in less than thirty seconds</a></h1>
+<p>
+What's the fastest way to start a blog? Wordpress? Jekyll?
+</p>
+
+<p>
+Nah, it's <code>pandoc</code> and <code>now</code>.
+</p>
+
+<div id="outline-container-orga6e31be" class="outline-2">
+<h2 id="whats-pandoc">What's <code>pandoc</code>?</h2>
+<div class="outline-text-2" id="text-whats-pandoc">
+<p>
+<a href="http://pandoc.org/">Pandoc</a> is a 'universal document converter' - a
+swiss army knife fordefault-text-scale changing document type a into
+document type b. It's good for lots of things, but today it's going to
+be good for turning Markdown (what we like writing in) into HTML (what
+we read on a website).
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgf55c7db" class="outline-2">
+<h2 id="whats-now">What's <code>now</code>?</h2>
+<div class="outline-text-2" id="text-whats-now">
+<p>
+<a href="https://zeit.co/now">Now</a> is a useful product from Zeit.com for
+deploying an application <i>really</i> quickly. It's great for throwing up
+something to see how it works. It will serve up Docker images, NodeJS
+applications and static sites. Today, we use it for a static site. You
+can install it with a simple <code>npm i -g now</code>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org7e5ebe4" class="outline-2">
+<h2 id="on-your-marks-get-set">On your marks, get set&#x2026;</h2>
+<div class="outline-text-2" id="text-on-your-marks-get-set">
+<p>
+So, make sure that you've got <code>pandoc</code> and <code>now</code> installed, that you're
+in a nice clean directory and that you've got a connection to the
+Internet. And that you know what your favourite editor is. If you don't
+have a favourite, pick the one you hate the least.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgbe5f7c5" class="outline-2">
+<h2 id="go">&#x2026; GO!</h2>
+<div class="outline-text-2" id="text-go">
+<p>
+Quickly - open a file called <code>hello-world.md</code> in your favourite editor
+and write something like this:
+</p>
+
+<pre class="example">
+# Hello World
+
+Hello world, this is the world's fastest blog!
+</pre>
+
+<p>
+Save it - faster, faster! And now run this in the terminal. What? I
+didn't tell you to open a terminal session? Quickly, open one and run:
+</p>
+
+<pre class="example">
+pandoc -o=index.html -to=html5 --standalone hello-world.md
+</pre>
+
+<p>
+IGNORE THE WARNINGS, we don't have time to explain! Now&#x2026; SHIP IT!
+</p>
+
+<pre class="example">
+now
+</pre>
+
+<p>
+<code>now</code> will put your <code>index.html</code> on the Internet. It'll even put the URL
+it uploaded it to in your clipboard. Now, open your least hated web
+browser and open the URL.
+</p>
+
+<p>
+Success!
+</p>
+
+<p>
+The other fifteen seconds is to bask in the glow of your achievement -
+you've earned it.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org56c0305" class="outline-2">
+<h2 id="more">More?</h2>
+<div class="outline-text-2" id="text-more">
+<p>
+What, you want more than one blog post in your blog? Are you crazy or
+greedy? Or both? Such luxury, millenials are so spoiled and entitled
+yadda yadda yadda&#x2026;
+</p>
+
+<p>
+Sure! Try this: open a new file called <code>my-second-post.md</code> and write
+your second post in it - I don't care what you write about!
+</p>
+
+<p>
+Now write <code>index.md</code> - like this:
+</p>
+
+<pre class="example">
+# My Quick Blog
+
+- [Hello World][hello-world.html]
+- [My second post][my-second-post.html]
+</pre>
+
+<p>
+and now
+</p>
+
+<pre class="example">
+pandoc -o=index.html --to=html5 --standalone index-world.md
+</pre>
+
+<pre class="example">
+pandoc -ohello-world.html --to=html5 --standalone hello-world.md
+</pre>
+
+<pre class="example">
+pandoc -omy-second-post.html --to=html5 --standalone my-second-post.md
+</pre>
+
+<p>
+finally, once again
+</p>
+
+<pre class="example">
+now
+</pre>
+
+<p>
+Paste the new URL in your browser and&#x2026;
+</p>
+
+<p>
+BOOM! You now have a blog with an index page and two posts. Do a little
+dance!
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgfbb5d9e" class="outline-2">
+<h2 id="things-you-can-now-try-out">Things you can now try out</h2>
+<div class="outline-text-2" id="text-things-you-can-now-try-out">
+<ul class="org-ul">
+<li>We're programmers - we don't like to do things twice! Write something
+to loop over the <code>.md</code> files in your directory to turn them into
+<code>.html</code> with <code>pandoc</code> rather than doing every file by hand. Bash,
+Ruby, JavaScript - whatever is easiest!</li>
+<li>It's not fun to have to change the URL of your blog every time you
+deploy it. <code>now</code> has a way you can alias a deployment to a permanent
+URL - why not take a look at how that's done.</li>
+<li>Your blog is <i>ugly</i>. Not going to lie. You should add some CSS.
+<code>pandoc</code> has a way to include a CSS file in the html - you need to add
+the flag <code>--css=file.css</code> to your <code>pandoc</code> call (once you've written
+some good looking CSS that is)</li>
+<li>Stop ignorning the warnings! Take a look at how to add metadata to
+your Pandoc markdown - it's all in the Pandoc documentation</li>
+</ul>
+
+<p>
+Have fun
+</p>
+</div>
+</div>
+<div class="taglist"></div></div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="https://staticblog.org/archive.html">Other posts</a>
+</div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+</body>
+</html>

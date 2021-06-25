@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="alternate"
+      type="application/rss+xml"
+      href="rss.xml"
+      title="RSS feed for "/>
+<title>Why learn... REST? Part 1: Resources</title>
+<meta name="author" content="John Dow">
+<meta name="referrer" content="no-referrer">
+<link href= "static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="static/favicon.ico">
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2020 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="preamble" class="status">
+<div class="header">
+  <a href="https://staticblog.org">My Static Org Blog</a>
+</div></div>
+<div id="content">
+<div class="post-date">16 Sep 2020</div><h1 class="post-title"><a href="/2019-03-25-why-learn-rest.md.html">Why learn... REST? Part 1: Resources</a></h1>
+<ul class="org-ul">
+<li><a href="#who-is-this-for">Who is this for?</a></li>
+</ul>
+
+<div id="outline-container-org7b3a448" class="outline-2">
+<h2 id="who-is-this-for">Who is this for?</h2>
+<div class="outline-text-2" id="text-who-is-this-for">
+<p>
+This is for&#x2026; me! I've been working for however many years and still
+don't know how REST is meant to work. You may think REST is about making
+sure you use POST for a new 'thing' rather than 'PUT', and 'DELETE' to
+remove a 'thing' unless it's from a browser. This is pretty much my
+position up to a few days ago.
+</p>
+
+<p>
+REST is a lot more interesting, and relies on some truly beautiful
+abstractions.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org917c72f" class="outline-2">
+<h2 id="the-world-wide-web">The World Wide Web</h2>
+<div class="outline-text-2" id="text-the-world-wide-web">
+<p>
+REST is a model of distributed computing built upon the World Wide Web.
+So if we're going to understand REST we're going to need a grasp on how
+the Web works. Don't worry, this isn't goind to be the low-level
+details - we're not going to be talking about the intricacies of TCP/IP
+architecture or what an HTTP message looks like. This isn't technical -
+if anything it's harder: it's abstract.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgdadbab0" class="outline-2">
+<h2 id="in-the-beginning">In the beginning&#x2026;</h2>
+<div class="outline-text-2" id="text-in-the-beginning">
+<p>
+When the Web was built there were no abstractions; it was very simple. A
+Uniform Resource Locator (URL<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>) pointed to a file on a computer
+somewhere else, and when you requested that URL that file was sent to
+your computer.
+</p>
+
+<p>
+So imagine it's 1995 and you're working at CERN and you want to write a
+page. But you've forgotten what all the HTML tags are because there are
+so many of them.<sup><a id="fnr.2" class="footref" href="#fn.2">2</a></sup> So you'd open your web browser, which you wrote
+yourself because, hey, you're Tim Berners-Lee now (it's your imagination
+so why not?), and you type in a URL:
+</p>
+
+<pre class="example">
+http://info.cern.ch/hypertext/WWW/MarkUp/Tags.html
+</pre>
+
+<p>
+And you get a page of HTML, that you probably wrote, that tells you
+about HTML tags that you probably came up with, served up by the web
+server that you also wrote because, yes, you're Tim Berners-Lee.
+</p>
+
+<p>
+This is the simplest way to think about the Web: you request an HTML
+document from a server and it finds that document. The path to the file
+on the server is <code>/hypertext/WWW/MarkUp/Tags.html</code> - it's just like a
+directory structure on a computer.
+</p>
+
+<p>
+If you've ever [built a static site][staticSite] this is exactly the
+type of behaviour you're used to.
+</p>
+
+<p>
+But there's another feature to your web server - the ability to
+dynamically create the response that gets sent back. All of a sudden you
+don't have to have a file in a directory to send back. It could be
+anything.
+</p>
+
+<p>
+For instance, it could be
+<a href="https://www.cl.cam.ac.uk/coffee/coffee.html">a picture of the office
+coffee machine this second</a>, so you know whether there's any coffee in
+it:
+</p>
+
+<pre class="example">
+https://www.cl.cam.ac.uk/coffee/xvcoffee.html
+</pre>
+
+<p>
+or a way to search for pages with a certain word in:
+</p>
+
+<pre class="example">
+http://info.cern.ch/search?term=h3
+</pre>
+
+<p>
+or even just the current time:
+</p>
+
+<pre class="example">
+http://time.gypsydave5.com/now
+</pre>
+
+<p>
+Each of these URLs' responses should be generated on the server. So the
+URLs are no longer the paths to a file which is returned when it is
+requested, they're &#x2026; what? What does the URL mean if it is no longer a
+way of getting a document from a filesystem? And what do you get if not
+a document?
+</p>
+</div>
+</div>
+
+<div id="outline-container-org9a88958" class="outline-2">
+<h2 id="representations-and-resources">Representations and Resources</h2>
+<div class="outline-text-2" id="text-representations-and-resources">
+<p>
+What is the current time? Try and pick the right one:
+</p>
+
+<blockquote>
+<p>
+About half past one
+</p>
+</blockquote>
+
+<blockquote>
+<p>
+Thirty-seven minutes past one in the afternoon
+</p>
+</blockquote>
+
+<blockquote>
+<p>
+Halb eins uhr
+</p>
+</blockquote>
+
+<blockquote>
+<p>
+13:37
+</p>
+</blockquote>
+
+<pre class="example">
+{
+    "hour": "13",
+    "minute": "37",
+    "second": "35",
+}
+</pre>
+
+<blockquote>
+<p>
+2019-01-01 13:37:35
+</p>
+</blockquote>
+
+<blockquote>
+<p>
+1546349825
+</p>
+</blockquote>
+
+<p>
+or even
+</p>
+
+<p>
+<a href="http://todo.com">http://todo.com</a>
+</p>
+
+<p>
+Did you pick the right one? Is there a right one? What is 'now'? Can you
+touch it? Can you taste it? Can point to it for me?
+</p>
+
+<p>
+Sorry to get all philosophical, but 'now' is definitely <i>abstract</i> -
+it's not a thing that you can see (like a document), but more of a
+concept. But it's a concept that we can see represented in all of the
+examples above - none of them 'is' 'now', but all of them are
+representations of 'now'.
+</p>
+
+<p>
+This is one of the key mental leaps that REST asks you to make - that
+URLs are abstract things called <i>resources</i>. You will never have direct
+access to a resource through HTTP; what you will get are
+<i>representations</i> of that resource.
+</p>
+
+<p>
+So which of the above representations is correct? All of them, of
+course! So which one should we send back when someone requests
+<code>http://time.gypsydave5.com/now</code>? Whichever one seems right to you.
+</p>
+</div>
+
+<div id="outline-container-orgdae1013" class="outline-3">
+<h3 id="content-negotiation">Content Negotiation</h3>
+<div class="outline-text-3" id="text-content-negotiation">
+<p>
+But perhaps we'd like to
+</p>
+</div>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara"><p class="footpara">
+You will also see the terms <i>URI</i> (Universal Resource Indicator),
+<i>URN</i> (Universal Resource Name) and <i>IRI</i> (International Resource
+Indicator). These all have specific meanings and were introduced
+to try to clean up the specification. Some people will now claim
+to be clever by saying that we <i>should</i> say URI rather than URL.
+But the w3c are nothing if not pragmatic about these things; the
+<a href="https://url.spec.whatwg.org/#goals">living spec</a> for URLs now
+says that we should "Standardize on the term URL. URI and IRI are
+just confusing". Confusing and only ever used to make some people
+feel smug and other people feel like outsiders so let's just
+stick with URL.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2">2</a></sup> <div class="footpara"><p class="footpara">
+Unless you want to edit the file everytime the time changes. Or
+you could set up a repeating task on the server to change the
+file.
+</p></div></div>
+
+
+</div>
+</div><div class="taglist"></div></div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="https://staticblog.org/archive.html">Other posts</a>
+</div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+</body>
+</html>

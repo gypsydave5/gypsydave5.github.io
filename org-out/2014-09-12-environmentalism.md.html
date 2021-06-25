@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="alternate"
+      type="application/rss+xml"
+      href="rss.xml"
+      title="RSS feed for "/>
+<title>Environmentalism</title>
+<meta name="author" content="John Dow">
+<meta name="referrer" content="no-referrer">
+<link href= "static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="static/favicon.ico">
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2020 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="preamble" class="status">
+<div class="header">
+  <a href="https://staticblog.org">My Static Org Blog</a>
+</div></div>
+<div id="content">
+<div class="post-date">16 Sep 2020</div><h1 class="post-title"><a href="/2014-09-12-environmentalism.md.html">Environmentalism</a></h1>
+<p>
+I've never really seen the point of environment variables until today.
+They've been slowly introduced into the syllabus at Makers during the
+bookmark manager project. To start with they were a way determine which
+database to use; whether the one for the test suite or the one for
+playing around on the local server.
+</p>
+
+<p>
+Something like
+</p>
+
+<div class="org-src-container">
+<pre class="src src-ruby">env = <span style="color: #333333; font-weight: bold; font-style: italic;">ENV</span>[<span style="color: #666666;">"RACK_ENV"</span>] || <span style="color: #666666;">"development"</span> <span style="color: #333333; font-weight: bold; font-style: italic;">DataMapper</span>.setup(<span style="color: #333333; font-weight: bold;">:default</span>,
+<span style="color: #666666;">"postgres://localhost/bookmark_manager_</span><span style="color: #333333;">#{env}</span><span style="color: #666666;">"</span>)
+</pre>
+</div>
+
+<p>
+Which is all well and good. Then it comes to getting the app up - let's
+say on Heroku.
+</p>
+
+<p>
+Heroku has PostgreSQL support, so that's taken care of by adding a
+plugin on the dashboard. Tick. Pushing the application to Heroku is easy
+enough (as long as you haven't spelled <code>Gemfile</code> in all caps at any
+point in your Git history. Who would do that?). But then you hit the
+buffers, because the database isn't where you've told Sinatra it is.
+</p>
+
+<p>
+So where is it? Hiding somewhere over at Amazon apparently. If you run
+<code>heroku config</code> you'll see a great (OK, tiny) stack of&#x2026; you guessed
+it&#x2026; environment variables. The two key ones to look at are
+<code>DATABASE_URL</code> and <code>HEROKU_POSTGRES_PINK_URL</code>. Next to them both is a
+long URL that lets you know that the nice folks at Amazon are taking
+care of your instance of Postgres on the behalf of Heroku.
+</p>
+
+<p>
+So we just jam that URL into the DataMapper setup right?
+</p>
+
+<pre class="example">
+ruby DataMapper.setup(:default,
+"postgres://whole-mess-of-letters.compute-1.amazonaws:porty_goodness_here")
+</pre>
+
+<p>
+Wrong. That URL is a magic number, it's specific to the Heroku server
+you're pushing to. But what about James? What about Vincent? Maybe they
+want to have an instance of their own. Or what if Heroku go and migrate
+your database to another cloud supplier? Bad times.
+</p>
+
+<p>
+Environment variables to the rescue. Look, it's right there in the
+config: <code>DATABASE_URL</code>. Just jam that sucker into the DataMapper setup.
+Of course, you need to make sure that you're using it in Heroku, so
+maybe some sort of <code>if</code> statement to make sure you're using it in the
+right place. Not pretty, but&#x2026;
+</p>
+
+<div class="org-src-container">
+<pre class="src src-ruby"><span style="color: #333333; font-weight: bold;">if</span> env.include?(<span style="color: #666666;">/heroku/</span>)
+    <span style="color: #333333; font-weight: bold; font-style: italic;">DataMapper</span>.setup(<span style="color: #333333; font-weight: bold;">:default</span>, <span style="color: #333333; font-weight: bold; font-style: italic;">ENV</span>[<span style="color: #666666;">"DATABASE_URL"</span>])
+<span style="color: #333333; font-weight: bold;">else</span>
+    <span style="color: #333333; font-weight: bold; font-style: italic;">DataMapper</span>.setup(<span style="color: #333333; font-weight: bold;">:default</span>, <span style="color: #666666;">"postgres://localhost/bookmark_manager_</span><span style="color: #333333;">#{env}</span><span style="color: #666666;">"</span>)
+<span style="color: #333333; font-weight: bold;">end</span>
+</pre>
+</div>
+
+<p>
+Environment variables. No longer a 'nice to have'.
+</p>
+<div class="taglist"></div></div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="https://staticblog.org/archive.html">Other posts</a>
+</div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+</body>
+</html>

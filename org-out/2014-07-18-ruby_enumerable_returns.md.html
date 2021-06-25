@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="alternate"
+      type="application/rss+xml"
+      href="rss.xml"
+      title="RSS feed for "/>
+<title>Many Enumerable Returns</title>
+<meta name="author" content="John Dow">
+<meta name="referrer" content="no-referrer">
+<link href= "static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="static/favicon.ico">
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2020 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="preamble" class="status">
+<div class="header">
+  <a href="https://staticblog.org">My Static Org Blog</a>
+</div></div>
+<div id="content">
+<div class="post-date">16 Sep 2020</div><h1 class="post-title"><a href="/2014-07-18-ruby_enumerable_returns.md.html">Many Enumerable Returns</a></h1>
+<p>
+As threatened then, here's the followup to my
+<a href="posts/2014/7/12/destructuring-in-a-method-block/">last post</a> on
+the <code>#Enumerables</code> section from <a href="https://rubymonk.com/">Ruby Monk</a>,
+how I felt like a bit of an idiot for a few hours, and what I learned
+from that.
+</p>
+
+<p>
+tl;dr - enumerable blocks aren't magic; <code>yield</code> is magic.
+</p>
+
+<p>
+This question is a little further along from the last, and was framed
+so:
+</p>
+
+<blockquote>
+<p>
+Try implementing a method called occurrences that accepts a string
+argument and uses inject to build a Hash. The keys of this hash should
+be unique words from that string. The value of those keys should be
+the number of times this word appears in that string.
+</p>
+</blockquote>
+
+<p>
+So far so, so good. So I wrote this:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-ruby"><span style="color: #333333; font-weight: bold;">def</span> <span style="color: #333333; font-weight: bold;">occurrences</span>(str)
+  str.scan(<span style="color: #666666;">/\w+/</span>).inject(<span style="color: #333333; font-weight: bold; font-style: italic;">Hash</span>.new(0)) <span style="color: #333333; font-weight: bold;">do</span> |hashy, i|
+    hashy[i.downcase] += 1
+  <span style="color: #333333; font-weight: bold;">end</span>
+<span style="color: #333333; font-weight: bold;">end</span>
+</pre>
+</div>
+
+<p>
+Which spat out:
+</p>
+
+<blockquote>
+<p>
+<code>TypeError can't convert String into Integer</code>
+</p>
+</blockquote>
+
+<p>
+And left me confused for a good few minutes. OK, getting on for a
+quarter of an hour. What was going on? - what I'd written was very
+similar to the example above:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-ruby">[4, 8, 15, 16, 23, 42].inject({}) { |a, i| a.update(i =&gt; i) }
+</pre>
+</div>
+
+<p>
+So I caved and looked at the answer:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-ruby"><span style="color: #333333; font-weight: bold;">def</span> <span style="color: #333333; font-weight: bold;">occurrences</span>(str)
+    str.scan(<span style="color: #666666;">/\w+/</span>).inject(<span style="color: #333333; font-weight: bold; font-style: italic;">Hash</span>.new(0)) <span style="color: #333333; font-weight: bold;">do</span> |build, word|
+        build[word.downcase] +=1
+        build
+    <span style="color: #333333; font-weight: bold;">end</span>
+<span style="color: #333333; font-weight: bold;">end</span>
+</pre>
+</div>
+
+<p>
+Which left me none the wiser. Why was the block re-iterating the
+accumulator function at the end? To test this I played around with
+<code>p</code>-ing the lines of the block&#x2026; and discovered something interesting.
+Namely,
+</p>
+
+<div class="org-src-container">
+<pre class="src src-ruby">a.update(i =&gt; i) <span style="color: #d9d9d9;"># </span><span style="color: #7f7f7f;">=&gt; a</span>
+</pre>
+</div>
+
+<div id="outline-container-org72c0047" class="outline-2">
+<h2 id="but">But&#x2026;</h2>
+<div class="outline-text-2" id="text-but">
+<div class="org-src-container">
+<pre class="src src-ruby">build[word.downcase] +=1 <span style="color: #d9d9d9;"># </span><span style="color: #7f7f7f;">=&gt; build[word.downcase], the new value of that key</span>
+</pre>
+</div>
+
+<p>
+The block <i>needs to return the accumulator</i> - the first example is just
+lucky that it does so already!
+</p>
+
+<p>
+The only reason the accumulator in an <code>Enumerable#inject</code> accumulates is
+that <i>it's returned from the block on each iteration</i>. In other words,
+somewhere in the definition of <code>#inject</code> for each class that can be made
+enumerable, the method =yield=s to the block, and then keeps the value
+returned to be passed in again as the new accumulator argument.
+</p>
+
+<p>
+I'd previously thought of <code>#inject</code> as working by <i>magic</i>, whereas in
+fact it was working by a method I could probably write myself given
+enough time. Something like this&#x2026;
+</p>
+
+<div class="org-src-container">
+<pre class="src src-ruby">bob = [1,2,3,4,5,6]
+
+<span style="color: #333333; font-weight: bold;">def</span> bob.<span style="color: #333333; font-weight: bold;">inject</span>(default = <span style="color: #333333; font-weight: bold;">nil</span>)
+  accumulator = default || <span style="color: #333333; font-weight: bold;">self</span>[0]
+  <span style="color: #333333; font-weight: bold;">if</span> default
+    <span style="color: #333333; font-weight: bold;">self</span>.each <span style="color: #333333; font-weight: bold;">do</span> |element|
+      accumulator = <span style="color: #333333; font-weight: bold;">yield</span>(accumulator, element)
+    <span style="color: #333333; font-weight: bold;">end</span>
+  <span style="color: #333333; font-weight: bold;">else</span>
+    <span style="color: #333333; font-weight: bold;">self</span>.drop(1).each <span style="color: #333333; font-weight: bold;">do</span> |element|
+      accumulator = <span style="color: #333333; font-weight: bold;">yield</span>(accumulator, element)
+    <span style="color: #333333; font-weight: bold;">end</span>
+  <span style="color: #333333; font-weight: bold;">end</span>
+  <span style="color: #333333; font-weight: bold;">puts</span> <span style="color: #666666;">"all adds up to: "</span>   <span style="color: #d9d9d9;"># </span><span style="color: #7f7f7f;">just to prove it's this method being</span>
+                            <span style="color: #d9d9d9;"># </span><span style="color: #7f7f7f;">called, not the superclasses...</span>
+  <span style="color: #333333; font-weight: bold;">p</span> accumulator
+<span style="color: #333333; font-weight: bold;">end</span>
+</pre>
+</div>
+
+<p>
+Which gives us such fun as:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-ruby">bob.inject() {|a,e| a += e}
+<span style="color: #d9d9d9;"># </span><span style="color: #7f7f7f;">=&gt; all adds up to: 21</span>
+bob.inject(10) {|a,e| a += e}
+<span style="color: #d9d9d9;"># </span><span style="color: #7f7f7f;">=&gt; all adds up to: 31</span>
+bob.inject([]) {|a,e| a &lt;&lt; e**2}
+<span style="color: #d9d9d9;"># </span><span style="color: #7f7f7f;">=&gt; all adds up to: [1, 4, 9, 16, 25, 36]</span>
+bob.inject({}) {|a,e| a[e] = <span style="color: #666666;">"x"</span>*e; a}
+<span style="color: #d9d9d9;"># </span><span style="color: #7f7f7f;">=&gt; {5=&gt;"xxxxx", 6=&gt;"xxxxxx", 1=&gt;"x", 2=&gt;"xx", 3=&gt;"xxx", 4=&gt;"xxxx"}</span>
+</pre>
+</div>
+
+<p>
+I relied on <code>#each</code> here, but we could easily write an <code>each</code> method
+using a <code>for... in...</code> loop or similar. The genius is in <code>yield</code>, which
+is the <i>real magic</i> that's going on here.
+</p>
+
+<p>
+<a href="https://rubymonk.com/">Ruby Monk</a> has more about the
+<a href="http://rubymonk.com/learning/books/1/chapters/34-lambdas-and-blocks-in-ruby/lessons/78-blocks-in-ruby">magic
+of yield</a>, and why it's weird in a language that professes that
+everything is an object. Like a lot in Ruby, I discovered a small thing
+didn't work, patiently played with it until I found out why, and then
+'worked' that small new piece of knowledge to give me greater insight
+into what was going on. I'm finding this to be the most satisfying
+method to learn by, both because it makes me feel like I'm learning to a
+deeper degree than I would by just reading the answers out of a book,
+and in addition, when the books do cover the subject, I can better apply
+what's written there to what I've seen in action.
+</p>
+</div>
+
+<div id="outline-container-org96232a3" class="outline-4">
+<h4 id="postscipt---27714"><i>postscipt</i> - 27/714</h4>
+<div class="outline-text-4" id="text-postscipt---27714">
+<p>
+Of course, David Black covers the same ground, but better (gets <code>each</code>
+off the ground using a <code>for</code> loop), in chapter 6 of
+<a href="http://www.manning.com/black2/"><i>The Well Grounded Rubyist</i></a>. Love
+that book.
+</p>
+</div>
+</div>
+</div>
+<div class="taglist"></div></div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="https://staticblog.org/archive.html">Other posts</a>
+</div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+</body>
+</html>

@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="alternate"
+      type="application/rss+xml"
+      href="rss.xml"
+      title="RSS feed for "/>
+<title>Learning the C Programming Language</title>
+<meta name="author" content="John Dow">
+<meta name="referrer" content="no-referrer">
+<link href= "static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="static/favicon.ico">
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2020 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="preamble" class="status">
+<div class="header">
+  <a href="https://staticblog.org">My Static Org Blog</a>
+</div></div>
+<div id="content">
+<div class="post-date">16 Sep 2020</div><h1 class="post-title"><a href="/2016-08-09-the-c-programming-language-part-one-hello-world.md.html">Learning the C Programming Language</a></h1>
+<div class="HTML">
+<p>
+&lt;h2&gt;
+</p>
+
+</div>
+
+<p>
+Part 1: hello, world
+</p>
+
+<div class="HTML">
+<p>
+&lt;/h2&gt;
+</p>
+
+</div>
+
+<p>
+I've started to learn C. There's a number of reasons for this. First, it
+was the 'proper' programming language when I was a kid. Second, I've
+been learning quite a bit of Go recently, and just about every other
+page on the excellent <a href="https://blog.golang.org/">Go Blog</a> has a
+sentence that starts with "In C&#x2026;".<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>
+</p>
+
+<p>
+Third, I've started a course on
+<a href="https://www.coursera.org/specializations/data-structures-algorithms">Data
+Structures and Algorithms</a> on <a href="https://www.coursera.org/">Coursera</a>,
+inspired by the ever-inspirational
+<a href="https://twitter.com/deniseyu21">Denise Yu</a>. The course only accepts
+submissions in four languages: Python, Java, C++ and C.<sup><a id="fnr.2" class="footref" href="#fn.2">2</a></sup> Going
+through that list my mind went "Basically Ruby with <i>bleaugh</i>
+indentation, <i>bleaugh</i> Java <i>bleaugh</i>, sounds <i>really</i> hard, sounds
+hard." So I went with 'sounds hard'.
+</p>
+
+<p>
+I thought I'd try and capture my process of learning C as it might be
+useful to others in a similar position - i.e. no computer science
+background but know how to program in Ruby and JavaScript. I'll be
+approaching this in a series of posts, most of which will be following
+the loose structure of
+<a href="http://blog.gypsydave5.com/the-c-programming-language-presentation/">a
+presentation I gave on C</a>.<sup><a id="fnr.3" class="footref" href="#fn.3">3</a></sup>
+</p>
+
+<div id="outline-container-org749b234" class="outline-2">
+<h2 id="background">Background</h2>
+<div class="outline-text-2" id="text-background">
+<p>
+C was invented by Dennis Richie at Bell labs in the 1970s in order to
+write UNIX.<sup><a id="fnr.4" class="footref" href="#fn.4">4</a></sup> He needed a language that provided sufficient
+abstraction to program quickly and efficiently, while at the same time
+being able to communicate directly with the computer's memory addresses
+to allow a programmer to perform low level optimizations. It has been a
+remarkably popular language, being used to write other languages (Ruby
+is written in C, NodeJS wouldn't work without
+<a href="https://nikhilm.github.io/uvbook/introduction.html">libuv</a>, written
+in C), and heavily influencing most modern programming languages (Java,
+Ruby, JavaScript, and most obviously, Go).
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgddf9426" class="outline-2">
+<h2 id="hello-world"><code>hello, world</code></h2>
+<div class="outline-text-2" id="text-hello-world">
+<p>
+Another of the ways C has influenced programming is through
+<a href="https://en.wikipedia.org/wiki/The_C_Programming_Language"><i>The C
+Programming Language</i></a> by Richie and Brian Kernighan. The author's
+intials gave their name to a
+<a href="https://en.wikipedia.org/wiki/Indent_Style#K.26R_style">style of
+formatting code</a>, along with giving us the <i>de facto</i> standard for your
+first program: "hello, world".
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C"><span style="color: #cdad00; font-weight: bold;">#include</span> <span style="color: #666666;">&lt;stdio.h&gt;</span>
+
+<span style="color: #333333; font-weight: bold; font-style: italic;">int</span> <span style="color: #333333; font-weight: bold;">main</span>() {
+    printf(<span style="color: #666666;">"hello, world\n"</span>);
+}
+</pre>
+</div>
+
+<p>
+Line 1: Include a file called <code>stdio.h</code>. It includes information about
+the functions in the C standard library that deal with I/O -
+input/output. In this case printing to the terminal.
+</p>
+
+<p>
+Line 3: All C programs start with a function called <code>main</code> - this is the
+function that gets executed when the program is, well, executed. The
+arguments (of which we're using none at all) are in the parentheses. The
+body of the function is in the curly braces. So far so JavaScript. For
+people who have never seen a typed language the <code>int</code> is a little
+surprising. All it's telling us (and C) is that the return value for
+this function is an integer. We'll talk about types later, but for now
+the <code>int</code> is almost working like <code>def</code> in Ruby or <code>function</code> in
+JavaScript - it's a keyword declaring a function.
+</p>
+
+<p>
+Line 4: The meat of the program. Here we're calling a function called
+<code>printf</code> which has already been written for us as a part of the C
+standard library - this is why we did that <code>#include</code> at the beginning.
+We're calling it with a single argument, a string literal inside double
+quotes, that just says "hello, world" with a newline character (<code>\n</code>) at
+the end.
+</p>
+
+<p>
+At the end of the line we put a semi-colon to tell C that the line has
+finished.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org96afd4e" class="outline-2">
+<h2 id="compiling-and-running">Compiling and running</h2>
+<div class="outline-text-2" id="text-compiling-and-running">
+<p>
+If you put all of that into a file called <code>hello-world.c</code>, save it, head
+to the terminal and type<sup><a id="fnr.5" class="footref" href="#fn.5">5</a></sup>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sh">gcc hello-world.c
+</pre>
+</div>
+
+<p>
+Then if you <code>ls</code> the same directory you should see a new file
+called=a.out=.<sup><a id="fnr.6" class="footref" href="#fn.6">6</a></sup> If you then run this with <code>./a.out</code>, you'll see
+<code>hello, world</code>. Mission accomplished.
+</p>
+
+<p>
+<code>gcc</code> is the <a href="https://gcc.gnu.org/">Gnu Compiler Collection</a>,<sup><a id="fnr.7" class="footref" href="#fn.7">7</a></sup>
+which will compile your C program into an executable that your computer
+can run. All this means is that instead of translating each line of your
+program into something your computer can understand as you run it, as
+with something like Ruby or JavaScript, we're translating the whole
+program in one go before we run it.
+</p>
+
+<p>
+<code>a.out</code> isn't that informative, so in order to get a better filename we
+can pass a flag to GCC:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sh">gcc hello-world.c -o hello-word
+</pre>
+</div>
+
+<p>
+Which outputs to the file <code>hello-world</code>, which we can now run with
+<code>./hello-world</code>
+</p>
+
+<p>
+Success, we're now all C programmers!
+</p>
+</div>
+
+<div id="outline-container-orgb5ce579" class="outline-3">
+<h3 id="why-main-returns-an-int">Why <code>main</code> returns an <code>int</code></h3>
+<div class="outline-text-3" id="text-why-main-returns-an-int">
+<p>
+If you've run programs on the command line before you may be aware that
+you get exit codes with each program that runs. You may have even been
+(un)lucky enough to see something on the lines of
+<code>Error: non-zero exit code</code>. On a POSIX system, a process returns a
+number to the process that called it to let it know how things went -
+this is called the exit code. <code>0</code> is the good one, every other number is
+some flavour of 'gone wrong'.
+</p>
+
+<p>
+The default return value for main, if we don't explicitly return a
+value, is <code>0</code>. We can change this behaviour in our <code>hello-world</code> by
+returning an explicit value using the keyword <code>return</code> (very Ruby, so
+JavaScript).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C"><span style="color: #cdad00; font-weight: bold;">#include</span> <span style="color: #666666;">&lt;stdio.h&gt;</span>
+
+<span style="color: #333333; font-weight: bold; font-style: italic;">int</span> <span style="color: #333333; font-weight: bold;">main</span>() {
+    printf(<span style="color: #666666;">"hello, world\n"</span>);
+    <span style="color: #333333; font-weight: bold;">return</span> 1;
+}
+</pre>
+</div>
+
+<p>
+(don't forget the semicolon!)
+</p>
+
+<p>
+Experiment with different return values. Remember to recompile your
+program each time you do. You may be able to see the returned value in
+your terminal's prompt. Otherwise you can echo out the last commands
+exit status with the command <code>echo $?</code>.
+</p>
+</div>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara"><p class="footpara">
+Don't believe me? Look at
+<a href="https://blog.golang.org/go-slices-usage-and-internals">this</a>
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2">2</a></sup> <div class="footpara"><p class="footpara">
+You can now do the same course with a more diverse set of
+languages.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3">3</a></sup> <div class="footpara"><p class="footpara">
+This was given at a Makers Academy alumni event. To view the
+speakers notes tap <code>n</code>.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.4" class="footnum" href="#fnr.4">4</a></sup> <div class="footpara"><p class="footpara">
+A longer discussion of the origins of C was written by Richie and
+is available
+<a href="https://www.bell-labs.com/usr/dmr/www/chist.pdf">here</a>
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.5" class="footnum" href="#fnr.5">5</a></sup> <div class="footpara"><p class="footpara">
+This assumes you have gcc installed, which is likely if you've
+been developing on your computer for a while.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.6" class="footnum" href="#fnr.6">6</a></sup> <div class="footpara"><p class="footpara">
+You want to know <i>why</i> it's <code>a.out</code>? Read Richie's C History -
+link above.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.7" class="footnum" href="#fnr.7">7</a></sup> <div class="footpara"><p class="footpara">
+Yes, it used to be called the Gnu C Compiler - acronyms are so
+wonderfully flexible&#x2026;
+</p></div></div>
+
+
+</div>
+</div><div class="taglist"></div></div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="https://staticblog.org/archive.html">Other posts</a>
+</div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+</body>
+</html>

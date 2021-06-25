@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="alternate"
+      type="application/rss+xml"
+      href="rss.xml"
+      title="RSS feed for "/>
+<title>Using Vim as a SQL Server Client</title>
+<meta name="author" content="John Dow">
+<meta name="referrer" content="no-referrer">
+<link href= "static/style.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="static/favicon.ico">
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2020 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="preamble" class="status">
+<div class="header">
+  <a href="https://staticblog.org">My Static Org Blog</a>
+</div></div>
+<div id="content">
+<div class="post-date">16 Sep 2020</div><h1 class="post-title"><a href="/2016-01-06-vim-mac-mssql-client.md.html">Using Vim as a SQL Server Client</a></h1>
+<p>
+Bad times - having to connect to my company's SQL Server database in
+order to migrate data. The last time I looked at that database it was
+through a connection to a Windows box running the Microsoft development
+client. Laggy, slow, and an unfamiliar environment.
+</p>
+
+<p>
+So what are my options on a Mac? Well, there are a couple of SQL Server
+clients out there, but the one I tried out turned out to be buggy -
+there's nothing less fun than losing a query you've been crafting for an
+hour. And why should I spend time moving the query betweeen an editor
+(Vi) and an awkward GUI interface?
+</p>
+
+<p>
+Screw that - let's do it in Vim! This method has been tested on my Mac,
+but should also work for another *nix based system. No guarantees
+though.
+</p>
+
+<div id="outline-container-orgc517ca1" class="outline-2">
+<h2 id="the-tools">The Tools</h2>
+<div class="outline-text-2" id="text-the-tools">
+<p>
+To do this we need:
+</p>
+
+<ul class="org-ul">
+<li>a way for the Mac to talk to the SQL Server database</li>
+<li>a way for that connection to talk to Vim</li>
+</ul>
+
+<p>
+And we will be using the following tools to do that:
+</p>
+
+<ul class="org-ul">
+<li><a href="http://www.freetds.org/">FreeTDS</a></li>
+<li><a href="http://www.unixodbc.com/">unixODBC</a></li>
+<li>the Vim plugin
+<a href="http://www.vim.org/scripts/script.php?script_id=356">dbext.vim</a></li>
+<li>and the Perl libraries <a href="http://dbi.perl.org/">DBI</a> and
+<a href="http://search.cpan.org/~mjevans/DBD-ODBC-1.52/ODBC.pm">DBD::ODBC</a>
+(installed using
+<a href="http://search.cpan.org/~mjevans/DBD-ODBC-1.52/ODBC.pm">CPAN</a>)</li>
+</ul>
+
+<p>
+We'll start with a simple example - connecting dbext to a local instance
+of PostgreSQL.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org138a50b" class="outline-2">
+<h2 id="dbext-with-postgresql">dbext with PostgreSQL</h2>
+<div class="outline-text-2" id="text-dbext-with-postgresql">
+<p>
+Install dbext into Vim using whichever package manager or other you
+like. Dbext is a 'proper' Vim extension, in that it comes with extensive
+documentation in the form of Vim helpfiles. Access the full help with
+<code>:h dbext</code> and check out the tutorial at <code>:h dbext-tutorial</code>.
+</p>
+
+<p>
+If even the tutorial is fast enough, here's a quick start for PostgreSQL
+locally. Let's assume you've already installed PostgreSQL, and that
+you've not added any usernames or passwords. Somewhere in your Vim
+initialization files (like <code>~/.vimrc</code>) add the following line:
+</p>
+
+<p>
+<code>let g:dbext_default_profile_local_PSQL = 'type=PGSQL'</code>
+</p>
+
+<p>
+Here we've set up a local profile for PostgreSQL, called it
+<code>local_PSQL</code>, and told dbext that the type of connection this profile
+will use is, well, Postgres. Now either restart Vim or evaluate that
+command in your current session.
+</p>
+
+<p>
+To use this profile with some SQL in Vim, first put some SQL into a
+buffer. Try this: <code>SELECT * FROM bob</code>. Then, in the buffer, send the
+command <code>:DBPromptForBufferParameters</code>. You'll get a menu with the
+<code>local_PSQL</code> option on it. Select that option (probably option 1).
+</p>
+
+<p>
+Now have a crack at running a query - put your cursor on the line with
+the SQL statement on it and execute the query with the command
+<code>&lt;Leader&gt;sel</code> (=s=ql =e=xecute =l=ine).
+</p>
+
+<p>
+This won't work, but should give you a hint about what's going wrong:
+PostgreSQL needs a <code>[.pgpass]</code> file for the password to the database -
+even if there isn't a password(!). So just create an empty file called
+<code>.pgpass</code> in your <code>$HOME</code> directory. Now it should work (or at least
+return a reasonable error message if your default database doesn't have
+a <code>bob</code> table).
+</p>
+
+<p>
+Now&#x2026; go crazy! Dbext is great - read some of the docs in full and have
+a play with some SQL queries. Ah, the joy of Vim! Come back when you
+want to hook it up to a remote SQL Server.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org885be36" class="outline-2">
+<h2 id="sql-server-on-mac">SQL Server on Mac</h2>
+<div class="outline-text-2" id="text-sql-server-on-mac">
+<p>
+Had fun? Right, this bit is a bit of a drag. Macs (and other *nix
+systems) have no native support for TDS, the protocol by which we talk
+to SQL Server databases. So we'll have to install a library called
+<code>freetds</code>.
+</p>
+
+<p>
+But before we do that we'll need to install an ODBC driver as the
+<code>freetds</code> library does not provide sufficiently sophisticated binaries
+for <code>dbext</code> to use to query a database directly.<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>
+</p>
+
+<p>
+First up we'll install <code>unixodbc</code> - I'm using
+<a href="http://brew.sh/">Homebrew</a>, but if you'd like to build your own
+binaries be my guest.
+</p>
+
+<pre class="example">
+brew install unixodbc
+</pre>
+
+<p>
+And now that's done, let's get hold of <code>freetds</code>
+</p>
+
+<pre class="example">
+brew install freetds --with-unixodbc --with-msdblib
+</pre>
+
+<p>
+We're asking for <code>freetds</code> to be installed with <code>unixodbc</code> support, and
+telling it that we want it to use the version of TDS that Microsoft
+developed for SQL Server.<sup><a id="fnr.2" class="footref" href="#fn.2">2</a></sup>
+</p>
+
+<p>
+If you'd like to test the installation, <code>freetds</code> comes with a couple of
+command line tools you can use to connect to a SQL Server DB. Run <code>tsql</code>
+with the appropriate server, port, username and password passed in as
+options and check to see if you can connect. Have a bit more of a play
+around if you can - you've earned it.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org3827af5" class="outline-2">
+<h2 id="perl-dbi-and-dbdodbc">Perl: <code>DBI</code> and <code>DBD::ODBC</code></h2>
+<div class="outline-text-2" id="text-perl-dbi-and-dbdodbc">
+<p>
+The final step is to get <code>dbext</code> talking to the ODBC installation. And
+it wants to do this through a pair of Perl libraries. We'll install
+these using CPAN, the Perl equivalent of RubyGems or NPM.<sup><a id="fnr.3" class="footref" href="#fn.3">3</a></sup> First
+start the interactive interface as the super user:
+</p>
+
+<pre class="example">
+sudo perl -MCPAN -e shell
+</pre>
+
+<p>
+And then install the libraries we need:
+</p>
+
+<pre class="example">
+install DBI
+install DBD::ODBC
+</pre>
+
+<p>
+Both of these will output a scarily verbose amount of logs - it's ok,
+it's normal<sup><a id="fnr.4" class="footref" href="#fn.4">4</a></sup> - and by the end of it we've got everything installed
+that we'll need. Almost there. Almost&#x2026;
+</p>
+</div>
+</div>
+
+<div id="outline-container-org2f09f67" class="outline-2">
+<h2 id="configuration-files">Configuration files</h2>
+<div class="outline-text-2" id="text-configuration-files">
+<p>
+Getting <code>freetds</code> and <code>unixodbc</code> working together happily is super
+simple - but it took me a while to work out exactly what was needed.
+Configuration for <code>freetds</code> can live either in its own configuration
+file, or with the ODBC configuration. The simplest thing to do is to
+push the configuration over to the ODBC side entirely.
+</p>
+
+<p>
+What we're looking to do it to tell ODBC that there is a sort of
+database called 'freeTDS' and to point it to where the files that
+describe the protocol live - this is the database 'driver', just like a
+printer driver. Then we need to give ODBC the details of the specific
+database we want to connect to - think of this as the specific printer
+you connect to using a printer driver, the network address etc.
+</p>
+
+<p>
+The first step is to register <code>freetds</code> as a driver with <code>unixodbc</code> -
+this is done in a file called <code>odbcinst.ini</code> which Homebrew has
+(hopefully) symlinked into <code>/usr/local/etc/odbcinst.ini</code><sup><a id="fnr.5" class="footref" href="#fn.5">5</a></sup>. And in
+that file we put the following:
+</p>
+
+<pre class="example">
+[FreeTDS]
+Description = TD Driver (MSSQL)
+Driver = /usr/local/lib/libtdsodbc.so
+Setup = /usr/local/lib/libtdsodbc.so
+FileUsage = 1
+</pre>
+
+<p>
+The top line is the name we're giving the driver, the second a
+human-friendly description of what it does. Thee next two lines give
+ODBC the driver and set up information - <code>libsdsodbc.so</code> was installed
+with the <code>freeTDS</code> installation and put in <code>/usr/local/lib</code> as a symlink
+by Homebrew (again, hopefully).
+</p>
+
+<p>
+That's the driver bit done. Now let's point ODBC to your SQL Server
+database by adding its details to the <code>~/.odbc.ini</code> file, which you'll
+have to create.<sup><a id="fnr.6" class="footref" href="#fn.6">6</a></sup> Put the following in there:
+</p>
+
+<pre class="example">
+[MyMSSQLDB]
+Driver = FreeTDS
+Server = &lt;ip or domain name goes here&gt;
+Database = &lt;database name goes here&gt;
+Port = &lt;port number&gt;
+</pre>
+
+<p>
+This connection information is called a DSN<sup><a id="fnr.7" class="footref" href="#fn.7">7</a></sup>, and we'll be using it
+in <code>dbext</code>. Replace <code>MyMSSQLDB</code> with something more descriptive - it's
+the name of the connection to your database that ODBC (and, by
+extension, <code>dbext</code>) will use.
+</p>
+
+<p>
+Success! One more small step to go
+</p>
+</div>
+</div>
+
+<div id="outline-container-orge6617f4" class="outline-2">
+<h2 id="odbc-in-dbext">ODBC in <code>dbext</code></h2>
+<div class="outline-text-2" id="text-odbc-in-dbext">
+<p>
+Now we've got an ODBC connection to play with, it's time to put its
+details into <code>dbext</code>. This can bedone by putting the following into your
+<code>.vimrc</code> - right next to where you declared your PostgreSQL connection
+information.
+</p>
+
+<p>
+<code>let g:dbext_default_profile_MyMSSQLDB = 'type=ODBC:user=&lt;username&gt;:passwd=&lt;password&gt;:dsnname=MyMSSQLDB'</code><sup><a id="fnr.8" class="footref" href="#fn.8">8</a></sup>
+</p>
+
+<p>
+Pretty long, right? But comprehendible. We're giving similar information
+to that which we used for the PostgreSQL connection, only we're
+declaring that the type is <code>ODBC</code>, and we're declaring the DSN name that
+we're using as well.
+</p>
+
+<p>
+And that's it. Restart your Vim Session, <code>&lt;Leader&gt;sbp</code> (it's the same as
+<code>:DBPromptForBufferParameters</code>) and pick MyMSSQLDB (feel free to give it
+a better name later). You can now evaluate lines of SQL against the
+database, and see the return value in a separate split below.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org8ce808d" class="outline-2">
+<h2 id="tldr">tl;dr</h2>
+<div class="outline-text-2" id="text-tldr">
+<ul class="org-ul">
+<li><code>brew install unixodbc</code></li>
+<li><code>brew install freetds --with-unixodbc --with-msdblib</code></li>
+<li><code>sudo perl -MCPAN -e shell</code></li>
+<li><code>install DBI</code> and <code>install DBD::ODBC</code> in the CPAN shell</li>
+<li>Add the following to <code>/usr/local/etc/odbcinst.ini</code>:</li>
+</ul>
+
+<pre class="example">
+[FreeTDS]
+Description = TD Driver (MSSQL)
+Driver = /usr/local/lib/libtdsodbc.so
+Setup = /usr/local/lib/libtdsodbc.so
+FileUsage = 1
+</pre>
+
+<ul class="org-ul">
+<li>Add the following to <code>~/.odbc.ini</code>:</li>
+</ul>
+
+<pre class="example">
+[MyMSSQLDB]
+Driver = FreeTDS
+Server = &lt;ip or domain name goes here&gt;
+Database = &lt;database name goes here&gt;
+Port = &lt;port number&gt;
+</pre>
+
+<ul class="org-ul">
+<li>install <code>dbext</code> into Vim</li>
+<li>Add
+<code>let g:dbext_default_profile_MyMSSQLDB = 'type=ODBC:user=&lt;username&gt;:passwd=&lt;password&gt;:dsnname=MyMSSQLDB'</code>
+to <code>~/.vimrc</code></li>
+<li>Read the <code>dbext</code> manual (<code>:h dbext</code>)</li>
+</ul>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara"><p class="footpara">
+My details are <i>fuzzy</i> at best, but as far as I can see the
+<code>osql</code> and <code>tsql</code> bins that come with <code>freetds</code> are not set up
+for interactive querying, and can't be used in the same way that,
+say, <code>osql</code> on a Windows machine would work.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2">2</a></sup> <div class="footpara"><p class="footpara">
+Even when making their own standard, M$ can't help but diverge
+from it.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3">3</a></sup> <div class="footpara"><p class="footpara">
+Or Maven or whatever.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.4" class="footnum" href="#fnr.4">4</a></sup> <div class="footpara"><p class="footpara">
+CPAN is running all the tests on each of the modules. Bit
+excessive I know.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.5" class="footnum" href="#fnr.5">5</a></sup> <div class="footpara"><p class="footpara">
+This inforamation can also be added using the <code>odbcinst</code> tool,
+But this way seems easier to me. Read more about these files in
+the unixODBC documentation
+<a href="http://www.unixodbc.org/odbcinst.html">here</a>
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.6" class="footnum" href="#fnr.6">6</a></sup> <div class="footpara"><p class="footpara">
+ODBC will also look in <code>/usr/local/etc/odbc.ini</code> for DSNs, but
+these will be available to all users. So we're putting them in
+the local user file it checks, <code>~/.odbc.ini</code>.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.7" class="footnum" href="#fnr.7">7</a></sup> <div class="footpara"><p class="footpara">
+Data Source Name - just so you know.
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.8" class="footnum" href="#fnr.8">8</a></sup> <div class="footpara"><p class="footpara">
+The connection information used here can include the database,
+but we've pushed that part down to the DSN defined above. It must
+always include the <code>username</code> and <code>passwd</code> from what I've seen
+through experimentation.
+</p></div></div>
+
+
+</div>
+</div><div class="taglist"></div></div>
+<div id="postamble" class="status"><div id="archive">
+  <a href="https://staticblog.org/archive.html">Other posts</a>
+</div>
+<center><a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="https://purl.org/dc/terms/" href="https://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">bastibe.de</span> by <a xmlns:cc="https://creativecommons.org/ns#" href="https://bastibe.de" property="cc:attributionName" rel="cc:attributionURL">Bastian Bechtold</a> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</center></div>
+</body>
+</html>
