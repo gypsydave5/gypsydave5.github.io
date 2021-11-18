@@ -2,7 +2,7 @@
 title: What I Think About TypeScript and Compile-To-JavaScript Languages
 description: Not entirely nice review of a not entirely nice language
 published: false
-date: 
+date: 2021-11-18 20:25:21
 ---
 
 Well, what do I think of TypeScript?

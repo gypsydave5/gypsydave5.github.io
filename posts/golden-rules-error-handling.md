@@ -1,13 +1,13 @@
 ---
-title: Golden Rules: How To Handle Errors?
+title: 'Golden Rules: How To Handle Errors?'
 description: enough about bits to make you a bit dangerous
 published: false
 date: 2019-07-12 22:52:55
 tags:
-  - errors
-  - exceptions
-  - javascript
-  - golang
+- errors
+- exceptions
+- javascript
+- golang
 ---
 
 ## Is this exception exceptional?
