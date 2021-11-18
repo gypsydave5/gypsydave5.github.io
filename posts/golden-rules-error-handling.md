@@ -4,7 +4,6 @@ description: enough about bits to make you a bit dangerous
 published: false
 date: 2019-07-12 22:52:55
 tags:
-  - golden_rules
   - errors
   - exceptions
   - javascript
