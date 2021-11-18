@@ -1,0 +1,544 @@
+/**
+ * SimpleTalk Core CSS
+ * ---------------------------------
+ * This CSS file includes all "public" stlying for
+ * the base PartViews, like WorldView, StackView, etc.
+ * If you come across behavior not defined in this file,
+ * be sure to check the Shadow DOM styling for the given
+ * View components.
+ **/
+
+/* Global Variables */
+:root {
+    --marching-ant-width: 1px;
+    --marching-ant-length: 10px;
+    --marching-ant-color: black;
+    --palette-yellow: #ffea95;
+    --palette-blue: #004b67;
+    --palette-green: #41ccb4;
+    --palette-orange: #ff7c5d;
+    --palette-red: #c70151;
+    --palette-cornsik: #FFF8DC;
+    --container-default-width: 20vw;
+    --container-default-height: 15vh;
+    --drawing-default-width: 500px;
+    --drawing-default-height: 300px;
+    --field-default-width: 300px;
+    --field-default-height: 200px;
+}
+
+/* Keyframe Animations */
+@keyframes marching-ants-animation {
+    0%   {background-position: 0 0, var(--marching-ant-length) 100%, 0 var(--marching-ant-length), 100% 0;}
+    100% {background-position: var(--marching-ant-length) 0, 0 100%, 0 0, 100% var(--marching-ant-length);}
+}
+
+/* Prerequisites */
+* {
+    visibility: initial;
+    box-sizing: border-box;
+}
+
+body {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    font-family: "Crimson Pro";
+    background-image: /* tint image */
+                      linear-gradient(to right, rgba(192, 192, 192, 0.85), rgba(192, 192, 192, 0.75)),
+                      /* checkered effect */
+                      linear-gradient(to right, black 50%, white 50%),
+                      linear-gradient(to bottom, black 50%, white 50%);
+    background-blend-mode: normal, difference, normal;
+    background-size: 2em 2em;
+}
+
+.active {
+    outline: solid var(--palette-orange) 1px;
+}
+
+/* =World Styles
+ *----------------------------------------------------*/
+st-world {
+    display: block;
+    position: absolute;
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+    box-shadow: 0px 0px 30px 10px rgba(100, 100, 100, 0.8);
+}
+
+
+/* =Stack Styles
+ *----------------------------------------------------*/
+st-stack {
+    display: none;
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+st-window st-stack {
+    display: block;
+}
+.current-stack {
+    display: block;
+}
+
+/* =Card Styles
+ *----------------------------------------------------*/
+st-card {
+    display: none;
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.current-card {
+    overflow: auto;
+}
+
+.current-card,
+st-card[role="lens"] {
+    display: block;
+    visibility: initial;
+}
+
+/* =Button Styles
+ *----------------------------------------------------*/
+st-button {
+    box-sizing: border-box;
+    display: flex;
+    position: absolute;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    user-select: none;
+    margin-left: -1px;
+    margin-right: -1px;
+}
+
+st-button:not(.editing):hover {
+    cursor: pointer;
+}
+
+st-button:(.editing){
+    background-color: white;
+    color: black;
+}
+
+st-button:active{
+    outline: solid var(--palette-orange) 1px;
+}
+/* =Window Styles
+ *----------------------------------------------------*/
+st-window {
+    box-sizing: border-box;
+    display: flex;
+    position: absolute;
+    flex-direction: column;
+    border: 1px solid rgba(100, 100, 100, 0.2);
+    box-shadow: 3px 4px 4px 0px rgba(50, 50, 50, 0.3);
+    z-index: 100;
+}
+
+st-window:active {
+    z-index: 100;
+}
+
+/* =Area Styles
+ *---------------------------------------------------------*/
+st-area {
+    position: absolute;
+    border: 1px solid rgb(150, 150, 150);
+    width: var(--container-default-width);
+    height: var(--container-default-height);
+}
+
+st-area:empty {
+    display: block;
+    position: absolute;
+    border: 1px solid rgb(150, 150, 150);
+    width: var(--container-default-width);
+    height: var(--container-default-height);
+    flex-shrink: 0;
+}
+
+st-area.outer-allow-scroll {
+    overflow: hidden;
+}
+-----------------*/
+
+
+/* =Svg Styles
+ *---------------------------------------------------------*/
+st-svg {
+    display: block;
+    position: absolute;
+    /* border: 1px solid rgb(150, 150, 150);*/
+}
+
+/* =Drawing Styles
+ *----------------------------------------------------*/
+st-drawing {
+    background-color: #1fe0; /* transparent */
+    position: absolute;
+}
+
+/* =Field Styles
+ *----------------------------------------------------*/
+st-field {
+    width: var(--field-default-width);
+    height: var(--field-default-height);
+    background-color: var(--palette-cornsik);
+    position: absolute;
+    display: block;
+}
+
+/* =Layout Class Styles
+ * --------------------------------------------------------*/
+.list-layout {
+    display: flex;
+    flex-direction: row;
+}
+
+st-world > st-stack > :not(.current-card).list-layout {
+    display: none;
+}
+
+.list-column {
+    flex-direction: column;
+}
+
+.list-layout:not(.list-column).list-align-top {
+    align-items: start;
+}
+
+.list-layout:not(.list-column).list-align-bottom {
+    align-items: end;
+}
+
+.list-layout.list-column.list-align-left {
+    align-items: start;
+}
+
+.list-layout.list-column.list-align-right {
+    align-items: end;
+}
+
+.list-layout.list-align-center {
+    align-items: center;
+}
+
+.list-layout.list-distribution-center {
+    justify-content: center;
+}
+
+.list-layout.list-distribution-start {
+    justify-content: start;
+}
+
+.list-layout.list-distribution-end {
+    justify-content: end;
+}
+
+.list-layout.list-distribution-space-between {
+    justify-content: space-between;
+}
+
+.list-layout.list-distribution-space-around {
+    justify-content: space-around;
+}
+
+.wrap-list {
+    flex-wrap: wrap;
+    align-content: start;
+}
+
+.list-layout > *:not(st-window):not(st-editor) {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+}
+
+.list-layout > st-window,
+.list-layout > st-editor {
+    position: absolute !important;
+}
+
+.list-layout.list-column > .h-space-fill {
+    width: 100% !important;
+}
+
+.list-layout:not(.list-column) > .v-space-fill {
+    height: 100% !important;
+}
+
+.list-layout.list-column > .v-space-fill,
+.list-layout:not(.list-column) > .h-space-fill {
+    flex: 1;
+    height: auto !important;
+}
+
+.list-layout:not(.list-column) > .h-rigid {
+    flex: none;
+}
+
+.v-shrink-wrap {
+    height: max-content !important;
+}
+
+.h-shrink-wrap {
+    width: max-content !important;
+}
+
+.pin-top {
+    top: 0 !important;
+    bottom: unset !important;
+}
+
+.pin-bottom {
+    bottom: 0 !important;
+    top: unset !important;
+}
+
+.pin-left {
+    left: 0 !important;
+    right: unset !important;
+}
+
+.pin-right {
+    right: 0 !important;
+    left: unset !important;
+}
+
+/* =Layout Exceptions
+ * --------------------------------------------------------*/
+/* We don't want list-layout to display on Cards when they
+ * are not current in the current stack (but we want this
+ * in stack windows) */
+/* st-stack.current-stack > st-card.list-layout:not(.current-card){ */
+/*     display: none; */
+/* } */
+wrapped-view st-stack st-card:not(.current-card){
+    display: none;
+}
+
+wrapped-view > st-card,
+wrapped-view > st-stack {
+    display: block;
+}
+
+/* =Editor
+ * --------------------------------------------------------*/
+editor-subparts > li {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    width: 100%;
+    border-bottom: 1px solid rgba(100, 100, 100, 0.0);
+    transition: border 0.1s linear;
+}
+
+editor-subparts > li:hover {
+    cursor: pointer;
+    border-bottom: 1px solid rgba(100, 100, 100, 0.5);
+    transition: border 0.1s linear;
+}
+
+editor-subparts > li > .icon-display-area {
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-bottom: 5px;
+    align-self: center;
+}
+
+editor-subparts > li > .icon-display-area > svg {
+    width: 100%;
+    height: 100%;
+}
+
+editor-subparts > li > * {
+    margin-right: 16px;
+}
+
+editor-subparts .id-span {
+    font-family: monospace;
+    color: rgba(0, 0, 0, 0.4);
+}
+
+editor-subparts button.add-part-button {
+    outline: none;
+    border: 1px solid rgba(0, 0, 0, 0.4);
+    border-radius: 100%;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.7rem;
+    height: 1.7rem;
+    padding: 4px;
+}
+
+editor-subparts button.add-part-button:hover {
+    background-color: rgba(240, 240, 240);
+    cursor: pointer;
+}
+
+editor-subparts button.add-part-button:active {
+    background-color: rgba(220, 220, 220);
+}
+
+editor-subparts button.add-part-button > svg {
+    width: 100%;
+    height: 100%;
+}
+
+
+/* =Utility Classes
+ * --------------------------------------------------------*/
+.editing {
+    background-image: linear-gradient(90deg, var(--marching-ant-color) 50%, transparent 50%),
+        linear-gradient(90deg, var(--marching-ant-color) 50%, transparent 50%),
+        linear-gradient(0, var(--marching-ant-color) 50%, transparent 50%),
+        linear-gradient(0, var(--marching-ant-color) 50%, transparent 50%);
+    background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
+    background-size: var(--marching-ant-length) var(--marching-ant-width), var(--marching-ant-length) var(--marching-ant-width), var(--marching-ant-width) var(--marching-ant-length), var(--marching-ant-width) var(--marching-ant-length);
+    animation: marching-ants-animation 400ms infinite linear;
+    border-color: transparent;
+}
+
+.editable {
+    outline: solid 1px var(--palette-orange);
+}
+
+.highlight {
+    background-color: green!important;
+}
+
+.targeting:after {
+    content: " ";
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+body.targeting-mode,
+body.targeting-mode [part-id] {
+    cursor: crosshair !important;
+}
+
+/* =Contextual Menu
+ *---------------------------------------------------*/
+.st-context-menu {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    border: 1px solid black;
+    background-color: white;
+    box-shadow: 1px 2px 10px rgba(50, 50, 50, 0.7);
+    z-index: 10000;
+    padding-bottom: 8px;
+    min-width: 200px;
+    font-family: 'Helvetica', sans-serif;
+}
+
+.context-menu-item {
+    display: block;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+.context-menu-item:hover {
+    cursor: pointer;
+    background-color: rgba(50, 50, 50, 0.9);
+    color: white;
+}
+
+.context-menu-item:hover > st-context-menu {
+    background-color: white;
+    color: black;
+}
+
+.context-menu-spacer {
+    display: block;
+    height: 1px;
+    margin-left: 24px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    margin-right: 24px;
+    background-color: rgba(150, 150, 150, 0.7);
+}
+
+
+/* Navigator 
+ * --------------------------------------------------*/
+
+wrapped-view {
+    display: block;
+    box-sizing: border-box;
+    width: 150px;
+    height: 100px;
+    border: 1px solid rgba(100, 100, 100, 0.4);
+    overflow: hidden;
+    margin-left: 15px;
+    flex-shrink: 0;
+    transition: transform 0.2s ease-in, opacity 0.2s ease-in, box-shadow 0.2s linear;
+    transform: translateY(0);
+    opacity: 1.0;
+}
+
+wrapped-view(:hover){
+    cursor: pointer;
+}
+
+wrapped-view(:hover:not(.current)){
+    border: 1px solid rgba(100, 100, 100, 0.8);
+    box-shadow: 1px 1px 20px 1px rgba(150, 150, 150, 0.5);
+    transition: box-shadow 0.1s linear, border 0.1s linear;
+}
+
+wrapped-view(:not(.current)) > st-card {
+    display: none;
+}
+
+wrapped-view(.current){
+    box-shadow: 1px 1px 20px 2px rgba(100, 100, 100, 0.8);
+}
+wrapped-view(:not(.current)){
+    opacity: 0.5;
+    transition: transform 0.2s ease-out, opacity 0.2s ease-out, box-shadow 0.2s linear;
+}
+
+wrapped-view(:not(.current)) > #number-display {
+    opacity: 0.8;
+    background-color: rgba(200, 200, 200, 0.5);
+    transition: opacity 0.2s ease-out;
+    z-index: 1000;
+}
+
+wrapped-view(:not(.current)) > #number-display > span {
+    transform: translateY(0px);
+    transition: transform 0.2s linear;
+}
+
+wrapped-view(:not(.current)) > #number-display {
+    opacity: 0.8;
+    background-color: rgba(200, 200, 200, 0.5);
+    transition: opacity 0.2s ease-out;
+    z-index: 1000;
+}
+
+wrapped-view(:not(.current)) > #number-display > span {
+    transform: translateY(0px);
+    transition: transform 0.2s linear;
+}
