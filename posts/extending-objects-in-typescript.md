@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Extending Somebody Else's Object in TypeScript"
-date: 2021-01-24 19:12:28
+date: 2022-01-24 19:12:28
 tags:
     - TypeScript
 published: true
