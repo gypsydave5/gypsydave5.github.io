@@ -1,7 +1,10 @@
 ---
+layout: post
 title: `toJSON` and `toString`
 description: Looking at two built in methods for transforming your JavaScript objects
 published: true
+tags:
+    - TypeScript
 date: 2021-12-08 15:04:05
 ---
 
