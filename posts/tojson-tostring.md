@@ -1,6 +1,6 @@
 ---
 layout: post
-title: `toJSON` and `toString`
+title: toJSON and toString
 description: Looking at two built in methods for transforming your JavaScript objects
 published: true
 tags:
