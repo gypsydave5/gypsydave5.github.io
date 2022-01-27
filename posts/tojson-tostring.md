@@ -69,7 +69,7 @@ function stringMyPinoccio(pinoccio: Pinoccio): string {
 }
 ```
 
-But why bother, when you can just lean a litte on a little old fashioned object oriented programming to make your life so much better...
+But why bother, when you can just lean on a little old fashioned object oriented programming to make your life so much better...
 
 ```typescript
 class Pinoccio {
@@ -96,11 +96,11 @@ The best thing about this approach is that now you'll get the appropriate string
 // '`Met a funny chap called Pinoccio who looks like: I've got 0 strings, to hold me down`
 ```
 
-and what's really wonderful about this is that it's recursive. The call of `toString()` on `pinoccio` actuall ends up calling `toString()` on the `strings` property of `pinoccio` - because it's being used in a string too...
+and what's really wonderful about this is that it's recursive. The call of `toString()` on `pinoccio` actually ends up calling `toString()` on the `strings` property of `pinoccio` - because it's being used in a string too...
 
 If you manage to organize things well, you could get some really nice, informative and readable strings coming out of your program. Instead of `[object Object]`.
 
-Of course, you could argue that you will _never_ need to see your object as a string. And I can admit, it might seem that way. But given that this is what you will see in your debugger, or in a console, or in your logs, it might be worth overriding `toString()` with something useful rahter than useless.
+Of course, you could argue that you will _never_ need to see your object as a string. And I can admit, it might seem that way. But given that this is what you will see in your debugger, or in a console, or in your logs, it might be worth overriding `toString()` with something useful rather than useless.
 
 On the subject of logs...
 
