@@ -1,0 +1,106 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+          inlineMath: [['$','$'], ['\\(','\\)']],
+          processEscapes: true,
+      },
+      displayAlign: "left",
+      displayIndent: "1em",
+      CommonHTML: { linebreaks: { automatic: true } },
+      "HTML-CSS": { linebreaks: { automatic: true } },
+      SVG       : { linebreaks: { automatic: true } }
+    });
+</script>
+<script type="text/javascript"
+        async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+  <link rel="stylesheet" href="/css/style.css">
+  <title>Environmentalism</title>
+</head>
+
+  <body>
+    <main>
+    
+<header>
+  <section class="top">
+    <h1><a href="/">gypsydave5</a></h1>
+    <p>The blog of David Wickes, software developer</p>
+  </section>
+
+  <ul class="links">
+    <li><a href="/pages/about/">about</a></li>
+    <li><a href="/posts/">posts</a></li>
+  </ul>
+</header>
+
+    
+<article>
+  <h1>Environmentalism</h1>
+  <time datetime="2014-09-12T20:17" >Sep 12, 2014</time>
+  <p>I&rsquo;ve never really seen the point of environment variables until today. They&rsquo;ve
+been slowly introduced into the syllabus at Makers during the bookmark manager
+project. To start with they were a way determine which database to use; whether
+the one for the test suite or the one for playing around on the local server.</p>
+
+<p>Something like</p>
+
+<pre><code class="language-ruby">env = ENV[&quot;RACK_ENV&quot;] || &quot;development&quot; DataMapper.setup(:default,
+&quot;postgres://localhost/bookmark_manager_#{env}&quot;)
+</code></pre>
+
+<p>Which is all well and good. Then it comes to getting the app up - let&rsquo;s say on
+Heroku.</p>
+
+<p>Heroku has PostgreSQL support, so that&rsquo;s taken care of by adding a plugin on the
+dashboard. Tick. Pushing the application to Heroku is easy enough (as long as
+you haven&rsquo;t spelled <code>Gemfile</code> in all caps at any point in your Git history. Who
+would do that?). But then you hit the buffers, because the database isn&rsquo;t where
+you&rsquo;ve told Sinatra it is.</p>
+
+<p>So where is it? Hiding somewhere over at Amazon apparently. If you run <code>heroku
+config</code> you&rsquo;ll see a great (OK, tiny) stack of&hellip; you guessed it&hellip; environment
+variables. The two key ones to look at are <code>DATABASE_URL</code> and
+<code>HEROKU_POSTGRES_PINK_URL</code>. Next to them both is a long URL that lets you know
+that the nice folks at Amazon are taking care of your instance of Postgres on
+the behalf of Heroku.</p>
+
+<p>So we just jam that URL into the DataMapper setup right?</p>
+
+<pre><code>ruby DataMapper.setup(:default,
+&quot;postgres://whole-mess-of-letters.compute-1.amazonaws:porty_goodness_here&quot;)
+</code></pre>
+
+<p>Wrong. That URL is a magic number, it&rsquo;s specific to the Heroku server you&rsquo;re
+pushing to. But what about James? What about Vincent? Maybe they want to have an
+instance of their own. Or what if Heroku go and migrate your database to another
+cloud supplier? Bad times.</p>
+
+<p>Environment variables to the rescue. Look, it&rsquo;s right there in the config:
+<code>DATABASE_URL</code>. Just jam that sucker into the DataMapper setup. Of course, you
+need to make sure that you&rsquo;re using it in Heroku, so maybe some sort of <code>if</code>
+statement to make sure you&rsquo;re using it in the right place. Not pretty, but&hellip;</p>
+
+<pre><code class="language-ruby">if env.include?(/heroku/)
+    DataMapper.setup(:default, ENV[&quot;DATABASE_URL&quot;])
+else
+    DataMapper.setup(:default, &quot;postgres://localhost/bookmark_manager_#{env}&quot;)
+end
+</code></pre>
+
+<p>Environment variables. No longer a &lsquo;nice to have&rsquo;.</p>
+
+</article>
+
+    </main>
+  </body>
+</html>

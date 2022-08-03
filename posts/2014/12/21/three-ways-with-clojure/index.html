@@ -1,0 +1,148 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+          inlineMath: [['$','$'], ['\\(','\\)']],
+          processEscapes: true,
+      },
+      displayAlign: "left",
+      displayIndent: "1em",
+      CommonHTML: { linebreaks: { automatic: true } },
+      "HTML-CSS": { linebreaks: { automatic: true } },
+      SVG       : { linebreaks: { automatic: true } }
+    });
+</script>
+<script type="text/javascript"
+        async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+  <link rel="stylesheet" href="/css/style.css">
+  <title>Three Ways with Clojure</title>
+</head>
+
+  <body>
+    <main>
+    
+<header>
+  <section class="top">
+    <h1><a href="/">gypsydave5</a></h1>
+    <p>The blog of David Wickes, software developer</p>
+  </section>
+
+  <ul class="links">
+    <li><a href="/pages/about/">about</a></li>
+    <li><a href="/posts/">posts</a></li>
+  </ul>
+</header>
+
+    
+<article>
+  <h1>Three Ways with Clojure</h1>
+  <time datetime="2014-12-21T21:04" >Dec 21, 2014</time>
+  <p>I&rsquo;ve been working with <a href="http://clojure.org/">Clojure</a> in the last few days, both looking at the
+<a href="http://clojurekoans.com/">Clojure Koans</a> and another resource I&rsquo;ve discovered <a href="http://www.4clojure.com/">4clojure.com</a>. I&rsquo;d like to
+share a nice problem I saw there, and some of the solutions to it which I think
+expose some of the things I&rsquo;m beginning to appreciate about the language.</p>
+
+<h3>The Problem</h3>
+
+<p>as stated on <a href="http://www.4clojure.com/problem/21#prob-title">4clojure</a>.</p>
+
+<blockquote>
+<p>Write a function which returns the Nth element from a sequence.
+(Without using <code>nth</code>)</p>
+</blockquote>
+
+<p><code>nth</code> is the obvious answer to the problem, as it returns the nth element in
+a sequence:</p>
+
+<pre><code class="language-clojure">(= 2 (nth 1 '(1 2 3 4)))
+</code></pre>
+
+<p>We need to get to a function that will do the same, something that will fit
+in the blank space below:</p>
+
+<pre><code class="language-clojure">(= (___ '(4 5 6 7) 2) 6)
+</code></pre>
+
+<h3>Solution 1: recurring</h3>
+
+<pre><code class="language-clojure">(fn my_nth [seqn n] (if
+    (zero? n)
+    (first seqn)
+    (my-nth (rest seqn) (dec n))))
+</code></pre>
+
+<p>Here we use recurrance, setting the breaking point as the iteration where <code>n</code> is
+zero using <code>if</code>, at which point the function returns the <code>first</code> value of the
+sequence. If it&rsquo;s not, we fire the function again, but this time chopping off
+the first member of the sequence (<code>(rest seqn)</code> returns the rest) and
+<code>dec</code>rementing the value of <code>n</code> by one. We walk through the sequence, losing
+items from the front of the sequence <code>n</code> times, until we get to the index.</p>
+
+<p>We&rsquo;ve named the function <code>my_nth</code>, but we could easily anonymize it:</p>
+
+<pre><code class="language-clojure">(fn [seqn n] (if
+    (zero? n)
+    (first seqn)
+    (recur (rest seqn) (dec n))))
+</code></pre>
+
+<p><code>recur</code> is neat - it executes the expressions that follow it, then rebinds the
+values hey produce to the bindings of the recursion point, in this case the
+<code>fn</code> method. We then get moved back to that method with the new values, causing
+the recusion. Very cool.</p>
+
+<p>Usually recursion is a neat way of writing a short function; here it&rsquo;s pretty
+longwinded. We can get smaller&hellip;</p>
+
+<h3>Solution 2: taking</h3>
+
+<pre><code class="language-clojure">(fn [seqn n] (last (take (inc n) seqn)))
+</code></pre>
+
+<p>Here we <code>take</code> the first one-more-than-n (<code>inc</code> increments its argument) items
+from the sequence, and then take the <code>last</code> one from the end of that new list-
+which will be the nth element.</p>
+
+<p><code>take</code> is used in many of the examples I&rsquo;ve seen as a way of accessing
+a sequence which may be infinite like the Fibonacci series - see some of the
+examples over at
+<a href="https://en.wikibooks.org/wiki/Clojure_Programming/Examples/Lazy_Fibonacci">Wikibooks</a>.</p>
+
+<p>We can squeeze more succinctness in there using some alternative syntax:</p>
+
+<pre><code class="language-clojure">#(last (take (inc %2) %1))
+</code></pre>
+
+<p>But if you want to be really succinct:</p>
+
+<p>###Solution 3: ripping off Java</p>
+
+<pre><code class="language-clojure">.get
+</code></pre>
+
+<p>Clojure gives you access to Java methods and fields through the use of the dot
+(<code>.</code>) operator, which takes the form <code>(.instanceMember instance arguments*)</code>.
+Here we&rsquo;re using the <code>get()</code> method from the Java <a href="http://docs.oracle.com/javase/tutorial/collections/interfaces/list.html">Lists
+interface</a>,
+which we get to use on these instances as they are, well, Java lists.  which
+takes one argument - and luckily for us its the index! We&rsquo;re calling <code>get(6)</code>
+on the list, which gives us the answer we want.</p>
+
+<p>This is pretty close to cheating, but it goes to show how Clojure&rsquo;s access to
+Java gives us a whole other language of libraries and methods to play with.</p>
+
+</article>
+
+    </main>
+  </body>
+</html>

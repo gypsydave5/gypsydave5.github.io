@@ -1,0 +1,130 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+          inlineMath: [['$','$'], ['\\(','\\)']],
+          processEscapes: true,
+      },
+      displayAlign: "left",
+      displayIndent: "1em",
+      CommonHTML: { linebreaks: { automatic: true } },
+      "HTML-CSS": { linebreaks: { automatic: true } },
+      SVG       : { linebreaks: { automatic: true } }
+    });
+</script>
+<script type="text/javascript"
+        async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+  <link rel="stylesheet" href="/css/style.css">
+  <title>Surviving Windows</title>
+</head>
+
+  <body>
+    <main>
+    
+<header>
+  <section class="top">
+    <h1><a href="/">gypsydave5</a></h1>
+    <p>The blog of David Wickes, software developer</p>
+  </section>
+
+  <ul class="links">
+    <li><a href="/pages/about/">about</a></li>
+    <li><a href="/posts/">posts</a></li>
+  </ul>
+</header>
+
+    
+<article>
+  <h1>Surviving Windows</h1>
+  <time datetime="2014-07-04T11:35" >Jul 04, 2014</time>
+  <p>I&rsquo;ve worked within Windows and Microsoft OSs for&hellip; well, most of my computing
+life now I think about it. I&rsquo;m pretty sure that most people are the same. And
+like most people I&rsquo;ve always had my little moans about it. Too many to mention.</p>
+
+<p>This has come to a head since I [switched to Linux][LinuxSwitch] a few months
+ago. Not that Linux (Ubuntu in my case) doesn&rsquo;t have it&rsquo;s own long list of
+problems, but they all feel more like problems I should be fixing myself
+- rather than things I&rsquo;ll just moan about and put up with. Yes, Ubuntu (and the
+Unity desktop specfically) has &lsquo;spoiled&rsquo; me. I&rsquo;d rather be working in that
+environment than any earlier version of Windows. Woo-hoo. Hear the whoop from camp
+Linux, joy shall be in heaven over one sinner that repenteth, etc etc usw.</p>
+
+<p>But there&rsquo;s still so much of my life that has to be done in Windows. Work
+spreadsheet has VBA macros? Work machine in Vista? <a href="https://launchpad.net/pipelight">Netflix requires
+Silverlight</a>? It&rsquo;s inevitable.</p>
+
+<p>So instead of moaning I&rsquo;ve been trying to fix Windows to make it usable like
+I want it to be. And I think I&rsquo;ve found some good options. The first thing to
+note is that I&rsquo;ve been so used to putting up with Windows that I was under the
+impression that there was very little that could be done to it. Lay that thought
+to rest - there&rsquo;s hundreds of hacks, options, fixes, and bits of software we can
+use to make Window&rsquo;s a happier place to be. Or, if not actively happy, then at
+least survivable&hellip;</p>
+
+<h2>Winsplit Revolution</h2>
+
+<p>OK, not the greatest name. What I missed most about Ubuntu when stuck on Vista
+was the way I could throw windows around the desktop using the numpad. This
+feauture is neatly emulated with <a href="http://download.cnet.com/WinSplit-Revolution/3000-2072_4-10971915.html">Winsplit Revolution</a>, which is small
+and, well, works. You can customize the shortcuts too. (Looks like the original
+website is no longer around so I&rsquo;ve linked to the CNET page).</p>
+
+<h2>Put the taskbar on the side</h2>
+
+<p>Oh this sounds dumb I know, but nobody even thinks of doing it on Windows
+because it&rsquo;s a change. Totally inspired by the Unity set up, it just makes more
+sense. If most of what I&rsquo;m doing involves reading down a page on the screen
+- code, text, etc - then I really want optimize the vertical space on the
+screen. So slam the taskbar to the side and get yourself a couple of centimeters
+for free. If you were going to try one new thing this week make it this.</p>
+
+<h2>GVim</h2>
+
+<p>All that Vim goodness - <a href="http://www.vim.org/download.php#pc">now on your Windows</a>. And you can use the same
+config files. And you can set the config depending on the environment (Windows,
+Linux, OSX). And you could save all those files onto Dropbox, make symlinks to
+them&hellip; OK - too far. But get GVim for Windows.</p>
+
+<h2>Autohotkey</h2>
+
+<p>I&rsquo;ll write something about the what effect of removing the caps lock button from
+my keyboard has been (no, not physically) at a later date. But for fun keyboard
+hacks like this and more I&rsquo;ve been enjoying <a href="http://www.autohotkey.com/">Autohotkey</a>, which has its
+own simple scripting language to allow you to remap and rewite your keyboard to
+your hearts content.</p>
+
+<h2>Get GNUy</h2>
+
+<p>I&rsquo;ve tried <a href="https://www.cygwin.com/">Cygwin</a> before - part of working using a Linux only font
+tool. But I found it&hellip; big. Powerful, yes - but big. So big I didn&rsquo;t use it.
+Second time around I&rsquo;ve been using <a href="https://github.com/bmatzelle/gow/wiki">Gow</a> - which brings all the *nix-y
+command line goodness to your <code>cmd</code> shell in Windows.</p>
+
+<h2>Chocolatey</h2>
+
+<p>Missing <code>apt-get</code> or similar package management utilities on Windows?
+<a href="http://chocolatey.org/">Chocolatey</a> to the rescue. Install Git! Install Node! Install
+everything listed above and more, and get them all updated from the command
+line. It&rsquo;s brilliant.</p>
+
+<p>Ah, that&rsquo;s it for now. All I&rsquo;d finish off by saying is that the only thing
+holding me back from improving my experience of Windows was&hellip; ignorance. And
+indolence. GNU/Linux makes you change things to fit the way you work, and as soon as
+you&rsquo;ve learned how to do that it&rsquo;s easier to avoide complacence with other OSes.
+. A good lesson.</p>
+
+</article>
+
+    </main>
+  </body>
+</html>

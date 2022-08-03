@@ -1,0 +1,226 @@
+<html>
+  <head>
+    <script src="https://unpkg.com/typescript@latest/lib/typescriptServices.js"></script>
+    <script src="https://unpkg.com/bignumber.js@9.0.1/bignumber.min.js"></script>
+    <link href="style.css" rel="stylesheet">
+  </head>
+  <body>
+    <h1><code>toJSON</code> and <code>toString</code></h1>
+    <h2>Syntax Highlighting Is For The Weak</h2>
+
+    <button onclick="loadSample('objectObject')">Object Object</button>
+    <button onclick="loadSample('baseMoney')">Money</button>
+    <button onclick="loadSample('moneyToString')">Money toString</button>
+    <button onclick="loadSample('toStringTag')">Money toStringTag</button>
+    <button onclick="loadSample('moneyToJSON')">Money toJSON</button>
+    <button onclick="loadSample('customErrorF')">Custom Error</button>
+    <button onclick="loadSample('customErrorC')">Custom Error C</button>
+
+    <textarea id="code" oninput="resizeCode()"></textarea>
+
+    <button onclick="doit()">Do it</button>
+
+    <section class="output">
+      <h4>Output:</h4>
+      <pre id="output">      
+      </pre>
+    </section>
+
+    <nav>
+      <ul class="nav">
+        <li><a href="index.html" id="previous">Previous</a></li>
+        <li><a href="conclusions.html" id="next">Next</a></li>
+      </ul>
+    </nav>
+    
+    <script>
+      const options = {
+	  "outDir": "dist",
+	  "target": "ES6",
+	  "module": "CommonJS",
+	  "moduleResolution": "node",
+	  "esModuleInterop": true,
+	  "downlevelIteration": true,
+	  "allowSyntheticDefaultImports": true,
+	  "importHelpers": true,
+	  "skipLibCheck": true,
+	  "sourceMap": false,
+	  "removeComments": true,
+	  "noEmitOnError": true,
+	  "strict": false,
+	  "alwaysStrict": false,
+	  "noImplicitAny": false,
+	  "typeRoots": ["node_modules/@types/"]
+      }
+
+      window.addEventListener('load', () => {
+          loadSample('object-object')
+      })
+      
+      function doit() {
+          evaluate(transpile())
+      }
+
+      function transpile() {
+          return window.ts.transpile(document.getElementById('code').value, options);
+      }
+
+      function evaluate(js) {
+          document.getElementById('output').innerHTML = (eval,eval)(js)
+      }
+      
+      function loadSample(sampleName) {
+          const code = document.getElementById('code')
+          code.value = samples[sampleName]
+          resizeCode()
+      }
+
+      function resizeCode() {
+          const code = document.getElementById('code')
+          code.style.height = "";
+          code.style.height = `${code.scrollHeight + 5}px`
+      }
+
+      const samples = {
+          baseMoney: `
+class Currency {
+  constructor(public readonly value: string) {}
+}
+
+class Money {
+  constructor(public readonly value: BigNumber, public readonly currency: Currency) {}
+}
+
+new Money(new BigNumber(13.37), new Currency('ISK'));
+`,
+          moneyToString: `
+class Currency {
+  constructor(public readonly value: string) {}
+  
+  toString() {
+    return this.value
+  }
+}
+
+class Money {
+  constructor(public readonly value: BigNumber, public readonly currency: Currency) {}
+  
+  toString() {
+    return \`\${this.value} \${this.currency}\`
+  }
+}
+
+new Money(new BigNumber(13.37), new Currency('ISK'));
+`,
+          moneyToJSON: `
+class Currency {
+  constructor(public readonly value: string) {}
+
+  toJSON() {
+    return this.value;
+  }
+}
+
+class Money {
+  constructor(public readonly value: BigNumber, public readonly currency: Currency) {}
+
+  toJSON() {
+    return { amount: this.value, currency: this.currency }
+  }
+}
+
+const money = new Money(new BigNumber(13.37), new Currency('ISK'));
+JSON.stringify(money)
+`,
+          errors: `
+const error = new Error('badness')
+error`,
+          customErrorF: `
+class MyServiceError extends Error {
+    constructor(public readonly number: number, public readonly originalError: Error) {
+            super('MyService failed to process a number')
+            this.name = this.constructor.name;
+        }
+}
+
+const error = new MyServiceError(303, new Error('the badness'));
+
+function serializeMyServiceError(error: MyServiceBadResponseError): MyServiceBadResponseErrorDTO {
+    return {
+        name: error.name,
+        message: error.message,
+        stack: error.stack,
+        number: error.number,
+        originalError: { name: error.originalError.name, message: error.originalError.message, stack: error.originalError.stack },
+    }
+}
+
+JSON.stringify(serializeMyServiceError(error), null, 2)
+`,
+          customErrorC: `
+class HttpError extends Error {
+    constructor(public readonly request: Request, public readonly response: Response) {
+        super('the badness');
+        this.name = this.constructor.name;
+    }
+
+    toJSON() {
+        return {
+            name: this.name,
+            message: this.message,
+            stack: this.stack,
+            request: this.request,
+            response: this.response,
+        }
+    }
+}
+
+class MyServiceError extends Error {
+    constructor(public readonly number: number, public readonly originalError: Error) {
+            super('MyService failed to process a number')
+            this.name = this.constructor.name;
+        }
+
+    toJSON() {
+       return {
+        name: this.name,
+        message: this.message,
+        stack: this.stack,
+        number: this.number,
+        originalError: this.originalError.toJSON(),
+        }
+    }
+}
+
+const error = new MyServiceError(303, new HttpError(new Request('hello'), new Response()));
+
+JSON.stringify(error, null, 2)
+`,
+          objectObject: `
+Object.prototype.toString()
+`,
+          toStringTag: `
+class Currency {
+  constructor(public readonly value: string) {}
+}
+
+class Money {
+  [Symbol.toStringTag] = this.constructor.name
+  constructor(public readonly value: BigNumber, public readonly currency: Currency) {}
+}
+
+new Money(new BigNumber(13.37), new Currency('ISK'));
+`,
+          'object-object': `
+const point = {
+  x: 1,
+  y: 2
+}
+
+point
+`
+      }
+      
+    </script>
+  </body>
+</html>

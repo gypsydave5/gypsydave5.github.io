@@ -1,0 +1,155 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+          inlineMath: [['$','$'], ['\\(','\\)']],
+          processEscapes: true,
+      },
+      displayAlign: "left",
+      displayIndent: "1em",
+      CommonHTML: { linebreaks: { automatic: true } },
+      "HTML-CSS": { linebreaks: { automatic: true } },
+      SVG       : { linebreaks: { automatic: true } }
+    });
+</script>
+<script type="text/javascript"
+        async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+  <link rel="stylesheet" href="/css/style.css">
+  <title>Extending Somebody Else’s Object in TypeScript</title>
+</head>
+
+  <body>
+    <main>
+    
+<header>
+  <section class="top">
+    <h1><a href="/">gypsydave5</a></h1>
+    <p>The blog of David Wickes, software developer</p>
+  </section>
+
+  <ul class="links">
+    <li><a href="/pages/about/">about</a></li>
+    <li><a href="/posts/">posts</a></li>
+  </ul>
+</header>
+
+    
+<article>
+  <h1>Extending Somebody Else&rsquo;s Object in TypeScript</h1>
+  <time datetime="2022-01-24T19:12" >Jan 24, 2022</time>
+  <p>Here&rsquo;s how to extend (&ldquo;monkey patch&rdquo;) a JavaScript class in TypeScript, without giving up on type safety (or our precious auto complete).</p>
+
+<h2>Our example: <code>tape</code></h2>
+
+<p><a href="https://github.com/substack/tape">Tape</a> is a gloriously simple testing harness for JavaScript. I&rsquo;d use it more often but the Webstorm support is non-existant, and I use Webstorm at work, and, well&hellip; anyway, it&rsquo;s great, take a look at it.</p>
+
+<p>Our example is going to involve extending the testing object of <code>tape</code> with a &ldquo;custom matcher&rdquo;: a way of wrapping a bit of testing logic up into a reusable method. In <code>tape</code>, the test assertions are all methods on an instance of <code>Test</code>, which is passed into each test. Like this:</p>
+
+<pre><code class="language-typescript">import test from 'tape';
+
+import test, { Test } from 'tape';
+
+test('2 divided by 2 is 1', function (t: Test) {
+    t.equal(2 / 2, 1)
+    t.end()
+});
+
+</code></pre>
+
+<p>Pretty bare-bones, but easy to understand. What I&rsquo;d like is something that looks more like this:</p>
+
+<pre><code class="language-typescript">import test from 'tape';
+
+import test, { Test } from 'tape';
+
+test('2 divided by 2 is 1', function (t: Test) {
+    t.isOne(2 / 2)
+    t.end()
+});
+
+</code></pre>
+
+<h2>First step: how to extend a class in JS</h2>
+
+<p>This is, if anything, the easy bit. We get hold of the <code>Test</code> class and fiddle with its prototype. By &lsquo;fiddle&rsquo; I mean go and add a new method to it. Some developers (mainly Java developers) don&rsquo;t like this jiggery pokery and sneeringly call it &ldquo;monkey patching&rdquo;. I think it&rsquo;s <em>fine</em> if you&rsquo;re not trying to share the code as a library, and it&rsquo;s <em>definitely fine</em> when it&rsquo;s in your test code. Maybe take a look at how Smalltalk does the same thing a lot without any pearl clutching. Or Perl clutching. But I digress. Here&rsquo;s an extension in plain old JavaScript, using NodeJS and CommonJS modules:</p>
+
+<pre><code class="language-javascript">const test = require('tape')
+
+test.Test.prototype.isOne = function isOne(number, message) {
+  this._assert(n === 1, {
+    message: message || `${number} equal to 1`,
+    operator: 'isOne',
+    actual: n,
+  });
+};
+
+</code></pre>
+
+<p>Word of explanation: the <code>_assert</code> method is a private method within the <code>Test</code> instance. Yes, we&rsquo;re depending on a private API. Yes, that should worry you a little bit. But, like I say, it&rsquo;s in the tests and they&rsquo;re <em>my</em> damn tests so I&rsquo;ll do as I please thank you.</p>
+
+<p>If this whole <code>prototype</code> thing is all a bit of a mystery to you, I gently suggest that you take a look over at <a href="https://github.com/getify/You-Dont-Know-JS/blob/1st-ed/README.md"><em>You Don&rsquo;t Know JS</em></a>, and read the book about Object Prototypes. Anyway, drop that in your code where you like and, as if by magic, you&rsquo;ll be able to run the example above.</p>
+
+<p>However, you won&rsquo;t be able to <em>compile</em> the example as TypeScript still doesn&rsquo;t know about the method. It is still going to be using the type definitions from <code>@types/tape</code>, which definitely don&rsquo;t include <code>.isOne()</code>. And we won&rsquo;t get the awesome completion in our IDE, which, as we all know, is the <em>real</em> reason we love static typing so much. So how can we <em>gently re-educate</em> TypeScript about our new method?</p>
+
+<h2>Module Augmentation</h2>
+
+<p>We&rsquo;re going to do this through <a href="https://www.typescriptlang.org/docs/handbook/declaration-merging.html#module-augmentation"><em>module augmentation</em></a>. Take a look at the docs, and if you do you&rsquo;ll probably abandon this whole blog post as it&rsquo;s mostly a re-hash of that. But, let&rsquo;s press on.</p>
+
+<p>Mostly we tell TypeScript about the types in our systems through annotating our code. You know, saying that our variables are <code>string</code>s, or that this function takes a <code>number</code> and returns a <code>boolean</code> and the like.</p>
+
+<p>We also create some types ourselves, built using other types. <code>interface</code>s and <code>type</code>s, and even <code>class</code>es are good examples of these.</p>
+
+<p>But what we&rsquo;re going to do now is crack open an existing type and start adding to it. We&rsquo;ll keep it simple by having our type declarations all in the same file as the implementation - so the same file as the <code>test.Test.prototype</code> stuff in this case. What we&rsquo;ll do is, essentially, redeclare a module that we import in the code, and write a new declaration of one of its members which includes the new methods we&rsquo;re going to write. Like this:</p>
+
+<p>We import the <code>'tape'</code> module, then immediately redeclare it. And then, inside the module declaration, we write a new <code>Test</code> class with the method definitions we want on it. Hurrah. Note that I decided to define the <code>_assert</code> method as, well, it just shuts up the typechecker when I&rsquo;m writing the implementation. But also note that I did a <em>terrible</em> job of it by using <code>any</code> all over the place. But it&rsquo;s fit for purpose, and saves me the pain of trying to work out the type of the private options object. Yuck.</p>
+
+<p>So putting it all together in one file:</p>
+
+<pre><code class="language-typescript">// inside `tapeExtensions/index.ts`
+import test from 'tape';
+
+declare module 'tape' {
+  class Test {
+    isOne(n: number, message?: string): void;
+    _assert(ok: boolean, options: any): any;
+  }
+}
+
+test.Test.prototype.isOne = function isOne(n: number, message?: string) {
+  this._assert(n === 1, {
+    message: message ||  `${number} equal to 1`,
+    operator: 'isOne',
+    actual: n,
+  });
+};
+</code></pre>
+
+<p>then we just import the <code>tapeExtensions</code> module. Note that we&rsquo;re not importing it to use anything exported by it; we&rsquo;re just doing it for the side-effect of extending <code>Test</code> with our new method. Yes, this might make you uncomfortable (<em>ooooh side effects BAAAAAD! Mokey patching BAAAAD! OH NO HE&rsquo;S USING INHERITANCE QUICK GET THE CRUXIFIX!</em>), that&rsquo;s a larger conversation that I&rsquo;ll need to have with you one day. Anyway, here&rsquo;s how to use it:</p>
+
+<pre><code class="language-typescript">// in
+import test, { Test } from 'tape';
+import './tapeExtensions';
+
+test('2 divided by 2 is 1', function (t: Test) {
+    t.isOne(2 / 2)
+    t.end()
+});
+</code></pre>
+
+<p>So, there you are: all the awesome power, just itching to be abused, of writing extending an object using &ldquo;monkey patching&rdquo;, combined with type safety. You could easily make a mess of all this if you don&rsquo;t use it with good taste and a bit of common sense, but we&rsquo;re all <em>professional software developers</em> right? We know what we&rsquo;re doing, right?</p>
+
+</article>
+
+    </main>
+  </body>
+</html>

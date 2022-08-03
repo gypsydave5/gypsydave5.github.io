@@ -1,0 +1,333 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+          inlineMath: [['$','$'], ['\\(','\\)']],
+          processEscapes: true,
+      },
+      displayAlign: "left",
+      displayIndent: "1em",
+      CommonHTML: { linebreaks: { automatic: true } },
+      "HTML-CSS": { linebreaks: { automatic: true } },
+      SVG       : { linebreaks: { automatic: true } }
+    });
+</script>
+<script type="text/javascript"
+        async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+  <link rel="stylesheet" href="/css/style.css">
+  <title>toJSON and toString</title>
+</head>
+
+  <body>
+    <main>
+    
+<header>
+  <section class="top">
+    <h1><a href="/">gypsydave5</a></h1>
+    <p>The blog of David Wickes, software developer</p>
+  </section>
+
+  <ul class="links">
+    <li><a href="/pages/about/">about</a></li>
+    <li><a href="/posts/">posts</a></li>
+  </ul>
+</header>
+
+    
+<article>
+  <h1>toJSON and toString</h1>
+  <time datetime="2021-12-08T15:04" >Dec 08, 2021</time>
+  <h2><code>toString</code></h2>
+
+<p>What&rsquo;s everyone&rsquo;s favourite thing to see on the screen when writing TypeScript or JavaScript? The one message that lets you know you&rsquo;re winning?</p>
+
+<pre><code>[object Object]
+</code></pre>
+
+<p>Oh <code>[object Object]</code>, how we love you. So objecty they named you twice. But why, as my three year old daughter keeps saying. Why?</p>
+
+<p>An example is worth a thousand words and so:</p>
+
+<pre><code class="language-javascript">{}.toString() // '[object Object]'
+Object.prototype.toString() // '[object Object]'
+</code></pre>
+
+<p><code>[object Object]</code> is the default output of the JavaScript <code>Object</code> prototype&rsquo;s <code>toString()</code> method, and that prototype is what every new object in JavaScript inherits from. Even if you think you&rsquo;ve got no <code>toString()</code>s on you:</p>
+
+<pre><code class="language-javascript">const pinoccio = {
+    strings: 0,
+    isHeldDown: false,
+    frets: 0,
+    frowns: 0,
+}
+
+pinoccio // '[object Object]'
+</code></pre>
+
+<p>or even</p>
+
+<pre><code class="language-typescript">class Pinoccio {
+    constructor(
+        public readonly strings: number, 
+        public readonly isHeldDown: boolean,
+        public readonly frets: number,
+        public readonly frowns: number,
+        )
+}
+
+new Pinoccio(0, false, 0, 0) // '[object Object]'
+
+</code></pre>
+
+<p>How do we avoid this? Well we either</p>
+
+<ol>
+<li>Never output <code>pinoccio</code> as a string</li>
+<li>Change <code>Object.prototype.toString()</code> (don&rsquo;t do this)</li>
+<li>Write our own way of turning <code>pinoccio</code> to a string</li>
+<li>Override the <code>toString()</code> method</li>
+</ol>
+
+<p>3 is not a bad idea, and it&rsquo;s what a lot of more &ldquo;functional&rdquo; developers do in JavaScript:</p>
+
+<pre><code class="language-typescript">function stringMyPinoccio(pinoccio: Pinoccio): string {
+    return `I've got ${pinoccio.strings} strings, to hold me down`
+}
+</code></pre>
+
+<p>But why bother, when you can just lean on a little old fashioned object oriented programming to make your life so much better&hellip;</p>
+
+<pre><code class="language-typescript">class Pinoccio {
+    constructor(
+        public readonly strings: number, 
+        public readonly isHeldDown: boolean,
+        public readonly frets: number,
+        public readonly frowns: number,
+        )
+        
+    toString(): string {
+        return `I've got ${this.strings} strings, to hold me down`
+    }
+}
+
+new Pinoccio(0, false, 0, 0) // 'I've got 0 strings, to hold me down'
+
+</code></pre>
+
+<p>The best thing about this approach is that now you&rsquo;ll get the appropriate string output for pinoccio whenever <code>toString()</code> is called. And it&rsquo;s called <em>everywhere</em>. Whenever an object should be a string in the opinion of JavaScript, then this is the method that will get called. So now if I want to stick <code>pinoccio</code> in a longer string:</p>
+
+<pre><code class="language-javascript">`Met a funny chap called Pinoccio who looks like: ${pinoccio}`
+// '`Met a funny chap called Pinoccio who looks like: I've got 0 strings, to hold me down`
+</code></pre>
+
+<p>and what&rsquo;s really wonderful about this is that it&rsquo;s recursive. The call of <code>toString()</code> on <code>pinoccio</code> actually ends up calling <code>toString()</code> on the <code>strings</code> property of <code>pinoccio</code> - because it&rsquo;s being used in a string too&hellip;</p>
+
+<p>If you manage to organize things well, you could get some really nice, informative and readable strings coming out of your program. Instead of <code>[object Object]</code>.</p>
+
+<p>Of course, you could argue that you will <em>never</em> need to see your object as a string. And I can admit, it might seem that way. But given that this is what you will see in your debugger, or in a console, or in your logs, it might be worth overriding <code>toString()</code> with something useful rather than useless.</p>
+
+<p>On the subject of logs&hellip;</p>
+
+<h2><code>toJSON</code></h2>
+
+<p>What&rsquo;s everyone&rsquo;s favourite log message?</p>
+
+<pre><code>'{&quot;message&quot;:&quot;service failed to do the thing&quot;,&quot;error&quot;:&quot;{\\&quot;message\\&quot;:\\&quot;something went wrong with this request\\&quot;,\\&quot;request\\&quot;:\\&quot;{\\\\\\&quot;headers\\\\\\&quot;:\\\\\\&quot;{\\\\\\\\\\\\\\&quot;content-type\\\\\\\\\\\\\\&quot;:\\\\\\\\\\\\\\&quot;application/json\\\\\\\\\\\\\\&quot;}\\\\\\&quot;,\\\\\\&quot;body\\\\\\&quot;:\\\\\\&quot;{\\\\\\\\\\\\\\&quot;message\\\\\\\\\\\\\\&quot;:\\\\\\\\\\\\\\&quot;hello world\\\\\\\\\\\\\\&quot;}\\\\\\&quot;,\\\\\\&quot;method\\\\\\&quot;:\\\\\\&quot;POST\\\\\\&quot;,\\\\\\&quot;url\\\\\\&quot;:\\\\\\&quot;http://hello\\\\\\&quot;}\\&quot;}&quot;}'
+</code></pre>
+
+<p>Yes, that&rsquo;s right - it&rsquo;s nested JSON. Nothing like nested JSON to ruin your day, as you repeatedly paste and pares each individual bit to understand what the hell went wrong, or try to strip the forward-slashes using the power of your mind. No, that doesn&rsquo;t work.</p>
+
+<p>Nested JSON messages are what happens when you just add a little bit extra on to an error message to give context, but decide that that context is probably an object like the request you just sent. And so you <code>JSON.stringify</code> that object into the error message string. But the that error message string winds up inside another object that, unknown to you, <em>also</em> gets <code>JSON.stringify</code>&rsquo;d, and etc and so on until you get to forward slash city.</p>
+
+<p>What&rsquo;s tragic about all this is that we live in a world of <em>structured logging</em> these days: we don&rsquo;t just log messages, we log whole damn bits of JSON so we can run exciting queries to tell us exactly how badly we&rsquo;ve screwed up this time.</p>
+
+<p>But getting a nice bit of JSON out of a JavaScript error can be a bit annoying. For instance, there&rsquo;s only really three fields on your basic <code>Error</code>: the <code>name</code>, the <code>message</code> and the <code>stack</code> trace.</p>
+
+<p>Most browsers do a good job of showing all three in their console. And the <code>toString()</code> implementation in <code>Error</code> is actually pretty good:</p>
+
+<pre><code class="language-javascript">new Error('the badness').toString() // 'Error: the badness'
+</code></pre>
+
+<p>You get the name of the class and the message. Pretty useful. But have you seen what happens when you try and turn one of them into JSON?</p>
+
+<pre><code class="language-javascript">JSON.stringify(new Error('the badness')) // '{}'
+</code></pre>
+
+<p>How useless is that?</p>
+
+<p>So how do we (1) get some more structure into our <code>Error</code>s, and (2) turn them into nice JSON?</p>
+
+<h3>Custom errors</h3>
+
+<p>To customize our errors we should <em>subclass</em> them. Yes, I know. Inheritance is the great Satan of object oriented programming. &ldquo;Favor object composition over class inheritance&rdquo;. If we start inheriting from classes our entire codebase will turn instantly into a nightmare of dependencies and spaghetti, and all the cool kids won&rsquo;t want to hang out with us.</p>
+
+<p>Well, the good news is that all those cool kids are off doing functional programming badly now, so you don&rsquo;t have to worry about them. As for the nightmare hellscape of inheritance&hellip; well, <em>Design Patterns</em> - from where that quote is taken - says &ldquo;<em>favor</em> object composition over class inheritance&rdquo;. Not &ldquo;never use inheritance&rdquo;. I&rsquo;m not going to get into why this is a great use case for inheritance, but trust me - it is. Feel free to make it work by just implementing the <code>Error</code> interface if you like. It&rsquo;s your life.</p>
+
+<p>Having said all that:</p>
+
+<pre><code class="language-typescript">class MyServiceError extends Error {
+    constructor(
+        public readonly number: number,
+        public readonly originalError: Error) {
+            super('MyService failed to process a number')
+            this.name = this.constructor.name;
+        }
+}
+</code></pre>
+
+<p>Boom. This is the nicest way of doing this. Maybe the only weird thing here is <code>this.name = this.constructor.name</code>, which is just making sure that the name of this error isn&rsquo;t <code>Error</code>, but instead is named after its constructor function (<code>MyServiceBadResponseError</code>).</p>
+
+<p>Well, we now have all those lovely fields all ready for our structured logging. But how can we get a nice, structured bit of JSON out given that, even with our modifications, we still get:</p>
+
+<pre><code class="language-typescript">JSON.stringify(new MyServiceBadResponseError(303, new Request(), new Response, new Error())) 
+// {&quot;number&quot;:303,&quot;originalError&quot;:{},&quot;name&quot;:&quot;MyServiceError&quot;}'
+</code></pre>
+
+<p>This is better - but it&rsquo;s still not really what we want. Where&rsquo;s my <code>stack</code>? Where&rsquo;s the <code>message</code>? What about that original error?</p>
+
+<p>One way would be to write a nice function to transform the object into a thing we can then send to <code>JSON.stringify</code>:</p>
+
+<pre><code class="language-typescript">function serializeMyServiceError(error: MyServiceBadResponseError): MyServiceBadResponseErrorDTO {
+    return {
+        name: error.name,
+        message: error.message,
+        stack: error.stack,
+        number: error.number,
+        originalError: error.originalError,
+    }
+}
+</code></pre>
+
+<p>This is pretty good:</p>
+
+<pre><code>{
+  &quot;name&quot;: &quot;MyServiceError&quot;,
+  &quot;message&quot;: &quot;MyService failed to process a number&quot;,
+  &quot;stack&quot;: &quot;MyServiceError@http://localhost:8000/tojson/errors.html line 67 &gt; eval:11:9\n@http://localhost:8000/tojson/errors.html line 67 &gt; eval:17:15\nevaluate@http://localhost:8000/tojson/errors.html:67:68\ndoit@http://localhost:8000/tojson/errors.html:59:19\nonclick@http://localhost:8000/tojson/errors.html:1:1\n&quot;,
+  &quot;number&quot;: 303,
+  &quot;originalError&quot;: {}
+}
+</code></pre>
+
+<p>But I still can&rsquo;t see my original error. How about:</p>
+
+<pre><code class="language-typescript">function serializeMyServiceError(error: MyServiceBadResponseError): MyServiceBadResponseErrorDTO {
+    return {
+        name: error.name,
+        message: error.message,
+        stack: error.stack,
+        number: error.number,
+        originalError: { name: error.originalError.name, message: error.originalError.message, stack: error.originalError.stack },
+    }
+}
+</code></pre>
+
+<p>Yay!</p>
+
+<pre><code>{
+  &quot;name&quot;: &quot;MyServiceError&quot;,
+  &quot;message&quot;: &quot;MyService failed to process a number&quot;,
+  &quot;stack&quot;: &quot;MyServiceError@http://localhost:8000/tojson/errors.html line 67 &gt; eval:11:9\n@http://localhost:8000/tojson/errors.html line 67 &gt; eval:17:15\nevaluate@http://localhost:8000/tojson/errors.html:67:68\ndoit@http://localhost:8000/tojson/errors.html:59:19\nonclick@http://localhost:8000/tojson/errors.html:1:1\n&quot;,
+  &quot;number&quot;: 303,
+  &quot;originalError&quot;: {
+    &quot;name&quot;: &quot;Error&quot;,
+    &quot;message&quot;: &quot;&quot;,
+    &quot;stack&quot;: &quot;@http://localhost:8000/tojson/errors.html line 67 &gt; eval:17:39\nevaluate@http://localhost:8000/tojson/errors.html:67:68\ndoit@http://localhost:8000/tojson/errors.html:59:19\nonclick@http://localhost:8000/tojson/errors.html:1:1\n&quot;
+  }
+}
+</code></pre>
+
+<p>But what if my original error wasn&rsquo;t an <code>Error</code>? What if you didn&rsquo;t know what sort of error it was going to be?</p>
+
+<p>OK, finally, this is what we&rsquo;re trying to get to here: <code>toJSON()</code>. A method we call to get the (unstringified) JSON representation of an object.</p>
+
+<pre><code class="language-typescript">class MyServiceError extends Error {
+    constructor(
+        public readonly number: number,
+        public readonly originalError: Error) {
+            super('MyService failed to process a number')
+            this.name = this.constructor.name;
+        }
+    
+    toJSON() {
+        return {
+            name: error.name,
+            message: error.message,
+            stack: error.stack,
+            number: error.number,
+            originalError: originalError.toJSON(),
+        }
+    }
+}
+
+
+class HttpError extends Error {
+    constructor(public readonly request: Request, public readonly response: Response) {
+        super('the badness');
+        this.name = this.constructor.name;
+    }
+
+    toJSON() {
+        return {
+            name: this.name,
+            message: this.message,
+            stack: this.stack,
+            request: this.request,
+            response: this.response,
+        }
+    }
+}
+
+
+JSON.stringify(303, new HttpError(new Request('hello', new Response())).toJSON())
+</code></pre>
+
+<pre><code>{
+  &quot;name&quot;: &quot;MyServiceError&quot;,
+  &quot;message&quot;: &quot;MyService failed to process a number&quot;,
+  &quot;stack&quot;: &quot;MyServiceError@http://localhost:8000/tojson/errors.html line 67 &gt; eval:20:9\n@http://localhost:8000/tojson/errors.html line 67 &gt; eval:35:15\nevaluate@http://localhost:8000/tojson/errors.html:67:68\ndoit@http://localhost:8000/tojson/errors.html:59:19\nonclick@http://localhost:8000/tojson/errors.html:1:1\n&quot;,
+  &quot;number&quot;: 303,
+  &quot;originalError&quot;: {
+    &quot;name&quot;: &quot;HttpError&quot;,
+    &quot;message&quot;: &quot;the badness&quot;,
+    &quot;stack&quot;: &quot;HttpError@http://localhost:8000/tojson/errors.html line 67 &gt; eval:3:9\n@http://localhost:8000/tojson/errors.html line 67 &gt; eval:35:39\nevaluate@http://localhost:8000/tojson/errors.html:67:68\ndoit@http://localhost:8000/tojson/errors.html:59:19\nonclick@http://localhost:8000/tojson/errors.html:1:1\n&quot;,
+    &quot;request&quot;: {},
+    &quot;response&quot;: {}
+  }
+}
+</code></pre>
+
+<p>Gives the same output as above.</p>
+
+<p>First, just on its own, this is a <em>good object oriented idea</em>. Let&rsquo;s leave the decisions about how our complex, odd-looking objects get turned into JSON up to those objects themselves. We can even send in complicated blobs of objects as private properties of the object, then only <code>toJSON()</code> the bits we really care about.</p>
+
+<p>But second&hellip; ah! Just look at this:</p>
+
+<pre><code class="language-typescript">JSON.stringify(303, new HttpError(new Request('hello', new Response())))
+</code></pre>
+
+<p>You <em>don&rsquo;t need to call <code>toJSON()</code></em>! <code>JSON.stringify</code> will call it for you. In fact, it&rsquo;ll call it <em>recursively</em> on each of the (enumerable) properties of your object. So you can just have <code>toJSON</code> return the <code>originalError</code>, and <code>JSON.stringify</code> will call it if it&rsquo;s there, or do its own thing if it&rsquo;s not. Behold, delayed binding (or polymorphism - you choose) in action, actually working for you. And actually built into the language.</p>
+
+<p>Just as <code>toString()</code> will get called recursively as objects are coerced into strings, so <code>toJSON()</code> gets called recursively as you coerce objects into a JSON string.</p>
+
+<p>This approach can be applied to everything - I&rsquo;ve used errors here as I think this is an area we could all do better in. But the same approach could be used with all your domain objects. How often do you find yourself serializing your objects to JSON to send over the wire? And how often are they nested and awkward to work with? How often do you write your custom serializer that then instantly gets sent straight to <code>JSON.stringify</code>? It would be much easier just to define the JSON representation of your object <em>once</em>, canonically, and then rely on <code>JSON.stringify</code> to do the right thing. Less code, less work, more fun: object oriented programming.</p>
+
+<h2>So what?</h2>
+
+<p>More broadly, why don&rsquo;t we just implement <code>toString()</code> and <code>toJSON()</code> on <em>all our objects</em>? We&rsquo;d never be stymied by <code>[object Object]</code> again - we&rsquo;d be in control of what we read in our consoles and debugger. We&rsquo;d never get fooled by some weird serialization of one of our objects. And structured logging would be simple, easy and fun (Rich Hickey only gives you one of these)! JavaScript gets damned as a bad language, but there are shining points of awesomeness in its design, and I think protocols that use these two methods are two of them.</p>
+
+</article>
+
+    </main>
+  </body>
+</html>

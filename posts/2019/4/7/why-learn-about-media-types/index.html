@@ -1,0 +1,426 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+          inlineMath: [['$','$'], ['\\(','\\)']],
+          processEscapes: true,
+      },
+      displayAlign: "left",
+      displayIndent: "1em",
+      CommonHTML: { linebreaks: { automatic: true } },
+      "HTML-CSS": { linebreaks: { automatic: true } },
+      SVG       : { linebreaks: { automatic: true } }
+    });
+</script>
+<script type="text/javascript"
+        async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+  <link rel="stylesheet" href="/css/style.css">
+  <title>Why learn… about Media Types</title>
+</head>
+
+  <body>
+    <main>
+    
+<header>
+  <section class="top">
+    <h1><a href="/">gypsydave5</a></h1>
+    <p>The blog of David Wickes, software developer</p>
+  </section>
+
+  <ul class="links">
+    <li><a href="/pages/about/">about</a></li>
+    <li><a href="/posts/">posts</a></li>
+  </ul>
+</header>
+
+    
+<article>
+  <h1>Why learn&hellip; about Media Types</h1>
+  <time datetime="2019-04-07T19:12" >Apr 07, 2019</time>
+  <p>Media types are used to communicate the type of data being sent over the web. They are used</p>
+
+<ul>
+<li>in an HTTP response to declare the type of content being sent</li>
+<li>in requests to declare what sort of content the client can interpret</li>
+<li>in POST requests to declare the type of content being sent.</li>
+</ul>
+
+<p>Basically, wherever there is data on the web, there will be a media type to tell you what sort of data it is. And if there&rsquo;s not, well there really ought to be.</p>
+
+<p>This article will explain how to interpret a media type and also explain how they are used in HTTP headers to make sure we get the data that we can understand.</p>
+
+<ul>
+<li><a href="#who-is-this-for">Who is this for?</a></li>
+<li><a href="#where-have-i-seen-media-types-before">Where Have I seen Media Types Before?</a></li>
+<li><a href="#media-type-syntax">Media Type Syntax</a></li>
+<li><a href="#media-types-in-http-message-headers">Media Types in HTTP Message Headers</a></li>
+<li><a href="#content-negotiation">Content Negotiation</a></li>
+<li><a href="#roll-your-own-media-type">Roll Your Own Media Type</a></li>
+<li><a href="#summary">Summary</a></li>
+<li><a href="#q-and-a">Q and A</a></li>
+</ul>
+
+<h2>Who is this for?</h2>
+
+<p>This is for web developers who are interested in understanding how to move data over the web. Some knowledge of HTTP, specifically headers, is useful but not necessary.</p>
+
+<h2>Where Have I Seen Media Types Before?</h2>
+
+<p>The first time I saw a media type was when I wrote my first HTML file - specifically to get some CSS:<sup class="footnote-ref" id="fnref:1"><a rel="footnote" href="#fn:1">1</a></sup></p>
+
+<pre><code class="language-html">&lt;link rel=&quot;stylesheet&quot; src=&quot;style.css&quot; type=&quot;text/css&quot; /&gt;
+</code></pre>
+
+<p>There&rsquo;s our first media type - <code>text/css</code>.</p>
+
+<p>The next place I bumped into them was when I was returning JSON from a server:</p>
+
+<pre><code>response.contentType = &quot;application/json&quot;
+</code></pre>
+
+<p>There&rsquo;s another one - <code>application/json</code>.</p>
+
+<p>So they&rsquo;re not completely alien to us - they&rsquo;re a way of saying that &ldquo;the file is full of CSS&rdquo;, and &ldquo;I&rsquo;m sending you some JSON&rdquo;. Let&rsquo;s take a closer look at these two types while investigating the syntax of media types.</p>
+
+<h2>Media Type Syntax</h2>
+
+<p>A media type is made up of two fields separated by a <code>/</code>. The first is the <code>type</code> and the second is the <code>subtype</code>.</p>
+
+<p>Straight off we can see that CSS (<code>text/css</code>) has a type of <code>text</code>, and a subtype of <code>css</code>. The <code>text</code> type is very broad - it says that the media is just text, which covers quite a few types of content - content such as:</p>
+
+<ul>
+<li><code>text/html</code> - it&rsquo;s what you&rsquo;re reading right now!</li>
+<li><code>text/plain</code> - it&rsquo;s just plain text!</li>
+<li><code>text/markdown</code> - what I&rsquo;m writing this in which will get turned into <code>text/html</code></li>
+<li><code>text/csv</code> &hellip;</li>
+</ul>
+
+<p>you get the idea.</p>
+
+<p><code>application/json</code> has a subtype of <code>json</code>, which is appropriate as, well, it <em>is</em> JSON. The <code>application</code> type informs us that this is a type that&rsquo;s meant to be processed by a application. This kinda makes sense, as it&rsquo;s JSON, which is meant to be read by computers.</p>
+
+<p>(But isn&rsquo;t CSS only meant to be processed by an application? Yes, it is. Maybe it should have been <code>application/css</code>. Maybe it should have been <code>text/json</code>. Who knows. Media types are a bit wonky. The whole web is a bit wonky. Don&rsquo;t worry about it too much. Part of being a web developer is learning to live with a fair amount of kludge and ambiguity that happened before some of us were born. Learn to live with it.)</p>
+
+<p>Other fun <code>application</code> types are</p>
+
+<ul>
+<li><code>application/pdf</code> for PDFs</li>
+<li><code>application/zip</code> for zip files</li>
+<li>and many, many more&hellip;</li>
+</ul>
+
+<h3>All the types</h3>
+
+<p>We&rsquo;ve seen <code>text</code> and <code>application</code> types - here&rsquo;s a list of types that you&rsquo;re likely to come across with examples:</p>
+
+<table>
+<thead>
+<tr>
+<th align="center">type</th>
+<th align="center">purpose</th>
+<th align="center">example</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="center"><code>application</code></td>
+<td align="center">media for application consumption</td>
+<td align="center"><code>application/json</code></td>
+</tr>
+
+<tr>
+<td align="center"><code>audio</code></td>
+<td align="center">audio media</td>
+<td align="center"><code>audio/mp3</code></td>
+</tr>
+
+<tr>
+<td align="center"><code>font</code></td>
+<td align="center">font formats</td>
+<td align="center"><code>font/ttf</code></td>
+</tr>
+
+<tr>
+<td align="center"><code>image</code></td>
+<td align="center">visual media</td>
+<td align="center"><code>image/gif</code></td>
+</tr>
+
+<tr>
+<td align="center"><code>multipart</code></td>
+<td align="center">media that needs to be sent in parts</td>
+<td align="center"><code>multipart/form-data</code></td>
+</tr>
+
+<tr>
+<td align="center"><code>text</code></td>
+<td align="center">plain text</td>
+<td align="center"><code>text/html</code></td>
+</tr>
+
+<tr>
+<td align="center"><code>video</code></td>
+<td align="center">video media</td>
+<td align="center"><code>video/mp4</code></td>
+</tr>
+</tbody>
+</table>
+<p>Type and subtype are the only parts of a media type that are required, but there are also couple of optional parts.</p>
+
+<h3>Parameters</h3>
+
+<p>Media types can have a list of parameters tagged on to them after a semicolon. For instance</p>
+
+<pre><code>text/plain;charset=UTF-8
+</code></pre>
+
+<p>is a <code>text/plain</code> media type that&rsquo;s using the UTF-8 character encoding. If we want our sweet emojis to work we need to remember to say we&rsquo;re using UTF-8, or else the client will assume we&rsquo;re writing in ASCII like 1970s cavemen.</p>
+
+<p>Parameter types aren&rsquo;t dictated by the media type specification,<sup class="footnote-ref" id="fnref:2"><a rel="footnote" href="#fn:2">2</a></sup> and you can have as many of them as you like:</p>
+
+<pre><code>text/plain;charset=UTF-8,blog-post=true,author=gypsydave5
+</code></pre>
+
+<p>They gain their meaning through context; browsers, for instance, will look for and use a <code>charset</code> parameter when they read a media type over HTTP. More on browsers in a bit.</p>
+
+<h3>Structured Syntax Name Suffix</h3>
+
+<p>This one&rsquo;s a bit weird, but it&rsquo;s also cool, so bear with me. Take a look at this media type:</p>
+
+<pre><code>image/svg+xml
+</code></pre>
+
+<p>This is the type for SVG images - Scalable Vector Graphics. <code>image</code> is the type, <code>svg</code> is the subtype - that&rsquo;s what we&rsquo;d expect.</p>
+
+<p>But what&rsquo;s this <code>+xml</code> doing at the end? Well, as you may already know, SVGs are written in XML - it&rsquo;s one of the nicest things about them. So the <code>+xml</code> is telling us that the syntax of SVG is XML; you could say that XML is the &lsquo;base&rsquo; language for SVG. This is called the &lsquo;structured syntax name&rsquo;, and it&rsquo;s a nice way of letting us know that, hey, you may not know what SVGs are but, it&rsquo;s OK, it&rsquo;s just XML under the hood so you&rsquo;ll be fine.</p>
+
+<p>(Unless you&rsquo;re me and you panic everytime you hear the word XML and you find it ridiculous that some people think it&rsquo;s human readable and you wish that the whole world was represented as JSON, but that&rsquo;s another story&hellip;)</p>
+
+<hr />
+
+<p>Look, I can tell you&rsquo;re really excited by all these media types. Now you know how to understand them, you can read the <a href="https://www.iana.org/assignments/media-types/media-types.xhtml">list of all the media types</a> that have been registered with IANA, the Internet Assigned Numbers Authority. Go on, read them all now. I&rsquo;ll wait.</p>
+
+<p>There&rsquo;s a lot, right? Try not to panic - you&rsquo;ll probably only ever use ten of them at most. But did you see the one for SNES ROMs?</p>
+
+<h2>Media Types in HTTP Message Headers</h2>
+
+<p>The most important place you&rsquo;ll use media types is in HTTP messages. You&rsquo;ll use them to describe the media type of the data you want in the <code>Accept</code> header of an HTTP Request, and the type of data you&rsquo;re sending in the <code>Content-Type</code> header of an HTTP Response.</p>
+
+<h3>The <code>Accept</code> Header</h3>
+
+<p>The <code>Accept</code> header is the way a client - like your browser - can tell a server what sort of content it wants.</p>
+
+<p>At its simplest it can look like this:</p>
+
+<pre><code>Accept: application/json
+</code></pre>
+
+<p>If I put this in the header of my request, I&rsquo;d be making it very clear to the server that I want JSON back. No questions asked.<sup class="footnote-ref" id="fnref:3"><a rel="footnote" href="#fn:3">3</a></sup></p>
+
+<p>But say you wanted some audio back from the server, but didn&rsquo;t mind what subtype - <code>audio/mp3</code> is just as good as <code>audio/wav</code> for you. In this case you can say:</p>
+
+<pre><code>Accept: audio/*
+</code></pre>
+
+<p><code>*</code> represents a wildcard - it means &lsquo;give me anything&rsquo;. The server could legitimately reply with an <code>audio</code> media type with <em>any</em> subtype.</p>
+
+<p>Finally, if you just don&rsquo;t care what comes back from the server you can just say</p>
+
+<pre><code>Accept: */*
+</code></pre>
+
+<h3>The <code>Content-Type</code> Header</h3>
+
+<p><code>Content-Type</code> is the header you should add to an HTTP Response message to tell the client what they&rsquo;re getting in the response body. This is how the client knows how to interpret the message that you&rsquo;re sending.</p>
+
+<p>The <code>Content-Type</code> header should have one media type, so it could be as simple as this:</p>
+
+<pre><code>Content-Type: text/html
+</code></pre>
+
+<h3>Wait, can&rsquo;t I just use a file extension?</h3>
+
+<p>You can imagine that you&rsquo;ve got some data that you can get to through a URL:</p>
+
+<pre><code>http://gypsydave5/data
+</code></pre>
+
+<p>Maybe if I wanted to get the data as JSON I could request:</p>
+
+<pre><code>http://gypsydave5/data.json
+</code></pre>
+
+<p>But if I want XML instead I could do:</p>
+
+<pre><code>http://gypsydave5/data.xml
+</code></pre>
+
+<p>The benefit being that this is pretty easy to understand if I&rsquo;m used to using a filesystem - I can just identify the type of file by the extension, and so I can now do the same with a URL.</p>
+
+<p>What&rsquo;s the harm? Probably the most annoying thing is that, even if you provide an extension as above, you&rsquo;ll <em>still</em> have to provide a <code>Content-Type</code> header. This is because, on the web, information about content isn&rsquo;t meant to be encoded in URLs; it&rsquo;s meant to be in the <code>Content-Type</code> header.</p>
+
+<p>Some popular frameworks do this,<sup class="footnote-ref" id="fnref:4"><a rel="footnote" href="#fn:4">4</a></sup> but it&rsquo;s a bad idea. Don&rsquo;t do it.</p>
+
+<p>The biggest problem is that you&rsquo;ll miss out on being able to perform <em>content negotiation</em>.</p>
+
+<h2>Content Negotiation</h2>
+
+<p>Pretend you&rsquo;re going to a sandwich shop and your friend asks you to get a sandwich. Sure, you say, what do you want? I don&rsquo;t know, they say, what do they have? Um&hellip; you say, I really don&rsquo;t know - here&rsquo;s the menu but they&rsquo;ve often run out of some of the fillings by this time of day.</p>
+
+<p>OK, says your friend, here&rsquo;s what I&rsquo;d like:</p>
+
+<blockquote>
+<p>&ldquo;I want tuna mayo or a New Yorker - either is fine. If they don&rsquo;t have those, then I&rsquo;ll take an egg salad. And if they don&rsquo;t have an egg salad, then please, get me anything - I&rsquo;m starving.&rdquo;</p>
+</blockquote>
+
+<p>Doesn&rsquo;t sound too bad. You can use your friend&rsquo;s set of sandwich requirements when you get to the sandwich shop to get them a sandwich that they&rsquo;ll like.</p>
+
+<p>The same thing happens every day on the web, with clients sending a list of media types over to servers to try and make sure that they&rsquo;ll get something they like. Take a look at this <code>Accept</code> header of an HTTP Request sent from a web browser:<sup class="footnote-ref" id="fnref:5"><a rel="footnote" href="#fn:5">5</a></sup></p>
+
+<pre><code>Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+</code></pre>
+
+<p>The browser wants one of the above media types. But it&rsquo;s got some opinions about which ones it would prefer, which it&rsquo;s expressing using <code>q</code> parameters.<sup class="footnote-ref" id="fnref:6"><a rel="footnote" href="#fn:6">6</a></sup> <code>q</code> parameters have a value between <code>1</code> and <code>0</code>, and the default value of a <code>q</code> parameter (when it&rsquo;s not supplied) is <code>1</code>.</p>
+
+<p>Here&rsquo;s the media types above written out with their <code>q</code> values.</p>
+
+<table>
+<thead>
+<tr>
+<th>media type</th>
+<th>q value</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>text/html</code></td>
+<td>1.0</td>
+</tr>
+
+<tr>
+<td><code>application/xhtml+xml</code></td>
+<td>1.0</td>
+</tr>
+
+<tr>
+<td><code>application/xml</code></td>
+<td>0.9</td>
+</tr>
+
+<tr>
+<td><code>*/*</code></td>
+<td>0.8</td>
+</tr>
+</tbody>
+</table>
+<p>A series of choices ranked by preference. If you or I were going to the server to get the browser some content, the browser would tell us something like:</p>
+
+<blockquote>
+<p>&ldquo;I really want <code>text/html</code> and <code>application/xhtml+xml</code>. But, if they don&rsquo;t have those, I&rsquo;d go for some sweet <code>application/xml</code>. And if they don&rsquo;t have that then, whatever, just get me anything.&rdquo;</p>
+</blockquote>
+
+<p>Which is really what you&rsquo;d want a browser to do - you always want to get <em>something</em> back.</p>
+
+<pre><code>Accept: audio/*
+</code></pre>
+
+<p>Is like we&rsquo;re being sent to the record store:</p>
+
+<blockquote>
+<p>&ldquo;Could you get me the new Nirvana album?<sup class="footnote-ref" id="fnref:7"><a rel="footnote" href="#fn:7">7</a></sup> I don&rsquo;t care if it&rsquo;s on vinyl, tape or CD. Hell, 8 Track will do. Just make sure I can listen to it, OK - I don&rsquo;t just want the poster.&rdquo;</p>
+</blockquote>
+
+<p>This is <em>content negotiation</em> - our request to the server has given it our preferences regarding the content type we get back. It can go through those prefences, looking at what content types it can return, and give us the type that matches the most closely.</p>
+
+<h3>Content Negotiation and Testing</h3>
+
+<p>It&rsquo;s easier to write tests on the data that builds an HTML page than the HTML itself. If you build your application with content negotiation, you can test the contents of a &lsquo;page&rsquo; by requesting the JSON representation rather than the HTML representation.</p>
+
+<h2>Roll your own media type</h2>
+
+<p>You can invent your own media types, and it&rsquo;s not as rare as you might think. In fact it&rsquo;s a powerful technique for writing web APIs. The media type specification has space for subtypes that aren&rsquo;t registered (and should never be registered). They start with <code>x-</code>:<sup class="footnote-ref" id="fnref:8"><a rel="footnote" href="#fn:8">8</a></sup></p>
+
+<pre><code>application/x-myapplication-orderstatus+json
+</code></pre>
+
+<p>This could be the media type for the order status in my application. <code>+json</code> lets everyone know that it&rsquo;s written in JSON, but we&rsquo;ve tightly specified that the content is a part of <code>myapplication</code> - it&rsquo;s not just any old JSON.</p>
+
+<p>This is just vanity if you don&rsquo;t choose to leverage it to pass on additional information about the media type. For instance, if you want to change the structure of the <code>application/x-myapplication-orderstatus+json</code> media type, you can add a version parameter:<sup class="footnote-ref" id="fnref:9"><a rel="footnote" href="#fn:9">9</a></sup></p>
+
+<pre><code>application/x-myapplication-orderstatus+json;v=1.1
+</code></pre>
+
+<p>This is very useful when describing the content types that are sent and received across an evolving REST API.</p>
+
+<p>Finally you can <a href="https://www.iana.org/form/media-types">register your media type with IANA</a> to let the world know how to interact with your application.</p>
+
+<h2>Summary</h2>
+
+<p>We&rsquo;ve learned:</p>
+
+<ul>
+<li>The syntax of a media type and what they mean.</li>
+<li>How to use a media type in <code>Content-Type</code> headers to declare what we&rsquo;re sending.</li>
+<li>How to use them in <code>Accept</code> headers to control the content type we get back.</li>
+<li>How to use them to perform content negotiation with a server.</li>
+</ul>
+
+<p>Media types are important - they help smooth the path of passing data around on the web. Using them - and using them well - will help make your web applications easier for you others to use and understand.</p>
+
+<h2>Q and A</h2>
+
+<blockquote>
+<p>Q: &ldquo;Wait, I didn&rsquo;t put a <code>Content-Type</code> header on the HTML I sent but my browser still knew it was HTML - what gives?&rdquo;</p>
+</blockquote>
+
+<p>A: There are ways of working out the media type of data; go read up on <a href="https://en.wikipedia.org/wiki/Content_sniffing">content sniffing</a>.</p>
+
+<blockquote>
+<p>Q: Wait, don&rsquo;t you mean MIME types?</p>
+</blockquote>
+
+<p>No, I don&rsquo;t. MIME means <em>Multipurpose Internet Mail Extensions</em> and was the first place that media types were used. But since they&rsquo;re not used solely for &lsquo;internet mail&rsquo; (email to you and me), the proper name is &lsquo;media type&rsquo;. People still tend to use MIME, media and content type interchangeably, but now you know the right answer you can look smug at parties and demand a pay rise.</p>
+
+<div class="footnotes">
+
+<hr />
+
+<ol>
+<li id="fn:1">This is HTML4 - you don&rsquo;t need to include the type in HTML5. But that would ruin this perfectly good example.</li>
+
+<li id="fn:2">Apart from <code>q</code>, this one <em>is</em> specified.</li>
+
+<li id="fn:3">In fact the server should send back a 406: Not Acceptable code if it can&rsquo;t supply the media type asked for&hellip; but this rarely happens.</li>
+
+<li id="fn:4"><a href="https://github.com/rails/activeresource">Active Resource in Rails</a></li>
+
+<li id="fn:5">In this case Firefox.</li>
+
+<li id="fn:6">The <code>q</code> stands for quality. I&rsquo;m not even joking.</li>
+
+<li id="fn:7">I am very much down with popular culture.</li>
+
+<li id="fn:8">or <code>x.</code>. In fact <code>x.</code> is preferred by IANA but <code>x-</code> is more widely used.</li>
+
+<li id="fn:9">You could also try <code>application/x-myapplication-orderstatus_1.0+json</code> - it depends on how you want to parse the version information and what your versioning policy is (how compatible the versions are).</li>
+</ol>
+
+</div>
+
+</article>
+
+    </main>
+  </body>
+</html>

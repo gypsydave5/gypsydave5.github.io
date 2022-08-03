@@ -1,0 +1,131 @@
+<html>
+  <head>
+    <script src="https://unpkg.com/typescript@latest/lib/typescriptServices.js"></script>
+    <script src="https://unpkg.com/bignumber.js@9.0.1/bignumber.min.js"></script>
+    <link href="style.css" rel="stylesheet">
+  </head>
+  <body>
+    <h1><pre>toJSON</pre></h1>
+    <h2>The Classy Way To Serialize</h2>
+  </body>
+
+  <button onclick="loadSample('baseMoney')">Money</button>
+  <button onclick="loadSample('moneyToString')">Money toString</button>
+  <button onclick="loadSample('moneyToJSON')">Money toJSON</button>
+
+  <textarea id="code" oninput="resizeCode()"></textarea>
+
+  <button onclick="doit()">Do it</button>
+
+  <section class="output">
+    <h4>Output:</h4>
+    <pre id="output">      
+    </pre>
+  </section>
+
+  <nav>
+    <ul class="nav">
+      <li><a href="index.html" id="previous">Previous</a></li>
+      <li><a href="two.html" id="next">Next</a></li>
+    </ul>
+  </nav>
+  
+  <script>
+    const options = {
+	"outDir": "dist",
+	"target": "ES6",
+	"module": "CommonJS",
+	"moduleResolution": "node",
+	"esModuleInterop": true,
+	"downlevelIteration": true,
+	"allowSyntheticDefaultImports": true,
+	"importHelpers": true,
+	"skipLibCheck": true,
+	"sourceMap": false,
+	"removeComments": true,
+	"noEmitOnError": true,
+	"strict": false,
+	"alwaysStrict": false,
+	"noImplicitAny": false,
+	"typeRoots": ["node_modules/@types/"]
+    }
+    
+    function doit() {
+        evaluate(transpile())
+    }
+
+    function transpile() {
+        return window.ts.transpile(document.getElementById('code').value, options);
+    }
+
+    function evaluate(js) {
+        document.getElementById('output').innerHTML = (eval,eval)(js)
+    }
+        
+    function loadSample(sampleName) {
+        const code = document.getElementById('code')
+        code.value = samples[sampleName]
+        resizeCode()
+    }
+
+    function resizeCode() {
+        const code = document.getElementById('code')
+        code.style.height = "";
+        code.style.height = `${code.scrollHeight + 5}px`
+    }
+
+    const samples = {
+        baseMoney: `
+class Currency {
+  constructor(public readonly value: string) {}
+}
+
+class Money {
+  constructor(public readonly value: BigNumber, public readonly currency: Currency) {}
+}
+
+new Money(new BigNumber(13.37), new Currency('ISK'));
+`,
+        moneyToString: `
+class Currency {
+  constructor(public readonly value: string) {}
+  
+  toString() {
+    return this.value
+  }
+}
+
+class Money {
+  constructor(public readonly value: BigNumber, public readonly currency: Currency) {}
+  
+  toString() {
+    return \`\${this.value} \${this.currency}\`
+  }
+}
+
+new Money(new BigNumber(13.37), new Currency('ISK'));
+`,
+        moneyToJSON: `
+class Currency {
+  constructor(public readonly value: string) {}
+
+  toJSON() {
+    return this.value;
+  }
+}
+
+class Money {
+  constructor(public readonly value: BigNumber, public readonly currency: Currency) {}
+
+  toJSON() {
+    return { amount: this.value, currency: this.currency }
+  }
+}
+
+const money = new Money(new BigNumber(13.37), new Currency('ISK'));
+JSON.stringify(money)
+`
+    }
+      
+  </script>
+</html>

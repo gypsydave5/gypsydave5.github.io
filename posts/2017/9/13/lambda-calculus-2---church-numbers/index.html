@@ -1,0 +1,304 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+          inlineMath: [['$','$'], ['\\(','\\)']],
+          processEscapes: true,
+      },
+      displayAlign: "left",
+      displayIndent: "1em",
+      CommonHTML: { linebreaks: { automatic: true } },
+      "HTML-CSS": { linebreaks: { automatic: true } },
+      SVG       : { linebreaks: { automatic: true } }
+    });
+</script>
+<script type="text/javascript"
+        async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+  <link rel="stylesheet" href="/css/style.css">
+  <title>Lambda Calculus 2 - Church Numbers</title>
+</head>
+
+  <body>
+    <main>
+    
+<header>
+  <section class="top">
+    <h1><a href="/">gypsydave5</a></h1>
+    <p>The blog of David Wickes, software developer</p>
+  </section>
+
+  <ul class="links">
+    <li><a href="/pages/about/">about</a></li>
+    <li><a href="/posts/">posts</a></li>
+  </ul>
+</header>
+
+    
+<article>
+  <h1>Lambda Calculus 2 - Church Numbers</h1>
+  <time datetime="2017-09-13T20:54" >Sep 13, 2017</time>
+  <h2>Counting without numbers?</h2>
+
+<p>In the <a href="/posts/2017/9/11/lambda-calculus-1---syntax/">first post I wrote about the lambda calculus</a> we looked at the basic
+syntax and a simple function that took two numbers and added them together:</p>
+
+<p>$$
+\lambda x.\lambda y.x + y
+$$</p>
+
+<p>This might all look OK until I tell you that, in the untyped lambda calculus,
+the only primitive data type is a function.</p>
+
+<p>A function. Not a bit, a byte, a string; not a number - a function.</p>
+
+<p>So we should be a little suspicious of $\,\lambda x.\lambda y.x + y$ as this $+$
+symbol needs to be defined as a function. Fair enough - addition feels like a
+the sort of thing that could easily be a function.</p>
+
+<p>But what would we apply to it? We need a number - like one or two. But we need
+to make them out of functions.</p>
+
+<p>Wait, what? We need to make numbers <em>out of functions?!</em></p>
+
+<p>And this is where things start to get weird.</p>
+
+<h2>So what&rsquo;s a number anyway?</h2>
+
+<p>You will now be inducted into a sacred mystery that will allow you to make and
+understand Lisp jokes on the Internet. Be brave.</p>
+
+<p>In a universe which only has functions - how would we count? Well, we&rsquo;d have to
+do it with functions, obviously.</p>
+
+<p>OK, sure - but that&rsquo;s not really getting us anywhere - let&rsquo;s take $2$ as a
+concrete example. How do I write a function that represents $2$?</p>
+
+<p>Simple - we could just give it a name - like it was JavaScript:</p>
+
+<pre><code class="language-javascript">const two = () =&gt; {}
+</code></pre>
+
+<p>Now you&rsquo;re obviously shouting &ldquo;But that&rsquo;s cheating! What are these &lsquo;names&rsquo; of
+which you speak? Are they made of functions too?&rdquo;</p>
+
+<p>And you&rsquo;d be right. The thing is, we don&rsquo;t just want a <em>symbol</em> for $2$ - the
+numeral. What we want is a function that represents, in some way, the very
+essence of two-ness.</p>
+
+<p>What I&rsquo;m trying to get across here (without jumping to the solution
+immediately) is that the representation of numbers in the lambda calculus are
+not mere symbols; they capture a key behaviour that we associate with the idea of
+&lsquo;number&rsquo;.</p>
+
+<p>And that behaviour is <em>repetition</em>. When we say &lsquo;look at those two apples&rsquo;,
+we&rsquo;re expecting there to be an apple, and then <em>another</em> apple. In Church
+arithmetic a number is represented by a function that takes two values, and then
+applies the first value to the second value $n$ times, where $n$ is the number
+being represented.</p>
+
+<h2>Church numbers</h2>
+
+<p>So much for the theory, let&rsquo;s take a look at some real numbers.<sup class="footnote-ref" id="fnref:1"><a rel="footnote" href="#fn:1">1</a></sup> First up, the
+number one:</p>
+
+<p>$$ \lambda f.\lambda x. f(x) $$</p>
+
+<p>We accept a variable called $f$, we take another one called $x$, and we call $f$
+with $x$ once. We&rsquo;re kinda hoping that $f$ turns out to be a function that takes
+a single argument, but as this is the lambda calculus and <em>everything</em> is a
+function that takes a single argument, we can be <del>fairly</del> absolutely certain
+it is.</p>
+
+<p>In JavaScript:</p>
+
+<pre><code class="language-javascript">f =&gt; x =&gt; f(x)
+</code></pre>
+
+<p>And Scheme:</p>
+
+<pre><code class="language-scheme">(lambda (f) (lambda (x) (f x)))
+
+</code></pre>
+
+<p>So if that&rsquo;s one, we can probably work out what two is, right?</p>
+
+<p>$$ \lambda fx. f\ (f\ x) $$</p>
+
+<p>And three?</p>
+
+<p>$$ \lambda fx. f\ (f\ (f\ x)) $$</p>
+
+<p>OK, so no peeking now. What&rsquo;s zero?</p>
+
+<p>&hellip;</p>
+
+<p>&hellip;</p>
+
+<p>&hellip;</p>
+
+<p>&hellip;</p>
+
+<p>&hellip;</p>
+
+<p>Did you work it out?</p>
+
+<p>$$ \lambda fx. x $$</p>
+
+<p>It&rsquo;s just ignoring the original function and returning the value it would&rsquo;ve
+been applied to. The function $f$ has been applied to $x$ zero times.</p>
+
+<h2>Function composition and functional powers</h2>
+
+<p>There&rsquo;s a neater way of talking about this, with just a litte more
+notation. We can abstract the idea of &ldquo;first apply $f$, then apply $f$ to that
+result, then apply $f$&hellip;&rdquo; out to the idea of <em>function composition</em>, which you
+might have seen in some languages. This is just building a new function out of
+two functions. The new function does exactly the same thing as calling one
+function after the other (in right-to-left order). This is usually written using
+the $\circ$ symbol:</p>
+
+<p>$$ (f \circ f)\ x = f\ (f\ x) $$</p>
+
+<p>And so three could become the (slightly) easier to read:</p>
+
+<p>$$ \lambda f.\lambda x.\ (f \circ f \circ f)\ x $$</p>
+
+<p>But we can go further. The idea of composing a function with itself so-many
+times can be written as a <em>functional power</em> - a &lsquo;function to the $n$&rsquo;. Just like
+we can say $2^3 = 8$, so we can say:</p>
+
+<p>$$
+\lambda f.\lambda x.\ (f\ (f\ (f\ x)))\quad=\quad \lambda fx. (f\circ f\circ f)\ x\quad=\quad \lambda fx. f^3\ x
+$$</p>
+
+<p>Implementing composition and powers of functions is left as an exercise for the
+reader in their favourite language.<sup class="footnote-ref" id="fnref:2"><a rel="footnote" href="#fn:2">2</a></sup></p>
+
+<h2>Playing around with the computer</h2>
+
+<p>I find there to be two <del>productive</del> interesting ways to play around with the
+lambda calculus and Church numbers when I&rsquo;m trying to understand what&rsquo;s going
+on.</p>
+
+<p>Firstly, and probably more obviously, try plugging around with them in your
+favourite language (as long as it has some sort of anonymous function type). Say
+Python - if we were to write three as a Church numeral we&rsquo;d have:</p>
+
+<pre><code class="language-python">three = lambda f: lambda x: f(f(f(x)))
+</code></pre>
+
+<p>If we want to test this - to see if it does what we think it does - we just need
+a function to be $f$:</p>
+
+<pre><code class="language-python">increment = lambda x: x + 1
+</code></pre>
+
+<p>and some value to play the role of $x$</p>
+
+<pre><code class="language-python">zero = 0
+</code></pre>
+
+<p>So then we just plug in those values:</p>
+
+<pre><code class="language-python">three(increment)(0) #=&gt; 3
+</code></pre>
+
+<p>We used three variables to hold the values above, but we could just inline them
+to get to something that looks a little more lambda-y:</p>
+
+<pre><code class="language-python">(lambda f: lambda x: f(f(f(x))))(lambda x: x + 1)(0) #=&gt; 3
+</code></pre>
+
+<p>Which translates to:</p>
+
+<p>$$ (\lambda f.\lambda x.\ f\ (f\ (f\ x)))\ (\lambda x. x + 1)\ 0 = 3 $$</p>
+
+<p>Both <code>zero</code> and <code>increment</code> use Python&rsquo;s built in number system. But we don&rsquo;t
+have to use numbers to test Church numbers. All we need are values that behave
+in the required way.<sup class="footnote-ref" id="fnref:5"><a rel="footnote" href="#fn:5">3</a></sup> For instance:</p>
+
+<pre><code class="language-scheme">(define inc (lambda (x) (cons '() x)))
+
+(define zero '())
+
+(((lambda (f) (lambda (x) (f x))) inc) zero) ;;=&gt; (())
+(((lambda (f) (lambda (x) (f (f x)))) inc) zero) ;;=&gt; (() ())
+(((lambda (f) (lambda (x) (f (f (f x))))) inc) zero) ;;=&gt; (() () ())
+</code></pre>
+
+<p>Lots of things will work - experiment!</p>
+
+<h2>Playing around with pen and paper</h2>
+
+<p>The second way I like to play with lambdas is with pen and paper. The simplicity
+of the syntax, and the very few transformations allowed on an expression,<sup class="footnote-ref" id="fnref:4"><a rel="footnote" href="#fn:4">4</a></sup> mean
+that it&rsquo;s possible to do the evaluation yourself. Let&rsquo;s try it with the
+above. I&rsquo;m going to go through it step by step, and I&rsquo;m going to note which of
+the reductions steps being performed at each line.</p>
+
+<p>$$
+\begin{array}{ c | l | c}
+&amp; Expression &amp; Reduction \\
+\hline
+0 &amp; (\lambda fx.\ f\ (f\ (f\ x)))\ (\lambda x. x + 1)\ 0 \\
+1 &amp; (\lambda x.\ (\lambda x.\ x + 1)\ ((\lambda x.\ x + 1)\ ((\lambda x.\ x + 1)\ x)))\ 0 &amp; \beta \\
+2 &amp; (\lambda x. (\lambda a.\ a + 1)\ ((\lambda b.\ b + 1)\ ((\lambda c.\ c + 1)\ x)))\ 0 &amp; \alpha \\
+3 &amp; (\lambda a.\ a + 1)\ ((\lambda b.\ b + 1)\ ((\lambda c.\ c + 1)\ 0)) &amp; \beta \\
+4 &amp; (\lambda a.\ a + 1)\ ((\lambda b.\ b + 1)\ 1) &amp; \beta \\
+5 &amp; (\lambda a.\ a + 1)\ 2 &amp; \beta \\
+6 &amp; 3 &amp; \beta
+\end{array}
+$$</p>
+
+<p>This is fun to try out, and while it&rsquo;s not much help when the expression is
+relatively simple as the one above, it gets pretty vital for me when I want to
+discover how more complicated expressions work.</p>
+
+<p>In summary, the computer is great for checking that a lambda expression works,
+but I prefer to do get the pen and paper out if I want to get a feel for what&rsquo;s
+going on - for what makes it work.</p>
+
+<h2>But &hellip;</h2>
+
+<p>But what about the $+$ and $1$ and $0$ above? I said that there were only
+functions in the lambda calculus, aren&rsquo;t we still cheating a little bit?</p>
+
+<p>We are. So in the <a href="/posts/2017/9/23/lambda-calculus-3---arithmetic-with-church-numbers/">next post</a> let&rsquo;s define <code>increment</code>, <code>add</code>,
+<code>multiply</code> and maybe even <code>exponentiation</code> in terms of lambdas. Things are
+certain to get weirder.</p>
+
+<p>Oh, and - you were promised the ability to undestand jokes on the internet? Take
+a look at <a href="http://www.schemers.org/Miscellaneous/imagine.txt">this</a> - hopefully it makes some sense now you know what
+$one$ is.</p>
+
+<div class="footnotes">
+
+<hr />
+
+<ol>
+<li id="fn:1">I mean, actually these are the <a href="https://en.wikipedia.org/wiki/Natural_number">natural numbers</a> including zero, not actually the <a href="https://en.wikipedia.org/wiki/Real_number">real numbers</a>. Yay, maths joke!</li>
+
+<li id="fn:2">I&rsquo;ve always wanted to say that. But, seriously - implement them. It&rsquo;s fun!</li>
+
+<li id="fn:5">I am thoroughly in debt to the amazing book <a href="https://mitpress.mit.edu/books/little-schemer"><em>The Little Schemer</em></a> for the this example.</li>
+
+<li id="fn:4">$\alpha$-conversion and $\beta$-reduction - see <a href="/posts/2017/9/11/lambda-calculus-1---syntax/">the first post</a></li>
+</ol>
+
+</div>
+
+</article>
+
+    </main>
+  </body>
+</html>

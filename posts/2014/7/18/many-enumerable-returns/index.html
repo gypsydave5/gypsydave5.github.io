@@ -1,0 +1,178 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+          inlineMath: [['$','$'], ['\\(','\\)']],
+          processEscapes: true,
+      },
+      displayAlign: "left",
+      displayIndent: "1em",
+      CommonHTML: { linebreaks: { automatic: true } },
+      "HTML-CSS": { linebreaks: { automatic: true } },
+      SVG       : { linebreaks: { automatic: true } }
+    });
+</script>
+<script type="text/javascript"
+        async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+  <link rel="stylesheet" href="/css/style.css">
+  <title>Many Enumerable Returns</title>
+</head>
+
+  <body>
+    <main>
+    
+<header>
+  <section class="top">
+    <h1><a href="/">gypsydave5</a></h1>
+    <p>The blog of David Wickes, software developer</p>
+  </section>
+
+  <ul class="links">
+    <li><a href="/pages/about/">about</a></li>
+    <li><a href="/posts/">posts</a></li>
+  </ul>
+</header>
+
+    
+<article>
+  <h1>Many Enumerable Returns</h1>
+  <time datetime="2014-07-18T20:52" >Jul 18, 2014</time>
+  <p>As threatened then, here&rsquo;s the followup to my <a href="posts/2014/7/12/destructuring-in-a-method-block/">last post</a> on the
+<code>#Enumerables</code> section from <a href="https://rubymonk.com/">Ruby Monk</a>, how I felt like a bit of an
+idiot for a few hours, and what I learned from that.</p>
+
+<p>tl;dr - enumerable blocks aren&rsquo;t magic; <code>yield</code> is magic.</p>
+
+<p>This question is a little further along from the last, and was framed so:</p>
+
+<blockquote>
+<p>Try implementing a method called occurrences that accepts a string argument and
+uses inject to build a Hash. The keys of this hash should be unique words from
+that string. The value of those keys should be the number of times this word
+appears in that string.</p>
+</blockquote>
+
+<p>So far so, so good. So I wrote this:</p>
+
+<pre><code class="language-ruby">def occurrences(str)
+  str.scan(/\w+/).inject(Hash.new(0)) do |hashy, i|
+    hashy[i.downcase] += 1
+  end
+end
+</code></pre>
+
+<p>Which spat out:</p>
+
+<blockquote>
+<p><code>TypeError
+can't convert String into Integer</code></p>
+</blockquote>
+
+<p>And left me confused for a good few minutes. OK, getting on for a quarter of an
+hour. What was going on? - what I&rsquo;d written was very similar to the example
+above:</p>
+
+<pre><code class="language-ruby">[4, 8, 15, 16, 23, 42].inject({}) { |a, i| a.update(i =&gt; i) }
+</code></pre>
+
+<p>So I caved and looked at the answer:</p>
+
+<pre><code class="language-ruby">def occurrences(str)
+	str.scan(/\w+/).inject(Hash.new(0)) do |build, word|
+    	build[word.downcase] +=1
+    	build
+	end
+end
+</code></pre>
+
+<p>Which left me none the wiser. Why was the block re-iterating the accumulator
+function at the end? To test this I played around with <code>p</code>-ing the lines of the
+block&hellip; and discovered something interesting. Namely,</p>
+
+<pre><code class="language-ruby">a.update(i =&gt; i) # =&gt; a
+</code></pre>
+
+<h1>But&hellip;</h1>
+
+<pre><code class="language-ruby">build[word.downcase] +=1 # =&gt; build[word.downcase], the new value of that key
+</code></pre>
+
+<p>The block <em>needs to return the accumulator</em> - the first example is just lucky
+that it does so already!</p>
+
+<p>The only reason the accumulator in an <code>Enumerable#inject</code> accumulates is that
+<em>it&rsquo;s returned from the block on each iteration</em>. In other words, somewhere in
+the definition of <code>#inject</code> for each class that can be made enumerable, the
+method <code>yield</code>s to the block, and then keeps the value returned to be passed in
+again as the new accumulator argument.</p>
+
+<p>I&rsquo;d previously thought of <code>#inject</code> as working by <em>magic</em>, whereas in fact it
+was working by a method I could probably write myself given enough time.
+Something like this&hellip;</p>
+
+<pre><code class="language-ruby">bob = [1,2,3,4,5,6]
+
+def bob.inject(default = nil)
+  accumulator = default || self[0]
+  if default
+    self.each do |element|
+      accumulator = yield(accumulator, element)
+    end
+  else
+    self.drop(1).each do |element|
+      accumulator = yield(accumulator, element)
+    end
+  end
+  puts &quot;all adds up to: &quot;   # just to prove it's this method being
+                            # called, not the superclasses...
+  p accumulator
+end
+</code></pre>
+
+<p>Which gives us such fun as:</p>
+
+<pre><code class="language-ruby">bob.inject() {|a,e| a += e}
+# =&gt; all adds up to: 21
+bob.inject(10) {|a,e| a += e}
+# =&gt; all adds up to: 31
+bob.inject([]) {|a,e| a &lt;&lt; e**2}
+# =&gt; all adds up to: [1, 4, 9, 16, 25, 36]
+bob.inject({}) {|a,e| a[e] = &quot;x&quot;*e; a}
+# =&gt; {5=&gt;&quot;xxxxx&quot;, 6=&gt;&quot;xxxxxx&quot;, 1=&gt;&quot;x&quot;, 2=&gt;&quot;xx&quot;, 3=&gt;&quot;xxx&quot;, 4=&gt;&quot;xxxx&quot;}
+</code></pre>
+
+<p>I relied on <code>#each</code> here, but we could easily write an <code>each</code> method using
+a <code>for... in...</code> loop or similar. The genius is in <code>yield</code>, which is the <em>real
+magic</em> that&rsquo;s going on here.</p>
+
+<p><a href="https://rubymonk.com/">Ruby Monk</a> has more about the <a href="http://rubymonk.com/learning/books/1/chapters/34-lambdas-and-blocks-in-ruby/lessons/78-blocks-in-ruby">magic of yield</a>, and why it&rsquo;s
+weird in a language that professes that everything is an object. Like a lot in
+Ruby, I discovered a small thing didn&rsquo;t work, patiently played with it until
+I found out why, and then &lsquo;worked&rsquo; that small new piece of knowledge to give me
+greater insight into what was going on. I&rsquo;m finding this to be the most
+satisfying method to learn by, both because it makes me feel like I&rsquo;m learning
+to a deeper degree than I would by just reading the answers out of a book, and
+in addition, when the books do cover the subject, I can better apply what&rsquo;s
+written there to what I&rsquo;ve seen in action.</p>
+
+<h3><em>postscipt</em> - <sup>27</sup>&frasl;<sub>714</sub></h3>
+
+<p>Of course, David Black covers the same ground, but better (gets <code>each</code> off the
+ground using a <code>for</code> loop), in chapter 6 of <a href="http://www.manning.com/black2/"><em>The Well Grounded Rubyist</em></a>. Love that
+book.</p>
+
+</article>
+
+    </main>
+  </body>
+</html>

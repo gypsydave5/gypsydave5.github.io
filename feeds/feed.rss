@@ -1,0 +1,2248 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>blog.gypsydave5.com</title><description>The blog of David Wickes, software developer</description><lastBuildDate>Wed, 03 Aug 2022 13:59:23 +0100</lastBuildDate><pubDate>Wed, 03 Aug 2022 13:59:23 +0100</pubDate><ttl>1800</ttl><link>https://blog.gypysdave5.com/feeds/feeds.rss</link><atom:link href="https://blog.gypysdave5.com/feeds/feed.rss" rel="self" type="application/rss+xml"></atom:link><item><title>Extending Somebody Else’s Object in TypeScript</title><description></description><link>https://blog.gypysdave5.com/posts/2022/1/24/extending-somebody-elses-object-in-typescript/</link><pubDate>Mon, 24 Jan 2022 19:12:28 +0000</pubDate><category>TypeScript</category><guid>https://blog.gypysdave5.com/posts/2022/1/24/extending-somebody-elses-object-in-typescript/</guid><content:encoding><![CDATA[<p>Here&rsquo;s how to extend (&ldquo;monkey patch&rdquo;) a JavaScript class in TypeScript, without giving up on type safety (or our precious auto complete).</p>
+
+<h2>Our example: <code>tape</code></h2>
+
+<p><a href="https://github.com/substack/tape">Tape</a> is a gloriously simple testing harness for JavaScript. I&rsquo;d use it more often but the Webstorm support is non-existant, and I use Webstorm at work, and, well&hellip; anyway, it&rsquo;s great, take a look at it.</p>
+
+<p>Our example is going to involve extending the testing object of <code>tape</code> with a &ldquo;custom matcher&rdquo;: a way of wrapping a bit of testing logic up into a reusable method. In <code>tape</code>, the test assertions are all methods on an instance of <code>Test</code>, which is passed into each test. Like this:</p>
+
+<pre><code class="language-typescript">import test from 'tape';
+
+import test, { Test } from 'tape';
+
+test('2 divided by 2 is 1', function (t: Test) {
+    t.equal(2 / 2, 1)
+    t.end()
+});
+
+</code></pre>
+
+<p>Pretty bare-bones, but easy to understand. What I&rsquo;d like is something that looks more like this:</p>
+
+<pre><code class="language-typescript">import test from 'tape';
+
+import test, { Test } from 'tape';
+
+test('2 divided by 2 is 1', function (t: Test) {
+    t.isOne(2 / 2)
+    t.end()
+});
+
+</code></pre>
+
+<h2>First step: how to extend a class in JS</h2>
+
+<p>This is, if anything, the easy bit. We get hold of the <code>Test</code> class and fiddle with its prototype. By &lsquo;fiddle&rsquo; I mean go and add a new method to it. Some developers (mainly Java developers) don&rsquo;t like this jiggery pokery and sneeringly call it &ldquo;monkey patching&rdquo;. I think it&rsquo;s <em>fine</em> if you&rsquo;re not trying to share the code as a library, and it&rsquo;s <em>definitely fine</em> when it&rsquo;s in your test code. Maybe take a look at how Smalltalk does the same thing a lot without any pearl clutching. Or Perl clutching. But I digress. Here&rsquo;s an extension in plain old JavaScript, using NodeJS and CommonJS modules:</p>
+
+<pre><code class="language-javascript">const test = require('tape')
+
+test.Test.prototype.isOne = function isOne(number, message) {
+  this._assert(n === 1, {
+    message: message || `${number} equal to 1`,
+    operator: 'isOne',
+    actual: n,
+  });
+};
+
+</code></pre>
+
+<p>Word of explanation: the <code>_assert</code> method is a private method within the <code>Test</code> instance. Yes, we&rsquo;re depending on a private API. Yes, that should worry you a little bit. But, like I say, it&rsquo;s in the tests and they&rsquo;re <em>my</em> damn tests so I&rsquo;ll do as I please thank you.</p>
+
+<p>If this whole <code>prototype</code> thing is all a bit of a mystery to you, I gently suggest that you take a look over at <a href="https://github.com/getify/You-Dont-Know-JS/blob/1st-ed/README.md"><em>You Don&rsquo;t Know JS</em></a>, and read the book about Object Prototypes. Anyway, drop that in your code where you like and, as if by magic, you&rsquo;ll be able to run the example above.</p>
+
+<p>However, you won&rsquo;t be able to <em>compile</em> the example as TypeScript still doesn&rsquo;t know about the method. It is still going to be using the type definitions from <code>@types/tape</code>, which definitely don&rsquo;t include <code>.isOne()</code>. And we won&rsquo;t get the awesome completion in our IDE, which, as we all know, is the <em>real</em> reason we love static typing so much. So how can we <em>gently re-educate</em> TypeScript about our new method?</p>
+
+<h2>Module Augmentation</h2>
+
+<p>We&rsquo;re going to do this through <a href="https://www.typescriptlang.org/docs/handbook/declaration-merging.html#module-augmentation"><em>module augmentation</em></a>. Take a look at the docs, and if you do you&rsquo;ll probably abandon this whole blog post as it&rsquo;s mostly a re-hash of that. But, let&rsquo;s press on.</p>
+
+<p>Mostly we tell TypeScript about the types in our systems through annotating our code. You know, saying that our variables are <code>string</code>s, or that this function takes a <code>number</code> and returns a <code>boolean</code> and the like.</p>
+
+<p>We also create some types ourselves, built using other types. <code>interface</code>s and <code>type</code>s, and even <code>class</code>es are good examples of these.</p>
+
+<p>But what we&rsquo;re going to do now is crack open an existing type and start adding to it. We&rsquo;ll keep it simple by having our type declarations all in the same file as the implementation - so the same file as the <code>test.Test.prototype</code> stuff in this case. What we&rsquo;ll do is, essentially, redeclare a module that we import in the code, and write a new declaration of one of its members which includes the new methods we&rsquo;re going to write. Like this:</p>
+
+<p>We import the <code>'tape'</code> module, then immediately redeclare it. And then, inside the module declaration, we write a new <code>Test</code> class with the method definitions we want on it. Hurrah. Note that I decided to define the <code>_assert</code> method as, well, it just shuts up the typechecker when I&rsquo;m writing the implementation. But also note that I did a <em>terrible</em> job of it by using <code>any</code> all over the place. But it&rsquo;s fit for purpose, and saves me the pain of trying to work out the type of the private options object. Yuck.</p>
+
+<p>So putting it all together in one file:</p>
+
+<pre><code class="language-typescript">// inside `tapeExtensions/index.ts`
+import test from 'tape';
+
+declare module 'tape' {
+  class Test {
+    isOne(n: number, message?: string): void;
+    _assert(ok: boolean, options: any): any;
+  }
+}
+
+test.Test.prototype.isOne = function isOne(n: number, message?: string) {
+  this._assert(n === 1, {
+    message: message ||  `${number} equal to 1`,
+    operator: 'isOne',
+    actual: n,
+  });
+};
+</code></pre>
+
+<p>then we just import the <code>tapeExtensions</code> module. Note that we&rsquo;re not importing it to use anything exported by it; we&rsquo;re just doing it for the side-effect of extending <code>Test</code> with our new method. Yes, this might make you uncomfortable (<em>ooooh side effects BAAAAAD! Mokey patching BAAAAD! OH NO HE&rsquo;S USING INHERITANCE QUICK GET THE CRUXIFIX!</em>), that&rsquo;s a larger conversation that I&rsquo;ll need to have with you one day. Anyway, here&rsquo;s how to use it:</p>
+
+<pre><code class="language-typescript">// in
+import test, { Test } from 'tape';
+import './tapeExtensions';
+
+test('2 divided by 2 is 1', function (t: Test) {
+    t.isOne(2 / 2)
+    t.end()
+});
+</code></pre>
+
+<p>So, there you are: all the awesome power, just itching to be abused, of writing extending an object using &ldquo;monkey patching&rdquo;, combined with type safety. You could easily make a mess of all this if you don&rsquo;t use it with good taste and a bit of common sense, but we&rsquo;re all <em>professional software developers</em> right? We know what we&rsquo;re doing, right?</p>
+]]></content:encoding></item><item><title>toJSON and toString</title><description>Looking at two built in methods for transforming your JavaScript objects</description><link>https://blog.gypysdave5.com/posts/2021/12/8/tojson-and-tostring/</link><pubDate>Wed, 08 Dec 2021 15:04:05 +0000</pubDate><category>TypeScript</category><guid>https://blog.gypysdave5.com/posts/2021/12/8/tojson-and-tostring/</guid><content:encoding><![CDATA[<h2><code>toString</code></h2>
+
+<p>What&rsquo;s everyone&rsquo;s favourite thing to see on the screen when writing TypeScript or JavaScript? The one message that lets you know you&rsquo;re winning?</p>
+
+<pre><code>[object Object]
+</code></pre>
+
+<p>Oh <code>[object Object]</code>, how we love you. So objecty they named you twice. But why, as my three year old daughter keeps saying. Why?</p>
+
+<p>An example is worth a thousand words and so:</p>
+
+<pre><code class="language-javascript">{}.toString() // '[object Object]'
+Object.prototype.toString() // '[object Object]'
+</code></pre>
+
+<p><code>[object Object]</code> is the default output of the JavaScript <code>Object</code> prototype&rsquo;s <code>toString()</code> method, and that prototype is what every new object in JavaScript inherits from. Even if you think you&rsquo;ve got no <code>toString()</code>s on you:</p>
+
+<pre><code class="language-javascript">const pinoccio = {
+    strings: 0,
+    isHeldDown: false,
+    frets: 0,
+    frowns: 0,
+}
+
+pinoccio // '[object Object]'
+</code></pre>
+
+<p>or even</p>
+
+<pre><code class="language-typescript">class Pinoccio {
+    constructor(
+        public readonly strings: number, 
+        public readonly isHeldDown: boolean,
+        public readonly frets: number,
+        public readonly frowns: number,
+        )
+}
+
+new Pinoccio(0, false, 0, 0) // '[object Object]'
+
+</code></pre>
+
+<p>How do we avoid this? Well we either</p>
+
+<ol>
+<li>Never output <code>pinoccio</code> as a string</li>
+<li>Change <code>Object.prototype.toString()</code> (don&rsquo;t do this)</li>
+<li>Write our own way of turning <code>pinoccio</code> to a string</li>
+<li>Override the <code>toString()</code> method</li>
+</ol>
+
+<p>3 is not a bad idea, and it&rsquo;s what a lot of more &ldquo;functional&rdquo; developers do in JavaScript:</p>
+
+<pre><code class="language-typescript">function stringMyPinoccio(pinoccio: Pinoccio): string {
+    return `I've got ${pinoccio.strings} strings, to hold me down`
+}
+</code></pre>
+
+<p>But why bother, when you can just lean on a little old fashioned object oriented programming to make your life so much better&hellip;</p>
+
+<pre><code class="language-typescript">class Pinoccio {
+    constructor(
+        public readonly strings: number, 
+        public readonly isHeldDown: boolean,
+        public readonly frets: number,
+        public readonly frowns: number,
+        )
+        
+    toString(): string {
+        return `I've got ${this.strings} strings, to hold me down`
+    }
+}
+
+new Pinoccio(0, false, 0, 0) // 'I've got 0 strings, to hold me down'
+
+</code></pre>
+
+<p>The best thing about this approach is that now you&rsquo;ll get the appropriate string output for pinoccio whenever <code>toString()</code> is called. And it&rsquo;s called <em>everywhere</em>. Whenever an object should be a string in the opinion of JavaScript, then this is the method that will get called. So now if I want to stick <code>pinoccio</code> in a longer string:</p>
+
+<pre><code class="language-javascript">`Met a funny chap called Pinoccio who looks like: ${pinoccio}`
+// '`Met a funny chap called Pinoccio who looks like: I've got 0 strings, to hold me down`
+</code></pre>
+
+<p>and what&rsquo;s really wonderful about this is that it&rsquo;s recursive. The call of <code>toString()</code> on <code>pinoccio</code> actually ends up calling <code>toString()</code> on the <code>strings</code> property of <code>pinoccio</code> - because it&rsquo;s being used in a string too&hellip;</p>
+
+<p>If you manage to organize things well, you could get some really nice, informative and readable strings coming out of your program. Instead of <code>[object Object]</code>.</p>
+
+<p>Of course, you could argue that you will <em>never</em> need to see your object as a string. And I can admit, it might seem that way. But given that this is what you will see in your debugger, or in a console, or in your logs, it might be worth overriding <code>toString()</code> with something useful rather than useless.</p>
+
+<p>On the subject of logs&hellip;</p>
+
+<h2><code>toJSON</code></h2>
+
+<p>What&rsquo;s everyone&rsquo;s favourite log message?</p>
+
+<pre><code>'{&quot;message&quot;:&quot;service failed to do the thing&quot;,&quot;error&quot;:&quot;{\\&quot;message\\&quot;:\\&quot;something went wrong with this request\\&quot;,\\&quot;request\\&quot;:\\&quot;{\\\\\\&quot;headers\\\\\\&quot;:\\\\\\&quot;{\\\\\\\\\\\\\\&quot;content-type\\\\\\\\\\\\\\&quot;:\\\\\\\\\\\\\\&quot;application/json\\\\\\\\\\\\\\&quot;}\\\\\\&quot;,\\\\\\&quot;body\\\\\\&quot;:\\\\\\&quot;{\\\\\\\\\\\\\\&quot;message\\\\\\\\\\\\\\&quot;:\\\\\\\\\\\\\\&quot;hello world\\\\\\\\\\\\\\&quot;}\\\\\\&quot;,\\\\\\&quot;method\\\\\\&quot;:\\\\\\&quot;POST\\\\\\&quot;,\\\\\\&quot;url\\\\\\&quot;:\\\\\\&quot;http://hello\\\\\\&quot;}\\&quot;}&quot;}'
+</code></pre>
+
+<p>Yes, that&rsquo;s right - it&rsquo;s nested JSON. Nothing like nested JSON to ruin your day, as you repeatedly paste and pares each individual bit to understand what the hell went wrong, or try to strip the forward-slashes using the power of your mind. No, that doesn&rsquo;t work.</p>
+
+<p>Nested JSON messages are what happens when you just add a little bit extra on to an error message to give context, but decide that that context is probably an object like the request you just sent. And so you <code>JSON.stringify</code> that object into the error message string. But the that error message string winds up inside another object that, unknown to you, <em>also</em> gets <code>JSON.stringify</code>&rsquo;d, and etc and so on until you get to forward slash city.</p>
+
+<p>What&rsquo;s tragic about all this is that we live in a world of <em>structured logging</em> these days: we don&rsquo;t just log messages, we log whole damn bits of JSON so we can run exciting queries to tell us exactly how badly we&rsquo;ve screwed up this time.</p>
+
+<p>But getting a nice bit of JSON out of a JavaScript error can be a bit annoying. For instance, there&rsquo;s only really three fields on your basic <code>Error</code>: the <code>name</code>, the <code>message</code> and the <code>stack</code> trace.</p>
+
+<p>Most browsers do a good job of showing all three in their console. And the <code>toString()</code> implementation in <code>Error</code> is actually pretty good:</p>
+
+<pre><code class="language-javascript">new Error('the badness').toString() // 'Error: the badness'
+</code></pre>
+
+<p>You get the name of the class and the message. Pretty useful. But have you seen what happens when you try and turn one of them into JSON?</p>
+
+<pre><code class="language-javascript">JSON.stringify(new Error('the badness')) // '{}'
+</code></pre>
+
+<p>How useless is that?</p>
+
+<p>So how do we (1) get some more structure into our <code>Error</code>s, and (2) turn them into nice JSON?</p>
+
+<h3>Custom errors</h3>
+
+<p>To customize our errors we should <em>subclass</em> them. Yes, I know. Inheritance is the great Satan of object oriented programming. &ldquo;Favor object composition over class inheritance&rdquo;. If we start inheriting from classes our entire codebase will turn instantly into a nightmare of dependencies and spaghetti, and all the cool kids won&rsquo;t want to hang out with us.</p>
+
+<p>Well, the good news is that all those cool kids are off doing functional programming badly now, so you don&rsquo;t have to worry about them. As for the nightmare hellscape of inheritance&hellip; well, <em>Design Patterns</em> - from where that quote is taken - says &ldquo;<em>favor</em> object composition over class inheritance&rdquo;. Not &ldquo;never use inheritance&rdquo;. I&rsquo;m not going to get into why this is a great use case for inheritance, but trust me - it is. Feel free to make it work by just implementing the <code>Error</code> interface if you like. It&rsquo;s your life.</p>
+
+<p>Having said all that:</p>
+
+<pre><code class="language-typescript">class MyServiceError extends Error {
+    constructor(
+        public readonly number: number,
+        public readonly originalError: Error) {
+            super('MyService failed to process a number')
+            this.name = this.constructor.name;
+        }
+}
+</code></pre>
+
+<p>Boom. This is the nicest way of doing this. Maybe the only weird thing here is <code>this.name = this.constructor.name</code>, which is just making sure that the name of this error isn&rsquo;t <code>Error</code>, but instead is named after its constructor function (<code>MyServiceBadResponseError</code>).</p>
+
+<p>Well, we now have all those lovely fields all ready for our structured logging. But how can we get a nice, structured bit of JSON out given that, even with our modifications, we still get:</p>
+
+<pre><code class="language-typescript">JSON.stringify(new MyServiceBadResponseError(303, new Request(), new Response, new Error())) 
+// {&quot;number&quot;:303,&quot;originalError&quot;:{},&quot;name&quot;:&quot;MyServiceError&quot;}'
+</code></pre>
+
+<p>This is better - but it&rsquo;s still not really what we want. Where&rsquo;s my <code>stack</code>? Where&rsquo;s the <code>message</code>? What about that original error?</p>
+
+<p>One way would be to write a nice function to transform the object into a thing we can then send to <code>JSON.stringify</code>:</p>
+
+<pre><code class="language-typescript">function serializeMyServiceError(error: MyServiceBadResponseError): MyServiceBadResponseErrorDTO {
+    return {
+        name: error.name,
+        message: error.message,
+        stack: error.stack,
+        number: error.number,
+        originalError: error.originalError,
+    }
+}
+</code></pre>
+
+<p>This is pretty good:</p>
+
+<pre><code>{
+  &quot;name&quot;: &quot;MyServiceError&quot;,
+  &quot;message&quot;: &quot;MyService failed to process a number&quot;,
+  &quot;stack&quot;: &quot;MyServiceError@http://localhost:8000/tojson/errors.html line 67 &gt; eval:11:9\n@http://localhost:8000/tojson/errors.html line 67 &gt; eval:17:15\nevaluate@http://localhost:8000/tojson/errors.html:67:68\ndoit@http://localhost:8000/tojson/errors.html:59:19\nonclick@http://localhost:8000/tojson/errors.html:1:1\n&quot;,
+  &quot;number&quot;: 303,
+  &quot;originalError&quot;: {}
+}
+</code></pre>
+
+<p>But I still can&rsquo;t see my original error. How about:</p>
+
+<pre><code class="language-typescript">function serializeMyServiceError(error: MyServiceBadResponseError): MyServiceBadResponseErrorDTO {
+    return {
+        name: error.name,
+        message: error.message,
+        stack: error.stack,
+        number: error.number,
+        originalError: { name: error.originalError.name, message: error.originalError.message, stack: error.originalError.stack },
+    }
+}
+</code></pre>
+
+<p>Yay!</p>
+
+<pre><code>{
+  &quot;name&quot;: &quot;MyServiceError&quot;,
+  &quot;message&quot;: &quot;MyService failed to process a number&quot;,
+  &quot;stack&quot;: &quot;MyServiceError@http://localhost:8000/tojson/errors.html line 67 &gt; eval:11:9\n@http://localhost:8000/tojson/errors.html line 67 &gt; eval:17:15\nevaluate@http://localhost:8000/tojson/errors.html:67:68\ndoit@http://localhost:8000/tojson/errors.html:59:19\nonclick@http://localhost:8000/tojson/errors.html:1:1\n&quot;,
+  &quot;number&quot;: 303,
+  &quot;originalError&quot;: {
+    &quot;name&quot;: &quot;Error&quot;,
+    &quot;message&quot;: &quot;&quot;,
+    &quot;stack&quot;: &quot;@http://localhost:8000/tojson/errors.html line 67 &gt; eval:17:39\nevaluate@http://localhost:8000/tojson/errors.html:67:68\ndoit@http://localhost:8000/tojson/errors.html:59:19\nonclick@http://localhost:8000/tojson/errors.html:1:1\n&quot;
+  }
+}
+</code></pre>
+
+<p>But what if my original error wasn&rsquo;t an <code>Error</code>? What if you didn&rsquo;t know what sort of error it was going to be?</p>
+
+<p>OK, finally, this is what we&rsquo;re trying to get to here: <code>toJSON()</code>. A method we call to get the (unstringified) JSON representation of an object.</p>
+
+<pre><code class="language-typescript">class MyServiceError extends Error {
+    constructor(
+        public readonly number: number,
+        public readonly originalError: Error) {
+            super('MyService failed to process a number')
+            this.name = this.constructor.name;
+        }
+    
+    toJSON() {
+        return {
+            name: error.name,
+            message: error.message,
+            stack: error.stack,
+            number: error.number,
+            originalError: originalError.toJSON(),
+        }
+    }
+}
+
+
+class HttpError extends Error {
+    constructor(public readonly request: Request, public readonly response: Response) {
+        super('the badness');
+        this.name = this.constructor.name;
+    }
+
+    toJSON() {
+        return {
+            name: this.name,
+            message: this.message,
+            stack: this.stack,
+            request: this.request,
+            response: this.response,
+        }
+    }
+}
+
+
+JSON.stringify(303, new HttpError(new Request('hello', new Response())).toJSON())
+</code></pre>
+
+<pre><code>{
+  &quot;name&quot;: &quot;MyServiceError&quot;,
+  &quot;message&quot;: &quot;MyService failed to process a number&quot;,
+  &quot;stack&quot;: &quot;MyServiceError@http://localhost:8000/tojson/errors.html line 67 &gt; eval:20:9\n@http://localhost:8000/tojson/errors.html line 67 &gt; eval:35:15\nevaluate@http://localhost:8000/tojson/errors.html:67:68\ndoit@http://localhost:8000/tojson/errors.html:59:19\nonclick@http://localhost:8000/tojson/errors.html:1:1\n&quot;,
+  &quot;number&quot;: 303,
+  &quot;originalError&quot;: {
+    &quot;name&quot;: &quot;HttpError&quot;,
+    &quot;message&quot;: &quot;the badness&quot;,
+    &quot;stack&quot;: &quot;HttpError@http://localhost:8000/tojson/errors.html line 67 &gt; eval:3:9\n@http://localhost:8000/tojson/errors.html line 67 &gt; eval:35:39\nevaluate@http://localhost:8000/tojson/errors.html:67:68\ndoit@http://localhost:8000/tojson/errors.html:59:19\nonclick@http://localhost:8000/tojson/errors.html:1:1\n&quot;,
+    &quot;request&quot;: {},
+    &quot;response&quot;: {}
+  }
+}
+</code></pre>
+
+<p>Gives the same output as above.</p>
+
+<p>First, just on its own, this is a <em>good object oriented idea</em>. Let&rsquo;s leave the decisions about how our complex, odd-looking objects get turned into JSON up to those objects themselves. We can even send in complicated blobs of objects as private properties of the object, then only <code>toJSON()</code> the bits we really care about.</p>
+
+<p>But second&hellip; ah! Just look at this:</p>
+
+<pre><code class="language-typescript">JSON.stringify(303, new HttpError(new Request('hello', new Response())))
+</code></pre>
+
+<p>You <em>don&rsquo;t need to call <code>toJSON()</code></em>! <code>JSON.stringify</code> will call it for you. In fact, it&rsquo;ll call it <em>recursively</em> on each of the (enumerable) properties of your object. So you can just have <code>toJSON</code> return the <code>originalError</code>, and <code>JSON.stringify</code> will call it if it&rsquo;s there, or do its own thing if it&rsquo;s not. Behold, delayed binding (or polymorphism - you choose) in action, actually working for you. And actually built into the language.</p>
+
+<p>Just as <code>toString()</code> will get called recursively as objects are coerced into strings, so <code>toJSON()</code> gets called recursively as you coerce objects into a JSON string.</p>
+
+<p>This approach can be applied to everything - I&rsquo;ve used errors here as I think this is an area we could all do better in. But the same approach could be used with all your domain objects. How often do you find yourself serializing your objects to JSON to send over the wire? And how often are they nested and awkward to work with? How often do you write your custom serializer that then instantly gets sent straight to <code>JSON.stringify</code>? It would be much easier just to define the JSON representation of your object <em>once</em>, canonically, and then rely on <code>JSON.stringify</code> to do the right thing. Less code, less work, more fun: object oriented programming.</p>
+
+<h2>So what?</h2>
+
+<p>More broadly, why don&rsquo;t we just implement <code>toString()</code> and <code>toJSON()</code> on <em>all our objects</em>? We&rsquo;d never be stymied by <code>[object Object]</code> again - we&rsquo;d be in control of what we read in our consoles and debugger. We&rsquo;d never get fooled by some weird serialization of one of our objects. And structured logging would be simple, easy and fun (Rich Hickey only gives you one of these)! JavaScript gets damned as a bad language, but there are shining points of awesomeness in its design, and I think protocols that use these two methods are two of them.</p>
+]]></content:encoding></item><item><title>Three Books</title><description>What even is a senior developer anyway?</description><link>https://blog.gypysdave5.com/posts/2021/5/7/three-books/</link><pubDate>Fri, 07 May 2021 15:04:05 +0000</pubDate><category></category><guid>https://blog.gypysdave5.com/posts/2021/5/7/three-books/</guid><content:encoding><![CDATA[<p>So I was kicking around some ideas with partner-in-crime and work friend
+<a href="https://quii.dev">Chris James</a> of <a href="https://quii.gitbook.io/learn-go-with-tests/"><em>Learn Go With
+Tests</em></a> fame, on the subject of &ldquo;
+what even is a &lsquo;senior&rsquo; software developer?&rdquo;. This wasn&rsquo;t an entirely abstract
+conversation; we were once again trying to work out what the best questions to
+ask at an interview were - interviews where we were doing the interviewing.</p>
+
+<p>Chris was thinking about what skills and knowledge a &ldquo;mid level&rdquo; (again,
+whatever that is) needs to become a senior developer. I was (once again)
+bemoaning the number of developers who can spit out a few buzzwords and parrot
+some fashionable ideas they&rsquo;ve seen on Twitter, but then never apply those ideas
+to their work.</p>
+
+<p>And somehow these two threads turned into the ultimate non-technical interview
+question:</p>
+
+<blockquote>
+<p>Which three books have most influenced the way you work?</p>
+</blockquote>
+
+<h2>What, Gatekeeping Much?</h2>
+
+<p>We instantly wondered whether we&rsquo;d be excluding people. And the answer is yes.
+It&rsquo;s an interview, the whole point ultimately is to exclude some people - the
+people who you don&rsquo;t want to get the job. So the better question is: is this
+question excluding the <em>right</em> people?</p>
+
+<p>And I think it is. This is a question for a <em>senior</em> software developer. I would
+genuinely expect a senior developer to have read at least three books. Three
+books that were worth reading, and which were influential on the way they work.
+This is a <em>knowledege</em> industry (or at least it ought to be and not the fashion
+industry it feels like half of the time), it&rsquo;s really not too much that we
+expect the senior developers in our discipline to have read three - more than
+three - actual books.</p>
+
+<p>Not blog posts - not that I&rsquo;ve got anything against blog posts. I&rsquo;ve learned a
+lot through blog posts. But the attribute I&rsquo;m looking for in a senior is
+somebody who can think &ldquo;big&rdquo; and think &ldquo;slow&rdquo;, who can pay attention to a long
+form piece of writing which has ideas in it that won&rsquo;t fit into a five-hundred
+word explanation. I&rsquo;d probably accept a journal paper at a pinch. But not a blog
+post. And definitely not a tweet.</p>
+
+<h2>Lol Yes I&rsquo;ve Read &hellip;</h2>
+
+<p>Of course, this still doesn&rsquo;t weed out the people who try to fake it. Yes, they
+will say, I&rsquo;ve read <em>The Structure and Interpretation of Computer Programs</em>. It
+was wonderful. Job please.</p>
+
+<p>Well, no - no job yet. Because the next question is:</p>
+
+<blockquote>
+<p>Please explain how those books have influenced the way you work. Frame
+your answer as though you were talking to a junior developer.</p>
+</blockquote>
+
+<p>One of the most important skills of a senior developer is the ability to pass
+knowledge and skills along to the &ldquo;next generation&rdquo;. I want a senior developer
+to make all the developers in an organization better, and especially the
+&ldquo;junior&rdquo; developers on their team. I don&rsquo;t want them to sit on their mighty
+tower of 1337 h4xx0r skillz - I need them to be educators and explainers,
+raising their game by raising everyone else&rsquo;s game. And if they can&rsquo;t explain
+why these important ideas are important to them, hopefully in a way that will
+inspire other developers to read the same book, then I really don&rsquo;t understand
+how they&rsquo;ll fit in with my idea of seniority. Maybe they should go and interview
+at a place that wants you to invert binary trees on a whiteboard or whatever.</p>
+
+<p>I&rsquo;ll go further: I don&rsquo;t even care that much if it&rsquo;s not a &ldquo;tech&rdquo; book. Maybe
+they learned something from a book about management. Or a book about chess. Or a
+book about sixteenth century Italian opera fans. It doesn&rsquo;t matter. As
+long as they can explain what they got from that book in a way that someone with
+little context in software development can understand, it&rsquo;ll indicate the sort
+of skills I would be looking for.</p>
+
+<p>So now what do you do?</p>
+
+<h2>I&rsquo;m a Junior / Mid-level Developer&hellip;</h2>
+
+<ol>
+<li>Ask all of those senior developers you know to name their three books.</li>
+<li>&hellip; and of course explain <em>why</em> those books to you.</li>
+<li>Put them all together in a big unordered list</li>
+<li><em>Think</em> about what you want to be learning next, what&rsquo;s missing from your
+skill set and then&hellip;</li>
+<li>Read a book</li>
+<li>NOW!</li>
+</ol>
+
+<p>Seriously - <em>read a book</em>. Don&rsquo;t doomscroll Twitter, don&rsquo;t read another blog
+post about the 27 new technologies you need to learn to be a DevTechOpsDataMonk.
+Don&rsquo;t learn yet another &ldquo;Hello World&rdquo; in the language <em>du jour</em> or the hot new
+JS framework. Read a book! Now is the time to step up, to move towards mastery
+of your discipline. Get that book, read that book, take notes about that book,
+bore your colleagues, friends and family by talking about that book, blog about
+that book. But read that book and read that book now.</p>
+
+<p>And if not now, when?</p>
+
+<h2>I&rsquo;m a Senior Developer&hellip;</h2>
+
+<p>Just write down your three books with a quick description and explanation of
+each, and now you&rsquo;re ready for all those juniors who are beating a path to your
+door. Let me know your list!</p>
+
+<p>And, of course there&rsquo;s a bonus here - I&rsquo;ll hopefully get to hear about some of
+the awesome books I ought to read!</p>
+
+<h2><em>Audere Legere</em></h2>
+
+<p>So there it is - does this sound right to you? Are you a senior developer who
+couldn&rsquo;t answer this question, and thinks it&rsquo;s dumb? Tell me why. Can you think
+of a better interview question that would test the same areas? Or a better way
+of asking the same question? Or asre you just waiting for me to name my three
+books? I might do it in a follow-up post. In any case, feel free to hit me up
+on <a href="https://twitter.com/gypsydave5">Twitter</a> to start a conversation.</p>
+]]></content:encoding></item><item><title>On Developer Fetishes</title><description>Attachment is the root of suffering</description><link>https://blog.gypysdave5.com/posts/2019/7/15/on-developer-fetishes/</link><pubDate>Mon, 15 Jul 2019 22:48:07 +0000</pubDate><category>shell,frameworks,languages,editor</category><guid>https://blog.gypysdave5.com/posts/2019/7/15/on-developer-fetishes/</guid><content:encoding><![CDATA[<h2>Caveat Lector</h2>
+
+<p>What follows is more of a stream of consciousneess that fell out a
+few nights ago pretty much unedited and very unpolished. Please
+don&rsquo;t take it too seriously, or personally (that would be too ironic)
+-  it&rsquo;s as much directed at me as it is anyone. I&rsquo;m publishing it
+<em>with regret</em>.</p>
+
+<h3>Programming languages do not care about you</h3>
+
+<p>You love your language. You&rsquo;ve spent hours, days - <em>months</em> -
+learning its intricacies inside out. You are the grand wizard of
+JavaScript. You are the shining Ruby of Rubyists. You are the P in
+PHP, the Hoss of Haskell, the rustiest Rustacean, the goofiest
+Gopher, the biggest, steamiest, hottest cup of Java in the JVM shop.</p>
+
+<p>So what.</p>
+
+<p>Your language is really just a set of blinkers around what you can
+do. You are ultimately limited by your language; trust me, it cannot
+do everything you want it to do.</p>
+
+<p>What&rsquo;s vital for a language isn&rsquo;t the language - its features, its
+warts, its amazing syntax for one line anonymous function calls,
+or array destructuring, or pattern matching&hellip;</p>
+
+<p>Or its beautiful landing page, its cod philosophy, its ridiculously
+cute rodent mascot.</p>
+
+<p>It&rsquo;s not even what it teaches you, about the world and about
+computers. That&rsquo;s important, and useful, but it isn&rsquo;t the most
+important thing.</p>
+
+<p>The most important thing about a language is the people who speak
+it and the problems they solve with it. Try to keep it that way.</p>
+
+<h3>You are not the framework you use</h3>
+
+<p>If it&rsquo;s true for languages, it&rsquo;s doubly true for frameworks. But
+it&rsquo;s usually these artefacts that are the cause of the greatest and
+most vociferous developer fetishism - yes, I&rsquo;m talking to you, front
+end JavaScript developers of 2019.</p>
+
+<p>Nobody cares if your website is made in React. Or Angular. Or Vue.
+Or Preact. Or Bumfle. You haven&rsquo;t heard of Bumfle? I just made it
+up. My website is written in Bumfle. It&rsquo;s the best. I&rsquo;m a Bumfle
+developer. Been one for the past twenty seconds. I&rsquo;m the best at
+Bumfle. Please sign up for my free Bumfle training course. We in
+the Bumfle community welcome all Bumfle contributors. Also, I&rsquo;ve
+just changed the Bumfle API to use Bumfle hooks which I&rsquo;m calling
+Books. Saga Books now because I&rsquo;ve read the DDD book. All your
+Bumfle code is now broken because of this. You are welcome. Also,
+Bumfle is now called Fumble. Also I&rsquo;m now building the next Fumble.
+It&rsquo;s called Brian.</p>
+
+<p>Nobody cares if you love a framework more than the last version of
+React, or whether it is simpler or easier to use than the next
+version of Vue. Especially not the framework.</p>
+
+<p>Because in two minutes time the subject of all your passion and
+effort and love and time will evaporate through the whimsy of a
+maintainer, an exciting change in fashion, an update to 3.6.6.6, a
+new API that introduces every other term from the DDD book&hellip;</p>
+
+<p>(Bumfle objects are now called Baggregates. You are welcome.)</p>
+
+<p>Do not get attached to a framework. Do not fall in love with these
+ephemera. The most important thing a framework can do is solve
+particular problem. Try and solve more problems, stop finding
+problems to solve with your favourite magic box. Stop inventing
+problems to solve with your favourite magic box.</p>
+
+<h3>Your text editor does not define you</h3>
+
+<p>Vim is fun. You feel like you&rsquo;ve passed a small exam every time you
+remember a command correctly. You get a small dopamine hit. You are
+a successful individual and a powerful software developer. At least
+a 5X. You must be because you know how to <code>d</code>elete <code>a</code> <code>w</code>ord. You
+then want to tell your friends about your huge triumph in writing
+a macro that adds a comma to the end of each line.</p>
+
+<p>Try and suppress this desire. Maybe suck on something sugary for
+five minutes instead. It will pass.</p>
+
+<p>Who cares how quickly you can delete a word? Or a line? Or cut and
+paste a paragraph? Is the speed at which you can surround a single
+word with quotation marks <em>really</em> the limiting factor on your work?
+You were unable to write your algorithm because it took you too
+long to do the copying and pasting? Your startup failed because you
+weren&rsquo;t typing fast enough? <em>Really?</em></p>
+
+<p>All those plugins - this goes for the VS Code people too - do you
+use them? They seemed like a good idea when you installed them.
+Free stuff. But do you ever <em>use</em> them? Are they just filling your
+screen with more noise? Was it worth spending those three hours
+choosing the right colour scheme?</p>
+
+<p>Take a good, long, hard look at what you actually do when you write
+code. Is there really that much that you&rsquo;re doing that couldn&rsquo;t be
+achieved with Windows Notepad?</p>
+
+<p>Your text editor is <em>just another tool</em>. It&rsquo;s a means to an end.
+It is not a status symbol. If you&rsquo;re spending more than one percent
+of your time setting up an editor&hellip; stop.</p>
+
+<h3>Your terminal does not express your individuality</h3>
+
+<p>The perfect font. The perfect colour scheme. The perfect shell.</p>
+
+<p>Bash of course. No, not bash. Nobody uses bash any more. Who are
+you. Get out of here. No, we use zsh. No, we don&rsquo;t know how to
+pronounce it either. But we use it. Or fish. Or something else.
+It&rsquo;s amazing.</p>
+
+<p>We use tmux. Mainly so we can see a big clock. We have a custom
+prompt. It tells us how many minutes until our JavaScript framework
+becomes obsolete. We have a terminal emulator that emits fireworks
+as we type. With a black background. Because we are 10x developers
+and it&rsquo;s just like Mr. Robot.</p>
+
+<p>Stop. Please. It&rsquo;s a terminal. It&rsquo;s a shell. You can spend a month
+customising it and in the end you&rsquo;ll not be a better developer.
+You&rsquo;ll just hate the look of whatever abomination you&rsquo;ve created
+and spend another month making it better. And another. And another&hellip;</p>
+
+<p>Stop worrying about how it looks and just use it. To do some
+development. You know. What you were meant to be doing.</p>
+
+<h2>Solutions</h2>
+
+<p>I&rsquo;ve been told that just moaning about all of this stuff without
+supplying any solutions isn&rsquo;t very nice. So I&rsquo;ll try and be nicer.</p>
+
+<ul>
+<li><p>Languages. Learn more than one. Learn more than two. Travel
+broadens the mind. You will learn to love your first language more.
+You will be forced to think of new ways of solving old problems.
+You will understand computers better. When you talk about languages,
+talk about how they differ and how it&rsquo;s nice to do things in different
+ways. Caveat: don&rsquo;t just learn how to write <code>hello world</code> in twenty
+languages; learn a handful of distinct ones to a good degree. This
+is not a waste of time.</p></li>
+
+<li><p>Frameworks. If your framework isn&rsquo;t giving you skills and knowledge
+you can transfer to the real world, I&rsquo;d worry. Make sure you know
+how it works &lsquo;under the hood&rsquo;. Don&rsquo;t get trapped. Every framework
+is a sinking ship. Every single one. And, yes, we are all rats.
+Don&rsquo;t learn more than one at a time. Forget everything you can about
+it when it finally dumps you.</p></li>
+
+<li><p>Editors. This isn&rsquo;t so much advice as some ideas. Delete your
+plugins, turn off syntax highlighting, and give it a week. Find
+ways of using your skill at programming (you&rsquo;re a programmer, right?)
+to extend your editor by using its interactions with the shell. Try
+changing editors for a month to try something else. Try using <code>ed</code>
+for a week.</p></li>
+
+<li><p>Terminals. Use the out of the box settings for whatever computer
+you&rsquo;re using and wait until you <em>can&rsquo;t</em> do something you <em>need</em> to
+do before you start messing with it. Exception: you may have a dark
+background if you do all your work in a pitch black room. But maybe
+ask yourself why you&rsquo;re doing all your coding in a pitch black room.
+Are you OK? Would you like to talk to someone?</p></li>
+</ul>
+]]></content:encoding></item><item><title>Why learn… about Media Types</title><description>All about media types and how to use them</description><link>https://blog.gypysdave5.com/posts/2019/4/7/why-learn-about-media-types/</link><pubDate>Sun, 07 Apr 2019 19:12:28 +0000</pubDate><category>web,beginners</category><guid>https://blog.gypysdave5.com/posts/2019/4/7/why-learn-about-media-types/</guid><content:encoding><![CDATA[<p>Media types are used to communicate the type of data being sent over the web. They are used</p>
+
+<ul>
+<li>in an HTTP response to declare the type of content being sent</li>
+<li>in requests to declare what sort of content the client can interpret</li>
+<li>in POST requests to declare the type of content being sent.</li>
+</ul>
+
+<p>Basically, wherever there is data on the web, there will be a media type to tell you what sort of data it is. And if there&rsquo;s not, well there really ought to be.</p>
+
+<p>This article will explain how to interpret a media type and also explain how they are used in HTTP headers to make sure we get the data that we can understand.</p>
+
+<ul>
+<li><a href="#who-is-this-for">Who is this for?</a></li>
+<li><a href="#where-have-i-seen-media-types-before">Where Have I seen Media Types Before?</a></li>
+<li><a href="#media-type-syntax">Media Type Syntax</a></li>
+<li><a href="#media-types-in-http-message-headers">Media Types in HTTP Message Headers</a></li>
+<li><a href="#content-negotiation">Content Negotiation</a></li>
+<li><a href="#roll-your-own-media-type">Roll Your Own Media Type</a></li>
+<li><a href="#summary">Summary</a></li>
+<li><a href="#q-and-a">Q and A</a></li>
+</ul>
+
+<h2>Who is this for?</h2>
+
+<p>This is for web developers who are interested in understanding how to move data over the web. Some knowledge of HTTP, specifically headers, is useful but not necessary.</p>
+
+<h2>Where Have I Seen Media Types Before?</h2>
+
+<p>The first time I saw a media type was when I wrote my first HTML file - specifically to get some CSS:<sup class="footnote-ref" id="fnref:1"><a rel="footnote" href="#fn:1">1</a></sup></p>
+
+<pre><code class="language-html">&lt;link rel=&quot;stylesheet&quot; src=&quot;style.css&quot; type=&quot;text/css&quot; /&gt;
+</code></pre>
+
+<p>There&rsquo;s our first media type - <code>text/css</code>.</p>
+
+<p>The next place I bumped into them was when I was returning JSON from a server:</p>
+
+<pre><code>response.contentType = &quot;application/json&quot;
+</code></pre>
+
+<p>There&rsquo;s another one - <code>application/json</code>.</p>
+
+<p>So they&rsquo;re not completely alien to us - they&rsquo;re a way of saying that &ldquo;the file is full of CSS&rdquo;, and &ldquo;I&rsquo;m sending you some JSON&rdquo;. Let&rsquo;s take a closer look at these two types while investigating the syntax of media types.</p>
+
+<h2>Media Type Syntax</h2>
+
+<p>A media type is made up of two fields separated by a <code>/</code>. The first is the <code>type</code> and the second is the <code>subtype</code>.</p>
+
+<p>Straight off we can see that CSS (<code>text/css</code>) has a type of <code>text</code>, and a subtype of <code>css</code>. The <code>text</code> type is very broad - it says that the media is just text, which covers quite a few types of content - content such as:</p>
+
+<ul>
+<li><code>text/html</code> - it&rsquo;s what you&rsquo;re reading right now!</li>
+<li><code>text/plain</code> - it&rsquo;s just plain text!</li>
+<li><code>text/markdown</code> - what I&rsquo;m writing this in which will get turned into <code>text/html</code></li>
+<li><code>text/csv</code> &hellip;</li>
+</ul>
+
+<p>you get the idea.</p>
+
+<p><code>application/json</code> has a subtype of <code>json</code>, which is appropriate as, well, it <em>is</em> JSON. The <code>application</code> type informs us that this is a type that&rsquo;s meant to be processed by a application. This kinda makes sense, as it&rsquo;s JSON, which is meant to be read by computers.</p>
+
+<p>(But isn&rsquo;t CSS only meant to be processed by an application? Yes, it is. Maybe it should have been <code>application/css</code>. Maybe it should have been <code>text/json</code>. Who knows. Media types are a bit wonky. The whole web is a bit wonky. Don&rsquo;t worry about it too much. Part of being a web developer is learning to live with a fair amount of kludge and ambiguity that happened before some of us were born. Learn to live with it.)</p>
+
+<p>Other fun <code>application</code> types are</p>
+
+<ul>
+<li><code>application/pdf</code> for PDFs</li>
+<li><code>application/zip</code> for zip files</li>
+<li>and many, many more&hellip;</li>
+</ul>
+
+<h3>All the types</h3>
+
+<p>We&rsquo;ve seen <code>text</code> and <code>application</code> types - here&rsquo;s a list of types that you&rsquo;re likely to come across with examples:</p>
+
+<table>
+<thead>
+<tr>
+<th align="center">type</th>
+<th align="center">purpose</th>
+<th align="center">example</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="center"><code>application</code></td>
+<td align="center">media for application consumption</td>
+<td align="center"><code>application/json</code></td>
+</tr>
+
+<tr>
+<td align="center"><code>audio</code></td>
+<td align="center">audio media</td>
+<td align="center"><code>audio/mp3</code></td>
+</tr>
+
+<tr>
+<td align="center"><code>font</code></td>
+<td align="center">font formats</td>
+<td align="center"><code>font/ttf</code></td>
+</tr>
+
+<tr>
+<td align="center"><code>image</code></td>
+<td align="center">visual media</td>
+<td align="center"><code>image/gif</code></td>
+</tr>
+
+<tr>
+<td align="center"><code>multipart</code></td>
+<td align="center">media that needs to be sent in parts</td>
+<td align="center"><code>multipart/form-data</code></td>
+</tr>
+
+<tr>
+<td align="center"><code>text</code></td>
+<td align="center">plain text</td>
+<td align="center"><code>text/html</code></td>
+</tr>
+
+<tr>
+<td align="center"><code>video</code></td>
+<td align="center">video media</td>
+<td align="center"><code>video/mp4</code></td>
+</tr>
+</tbody>
+</table>
+<p>Type and subtype are the only parts of a media type that are required, but there are also couple of optional parts.</p>
+
+<h3>Parameters</h3>
+
+<p>Media types can have a list of parameters tagged on to them after a semicolon. For instance</p>
+
+<pre><code>text/plain;charset=UTF-8
+</code></pre>
+
+<p>is a <code>text/plain</code> media type that&rsquo;s using the UTF-8 character encoding. If we want our sweet emojis to work we need to remember to say we&rsquo;re using UTF-8, or else the client will assume we&rsquo;re writing in ASCII like 1970s cavemen.</p>
+
+<p>Parameter types aren&rsquo;t dictated by the media type specification,<sup class="footnote-ref" id="fnref:2"><a rel="footnote" href="#fn:2">2</a></sup> and you can have as many of them as you like:</p>
+
+<pre><code>text/plain;charset=UTF-8,blog-post=true,author=gypsydave5
+</code></pre>
+
+<p>They gain their meaning through context; browsers, for instance, will look for and use a <code>charset</code> parameter when they read a media type over HTTP. More on browsers in a bit.</p>
+
+<h3>Structured Syntax Name Suffix</h3>
+
+<p>This one&rsquo;s a bit weird, but it&rsquo;s also cool, so bear with me. Take a look at this media type:</p>
+
+<pre><code>image/svg+xml
+</code></pre>
+
+<p>This is the type for SVG images - Scalable Vector Graphics. <code>image</code> is the type, <code>svg</code> is the subtype - that&rsquo;s what we&rsquo;d expect.</p>
+
+<p>But what&rsquo;s this <code>+xml</code> doing at the end? Well, as you may already know, SVGs are written in XML - it&rsquo;s one of the nicest things about them. So the <code>+xml</code> is telling us that the syntax of SVG is XML; you could say that XML is the &lsquo;base&rsquo; language for SVG. This is called the &lsquo;structured syntax name&rsquo;, and it&rsquo;s a nice way of letting us know that, hey, you may not know what SVGs are but, it&rsquo;s OK, it&rsquo;s just XML under the hood so you&rsquo;ll be fine.</p>
+
+<p>(Unless you&rsquo;re me and you panic everytime you hear the word XML and you find it ridiculous that some people think it&rsquo;s human readable and you wish that the whole world was represented as JSON, but that&rsquo;s another story&hellip;)</p>
+
+<hr />
+
+<p>Look, I can tell you&rsquo;re really excited by all these media types. Now you know how to understand them, you can read the <a href="https://www.iana.org/assignments/media-types/media-types.xhtml">list of all the media types</a> that have been registered with IANA, the Internet Assigned Numbers Authority. Go on, read them all now. I&rsquo;ll wait.</p>
+
+<p>There&rsquo;s a lot, right? Try not to panic - you&rsquo;ll probably only ever use ten of them at most. But did you see the one for SNES ROMs?</p>
+
+<h2>Media Types in HTTP Message Headers</h2>
+
+<p>The most important place you&rsquo;ll use media types is in HTTP messages. You&rsquo;ll use them to describe the media type of the data you want in the <code>Accept</code> header of an HTTP Request, and the type of data you&rsquo;re sending in the <code>Content-Type</code> header of an HTTP Response.</p>
+
+<h3>The <code>Accept</code> Header</h3>
+
+<p>The <code>Accept</code> header is the way a client - like your browser - can tell a server what sort of content it wants.</p>
+
+<p>At its simplest it can look like this:</p>
+
+<pre><code>Accept: application/json
+</code></pre>
+
+<p>If I put this in the header of my request, I&rsquo;d be making it very clear to the server that I want JSON back. No questions asked.<sup class="footnote-ref" id="fnref:3"><a rel="footnote" href="#fn:3">3</a></sup></p>
+
+<p>But say you wanted some audio back from the server, but didn&rsquo;t mind what subtype - <code>audio/mp3</code> is just as good as <code>audio/wav</code> for you. In this case you can say:</p>
+
+<pre><code>Accept: audio/*
+</code></pre>
+
+<p><code>*</code> represents a wildcard - it means &lsquo;give me anything&rsquo;. The server could legitimately reply with an <code>audio</code> media type with <em>any</em> subtype.</p>
+
+<p>Finally, if you just don&rsquo;t care what comes back from the server you can just say</p>
+
+<pre><code>Accept: */*
+</code></pre>
+
+<h3>The <code>Content-Type</code> Header</h3>
+
+<p><code>Content-Type</code> is the header you should add to an HTTP Response message to tell the client what they&rsquo;re getting in the response body. This is how the client knows how to interpret the message that you&rsquo;re sending.</p>
+
+<p>The <code>Content-Type</code> header should have one media type, so it could be as simple as this:</p>
+
+<pre><code>Content-Type: text/html
+</code></pre>
+
+<h3>Wait, can&rsquo;t I just use a file extension?</h3>
+
+<p>You can imagine that you&rsquo;ve got some data that you can get to through a URL:</p>
+
+<pre><code>http://gypsydave5/data
+</code></pre>
+
+<p>Maybe if I wanted to get the data as JSON I could request:</p>
+
+<pre><code>http://gypsydave5/data.json
+</code></pre>
+
+<p>But if I want XML instead I could do:</p>
+
+<pre><code>http://gypsydave5/data.xml
+</code></pre>
+
+<p>The benefit being that this is pretty easy to understand if I&rsquo;m used to using a filesystem - I can just identify the type of file by the extension, and so I can now do the same with a URL.</p>
+
+<p>What&rsquo;s the harm? Probably the most annoying thing is that, even if you provide an extension as above, you&rsquo;ll <em>still</em> have to provide a <code>Content-Type</code> header. This is because, on the web, information about content isn&rsquo;t meant to be encoded in URLs; it&rsquo;s meant to be in the <code>Content-Type</code> header.</p>
+
+<p>Some popular frameworks do this,<sup class="footnote-ref" id="fnref:4"><a rel="footnote" href="#fn:4">4</a></sup> but it&rsquo;s a bad idea. Don&rsquo;t do it.</p>
+
+<p>The biggest problem is that you&rsquo;ll miss out on being able to perform <em>content negotiation</em>.</p>
+
+<h2>Content Negotiation</h2>
+
+<p>Pretend you&rsquo;re going to a sandwich shop and your friend asks you to get a sandwich. Sure, you say, what do you want? I don&rsquo;t know, they say, what do they have? Um&hellip; you say, I really don&rsquo;t know - here&rsquo;s the menu but they&rsquo;ve often run out of some of the fillings by this time of day.</p>
+
+<p>OK, says your friend, here&rsquo;s what I&rsquo;d like:</p>
+
+<blockquote>
+<p>&ldquo;I want tuna mayo or a New Yorker - either is fine. If they don&rsquo;t have those, then I&rsquo;ll take an egg salad. And if they don&rsquo;t have an egg salad, then please, get me anything - I&rsquo;m starving.&rdquo;</p>
+</blockquote>
+
+<p>Doesn&rsquo;t sound too bad. You can use your friend&rsquo;s set of sandwich requirements when you get to the sandwich shop to get them a sandwich that they&rsquo;ll like.</p>
+
+<p>The same thing happens every day on the web, with clients sending a list of media types over to servers to try and make sure that they&rsquo;ll get something they like. Take a look at this <code>Accept</code> header of an HTTP Request sent from a web browser:<sup class="footnote-ref" id="fnref:5"><a rel="footnote" href="#fn:5">5</a></sup></p>
+
+<pre><code>Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+</code></pre>
+
+<p>The browser wants one of the above media types. But it&rsquo;s got some opinions about which ones it would prefer, which it&rsquo;s expressing using <code>q</code> parameters.<sup class="footnote-ref" id="fnref:6"><a rel="footnote" href="#fn:6">6</a></sup> <code>q</code> parameters have a value between <code>1</code> and <code>0</code>, and the default value of a <code>q</code> parameter (when it&rsquo;s not supplied) is <code>1</code>.</p>
+
+<p>Here&rsquo;s the media types above written out with their <code>q</code> values.</p>
+
+<table>
+<thead>
+<tr>
+<th>media type</th>
+<th>q value</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>text/html</code></td>
+<td>1.0</td>
+</tr>
+
+<tr>
+<td><code>application/xhtml+xml</code></td>
+<td>1.0</td>
+</tr>
+
+<tr>
+<td><code>application/xml</code></td>
+<td>0.9</td>
+</tr>
+
+<tr>
+<td><code>*/*</code></td>
+<td>0.8</td>
+</tr>
+</tbody>
+</table>
+<p>A series of choices ranked by preference. If you or I were going to the server to get the browser some content, the browser would tell us something like:</p>
+
+<blockquote>
+<p>&ldquo;I really want <code>text/html</code> and <code>application/xhtml+xml</code>. But, if they don&rsquo;t have those, I&rsquo;d go for some sweet <code>application/xml</code>. And if they don&rsquo;t have that then, whatever, just get me anything.&rdquo;</p>
+</blockquote>
+
+<p>Which is really what you&rsquo;d want a browser to do - you always want to get <em>something</em> back.</p>
+
+<pre><code>Accept: audio/*
+</code></pre>
+
+<p>Is like we&rsquo;re being sent to the record store:</p>
+
+<blockquote>
+<p>&ldquo;Could you get me the new Nirvana album?<sup class="footnote-ref" id="fnref:7"><a rel="footnote" href="#fn:7">7</a></sup> I don&rsquo;t care if it&rsquo;s on vinyl, tape or CD. Hell, 8 Track will do. Just make sure I can listen to it, OK - I don&rsquo;t just want the poster.&rdquo;</p>
+</blockquote>
+
+<p>This is <em>content negotiation</em> - our request to the server has given it our preferences regarding the content type we get back. It can go through those prefences, looking at what content types it can return, and give us the type that matches the most closely.</p>
+
+<h3>Content Negotiation and Testing</h3>
+
+<p>It&rsquo;s easier to write tests on the data that builds an HTML page than the HTML itself. If you build your application with content negotiation, you can test the contents of a &lsquo;page&rsquo; by requesting the JSON representation rather than the HTML representation.</p>
+
+<h2>Roll your own media type</h2>
+
+<p>You can invent your own media types, and it&rsquo;s not as rare as you might think. In fact it&rsquo;s a powerful technique for writing web APIs. The media type specification has space for subtypes that aren&rsquo;t registered (and should never be registered). They start with <code>x-</code>:<sup class="footnote-ref" id="fnref:8"><a rel="footnote" href="#fn:8">8</a></sup></p>
+
+<pre><code>application/x-myapplication-orderstatus+json
+</code></pre>
+
+<p>This could be the media type for the order status in my application. <code>+json</code> lets everyone know that it&rsquo;s written in JSON, but we&rsquo;ve tightly specified that the content is a part of <code>myapplication</code> - it&rsquo;s not just any old JSON.</p>
+
+<p>This is just vanity if you don&rsquo;t choose to leverage it to pass on additional information about the media type. For instance, if you want to change the structure of the <code>application/x-myapplication-orderstatus+json</code> media type, you can add a version parameter:<sup class="footnote-ref" id="fnref:9"><a rel="footnote" href="#fn:9">9</a></sup></p>
+
+<pre><code>application/x-myapplication-orderstatus+json;v=1.1
+</code></pre>
+
+<p>This is very useful when describing the content types that are sent and received across an evolving REST API.</p>
+
+<p>Finally you can <a href="https://www.iana.org/form/media-types">register your media type with IANA</a> to let the world know how to interact with your application.</p>
+
+<h2>Summary</h2>
+
+<p>We&rsquo;ve learned:</p>
+
+<ul>
+<li>The syntax of a media type and what they mean.</li>
+<li>How to use a media type in <code>Content-Type</code> headers to declare what we&rsquo;re sending.</li>
+<li>How to use them in <code>Accept</code> headers to control the content type we get back.</li>
+<li>How to use them to perform content negotiation with a server.</li>
+</ul>
+
+<p>Media types are important - they help smooth the path of passing data around on the web. Using them - and using them well - will help make your web applications easier for you others to use and understand.</p>
+
+<h2>Q and A</h2>
+
+<blockquote>
+<p>Q: &ldquo;Wait, I didn&rsquo;t put a <code>Content-Type</code> header on the HTML I sent but my browser still knew it was HTML - what gives?&rdquo;</p>
+</blockquote>
+
+<p>A: There are ways of working out the media type of data; go read up on <a href="https://en.wikipedia.org/wiki/Content_sniffing">content sniffing</a>.</p>
+
+<blockquote>
+<p>Q: Wait, don&rsquo;t you mean MIME types?</p>
+</blockquote>
+
+<p>No, I don&rsquo;t. MIME means <em>Multipurpose Internet Mail Extensions</em> and was the first place that media types were used. But since they&rsquo;re not used solely for &lsquo;internet mail&rsquo; (email to you and me), the proper name is &lsquo;media type&rsquo;. People still tend to use MIME, media and content type interchangeably, but now you know the right answer you can look smug at parties and demand a pay rise.</p>
+
+<div class="footnotes">
+
+<hr />
+
+<ol>
+<li id="fn:1">This is HTML4 - you don&rsquo;t need to include the type in HTML5. But that would ruin this perfectly good example.</li>
+
+<li id="fn:2">Apart from <code>q</code>, this one <em>is</em> specified.</li>
+
+<li id="fn:3">In fact the server should send back a 406: Not Acceptable code if it can&rsquo;t supply the media type asked for&hellip; but this rarely happens.</li>
+
+<li id="fn:4"><a href="https://github.com/rails/activeresource">Active Resource in Rails</a></li>
+
+<li id="fn:5">In this case Firefox.</li>
+
+<li id="fn:6">The <code>q</code> stands for quality. I&rsquo;m not even joking.</li>
+
+<li id="fn:7">I am very much down with popular culture.</li>
+
+<li id="fn:8">or <code>x.</code>. In fact <code>x.</code> is preferred by IANA but <code>x-</code> is more widely used.</li>
+
+<li id="fn:9">You could also try <code>application/x-myapplication-orderstatus_1.0+json</code> - it depends on how you want to parse the version information and what your versioning policy is (how compatible the versions are).</li>
+</ol>
+
+</div>
+]]></content:encoding></item><item><title>How I Write Blog Posts These Days</title><description></description><link>https://blog.gypysdave5.com/posts/2019/4/2/how-i-write-blog-posts-these-days/</link><pubDate>Tue, 02 Apr 2019 21:26:15 +0000</pubDate><category>writing,editors</category><guid>https://blog.gypysdave5.com/posts/2019/4/2/how-i-write-blog-posts-these-days/</guid><content:encoding><![CDATA[<h2>1. Editor: Vim</h2>
+
+<p>I write my Markdown in Vim. Or Emacs in Evil mode, which is Vim emulation in
+Emacs. Why? Well, I find the manipulation of text - any text - really quick and
+easy in Vim. Moving paragraphs, changing words, deleting sentences - Vim is
+aware of the structure of natural language, which makes using it to edit blog
+posts quite easy.</p>
+
+<h2>2. Format: Markdown</h2>
+
+<p>Markdown is both wonderful and terrible. Wonderful as it&rsquo;s <em>everywhere</em>, is
+human readable, and supports the structures you want to use for technical
+writing - i.e. code blocks. Terrible because there is no standard and so the
+HTML you&rsquo;ll get out of the other end of a parser is not consistent between
+parsers.</p>
+
+<p>Think this isn&rsquo;t too much trouble? I have to join all the lines in a paragraph
+to a single line when I&rsquo;m posting on Dev.to as the Markdown parser treats all
+the line breaks in a paragraph as hard breaks.<sup class="footnote-ref" id="fnref:1"><a rel="footnote" href="#fn:1">1</a></sup></p>
+
+<p>It&rsquo;s this inconsistency in Markdown parsers that makes me avoid (or at least not
+rely on) Markdown linters and previewers in my editors. I tend to wait until the
+post is near finished before I see what it looks like with stage 5 (see below).</p>
+
+<p>Still, the benefits outweigh the drawbacks and so Markdown it is.</p>
+
+<h3>3. Grammar and Spelling: aspell, style and diction</h3>
+
+<p>Markdown posts like this can be sent to <a href="http://aspell.net/"><code>aspell</code></a>, a handy
+interactive and extensible spellchecker. Good editor integration for aspell
+exists in both Vim and Emacs.</p>
+
+<p><a href="https://www.gnu.org/software/diction/diction.html"><code>style</code> and <code>diction</code></a> are
+a pair of tools that check for grammar mistakes and readability. <code>diction</code> picks
+up on clichés, doubled-words and potential misspellings. It&rsquo;s <em>sometimes</em> wrong
+but it gets you thinking about whether you could word things better and so makes
+an excellent starting point.</p>
+
+<p><code>style</code> describes how readable your document is through a series of scores
+- <a href="https://en.wikipedia.org/wiki/Flesch%E2%80%93Kincaid_readability_tests">Flesch-Kinkaid</a>
+for instance. It&rsquo;s interesting information.</p>
+
+<h3>4. Storage: GitHub</h3>
+
+<p>I keep my posts <a href="https://github.com/gypsydave5/gypsydave5.github.io">on GitHub</a>.
+If someone spots a mistake in what I&rsquo;ve written then at least this way they can
+open a pull request.</p>
+
+<h3>5. My Site: Static Site + GitHub Pages</h3>
+
+<p>I&rsquo;ve been using <a href="https://pages.github.com/">GitHub Pages</a> to host my blog as
+a static site since forever. It&rsquo;s an easy enough hosting solution and you can
+use it with any number of static site generators to turn your Markdown into
+HTML.</p>
+
+<p>I wrote <a href="https://github.com/gypsydave5/blawg">my own static site generator</a>
+because I found every one I tried a little too busy for my liking. It&rsquo;s <em>still</em>
+too busy for my liking and I reckon it could be scrapped in favour of
+<a href="https://pandoc.org/">Pandoc</a> and a few glue scripts, but it was fun to write.
+I wouldn&rsquo;t use it if I were you.</p>
+
+<p>I have a <a href="https://github.com/gypsydave5/gypsydave5.github.io/blob/source/publish.sh">horrible bash
+script</a>
+to publish the blog, and it looks <a href="http://blog.gypsydave5.com/">like this</a> when
+it&rsquo;s published.</p>
+
+<div class="footnotes">
+
+<hr />
+
+<ol>
+<li id="fn:1">Would be annoying if it wasn&rsquo;t for Vim&rsquo;s <code>J</code>oin command&hellip;</li>
+</ol>
+
+</div>
+]]></content:encoding></item><item><title>Why learn… a statically typed language?</title><description>Static typing for programmers with a dynamically typed background</description><link>https://blog.gypysdave5.com/posts/2019/3/22/why-learn-a-statically-typed-language/</link><pubDate>Fri, 22 Mar 2019 19:12:28 +0000</pubDate><category>languages,beginners,types</category><guid>https://blog.gypysdave5.com/posts/2019/3/22/why-learn-a-statically-typed-language/</guid><content:encoding><![CDATA[<p>Most people&rsquo;s first programming language is a dynamically typed, interpreted
+language - JavaScript, Python or Ruby. These are good languages to learn
+programming with, and you can be productive with all three of them. But there&rsquo;s
+a separate category of languages in widespread use: statically typed, compiled
+languages - C, Go, Java, C# and others. This article will try to explain the
+difference between the two language categories, look at their advantages and
+disadvantages, and then consider what would be a good choice of statically typed
+language for a programmer who is only familiar with dynamically typed languages
+to learn.</p>
+
+<ul>
+<li><a href="#who-is-this-for">Who is this for?</a></li>
+<li><a href="#what-is-a-statically-typed-compiled-language">What is a statically typed, compiled
+language?</a></li>
+<li><a href="#advantages">Advantages</a></li>
+<li><a href="#disadvantages">Disadvantages</a></li>
+<li><a href="#where-should-i-start">Where should I start?</a></li>
+</ul>
+
+<h2>Who is this for?</h2>
+
+<p>The target audience of this article is someone who is comfortable with
+programming in a dynamically typed language and who is interested in learning a
+statically typed language, and wants to know why it is worth while. The examples
+are in JavaScript, TypeScript, Python and Go, but no knowledge of these
+languages is required. This is based on my own experience of being a
+self-taught developer who started working in Ruby and JavaScript and has
+extended to languages like Go, TypeScript, Kotlin and Rust.</p>
+
+<h2>What is a statically typed, compiled language?</h2>
+
+<p>There are two pairs of opposites to look at here: <em>dynamically typed</em>
+vs. <em>statically typed</em>, and <em>compiled</em> vs. <em>interpreted</em>. Let&rsquo;s go through them
+in that order.</p>
+
+<h3>Dynamic vs Static typing</h3>
+
+<p>If someone asked you:</p>
+
+<blockquote>
+<p>What&rsquo;s five added to a banana?</p>
+</blockquote>
+
+<p>You would be confused - what do they mean? It looks like they&rsquo;ve made a
+mistake. Maybe they don&rsquo;t know what the meaning of &lsquo;add&rsquo; is, or what a &lsquo;banana&rsquo;
+is. Maybe they have a different meaning of &lsquo;add&rsquo; to us. Something has gone wrong
+somewhere though, as their question doesn&rsquo;t make sense to us.<sup class="footnote-ref" id="fnref:1"><a rel="footnote" href="#fn:1">1</a></sup></p>
+
+<p>Programming languages have a way of telling us that an expression written in the
+language do or do not make sense. They do this by using the <em>type</em> that every
+value in a programming language has. In dynamically typed languages we only
+really become aware of types when we use a value of one type in the wrong way -
+when we say something that doesn&rsquo;t &lsquo;make sense&rsquo;.</p>
+
+<p>For instance, in Python we can write this:</p>
+
+<pre><code class="language-python">5 + &quot;banana&quot;
+</code></pre>
+
+<p>Try saving that in a file called <code>typecheck.py</code> and executing it with <code>python
+typecheck.py</code>. You should get the following error in your terminal:</p>
+
+<pre><code>Traceback (most recent call last):
+  File &quot;typecheck.py&quot;, line 1, in &lt;module&gt;
+    5 + &quot;banana&quot;
+TypeError: unsupported operand type(s) for +: 'int' and 'str'
+</code></pre>
+
+<p>This is a type error - you can tell that from the way it says <code>TypeError</code> in the
+error message. The error is telling you that you can&rsquo;t <code>+</code> the types <code>int</code> and
+<code>str</code> together. Which is fair enough; just like you don&rsquo;t know how to add
+together 5 and a banana, neither does Python.</p>
+
+<p>The type error is thrown by a <em>type checker</em>, which checks that all the types in
+an expression are being used in the right way. The type checker kicks in when
+the Python program runs and checks that the two things that are being <code>+</code>ed
+together are of the right type.<sup class="footnote-ref" id="fnref:2"><a rel="footnote" href="#fn:2">2</a></sup></p>
+
+<p>Type checking can happen at one of two times: when the program is running
+(commonly called &lsquo;run time&rsquo;) or sometime before then. Dynamically typed
+languages have their types checked at run time - this is what happened with the
+Python program we ran above; the type error become apparent when the program was
+run. Statically typed languages have their types checked before they are run.</p>
+
+<h4>Type annotations</h4>
+
+<p>In order for the type checker to accurately check the types in a statically
+typed language, you will often have to explicitly declare the type of a variable
+through a <em>type annotation</em>. A type annotation is a little extra information you
+add to a variable to say what type it is. In English we can imagine adding type
+annotations to our nouns and verbs as extra information in parentheses. So our
+simple sentence:</p>
+
+<blockquote>
+<p>What&rsquo;s five added to a banana?</p>
+</blockquote>
+
+<p>Becomes</p>
+
+<blockquote>
+<p>What&rsquo;s five (which is a number) added (adding is something you do to numbers)
+to a banana (which is a fruit)?</p>
+</blockquote>
+
+<p>Which might be good evidence that natural language is not a place for type
+annotations.</p>
+
+<p>With these English type annotations we don&rsquo;t need to know what &lsquo;five&rsquo; is, what a
+&lsquo;banana&rsquo; is, and what &lsquo;addition&rsquo; is, to know that this sentence doesn&rsquo;t make
+sense. We don&rsquo;t even need to know what a &lsquo;number&rsquo; is. We just know that the verb
+in the middle needs two nouns to be of the type &lsquo;number&rsquo; for this sentence to be
+valid. We could perform this kind of check automatically just by looking at the
+words without having to know anything about their meaning - we can&rsquo;t do &lsquo;adding&rsquo;
+to a &lsquo;fruit&rsquo;. The type checker in a statically typed language works in the same
+way.<sup class="footnote-ref" id="fnref:3"><a rel="footnote" href="#fn:3">3</a></sup></p>
+
+<p>Let&rsquo;s see a type annotation in TypeScript, a statically typed variation of
+JavaScript:</p>
+
+<pre><code class="language-typescript">var theNumberFive: number = 5
+</code></pre>
+
+<p>This declares that the variable <code>theNumberFive</code> has the type <code>number</code>, and
+assigns the value <code>5</code> to it.</p>
+
+<p>The equivalent in JavaScript would be:</p>
+
+<pre><code class="language-javascript">var theNumberFive = 5
+</code></pre>
+
+<p>Exactly the same, only without the type annotation.</p>
+
+<p>We can also add type declarations to function signatures. The function <code>add</code> in
+JavaScript:</p>
+
+<pre><code class="language-javascript">function add(n1, n2) {
+    return n1 + n2
+}
+</code></pre>
+
+<p>looks like this in TypeScript:</p>
+
+<pre><code class="language-typescript">function add(n1: number, n2: number): number {
+    return n1 + n2
+}
+</code></pre>
+
+<p>We&rsquo;re saying that the function <code>add</code> takes two arguments, <code>n1</code> which is a
+<code>number</code> and <code>n2</code> which is a <code>number</code>, and returns a value which is also a
+<code>number</code>.</p>
+
+<p>These annotations will be used by the TypeScript type checker, which runs when
+the TypeScript is <em>compiled</em>.</p>
+
+<h3>Compiled / Interpreted</h3>
+
+<p>In an interpreted language such as JavaScript each line of the program is read
+and executed in sequence, one after the other,<sup class="footnote-ref" id="fnref:4"><a rel="footnote" href="#fn:4">4</a></sup> by an interpreter, which
+builds up the running process from the program you wrote, line by line.</p>
+
+<p>Compilation is the act of turning the program you&rsquo;ve written in one language
+into another language. For TypeScript, the target language is JavaScript. And
+during the compilation - at &lsquo;compile time&rsquo; - the type checker will analyze the
+TypeScript program for any errors.</p>
+
+<p>Compilers are usually used to translate a high level programming language (like
+JavaScript) into a lower level language like an assembly language or machine
+code. In the case of TypeScript, the compiler outputs another high level
+language - JavaScript.<sup class="footnote-ref" id="fnref:5"><a rel="footnote" href="#fn:5">5</a></sup></p>
+
+<p>Compiled vs. interpreted is barely ever a cut and dried distinction when with a
+particular programming language - an interpreter will sometimes have a
+compilation step which runs just before the code executes,<sup class="footnote-ref" id="fnref:6"><a rel="footnote" href="#fn:6">6</a></sup> and the output
+of a compiler will have to be run by an interpreter. In addition, being compiled
+or interpreted is not a property of the language itself. There are compilers for
+languages that are normally interpreted, and interpreters
+for languages that are normally compiled.</p>
+
+<p>For a statically typed, compiled language, the compilation step is where the
+type checker runs. Type checking is useful for the compiler as it allows it to
+make optimizations in the performance of the software - if a variable is always
+going to be a <code>number</code> it can optimize the memory locations used.</p>
+
+<h2>Advantages</h2>
+
+<h3>Type checking catches mistakes</h3>
+
+<p>Let&rsquo;s put this all together and write our example natural language &lsquo;expression&rsquo;
+in both JavaScript and TypeScript we will soon see one of the advantages of a
+statically typed language</p>
+
+<pre><code class="language-javascript">var five = 5
+var banana = &quot;banana&quot;
+
+function add(n1, n2) {
+    return n1 + n2
+}
+
+add(five, banana)
+</code></pre>
+
+<p>which will give us the result</p>
+
+<pre><code class="language-javascript">'5banana'
+</code></pre>
+
+<p>Oh JavaScript&hellip; more than happy to <code>+</code> <em>anything</em> together.<sup class="footnote-ref" id="fnref:7"><a rel="footnote" href="#fn:7">7</a></sup> It&rsquo;s easy to
+laugh at this sort of error, but I&rsquo;ve seen teams working on JavaScript bugs for
+days based on a number being stored as a string. It&rsquo;s an easy mistake to
+make. It&rsquo;s also the sort of bug that will <em>never, ever</em> happen to you - until it
+happens to you.</p>
+
+<p>But if we try to replicate the same bug in TypeScript</p>
+
+<pre><code class="language-typescript">var five: number = 5
+var banana: string = &quot;banana&quot;
+
+function add(n1: number, n2: number): number {
+    return n1 + n2
+}
+
+add(five, banana)
+</code></pre>
+
+<p>When we compile this with the TypeScript compiler<sup class="footnote-ref" id="fnref:8"><a rel="footnote" href="#fn:8">8</a></sup></p>
+
+<pre><code>add.ts:8:11 - error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+
+8 add(five, banana)
+            ~~~~~~
+
+
+Found 1 error.
+</code></pre>
+
+<p>The TypeScript compiler has caught our mistake and has even underlined where we
+went wrong - we can&rsquo;t put a <code>string</code> where a <code>number</code> is meant to go.</p>
+
+<p>This is the biggest advantage of static typing from the programmer&rsquo;s
+perspective; the type checker makes sure that we&rsquo;re not doing anything <em>stupid</em>
+like using a <code>string</code> like it&rsquo;s a <code>number</code>. All of a sudden we&rsquo;ve got a new
+level of certainty about how the program we&rsquo;ve written will work - without even
+running it.</p>
+
+<h3>Editor integration</h3>
+
+<p>But the fun of type checking doesn&rsquo;t end with compilation - far from it. Because
+a type checker can run even before you compile your program it can integrate
+with your text editor, to giving you information about your program as you&rsquo;re
+writing it. Because the type annotations declare what the type of a variable is,
+the editor can now tell you useful things like which methods are available to
+use on it.<sup class="footnote-ref" id="fnref:9"><a rel="footnote" href="#fn:9">9</a></sup></p>
+
+<h3>Compiled code runs faster</h3>
+
+<p>Compilation doesn&rsquo;t just translate one language into another; the compiler also
+looks at your program and tries to work out ways to make it run faster or more
+efficiently. Recursive function calls get turned into simple loops, for
+instance.</p>
+
+<h2>Disadvantages</h2>
+
+<p>This all sounds good - but what are the downsides of using a statically typed,
+compiled language?</p>
+
+<h3>Compilation takes time</h3>
+
+<p>Compilation of a program can take a long time. Less time these days with fast
+computers and good compilers, but still something like two or three minutes in
+the worst cases I&rsquo;ve experienced. If your workflow is reliant on fast, tight
+feedback loops then you might start to find a compiler annoying you as your
+program increases in size.</p>
+
+<h3>Types need more syntax</h3>
+
+<p>If you&rsquo;re used to a dynamically typed language, the verbosity of a statically
+typed language can be off-putting. Having to declare the types of every variable
+and function parameter can become wearing on the eyes. A modern language will
+try to take away the strain of this by inferring the type of variables where it
+can, but older statically typed languages like Java, C#, C++ and C can look
+verbose.</p>
+
+<h3>The world isn&rsquo;t typed</h3>
+
+<p>The verbosity of a statically typed language is made clear at the
+boundaries of a program - where it interacts with &lsquo;the world&rsquo;. A number of extra
+steps are required to wrangle the data coming into your system. This becomes
+apparent when parsing JSON - to get the full benefit of types in your system
+you&rsquo;ll have to take the general <code>JSON</code> type and turn it into one of your types,
+which can be pretty arduous. A dynamic language makes this a lot easier
+(although more open to type errors as seen above).</p>
+
+<h3>No REPL based development</h3>
+
+<p>Most compiled languages do not have support for a Read-Evaluate-Print-Loop,<sup class="footnote-ref" id="fnref:10"><a rel="footnote" href="#fn:10">10</a></sup>
+and do not lend themselves to the sort of interactive development seen in
+languages such as Clojure. If you work in this way you&rsquo;ll miss it - if you don&rsquo;t
+it won&rsquo;t make a bit of difference to you.</p>
+
+<h2>Where should I start?</h2>
+
+<p>So what&rsquo;s a good statically typed, compiled language to start with?</p>
+
+<p>If I had a lot of experience with JavaScript then there might be a good argument
+to try TypeScript, but I find that languages that compile to JavaScript
+introduce a layer of overhead and tooling that can stop you focusing on the
+language.</p>
+
+<p>I would advise steering away from Java as there&rsquo;s a lot of unnecessary cruft and
+complication in the language, some of which is a hangover from C. For instance,
+compare</p>
+
+<pre><code class="language-java">User user = new User()
+</code></pre>
+
+<p>in Java, which always makes me feel like I&rsquo;ve written the word <code>user</code> at least
+two too many times, to this in Go</p>
+
+<pre><code class="language-go">user := NewUser()
+</code></pre>
+
+<p>If you <em>did</em> want to look at a statically typed language built on the JVM,
+Kotlin is a good choice.</p>
+
+<p>The best choice in my opinion is the <a href="https://golang.org/">Go programming language</a>. It has a
+simple type system (there are no generic types to worry about), the language&rsquo;s
+syntax is small and easy to learn, the tooling and documentation are best in
+class, and it&rsquo;s increasingly popular. Take a look at the <a href="https://gobyexample.com/">Go By Example</a> or <a href="https://github.com/quii/learn-go-with-tests">Learn Go With Tests</a>.</p>
+
+<h2>What do you think?</h2>
+
+<p>Do you have any experience of transitioning from dynamically typed languages to
+statically typed languages. Or vice versa? What were the hardest parts? What
+advice would you offer? Which language(s) do you think make the best
+introduction to static typing?</p>
+
+<div class="footnotes">
+
+<hr />
+
+<ol>
+<li id="fn:1">We could say that the sentence is syntactically correct, but is semantically nonsense.</li>
+
+<li id="fn:2">Try and imagine what would happen if there were <em>no types</em> in a language. All you would have is bits floating around in memory. How would you know where the &lsquo;number&rsquo; started? Or ended? Or which bits of the memory were the program? This is why all programming languages are typed - programming would be impossible without them.</li>
+
+<li id="fn:3">Although often the type checker <em>does</em> know the types of the values it&rsquo;s looking at - it will know that <code>1</code> is a number. This is how type inference works, helping statically typed languages become a lot less verbose. For instance in Go we can just say <code>x := 1</code> and the type checker will be able to infer the type of <code>x</code> to be a number.</li>
+
+<li id="fn:4">There are some subtleties to this - often a language interpreter will compile parts of the code on the fly, and compiled languages can have sections of code whose types can only be worked out after compilation when we run the program (at &lsquo;run time&rsquo;).</li>
+
+<li id="fn:5">This is sometimes called <em>transpilation</em>.</li>
+
+<li id="fn:6">This is called a &lsquo;just in time&rsquo; compiler for obvious reasons.</li>
+
+<li id="fn:7">If you&rsquo;ve not watched Gary Bernhardt&rsquo;s <a href="https://www.destroyallsoftware.com/talks/wat">JavaScriptWAT</a> video, now would be a good time.</li>
+
+<li id="fn:8">If you&rsquo;re interested in seeing this for yourself, you will need a NodeJS environment on your computer. Then you will need to install the TypeScript compiler from NPM by running <code>npm install -g typescript</code>. To compile a TypeScript file, i.e. one called <code>add.ts</code>, run <code>tsc add.ts</code>. The compiled JavaScript output will be in a file called <code>add.js</code> if there are no compilation errors.</li>
+
+<li id="fn:9">This sort of assistance <em>is</em> available in dynamically typed languages, but not to the same degree.</li>
+
+<li id="fn:10">There is, of course, some nuance to this. For instance languages that run, on the Java Virtual Machine (JVM) <em>can</em> support a REPL by sending the compiled Java Byte Code emitted from the REPL directly to a running instance of the JVM.</li>
+</ol>
+
+</div>
+]]></content:encoding></item><item><title>Write and deploy a blog in less than thirty seconds</title><description></description><link>https://blog.gypysdave5.com/posts/2018/10/19/write-and-deploy-a-blog-in-less-than-thirty-seconds/</link><pubDate>Fri, 19 Oct 2018 15:18:43 +0000</pubDate><category>pandoc,now,unix,blogging</category><guid>https://blog.gypysdave5.com/posts/2018/10/19/write-and-deploy-a-blog-in-less-than-thirty-seconds/</guid><content:encoding><![CDATA[<p>What&rsquo;s the fastest way to start a blog? Wordpress? Jekyll?</p>
+
+<p>Nah, it&rsquo;s <code>pandoc</code> and <code>now</code>.</p>
+
+<h2>What&rsquo;s <code>pandoc</code>?</h2>
+
+<p><a href="http://pandoc.org/">Pandoc</a> is a &lsquo;universal document converter&rsquo; - a swiss army knife fordefault-text-scale
+changing document type a into document type b. It&rsquo;s good for lots of things, but
+today it&rsquo;s going to be good for turning Markdown (what we like writing in) into
+HTML (what we read on a website).</p>
+
+<h2>What&rsquo;s <code>now</code>?</h2>
+
+<p><a href="https://zeit.co/now">Now</a> is a useful product from Zeit.com for deploying an application
+<em>really</em> quickly. It&rsquo;s great for throwing up something to see how it works. It
+will serve up Docker images, NodeJS applications and static sites. Today, we use
+it for a static site. You can install it with a simple <code>npm i -g now</code>.</p>
+
+<h2>On your marks, get set&hellip;</h2>
+
+<p>So, make sure that you&rsquo;ve got <code>pandoc</code> and <code>now</code> installed, that you&rsquo;re in
+a nice clean directory and that you&rsquo;ve got a connection to the Internet. And
+that you know what your favourite editor is. If you don&rsquo;t have a favourite, pick
+the one you hate the least.</p>
+
+<h2>&hellip; GO!</h2>
+
+<p>Quickly - open a file called <code>hello-world.md</code> in your favourite editor and write
+something like this:</p>
+
+<pre><code># Hello World
+
+Hello world, this is the world's fastest blog!
+</code></pre>
+
+<p>Save it - faster, faster! And now run this in the terminal. What? I didn&rsquo;t tell
+you to open a terminal session? Quickly, open one and run:</p>
+
+<pre><code class="language-shell">pandoc -o=index.html -to=html5 --standalone hello-world.md
+</code></pre>
+
+<p>IGNORE THE WARNINGS, we don&rsquo;t have time to explain! Now&hellip; SHIP IT!</p>
+
+<pre><code class="language-shell">now
+</code></pre>
+
+<p><code>now</code> will put your <code>index.html</code> on the Internet. It&rsquo;ll even put the URL it
+uploaded it to in your clipboard. Now, open your least hated web browser and
+open the URL.</p>
+
+<p>Success!</p>
+
+<p>The other fifteen seconds is to bask in the glow of your achievement - you&rsquo;ve
+earned it.</p>
+
+<h2>More?</h2>
+
+<p>What, you want more than one blog post in your blog? Are you crazy or greedy? Or
+both? Such luxury, millenials are so spoiled and entitled yadda yadda yadda&hellip;</p>
+
+<p>Sure! Try this: open a new file called <code>my-second-post.md</code> and write your second
+post in it - I don&rsquo;t care what you write about!</p>
+
+<p>Now write <code>index.md</code> - like this:</p>
+
+<pre><code># My Quick Blog
+
+- [Hello World][hello-world.html]
+- [My second post][my-second-post.html]
+</code></pre>
+
+<p>and now</p>
+
+<pre><code class="language-shell">pandoc -o=index.html --to=html5 --standalone index-world.md
+</code></pre>
+
+<pre><code class="language-shell">pandoc -ohello-world.html --to=html5 --standalone hello-world.md
+</code></pre>
+
+<pre><code class="language-shell">pandoc -omy-second-post.html --to=html5 --standalone my-second-post.md
+</code></pre>
+
+<p>finally, once again</p>
+
+<pre><code class="language-shell">now
+</code></pre>
+
+<p>Paste the new URL in your browser and&hellip;</p>
+
+<p>BOOM! You now have a blog with an index page and two posts. Do a little dance!</p>
+
+<h2>Things you can now try out</h2>
+
+<ul>
+<li>We&rsquo;re programmers - we don&rsquo;t like to do things twice! Write something to loop
+over the <code>.md</code> files in your directory to turn them into <code>.html</code> with <code>pandoc</code>
+rather than doing every file by hand. Bash, Ruby, JavaScript - whatever is
+easiest!</li>
+<li>It&rsquo;s not fun to have to change the URL of your blog every time you deploy it.
+<code>now</code> has a way you can alias a deployment to a permanent URL - why not take
+a look at how that&rsquo;s done.</li>
+<li>Your blog is <em>ugly</em>. Not going to lie. You should add some CSS. <code>pandoc</code> has
+a way to include a CSS file in the html - you need to add the flag
+<code>--css=file.css</code> to your <code>pandoc</code> call (once you&rsquo;ve written some good looking
+CSS that is)</li>
+<li>Stop ignorning the warnings! Take a look at how to add metadata to your Pandoc
+markdown - it&rsquo;s all in the Pandoc documentation</li>
+</ul>
+
+<p>Have fun</p>
+]]></content:encoding></item><item><title>Lambda Calculus 4 - Logic with Church Booleans</title><description></description><link>https://blog.gypysdave5.com/posts/2017/10/21/lambda-calculus-4---logic-with-church-booleans/</link><pubDate>Sat, 21 Oct 2017 20:54:21 +0000</pubDate><category>Mathematics,Logic,Functional Programming,Lambda Calculus</category><guid>https://blog.gypysdave5.com/posts/2017/10/21/lambda-calculus-4---logic-with-church-booleans/</guid><content:encoding><![CDATA[<p>I found Church numbers pretty tough, and I&rsquo;m still not sure I fully understand
+them. But this post should be a little bit easier. I promised logic for this
+post, and logic I will give you. But not right now. First, it&rsquo;s&hellip;</p>
+
+<h2>Data structures with functions</h2>
+
+<p>As modern 21st century software developers, we&rsquo;re used to a strong divide
+between <em>data</em> and <em>process</em>. Even with object orientation we consider an object
+to be made of things it knows (the data) and things it does (the methods).<sup class="footnote-ref" id="fnref:1"><a rel="footnote" href="#fn:1">1</a></sup></p>
+
+<p>I always picture my programs as big old conveyor belts, where my program-workers
+each beat the hell out of a piece of data as it goes past, until it comes out as
+a shiny <del>new BMW</del> piece of JSON.</p>
+
+<p>Meanwhile, here in the lambda calculus&hellip; well, we&rsquo;ve got numbers for sure. But
+how can we get data structures like a piece of shiny JSON? Or even just a list?</p>
+
+<p>Take heart - through the lambda, all things are possible!<sup class="footnote-ref" id="fnref:2"><a rel="footnote" href="#fn:2">2</a></sup></p>
+
+<p>Let&rsquo;s try the simplest of all data structures - the pair. Simple, sure - but
+powerful. Every good Lisper knows that the can build any data interface you can
+conceive using enough pairs. If Lisp was written by Archimedes, he&rsquo;d say &ldquo;Give
+me a place to stand and enough <code>cons</code> cells and I shall move the earth&rdquo;.</p>
+
+<p>To get a pair as a data structure up and flying, we need three functions. One to
+make a pair out of two arguments, one that returns the first item in the pair,
+and another that returns the second item. Lispers will say &ldquo;Ah! <code>cons</code>, <code>car</code>
+and <code>cdr</code>!&rdquo;, but we will say $pair$, $first$ and $second$.</p>
+
+<p>First $pair$:</p>
+
+<p>$$
+pair\quad \equiv \quad \lambda p.\lambda q.\lambda f.\ f\ p\ q
+$$</p>
+
+<p>We take the two things we&rsquo;re pairing - that much makes sense - but then we take
+one more argument and apply it, first to the first argument, and then the result
+of that to the second argument.</p>
+
+<p>What&rsquo;s going on?</p>
+
+<p>We want something like $ first &lt; aPair &gt; $ to give us back the first item that we
+gave to the pair. So the final $f$ in pair is going to be offered both $p$ and
+$q$ and left to decide which one it wants.</p>
+
+<p>$$
+first\quad \equiv \quad \lambda pair. pair\ (\lambda a.\lambda b.\ a)
+$$</p>
+
+<p>$first$ takes a pair, and then gives that pair a function that takes two
+arguments and returns&hellip; well, the first one. Given that, it&rsquo;s a doddle to write
+$second$:</p>
+
+<p>$$
+second\quad \equiv \quad \lambda pair. pair\ (\lambda a.\lambda b.\ b)
+$$</p>
+
+<p>Same again, but this time we evaluate to the second of the arguments.</p>
+
+<p>Feel free to stick it into a programming language and play with it. Here it is
+in Scheme:</p>
+
+<pre><code class="language-scheme">(define pair
+    (lambda (p)
+        (lambda (q)
+            (lambda (f)
+                ((f p) q)))))
+</code></pre>
+
+<pre><code class="language-scheme">(define first
+    (lambda (p) (p (lambda (a) (lambda (b) a)))))
+</code></pre>
+
+<pre><code class="language-scheme">(define second
+    (lambda (p) (p (lambda (a) (lambda (b) b)))))
+</code></pre>
+
+<h2>Booleans</h2>
+
+<blockquote>
+<p>What is truth? said jesting Pilate, and would not stay for an answer.
+&amp;mdash; Francis Bacon, <em>On Truth</em></p>
+</blockquote>
+
+<p>Well, I hope you do stay for an answer. And there <em>is</em> an answer, at least for
+the concerns of the lambda calculus, but it&rsquo;s not going to be particularly life
+altering. In fact, it&rsquo;s probably going to remind you most of the solution to
+what a number is.</p>
+
+<h2>Numbers&hellip; AGAIN!</h2>
+
+<p>When we defined numbers a few posts ago, I was being fairly adamant that the
+best way to encode a number using functions would be to count the number of
+applications of a function. Remember - $zero$ was no applications, $one$ was
+one, etc.</p>
+
+<p>But this ain&rsquo;t necessarily so - we could implement numbers using the definition
+of pairs above:</p>
+
+<p>$$
+zero \quad \equiv \quad \lambda x\ x
+$$</p>
+
+<p>$$
+succ \quad \equiv \quad \lambda n.\ pair\ &lt;FALSE&gt;\ n
+$$</p>
+
+<p>Here we&rsquo;ve defined $zero$ as the identity function, and $succ$, the successor,
+as a pair of $&lt;FALSE&gt;$ to whatever the previous number was. Each number is now
+&lsquo;counting&rsquo; using the number of times that $zero$ has been paired up with
+$&lt;FALSE&gt;$.</p>
+
+<p>We can now go on to define other functions around this implementation - and we
+will - but the key thing I&rsquo;d like to stress is that what makes a number a number
+isn&rsquo;t really what it <em>is</em>, but rather how it <em>behaves</em> - how it behaves when
+being used with other functions like $add$ and $multiply$.</p>
+
+<p>Let&rsquo;s use that insight to imagine what $true$ and $false$ might be.</p>
+
+<h2>if &hellip; then &hellip; else</h2>
+
+<p>Every programming language I&rsquo;ve ever worked in has some sort of <code>if</code> expression
+or statement - a way of choosing one bit of code or another based on whether
+something was true or false. You know:</p>
+
+<pre><code class="language-ruby">if (1 + 1 == 2)
+    puts &quot;One and one is two!&quot;
+else
+    puts &quot;Maths is broken!&quot;
+end
+</code></pre>
+
+<p>We could think of <code>if</code> as being a function in the lambda calculus:</p>
+
+<p>$$
+if \quad \equiv \quad \lambda bool.\lambda t.\lambda f.\ tOrf
+$$</p>
+
+<p>This is fine, but gets us nowhere. But what if there were two different
+functions, one of which we used for true booleans, and one of which we used
+for false ones. Yes, I know, that would make no sense - you&rsquo;d have to know which
+one to use. But humour me.</p>
+
+<p>$$
+ifTrue \quad \equiv \quad \lambda bool.\lambda t.\lambda f.\ t
+$$</p>
+
+<p>$$
+ifFalse \quad \equiv \quad \lambda bool.\lambda t.\lambda f.\ f
+$$</p>
+
+<p>We&rsquo;re not even using the boolean any more, we&rsquo;re just saying that if the
+boolean is true, we evaluate to first argument, and if it&rsquo;s false we evaluate to
+the second argument.</p>
+
+<p>If we&rsquo;re not using the lambda that takes a boolean - the $\lambda bool$ - we can
+get rid of it from the end.</p>
+
+<p>$$
+true \quad \equiv \quad \lambda a.\lambda b.\ a
+$$</p>
+
+<p>$$
+false \quad \equiv \quad \lambda a.\lambda b.\ b
+$$</p>
+
+<p>And there we have it. We can just say that $true$ is the function that returns
+the first, and $false$ is the function that returns the second.</p>
+
+<p>Wait, can we? Well, why not? All we need really is a function that will signal
+one of two things - true or false we can call them. This &lsquo;signal&rsquo; we choose to
+be the return of the first or the second of the arguments it is applied to. Who
+cares <em>how</em> truth works - this is a mechanism that does what it needs to do.</p>
+
+<h2>Truth Tables</h2>
+
+<h3>And</h3>
+
+<p>So now we&rsquo;ve got truth going, let&rsquo;s have some fun defining some boolean
+operations. First, an easy one - $and$. And once again we&rsquo;re going to use the
+behaviour of $and$ to give us a clue as to the implementation.</p>
+
+<p>What&rsquo;s the behaviour? This might be easier to do if we construct a truth
+table. What&rsquo;s a truth table I hear you cry? Well, in logic we can draw up a
+table showing the truth or falsity of a proposition (sentence that is either
+true or false) based upon the truth or falsity of the propositions from which it
+is composed.</p>
+
+<p>The truth table is just the exhaustive table of true and false values that can
+exist in the proposition, along with the resulting truthfulness of the overall
+proposition. A proposition involving &lsquo;and&rsquo; will be made of two
+sub-propositions - the two being &lsquo;anded&rsquo; together. Traditionally these are
+written as &lsquo;$P$&rsquo; and &lsquo;$Q$&rsquo; - and who are we to disagree with tradition? The symbol
+&lsquo;$\land$&rsquo; is often used for &lsquo;and&rsquo;, so we&rsquo;ll do the same here. Finally, true and
+false will be &lsquo;$T$&rsquo; and &lsquo;$F$&rsquo;.</p>
+
+<p>$$
+\begin{array}{| c c | c |}
+P &amp; Q &amp; P \land Q \\
+\hline
+T &amp; T &amp; T \\
+T &amp; F &amp; F \\
+F &amp; T &amp; F \\
+F &amp; F &amp; F
+\end{array}
+$$</p>
+
+<p>What can we learn from this? Well, two things:</p>
+
+<ul>
+<li>If $P$ is false, then the proposition is always false.</li>
+<li>If $P$ is true, then the proposition has the same value as $Q$</li>
+</ul>
+
+<p>So we could say something like &ldquo;if $P$ then $Q$ else $false$&rdquo;. And as $P$ is
+a boolean as described above, we can pass it a couple of arguments just like it
+was an &lsquo;if&hellip; then&hellip; else&rsquo;. So we can write $and$ as:</p>
+
+<p>$$
+and \quad \equiv \quad \lambda p.\lambda q.\ p\ q\ false
+$$</p>
+
+<p>Or, even more concisely:</p>
+
+<p>$$
+and \quad \equiv \quad \lambda p.\lambda q.\ p\ q\ p
+$$</p>
+
+<p>As if $p$ is false we can just evaluate to $p$</p>
+
+<h3>Or</h3>
+
+<p>&lsquo;Or&rsquo; is represented by &lsquo;$\lor$&rsquo;:</p>
+
+<p>$$
+\begin{array}{| c  c | c |}
+P &amp; Q &amp; P \lor Q \\
+\hline
+T &amp; T &amp; T \\
+T &amp; F &amp; T \\
+F &amp; T &amp; T \\
+F &amp; F &amp; F
+\end{array}
+$$</p>
+
+<p>The pattern here should be clearer after doing $and$</p>
+
+<ul>
+<li>If $P$ is true, then the proposition is always true.</li>
+<li>If $P$ is false, then the proposition has the same value as $Q$</li>
+</ul>
+
+<p>Which can be written in lambdas as:</p>
+
+<p>$$
+or \quad \equiv \quad \lambda p.\lambda q.\ p\ p\ q
+$$</p>
+
+<h3>Not</h3>
+
+<p>&lsquo;Not&rsquo; is nice and short as a truth table. We will use $\lnot$ to represent it</p>
+
+<p>$$
+\begin{array}{ c | c }
+P &amp; \lnot P \\
+\hline
+T &amp; F \\
+F &amp; T
+\end{array}
+$$</p>
+
+<p>We just need to flip $P$ around - if it was true (returning the first argument),
+we make it return false (return the second argument), and vice versa.</p>
+
+<p>Like this:</p>
+
+<p>$$
+not \quad \equiv \quad \lambda p.\lambda a.\lambda b.\ p\ b\ a
+$$</p>
+
+<hr />
+
+<h3>if &hellip; then</h3>
+
+<p>$$
+\begin{array}{ c  c | c }
+P &amp; Q &amp; P \implies Q \\
+\hline
+T &amp; T &amp; T \\
+T &amp; F &amp; F \\
+F &amp; T &amp; T \\
+F &amp; F &amp; T
+\end{array}
+$$</p>
+
+<p>$$
+implies \quad \equiv \quad \lambda p.\lambda q. p\ q\ p
+$$</p>
+
+<hr />
+
+<h3>if and only if</h3>
+
+<p>$$
+\begin{array}{ c  c | c }
+P &amp; Q &amp; P \iff Q \\
+\hline
+T &amp; T &amp; T \\
+F &amp; F &amp; T \\
+F &amp; T &amp; F \\
+T &amp; F &amp; F
+\end{array}
+$$</p>
+
+<p>$$
+iff \quad \equiv \quad \lambda p.\lambda q. p\ q\ (not\ p)
+$$</p>
+
+<hr />
+
+<p>$$
+true \quad \equiv \quad \lambda a.\lambda b.\ a
+$$</p>
+
+<p>$$
+false \quad \equiv \quad \lambda a.\lambda b.\ b
+$$</p>
+
+<p>$$
+and \quad \equiv \quad \lambda p.\lambda q.\ p q p
+$$</p>
+
+<p>$$
+or \quad \equiv \quad \lambda p.\lambda q.\ p p q
+$$</p>
+
+<p>$$
+if \quad \equiv \quad \lambda p.\lambda a.\lambda b.\ p a b
+$$</p>
+
+<div class="footnotes">
+
+<hr />
+
+<ol>
+<li id="fn:1">I will be the first to admit that this is a terrible definition of OO, mainly driven by my ignorance.</li>
+
+<li id="fn:2">All things not necessarily possible with the lambda. Terms and conditions apply.</li>
+</ol>
+
+</div>
+]]></content:encoding></item><item><title>Lambda Calculus 3 - Arithmetic with Church Numbers</title><description></description><link>https://blog.gypysdave5.com/posts/2017/9/23/lambda-calculus-3---arithmetic-with-church-numbers/</link><pubDate>Sat, 23 Sep 2017 20:54:21 +0000</pubDate><category>Mathematics,Functional Programming,Lambda Calculus</category><guid>https://blog.gypysdave5.com/posts/2017/9/23/lambda-calculus-3---arithmetic-with-church-numbers/</guid><content:encoding><![CDATA[<p>Previously I&rsquo;ve posted about <a href="/posts/2017/9/11/lambda-calculus-1---syntax/">the lambda calculus</a>
+and <a href="/posts/2017/9/13/lambda-calculus-2---church-numbers/">Church numbers</a>. We&rsquo;d shown how we can encode numbers as
+functions using the Church encoding, but we&rsquo;d not really shown how we could <em>do</em>
+anything with those numbers.</p>
+
+<p>But before we get into it, let&rsquo;s clear up some stuff about brackets&hellip;</p>
+
+<h2>Left association and you</h2>
+
+<p>Just as it&rsquo;s easier to write $\lambda nfx.$ than $\lambda n.\lambda f.\lambda x.$
+because we make the assumption that each application of the function returns
+a new function, so there is a way of writing out function application without
+having to use lots of parentheses.<sup class="footnote-ref" id="fnref:1"><a rel="footnote" href="#fn:1">1</a></sup></p>
+
+<p>Where we would normally write</p>
+
+<p>$$
+f(x)
+$$</p>
+
+<p>with parentheses, we could instead write</p>
+
+<p>$$
+f\ x
+$$</p>
+
+<p>under the assumption that each argument associates to the one on the left. So if
+we had</p>
+
+<p>$$
+((f(x)\ y)\ z)
+$$</p>
+
+<p>we can write it as</p>
+
+<p>$$
+f\ x\ y\ z
+$$</p>
+
+<p>and something like</p>
+
+<p>$$
+(g(x)\ f(x))
+$$</p>
+
+<p>is</p>
+
+<p>$$
+g\ x\ (f\ x)
+$$</p>
+
+<p>As we still need the parentheses to make sure that the $f$ and $x$ get bundled
+together. We&rsquo;ll need this convention as we go on as things are going to get a
+little more parenthesis-heavy.</p>
+
+<h2>Add-one</h2>
+
+<p>OK, let&rsquo;s get back to the arithmetic.</p>
+
+<p>Say we have the number three:</p>
+
+<p>$$
+three \ \equiv \ \lambda f \lambda x.\ f\ (f\ (f x))
+$$</p>
+
+<p>(the function $f$ applied to $x$ three times)</p>
+
+<p>And we wanted to get to the number four:</p>
+
+<p>$$
+four \ \equiv \ \lambda f \lambda x.\ f\ (f (f\ (f x)))
+$$</p>
+
+<p>(the function $f$ applied to $x$ four times)</p>
+
+<p>How do we get from $three$ to $four$? Well, the difference is that we just need
+to apply $f$ one more time.</p>
+
+<p>$$
+four \ \equiv \ f\ three
+$$</p>
+
+<p>We can encode the idea of applying $f$ one more time into a lambda function. We
+could call it $add-one$ or $increment$ but lets go with $succ$ for &lsquo;successor&rsquo;.</p>
+
+<p>$$
+succ \ \equiv \ \lambda n. \lambda f. \lambda x.\ f\ (n\ f\ x)
+$$</p>
+
+<p>The $n$ is the number we&rsquo;re adding one to - we need to bind in the values of $f$
+and $x$ in to the function because they&rsquo;ll need to have $n$ applied to them
+before we can apply $f$ in the one extra time.</p>
+
+<p>Another way to think of this is that the general signature for a number is
+$\lambda f. \lambda x.$, and that when we apply $succ$ to a number, we need to
+get back another number - something else with the signature of $\lambda f. \lambda\ x.$</p>
+
+<p>So the signature of $succ$ - and consequently any unary operation on a
+number - is $\lambda n.\lambda f.\lambda x$, where $n$ is the number being changed.</p>
+
+<p>In Clojure that looks like:</p>
+
+<pre><code class="language-clojure">(fn [n] (fn [f] (fn [x] (f ((n f) x))))))
+</code></pre>
+
+<p>Yeah, it&rsquo;s a bit <em>verbose</em> in comparison to the lambda calculus version.<sup class="footnote-ref" id="fnref:2"><a rel="footnote" href="#fn:2">2</a></sup> All
+those parentheses, while great for being explicit about which functions get
+applied to what, makes it a bit tough on the eyes.</p>
+
+<p>What about Haskell?</p>
+
+<pre><code class="language-haskell">\n f x -&gt; f (n f x)
+</code></pre>
+
+<p>Bit more like the original, eh? Haskell has currying and left-association baked
+in to its syntax so its lambda expressions look almost exactly the same as the
+lambda calculus ones. You can see why it&rsquo;s so popular.<sup class="footnote-ref" id="fnref:3"><a rel="footnote" href="#fn:3">3</a></sup></p>
+
+<h2>Addition</h2>
+
+<p>Let&rsquo;s see if we can define addition.</p>
+
+<p>First off, $addition$ is an operation that takes two arguments, two numbers. So
+we know it needs to look something like:</p>
+
+<p>$$
+\lambda m. \lambda n. \lambda f. \lambda x.
+$$</p>
+
+<p>Where $m$ and $n$ are the numbers being added together. Now all we need to do is
+work out what comes after the dot.</p>
+
+<p>We could define it in terms of $succ$ - all we need to do is apply $succ$
+$m$ many times to $n$:</p>
+
+<p>$$
+\lambda m.\lambda n.\lambda f.\lambda x.\ m\ succ\ n\ f\ x
+$$</p>
+
+<p>And this works,<sup class="footnote-ref" id="fnref:5"><a rel="footnote" href="#fn:5">4</a></sup> but we could probably write something both more intuitive
+and simpler.</p>
+
+<p>What do we want as the result of $add$? We want a function that applies $f$ to
+$x$ $n$ many times, and the applies $f$ to the result of that $m$ many times.</p>
+
+<p>$$
+add\ (\lambda fx.\ f\ (f\ x))\ (\lambda fx.\ f\ (f\ (f\ x))) = \lambda fx.\ f\ (f\ (f\ (f\ (f\ x))))
+$$</p>
+
+<p>We can just write that out with the variables we&rsquo;ve been given - first apply $f$
+to $x$, $n$ many times.</p>
+
+<p>$$
+n\ f\ x
+$$</p>
+
+<p>and then apply $f$ to that result $m$ many times</p>
+
+<p>$$
+m\ f\ (n\ f\ x)
+$$</p>
+
+<p>giving us</p>
+
+<p>$$
+add\ \equiv\ \lambda n.\lambda m.\lambda f.\lambda x.\ m\ f\ (n\ f\ x)
+$$</p>
+
+<p>The order of $n$ and $m$ doesn&rsquo;t matter as they&rsquo;re just the order in which the
+number of $f$s are applied.<sup class="footnote-ref" id="fnref:6"><a rel="footnote" href="#fn:6">5</a></sup></p>
+
+<h2>Multiplication</h2>
+
+<p>We&rsquo;ve used the word &lsquo;times&rsquo; a lot here when talking about the application of $f$
+onto $x$s in the above. But now we&rsquo;ll have to deal with real multiplication.</p>
+
+<p>Before you try and reach at an answer, step back a little and ask yourself what
+the result ought to be, and what the Church arithmetic way of describing it would
+be.</p>
+
+<p>Say we had the numbers two and three. If I was back in primary school I&rsquo;d say
+that the reason that multiplying them together made six was because six was &lsquo;two
+lots of three&rsquo; or &lsquo;three lots of two&rsquo;.</p>
+
+<p>So when I want to put this into Church arithmetic, I feel like saying &lsquo;six is
+the application of three lots of the application of two lots of the application
+of $f$ onto $x$&rsquo;. Which is a mouthful, for sure, but looks like</p>
+
+<p>$$
+six\ \equiv\ \lambda f.\lambda x.\ ((three\ (two\ f))\ x)
+$$</p>
+
+<p>or, without the parentheses</p>
+
+<p>$$
+six\ \equiv\ \lambda f.\lambda x.\ three\ (two\ f)\ x
+$$</p>
+
+<p>$two\ f$ is a function that applies $f$ two times to whatever it&rsquo;s next argument
+is. $three\ (two\ f)$ will apply $two\ f$ to its next argument three times. So it
+will apply it $3\ \times\ 2$ times - 6 times.</p>
+
+<p>And so now we can move from the particular case to the general case;
+multiplication is:</p>
+
+<p>$$
+mult\ \equiv\ \lambda m.\lambda n.\lambda f.\lambda x.\ m\ (n\ f)\ x
+$$</p>
+
+<p>&rdquo;$m$ lots of ($n$ lots of $f$) applied to $x$&ldquo;, which is still a mouthful but</p>
+
+<h2>Exponentiation</h2>
+
+<p>So what could exponentiation be? Well, the first thing we know is that this
+time, order <em>is</em> going to be important - $2^3$ is not the same as $3^2$.</p>
+
+<p>Next, what does exponentiation <em>mean</em>? I mean, really mean? When we did
+multiplication we saw us doing &lsquo;two lots of (three lots of $f$)&rsquo;. But now we
+need to do &lsquo;two lots of something&rsquo; three times. The &lsquo;three&rsquo; part has to apply,
+not to the number of times we do an $f$, nor the number of times we do &lsquo;$n$ lots
+of $f$&rsquo;. But rather it needs to be <em>the number of times we do $n$ to itself</em>.</p>
+
+<p>Woah.</p>
+
+<p>So if &lsquo;three&rsquo; is the application of $f$ three times to $x$, we can say that
+$2^3$ is the application of $two$ three times to $f\ x$.</p>
+
+<p>Even. Bigger. Woah.</p>
+
+<p>Another way to look at it: a Church number is already encoding some of the
+behaviour of exponentiation. When we use <code>inc</code> and <code>0</code> as <code>f</code> and <code>x</code> we can
+think of the number <code>n</code> acting as $inc^n$ - <code>inc</code> done to itself <code>n</code> many times.</p>
+
+<p>This is more explicit if we try it with something other than increment - say
+<code>double</code>, aka &lsquo;times two&rsquo;. Let&rsquo;s do it in Haskell - but please feel free to pick
+any language you like.</p>
+
+<pre><code class="language-haskell">let timesTwo = \x -&gt; 2 * x
+let four = \f x -&gt; f(f(f(f x)))
+
+four timesTwo 1 -- 16
+</code></pre>
+
+<p>Four lots of <code>timesTwo</code> is 16; all we need to do is to use the number two
+instead, and apply the result to an <code>f</code> and an <code>x</code>.</p>
+
+<pre><code class="language-haskell">let two = \f x -&gt; f(f x)
+four two succ 0 -- 16
+</code></pre>
+
+<p>Sixteen again.</p>
+
+<p>So function for exponentiation - <code>m</code> to the power of <code>n</code> - is:</p>
+
+<p>$$
+exp\ \equiv\ \lambda m.\lambda n.\lambda f.\lambda x.\ n\ m\ f\ x
+$$</p>
+
+<p>But remember $\eta$-reduction? We can just go directly to:</p>
+
+<p>$$
+exp\ \equiv\ \lambda m.\lambda n.\ n\ m
+$$</p>
+
+<p>This is because you know the function you&rsquo;re left with after you&rsquo;ve applied $n$
+to $m$ is a number - will take an $f$ and an $x$ - you don&rsquo;t need to explicitly
+bind them in the outer function just in order to pass them unchanged to the
+inner one.</p>
+
+<p>But that&rsquo;s just a nicety. The important thing is&hellip; we&rsquo;ve finished!</p>
+
+<h2>Summary and Next!</h2>
+
+<p>This post looked at some simple arithmetic using Church numerals. We saw successor</p>
+
+<p>$$
+succ\quad \equiv\quad \lambda n.\lambda f.\lambda x.\ f\ (n\ f\ x)
+$$</p>
+
+<p>addition:</p>
+
+<p>$$
+add\quad \equiv\quad \lambda m.\lambda n.\lambda f.\lambda x.\ m\ f\ (n\ f\ x)
+$$</p>
+
+<p>multiplication:</p>
+
+<p>$$
+mult\quad \equiv\quad \lambda m.\lambda n.\lambda f.\lambda x.\ m\ (n\ f)\ x
+$$</p>
+
+<p>and exponentiation:</p>
+
+<p>$$
+exp\quad \equiv\quad \lambda m.\lambda n.\ m\ n
+$$</p>
+
+<p>An interesting relationship between the last three: the $f$ moves along to the
+right as the operation becomes &lsquo;bigger&rsquo;.</p>
+
+<p>Next post we&rsquo;ll be taking a short break from arithmetic to take a look at logic
+using the lambda calculus.</p>
+
+<div class="footnotes">
+
+<hr />
+
+<ol>
+<li id="fn:1">And I&rsquo;m speaking as a mad Lisp fan, lover of parens where ever they are.</li>
+
+<li id="fn:2"><p>But still terse compared to the mess we&rsquo;d get in Python. Or Ruby. Yeah, don&rsquo;t try it in Ruby. Oh, and I guess we could use the short hand anonymous
+function syntax, but I think that&rsquo;d look even messier&hellip;</p></li>
+
+<li id="fn:3">For functional programming that is.</li>
+
+<li id="fn:5">Get your pencil and paper out if you want to prove it!</li>
+
+<li id="fn:6">The same will go for multiplication. We know that this has to be the case if we&rsquo;re representing these numbers and operations correctly as they should display the <a href="https://en.wikipedia.org/wiki/Commutative_property">commutative property</a></li>
+</ol>
+
+</div>
+]]></content:encoding></item></channel></rss>

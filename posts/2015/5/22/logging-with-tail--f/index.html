@@ -1,0 +1,101 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+          inlineMath: [['$','$'], ['\\(','\\)']],
+          processEscapes: true,
+      },
+      displayAlign: "left",
+      displayIndent: "1em",
+      CommonHTML: { linebreaks: { automatic: true } },
+      "HTML-CSS": { linebreaks: { automatic: true } },
+      SVG       : { linebreaks: { automatic: true } }
+    });
+</script>
+<script type="text/javascript"
+        async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+  <link rel="stylesheet" href="/css/style.css">
+  <title>Logging with tail -f</title>
+</head>
+
+  <body>
+    <main>
+    
+<header>
+  <section class="top">
+    <h1><a href="/">gypsydave5</a></h1>
+    <p>The blog of David Wickes, software developer</p>
+  </section>
+
+  <ul class="links">
+    <li><a href="/pages/about/">about</a></li>
+    <li><a href="/posts/">posts</a></li>
+  </ul>
+</header>
+
+    
+<article>
+  <h1>Logging with <code>tail -f</code></h1>
+  <time datetime="2015-05-22T22:05" >May 22, 2015</time>
+  <p>Debugging a series of microservices locally can be a pain. You need to see all
+of the logs for each service, live, and hopefully all in one place to save you
+time trying to work out what&rsquo;s going on at the same time.</p>
+
+<p>You could run each service in a separate terminal, but that doesn&rsquo;t help manage
+reading the logs at once and doesn&rsquo;t scale well. Alternatively the services can
+be run in the background and we could send their output to the same terminal.
+But that is going to look messy - how will we know which service is logging?</p>
+
+<p>So let&rsquo;s send STDERR and STDOUT to a couple of files - we can do this in
+whatever we use to launch the services, but in bash it looks something like this:</p>
+
+<pre><code class="language-bash">run_service &gt; service_name.log 2&gt; service_name.err &amp;
+</code></pre>
+
+<p>Now we&rsquo;ve got a lot of files, slowly filling with logs. But we&rsquo;re definitely not
+reading them all at once. Enter the hero of the piece, <code>tail -f</code>. <code>tail</code> is
+a nice little Unix command that has the standard behaviour of reading the last
+10 line of a file. Handy now and then, but no big deal. <code>tail -f</code>, though, is
+a superhero. It &ldquo;causes tail to not stop when end of file is reached, but rather
+to wait for additional data to be appended to the input&rdquo; (I&rsquo;m quoting straight
+from the <code>man</code> page).</p>
+
+<p>What that means is that <code>tail</code> waits for more lines to be added to the file, and
+prints them when they are. Live logs are back - but only for one file. But
+<code>tail</code> has another neat feature: reading from multiple files. Just put them all
+in as arguments or splat them with a <code>*</code> like <code>tail -f *.log *.err</code>.</p>
+
+<p>Which has this lovely looking output:</p>
+
+<pre><code class="language-bash">==&gt; service_one.err &lt;==
+Here are some errors from service_one
+
+==&gt; service_one.log &lt;==
+And here are some logs from service_one
+
+==&gt; service_two.err &lt;==
+With the same deal...
+
+==&gt; service_two.log &lt;==
+... for service_two
+
+</code></pre>
+
+<p>And just carries on outputting as your services run, letting you keep an eye on
+all of them at once while you get back to work.</p>
+
+</article>
+
+    </main>
+  </body>
+</html>
