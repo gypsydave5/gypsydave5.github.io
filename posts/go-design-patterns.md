@@ -26,6 +26,12 @@ When you read the Gang Of Four design patterns book, you really shouldn't skip p
 
 > Favor object composition over class inheritance
 
+Well, this is good as we don't have classes or inheritance in Go. So composition it is. How do we achieve reuse with composition?
+
+> Delegation is an extreme example of object composition. It shows that you can always replace inheritance with object composition as a mechanism for code reuse.
+
+And Go is really good at delegation! Really good!
+
 ## Adapter Pattern
 
 We want to use Object A in a place where Object B is expected. Object A is functionally equivalent to Object B - but it happens to differ in terms of its interface. This could be as simple as the order of arguments in a method, or the name of some methods. Or it could be a shade more complicated. But not too complicated an adaptation - anything too complicated is really the responsibility of the Bridge Pattern or the Facade Pattern.
