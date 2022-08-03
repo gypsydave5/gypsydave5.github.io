@@ -9,9 +9,22 @@ tags:
 published: false
 ---
 
-## Introduction
+## Introduction: Objects and Go
 
-When you read the Gang Of Four design patterns book, you really shouldn't skip past the introduction. Even if you (think) you know how Object
+When you read the Gang Of Four design patterns book, you really shouldn't skip past the introduction. 
+
+
+### Interfaces, Not Implementation
+
+> This so greatly reduces implementation dependencies between subsystems that it leads to the following principle of reusable object-oriented design:
+
+> > Program to an interface, not an implementation.
+
+> Don’t declare variables to be instances of particular concrete classes. Instead, commit only to an interface defined by an abstract class. You will find this to be a common theme of the design patterns in this book.
+
+### Composition, Not Inheritance
+
+> Favor object composition over class inheritance
 
 ## Adapter Pattern
 
@@ -123,7 +136,7 @@ As you can see there's a lot going on inside that we don't care about. And there
 func (b *Reader) Read(p []byte) (n int, err error)
 ```
 
-Which means that, in terms of the interfaces,  `bufio.Reader` is a Decorator of the `io.Reader` interface, that adds buffering to the interface's behaviour.
+Which means that, in terms of the interfaces,  `bufio.Reader` is a Decorator of the `io.Reader` interface, that adds buffering to its behaviour.
 
 ## Adapter and Decorator: Two Sides of the Same Coin
 
