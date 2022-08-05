@@ -24,13 +24,30 @@ When you read the Gang Of Four design patterns book, you really shouldn't skip p
 
 ### Composition, Not Inheritance
 
-> Favor object composition over class inheritance
+Now I know what you're thinking: you cannot possibly do object oriented programming in Go, there's no inheritance. Neither good old fashioned classical inheritance in the style of Java or Smalltalk, nor fancy prototype-based inheritance like Self or JavaScript. And without inheritance, how can we do object-oriented programming? We can't write those wonderful examples we all remember where we have a `Dog` inheriting its methods from an `Animal` parent class. Which is what object-oriented programming is, right?
 
-Well, this is good as we don't have classes or inheritance in Go. So composition it is. How do we achieve reuse with composition?
+The Gang offer us a thin sliver of hope with the second of their principles of good object-oriented programming:
+
+> Favor object composition over class inheritance [^2]
+
+Well, this is good as we don't have classes or inheritance in Go. So composition it is.[^1] How do we achieve reuse with composition? Why... with delegation, of course!
 
 > Delegation is an extreme example of object composition. It shows that you can always replace inheritance with object composition as a mechanism for code reuse.
 
-And Go is really good at delegation! Really good!
+
+And Go is good at delegation! Really good! In other object-oriented languages, extension through delegation could be a little awkward - much more awkward than simple inheritance. Imagine we want to do some delegation in Java: for each of the methods we want to delegate to, we'd have to write our own method in the delegater class to receive the message and delegate down to the delegatee, wiring each one up individually. Much harder than just writing `class Dog extends Animal`. 
+
+But Go is of course a modern object-oriented language, and wants to make it easy for us to do the right thing: so delegation in Go is as simple as embedding another object (be it concrete or abstract) in an object:
+
+```golang
+type Dog struct {
+    Animal
+}
+```
+
+We suffer (slightly) here in that we can't substitute a `Dog` for an `Animal` if the `Animal` is concrete, and we are missing out on a touch of encapsulation as the `Animal` can be addressed directly through the `Dog`: `Dog.Animal`. But on the other hand, we can substitute `Dog` for `Animal` if the `Animal` is abstract, and if we are really concerned about encapsulation we can either pass around an interface (as all the )
+
+It almost feels like Go was made for design patterns: not only does its interfaces combine the best of dynamic typing with static typing through structural subtyping, but we also get forced to use composition instead of inheritance. We have no choice!
 
 ## Adapter Pattern
 
@@ -149,3 +166,9 @@ Which means that, in terms of the interfaces,  `bufio.Reader` is a Decorator of 
 The Adapter Pattern takes the an object's behaviour and changes its interface by wrapping it in another object.
 
 The Decorator Pattern takes an object's interface and changes its behaviour by wrapping it in another object.
+
+---
+
+[^1]: Not that this is relevant here, but I feel that people take this sgentence too far. It says _favor_ composition, not exclusively use it. I'm one of the few programmers I know who actually _likes_ inheritance, and thinks its a quick and easy and simple way to get code reuse. Whole beautiful systems have been written using inheritance. So, use inheritance. But not in Go, obviously.
+
+[^2]: _Design Patterns: Elements of Reusable Software_ by Gamma, Helm, Johnson & Vlissides, p.20
