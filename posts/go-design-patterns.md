@@ -160,7 +160,9 @@ A neat trick - and either way would work fine. The key point here isn't the diff
 
 ### What's The Problem?
 
-> Halp! I've written a JSON API and I need all of my HTTP responses to have a set of standard headers added to them.
+> I want to test my program against the real implementations of its dependencies, but I also want to test how it behaves when they error, like I'd do with a stub. I want my cake and I want to eat it.
+
+And with the Decorator Pattern, you can.
 
 ### The Pattern
 
@@ -184,13 +186,47 @@ type Reader struct {
 }
 ```
 
-As you can see there's a lot going on inside that we don't care about. And there's also an extensive collection of methods on the `bufio.Reader` type that we also don't care about in this example. Patterns are all about interfaces, and what we _do_ care about is that `bufio.Reader` [implements the `io.Reader` interface](https://pkg.go.dev/bufio#Reader.Read):
+As you can see there's a lot going on inside that we don't care about. And there's an extensive collection of methods on the `bufio.Reader` type that we also don't care about in this example. Patterns are all about interfaces, and what we _do_ care about is that `bufio.Reader` [implements the `io.Reader` interface](https://pkg.go.dev/bufio#Reader.Read):
 
 ```golang
 func (b *Reader) Read(p []byte) (n int, err error)
 ```
 
 Which means that, in terms of the interfaces,  `bufio.Reader` is a Decorator of the `io.Reader` interface, that adds buffering to its behaviour.
+
+### Fault Injection
+
+When testing parts of an application the ideal is always to test using "real" things. Now, I'm not saying that there's not a place for test doubles - I use them all the time. But it can't be denied that what you _really_ want to see when running your automated test is that the thing your testing works with real things.
+
+But here's the problem: you want real things to work, but you also want to test how your program behaves when the real things _don't_ work. This isn't quite as important when you're unit testing individual methods on a stateless object, but it gets a whole lot more important when you're testing the behaviour (one could say the _protocol_, which might mean the object's interface and its interactions with itself and with other interfaces. Which, come to think of it, is 90% of the hard work of testing. But I digress). 
+
+Imagine a situation where three stateful objects with not-insignificant interfaces are interacting with each other a lot. Imagine you're halfway down the sequence diagram of their interactions. Imagine that you want to find out what happens when just _one_ of those interactions fails, what state each of the objects wind up in.[^7]
+
+Here's one of our objects:
+
+```golang
+type One interface {
+    DoOneThing() error
+    DoAnotherThing() error
+    OneMoreThing() error
+    OkAreWeDoneYet() error
+    WowBigInterface() error
+}
+```
+
+The simplest way to affect the behaviour of just one of those methods is with a Decorator:
+
+```golang
+type DecorateOne struct {
+    One
+}
+
+func (d *DecorateOne) OneMoreThing() error {
+    return errors.New("emit macho dwarf: elf header corrupted")
+}
+```
+
+This is a fairly unsophisticated example, but what you should realise is that, once we've decorated an object, we're in complete control. If we want to spy one the method calls to `One`, we can. If we want to stub out the the third and sixth calls, but send all the 
 
 ## Adapter and Decorator: Two Sides of the Same Coin
 
@@ -207,3 +243,5 @@ The Decorator Pattern takes an object's interface and changes its behaviour by w
 [^3]: Kotlin, an increasingly popular JVM language that is a superset of Java, makes this almost as easy as Go does through declaring that classes implement an interface by delegating to one of their constructor arguments: `class Derived(b: Base) : Base by b`. See https://kotlinlang.org/docs/delegation.html#overriding-a-member-of-an-interface-implemented-by-delegation
 
 [^6]: _Design Patterns: Elements of Reusable Software_ by Gamma, Helm, Johnson & Vlissides, p.20
+
+[^7]: Of course, you could argue that if you've got your code in this situation then the problem really isn't the test.
