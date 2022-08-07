@@ -226,7 +226,27 @@ func (d *DecorateOne) OneMoreThing() error {
 }
 ```
 
-This is a fairly unsophisticated example, but what you should realise is that, once we've decorated an object, we're in complete control. If we want to spy one the method calls to `One`, we can. If we want to stub out the the third and sixth calls, but send all the 
+We embed the interface we're trying to test in our decorator struct, which mean that the struct now implements the same interface, and we then override any of the behaviours we want to control by implementing the methods on the struct.
+
+This is a fairly unsophisticated example, but what you should realise is that, once we've decorated an object, we're in complete control. If we want to spy one the method calls to `One`, we can. If we want to stub out the the third and sixth calls, but send all the others through to the real object, we can. And we can dynamically update the behaviour of the decorator in plenty of different ways to make it reusable:
+
+```golang
+type DecorateOne struct {
+    One
+    DoOneThingFunc func () error
+    OneMoreThingFunc func () error
+    // etc...
+}
+
+func (d *DecorateOne) OneMoreThing() error {
+    if d.OneMoreThingFunc == nil {
+        return b.One.OneMoreThing()
+    }
+    return d.OneMoreThingFunc()
+}
+
+// and so on for the other methods
+```
 
 ## Adapter and Decorator: Two Sides of the Same Coin
 
