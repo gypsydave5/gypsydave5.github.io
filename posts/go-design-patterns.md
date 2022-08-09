@@ -19,7 +19,7 @@ The first few times I tried to read this book I just didn't understand it. I thi
 
 As Grady Booch says in the Preface
 
-> This book isn’t an introduction to object-oriented technology or design. Many books already do a good job of that. This book assumes you are reasonably proficient in at least one object-oriented programming language, and you should have some experience in object-oriented design as well. You definitely shouldn’t have to rush to the nearest dictionary the moment we mention “types” and “polymorphism,” or “interface” as opposed to “implementation” inheritance. You definitely shouldn’t have to rush to the nearest dictionary the moment we mention “types” and “polymorphism,” or “interface” as opposed to “implementation” inheritance.
+> This book isn’t an introduction to object-oriented technology or design. Many books already do a good job of that. This book assumes you are reasonably proficient in at least one object-oriented programming language, and you should have some experience in object-oriented design as well. You definitely shouldn’t have to rush to the nearest dictionary the moment we mention “types” and “polymorphism,” or “interface” as opposed to “implementation” inheritance.
 
 And what we find in the introduction is a description of a style of object-oriented programming that is almost a prerequisite for using the patterns. The two most surprising things about this style of OO are
 
