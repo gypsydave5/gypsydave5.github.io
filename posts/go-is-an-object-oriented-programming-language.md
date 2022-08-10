@@ -8,6 +8,8 @@ tags:
   - OO
 ---
 
+## What even is object-oriented programming anyway?
+
 > First of all, think of an OO system as a bunch of intelligent animals inside your machine (the objects) talking to each other by sending messages to one another. Think “object.” Classes are irrelevant—they’re just a convenience provided for the compiler. [^1]
 
 ### Meilir Page-Jones' List
@@ -21,6 +23,15 @@ tags:
 - Inheritance
 - Polymorphism
 - Genericity
+
+
+###  Alan Kay's definition
+
+Alan Kay gave a very direct answer to a very direct question about what object-oriented programming is in 2003:
+
+> OOP to me means only messaging, local retention and protection and hiding of state-process, and extreme late-binding of all things. It can be done in Smalltalk and in LISP. There are possibly other systems in which this is possible, but I'm not aware of them. [^3]
+
+Well, messaging maps to Page-Jones' list well, and "local retention and protection and hiding of state-process" defiitely includes "encapsulation" and "information/implementation hiding"
 
 So let's go through the list.
 
@@ -45,6 +56,12 @@ Encapsulation in Go happens at two levels:
 - modules
 - types
 
+## Classes and Inheritance
+
+If there's one opinion I would like to disabuse everyone who is reading this of, it is that object-oriented programming is all about classes and inheritance. It just isn't . If you think it is, let me assure you that you're wrong and have been wrong for nigh-on a quarter of a century.
+
+We can 
+
 # Stupid thoughts
 
 On encapsulation: is it possible to use the go module system so that a single module acts as a single object? Yes, I suspect so. Is this a good idea? I suspect not.
@@ -66,3 +83,5 @@ I think "tell don't ask" gets so misunderstood that it deserves a whole blog pos
 
 [^2]: Meilir Page-Jones. 2000. Fundamentals of object-oriented design in UML. Addison-Wesley Longman Publishing Co., Inc., USA. Page-Jones, Meilir, _Fundamentals of Object-Oriented Design in UML_ p. 2.
 
+
+[^3]: http://userpage.fu-berlin.de/~ram/pub/pub_jf47ht81Ht/doc_kay_oop_en
