@@ -1,0 +1,48 @@
+@startuml
+interface "InterfaceA" {
+        MethodOne() string
+}
+interface "InterfaceB" {
+        MethodTwo() string
+}
+interface "InterfaceC" {
+        InterfaceA
+        InterfaceB
+}
+
+"InterfaceA" -right-* "InterfaceC"
+"InterfaceB" -left-* "InterfaceC"
+
+struct "TypeOne" {
+        MethodOne() string
+}
+
+struct "TypeTwo" {
+        MethodTwo() string
+}
+
+struct "TypeThree" {
+        TypeOne
+        TypeTwo
+}
+
+struct "TypeFour" {
+        MethodOne() string
+        MethodTwo() string
+}
+
+"TypeOne" -right-* "TypeThree"
+"TypeTwo" -left-* "TypeThree"
+
+"TypeOne" .up..|> "InterfaceA"
+"TypeTwo" .up..|> "InterfaceB"
+"TypeThree"  .up..|> "InterfaceA"
+"TypeThree"  .up..|> "InterfaceB"
+"TypeThree"  .up..|> "InterfaceC"
+
+"TypeFour" .up...|> "InterfaceC"
+"TypeFour" .up...|> "InterfaceB"
+"TypeFour" .up...|> "InterfaceA"
+@enduml
+
+

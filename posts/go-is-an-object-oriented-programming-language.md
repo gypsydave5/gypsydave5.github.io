@@ -8,6 +8,10 @@ tags:
   - OO
 ---
 
+## So
+
+Yeah, so. This is a big question. But let's first get one thing put to bed: There is no such thing as an object-oriented programming language,[^4] there are just programming languages you can do object-oriented programming in to a greater or lesser extent.
+
 ## What even is object-oriented programming anyway?
 
 > First of all, think of an OO system as a bunch of intelligent animals inside your machine (the objects) talking to each other by sending messages to one another. Think “object.” Classes are irrelevant—they’re just a convenience provided for the compiler. [^1]
@@ -30,6 +34,8 @@ tags:
 Alan Kay gave a very direct answer to a very direct question about what object-oriented programming is in 2003:
 
 > OOP to me means only messaging, local retention and protection and hiding of state-process, and extreme late-binding of all things. It can be done in Smalltalk and in LISP. There are possibly other systems in which this is possible, but I'm not aware of them. [^3]
+
+Sounds grumpy. I like it. So our question becomes "does Go get close to having the featurers required to perform "
 
 Well, messaging maps to Page-Jones' list well, and "local retention and protection and hiding of state-process" defiitely includes "encapsulation" and "information/implementation hiding"
 
@@ -60,7 +66,22 @@ Encapsulation in Go happens at two levels:
 
 If there's one opinion I would like to disabuse everyone who is reading this of, it is that object-oriented programming is all about classes and inheritance. It just isn't . If you think it is, let me assure you that you're wrong and have been wrong for nigh-on a quarter of a century.
 
-We can 
+> The Gang-of-Four Design Patterns book is, in fact, largely about replacing implementation inheritance (extends) with interface inheritance (implements)[^5]
+
+This is a deep insight. And we can see the evidence for it in the GoF book:
+
+> Favor object composition over class inheritance
+
+> Program to an interface, not an implementation
+
+If we translate these ideas into the constructs of Go, we can make some interesting observations.
+
+Go doesn't have classes, and so has no mechanism for code reuse other than object composition. Composition in Go is a simple case of "embedding" objects (interfaces, structs), inside other objects. This goes for both structs _and_ interfaces. In GoF language, we'd call this "delegation".
+
+But there is one layer of inheritance in Go, although we might have been trained all these years not to think of it as inheritance: interface inheritance, as Holub calls it. What in Javaland they would write as `implements` after a class to tell the world that this class implements (inherits!) an interface. But we don't think of this as inheritance in Go because (1) Go is obviously not an object-oriented programming language stop being weird Dave, and (2) we never have to declare that relationship in Go because, duh, structural sub-typing dude.
+
+
+
 
 # Stupid thoughts
 
@@ -69,6 +90,7 @@ On encapsulation: is it possible to use the go module system so that a single mo
 Interfaces are a mechanism of information/implementation hiding.
 
 If you're
+
 - passing messages
 - that ask for help and don't ask for information
 - which is to say, they tell don't ask.
@@ -85,3 +107,7 @@ I think "tell don't ask" gets so misunderstood that it deserves a whole blog pos
 
 
 [^3]: http://userpage.fu-berlin.de/~ram/pub/pub_jf47ht81Ht/doc_kay_oop_en
+
+[^4]: Apart from Smalltalk, but that's another story.
+
+[^5]: https://learning.oreilly.com/library/view/holub-on-patterns/9781430207252/Chapter02.html#:-:text=The%20Gang-of,interface%20inheritance%20(implements)

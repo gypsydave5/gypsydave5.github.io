@@ -43,7 +43,6 @@ The benefits of this are
 - By adding this one method to our object, we can use it in a large ecosystem of tools for manipulating it as a byte stream
 - By sharing this abstraction between all these tools, they no longer know or care what their arguments are. They are coupled together by something abstract - an interface - not something specific like a struct type. This is a far looser coupling.
 
-
 In the GoF book, the idea of an interface is also quite abstract - they refer to them chiefly through the idea of an "Abstract Class", which is a class where none of the methods have been implemented. Go has no classes, abstract or otherwise. We have the `interface` type.
 
 There are two things that I love about Go interfaces. The first is _structural sub-typing_, which sometimes gets called "duck typing" after the same idea that we see in dynamic object-oriented languages. The idea here is that if a type satisfies the structure of an interface, then it implements that interface, and can be used in places which expect that `interface` type. Which sounds a bit obvious when I say it, but you need to contrast the idea to a language like Java, where a poor type has to do all of the above _as well as_ be tagged to declare that it implements the interface.
@@ -51,8 +50,6 @@ There are two things that I love about Go interfaces. The first is _structural s
 Structural sub-typing is a lot more like the style of object-oriented programming you would see in a dynamic language like Smalltalk.
 
 The second thing I love about the Go `interface` type is that it enforces a stricter encapsulation than the Go module system. Go interfaces only expose the public methods of an object - any public fields on a `struct` type are hidden. These interfaces help enforce a style of programming where you aren't just throwing around chunks of data, but are throwing around chunks of behaviour. It's more likely that you'll accumulate data and behaviour together in one object if you use interfaces in Go. And that combination is one of the better definitions of good object-oriented programming.
-
-
 
 ### Composition, Not Inheritance
 
@@ -124,7 +121,6 @@ func NewHandlerAdapter(handler func (ResponseWriter, *Request)) MyHandler {
         handler: handler
     }
 }
-
 ```
 
 Which would let us use an anonymous function as a Handler:
@@ -154,7 +150,7 @@ By creating a new type for the handler function, we can add new methods to it - 
     var handler Handler = HandlerFunc(MyHandler)
 ```
 
-A neat trick - and either way would work fine. The key point here isn't the differences between the two implementations: what's important is that they're performing the same role in the code. They're both an example of the Adapter Pattern.
+Either way would work fine. The key point here isn't the differences between the two implementations: what's important is that they're performing the same role in the code. They're both examples of the Adapter Pattern.
 
 ## The Decorator Pattern
 
@@ -248,11 +244,42 @@ func (d *DecorateOne) OneMoreThing() error {
 // and so on for the other methods
 ```
 
-## Adapter and Decorator: Two Sides of the Same Coin
+### Adapter and Decorator: Two Sides of the Same Coin
 
 The Adapter Pattern takes the an object's behaviour and changes its interface by wrapping it in another object.
 
 The Decorator Pattern takes an object's interface and changes its behaviour by wrapping it in another object.
+
+## Facade Pattern
+
+### What's the problem?
+
+### The Pattern
+
+In the Facade Pattern we give ourselves the interface to the object that we want for most use cases, but still allow ourselves access to the underlying object whe we need it. The idea is to simplify the interface, usually through being opinionated about what we want the object to be used for.
+
+### Examples
+
+Lol I don't know right now
+
+Basically, embedding an interface into a struct and writing the methods that you want on it:
+
+```go
+type Facade struct {
+    FacadedInterface
+}
+```
+
+One can still access the underlying object:
+
+```go
+facade.FacededInterface.DoYourThing()
+```
+
+## Abstract Factory
+
+### The Problem
+
 
 ---
 
