@@ -10,7 +10,7 @@ It was created using [blawg][blawg], a static site generator I wrote.
 To build the site, first install `blawg` (which depends on [Go][golang])
 
 ```shell
-go get https://github.com/gypsydave5/blawg/blawg
+go install git.sr.ht/~dew/blawg/blawg@latest
 ```
 
 and then just run
@@ -28,7 +28,7 @@ or there's a Go 'script' you can run:
 go run serve.go
 ```
 
-and just head to `localhost:8000`.
+and just head to `localhost:3333`.
 
 To publish, there's a `publish.sh` script.
 
@@ -36,7 +36,7 @@ To publish, there's a `publish.sh` script.
 ./publish.sh
 ```
 
-[blawg]: https://github.com/gypsydave5/blawg
+[blawg]: https://git.sr.ht/~dew/blawg
 [golang]: https://golang.org/doc/install
 [one-line-static]: https://gist.github.com/willurd/5720255
 
