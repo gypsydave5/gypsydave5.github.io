@@ -1,3 +1,5 @@
 site
 server_log.txt
 .idea/**
+/.idea/
+/blog.gypsydave5.com.iml
