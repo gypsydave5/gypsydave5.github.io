@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>ES2015: The Good Parts</title>
+    <link rel="stylesheet" type="text/css" href="build/build.css">
+  </head>
+  <body>
+    <article>
+      <section>
+        <h1>ES2015: The Good Parts</h1>
+      </section>
+      <section>
+        <h2>Part 1: The Good Parts</h2>
+      </section>
+      <section>
+        <h1>Hello <code>const</code></h1>
+      </section>
+      <section>
+        <h2>no reassignment</h2>
+        <pre><code class="language-javascript">const bob = 'bob';
+bob = 'joe';
+console.log(bob) //=> 'bob'
+</code></pre>
+      </section>
+      <section>
+        <h2>Always initialized</h2>
+        <pre><code class="language-javascript">const bob; // SyntaxError
+</code></pre>
+      </section>
+      <section>
+        <h1>Hello <code>let</code></h1>
+      </section>
+      <section>
+        <h2>Reassignment is fine</h2>
+        <h3>it's like <code>var</code></h3>
+        <pre><code class="language-javascript">let bob = 'bob'
+bob = 'joe';
+console.log(bob) //=> 'joe'
+</code></pre>
+      </section>
+      <section>
+        <h2>Block scoping</h2>
+        <h3>That's anything between <code>{}</code> - not just functions</h3>
+        <pre><code class="language-javascript">var bob = 'bob'
+if (1 === 1) {
+  bob = 'joe'
+  console.log(bob) // => 'joe'
+}
+console.log(bob) // => 'bob'
+</code></pre>
+      </section>
+      <section>
+        <h2>Not like <code>var</code></h2>
+        <pre><code class="language-javascript">var bob = 'bob'
+if (1 === 1) {
+  let bob = 'joe'
+  console.log(bob) // => 'joe'
+}
+console.log(bob) // => 'joe'
+// curse you joe...
+</code></pre>
+      </section>
+      <section>
+        <h2>What actually happens:</h2>
+        <pre><code class="language-javascript">const bob = require('./bob');
+const phil = require('./phil');
+const gary = fs.readFileSync('./gary.txt');
+const nao = new Date();
+const myAwesomeString = 'my' + 'awesome' + 'string'
+// const this const that const the other</code></pre>
+        <h3>99% of the time...</h3>
+      </section>
+      <section><img src="images/all-your-const.jpg"></section>
+      <section>
+        <h2>Dave Score</h2>
+        <h1>4 out of 5</h1>
+        <h3>love my consts...</h3>
+      </section>
+      <section>
+        <h1>Hello <code>``</code></h1>
+        <p>(backticks aka Template Strings)</p>
+      </section>
+      <section>
+        <h2>Interpolation</h2>
+        <h3>(<em>so</em> Ruby)</h3>
+        <pre><code class="language-javascript">const name = 'George Nathaniel Curzon'
+const lineOne = `My name is ${name}`
+</code></pre>
+      </section>
+      <section>
+        <h2>Multiline</h2>
+        <pre><code class="language-javascript">const name = 'George Nathaniel Curzon';
+const property = 'person';
+const cheeks = 'pink';
+const hairType = 'sleek';
+const diningRegularity = 'twice a week';
+
+const baliol = `My name is ${name}
+I am a most superior ${property}.
+My cheeks are ${cheekColour}, my hair is ${hairType},
+I dine at Blenheim ${diningRegularity}.`;
+
+</code></pre>
+      </section>
+      <section>
+        <h2><code>\n</code>s get dropped in automatically</h2>
+        <pre><code class="language-javascript">My name is George Nathaniel Curzon
+I am a most superior person.
+My cheeks are pink, my hair is sleek,
+I dine at Blenheim twice a week.
+</code></pre>
+      </section>
+      <section>
+        <h2>Dave Score</h2>
+        <h1>2 out of 5</h1>
+        <h3>nice to have - but not rocking my world</h3>
+      </section>
+      <section>
+        <h1>Hello <code> => </code></h1>
+        <p>(arrow functions)</p>
+      </section>
+      <section><img src="images/arrow2.jpg" height="400"></section>
+      <section>
+        <h2>So much WIN it hurts</h2>
+        <ul>
+          <li>no more <code>function</code> keyword</li>
+          <li>optional brackets</li>
+          <li>implicit return</li>
+          <li>transparent `this` scope</li>
+        </ul>
+      </section>
+      <section>
+        <h2>What does it look like</h2>
+        <pre><code class="language-javascript">const f = () => "Imma returning!"
+const ret = f()
+console.log(ret) // "Imma returning!"
+</code></pre>
+      </section>
+      <section>
+        <h2>Single parameter? No parens</h2>
+        <pre><code class="language-javascript">const greeter = name => `Hello, ${name}`
+const greeting = greeter("Bob")
+console.log(greeting) // "Hello, Bob"
+</code></pre>
+      </section>
+      <section>
+        <h2>What is <code>this</code>?</h2>
+        <h3>See horrifying examples!</h3>
+      </section>
+      <section><img src="images/live-coding.jpg" height="400"></section>
+      <section>
+        <h2>Dave Score</h2>
+        <h1>5 out of 5</h1>
+        <h3>Finally a syntax to be proud of... but watch the this</h3>
+      </section>
+      <section>
+        <h1>Hello Promises</h1>
+      </section>
+      <section>
+        <h2>What is a promise?</h2>
+        <ul>
+          <li>It's a way of handling asychronous code</li>
+          <li>It's a functional pattern</li>
+          <li>It's a type of monad... does that help?</li>
+          <li>It looks sweeeet with arrow functions</li>
+        </ul>
+      </section>
+      <section><img src="images/always-promise.jpg" height="400"></section>
+      <section>
+        <h2>Promise example</h2>
+        <pre><code class="language-javascript">makeAsyncHTMLCall('gypsydave5.com')
+  .then(res => JSON.parse(res))
+  .then(object => object.message)
+  .then(console.log)
+  .catch(err => console.error(`it all went wrong: ${err}`))
+  </code></pre>
+      </section>
+      <section><img src="images/live-dangerously.jpg" height="400"></section>
+      <section>
+        <h2>Dave Score</h2>
+        <h1>5 out of 5</h1>
+        <h3>"It's just a monoid in the category of endofunctors, what's the problem?"</h3>
+      </section>
+      <section>
+        <ul>
+          <li>
+            <h2>Q: Where can I get all this wonderful stuff?</h2>
+          </li>
+          <li>
+            <h2>A: Everything so far is in Node RIGHT NAO</h2>
+          </li>
+        </ul>
+      </section>
+      <section>
+        <ul>
+          <li>
+            <h2>Q: But what about my browser?</h2>
+          </li>
+          <li>
+            <h2>A: Ahhh...<a href="http://kangax.github.io/compat-table/es6/" target="_blank">look at this?</a></h2>
+          </li>
+        </ul>
+      </section>
+      <section>
+        <h1>Hello Destructuring</h1>
+      </section>
+      <section>
+        <pre><code class="language-javascript">let [a, b] = ["hello", "world"]
+[a, b] = [b, a]
+</code></pre>
+      </section>
+      <section>
+        <h2>Objects too...</h2>
+        <pre><code class="language-javascript">const obj = {x: "bob", y: "wilma", z: "betty"}
+const {x, y} = obj //x => "bob", y => "wilma"
+const {x: bob, y: wilma} = obj // bob => "bob", wilma => "wilma"
+</code></pre>
+      </section>
+      <section>
+        <h1>Hello Module System</h1>
+      </section>
+      <section>
+        <h2><code>oHaiDave.js</code></h2>
+        <pre><code class="language-javascript">export function hi () { return "O HAI" }
+export const dave = "DAVE"
+</code></pre>
+      </section>
+      <section>
+        <pre><code class="language-javascript">import * as messager from "./oHaiDave"
+console.log(messager.hi()) // "O HAI"
+console.log(messager.dave) // "DAVE"
+</code></pre>
+      </section>
+      <section>
+        <h2>Destructuring at work</h2>
+        <pre><code class="language-javascript">import {dave: name} from "./oHaiDave"
+console.log(name) // "DAVE"
+</code></pre>
+      </section>
+      <section>
+        <h1>Hello Generators</h1>
+      </section>
+      <section>
+        <h2>What the f*** is a generator when it's at home?</h2>
+        <h2>MOAR LIVE CODING!</h2>
+      </section>
+      <section>
+        <h1>Hello<a href="https://babeljs.io/" target="_blank"> Babel</a></h1>
+      </section>
+      <section><img src="images/babel.png" height="400"></section>
+      <section>
+        <h2>Plays well with<a href="https://webpack.github.io/" target="_blank"> Webpack</a>
+          <and></and><a href="http://browserify.org/"> Browserify</a>
+        </h2>
+      </section>
+      <section><img src="images/react.png" height="400"></section>
+      <section>
+        <h2>Part 2: The Bad Parts</h2>
+      </section>
+      <section>
+        <h1>Hello Classes</h1>
+      </section>
+      <section>
+        <pre><code class="language-javascript">class Dave extends Person {
+  constructor(name, age) {
+    super(name, age)
+    this.caffeine = 5
+  }
+  
+  drinkCoffee() {
+    this.caffeine++
+  }
+}
+</code></pre>
+      </section>
+      <section>
+        <h2>Dave Score</h2>
+        <h1>1.5 out of 5</h1>
+        <h3>fine if you like that sort of thing</h3>
+      </section>
+      <section>
+        <h1>Hello Symbols</h1>
+      </section>
+      <section>
+        <pre><code class="language-javascript">const symbol = Symbol('dave')
+const object {
+  [symbol]: "it's me"
+}
+let bob = symbol + 'stuff' // TypeError
+let bet = symbol + 1 // TypeError
+</code></pre>
+      </section>
+      <section>
+        <h2>Dave Score</h2>
+        <h1>-2 out of 5</h1>
+        <h3>you implement this but not tail call optimization???</h3>
+      </section>
+      <section>
+        <h2>Part 3: The Ugly Parts</h2>
+      </section>
+      <section>
+        <ul>
+          <li>
+            <h2>It doesn't stop</h2>
+          </li>
+          <li>
+            <h3>ES2015...</h3>
+          </li>
+          <li>
+            <h3>ES2016...</h3>
+          </li>
+          <li>
+            <h3>ES2017...</h3>
+          </li>
+        </ul>
+      </section>
+      <section>
+        <h2>More changes are on the way</h2>
+        <h2><a href="https://github.com/tc39/ecma262" target="_blank">Proposed Changes</a></h2>
+      </section>
+      <section>
+        <h2>But Babel has you covered</h2>
+        <h2><a href="https://babeljs.io/docs/plugins/" target="_blank">Plugins</a></h2>
+      </section>
+      <section>
+        <h2>Beware! Sometimes these features can be... flakey...</h2>
+      </section>
+      <section>
+        <h2>Ugly closing thought:</h2>
+        <h2>JS is now compiling to JS</h2>
+        <h3>We may as well do Go / Clojure / Whatever</h3>
+      </section>
+      <section><img src="images/arrow.jpg" height="400"></section>
+    </article>
+    <script src="build/build.js"></script>
+  </body>
+</html>

@@ -1,0 +1,432 @@
+
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <title>This is the title of this talk</title>
+    <link rel="stylesheet" type="text/css" href="build/build.css"/>
+  </head>
+  <body>
+    <article>
+      <section>
+        <h1>This is the title of this talk</h1>
+        <aside>This title is a compromise; I really wanted to call it</aside>
+      </section>
+      <section>
+        <h1>The title of this talk is the title of this talk is the title of this talk is the title of this talk the title of this talk is the title of this talk is the title of this talk is the title of this talk is the title of this talk is the title of this talk is the title of this talk is the title of this talk is...</h1>
+        <aside>Which would've broken the Codebar website. So fair enough.</aside>
+      </section>
+      <section>
+        <h2>In order to understand recursion, one must first understand recursion</h2>
+        <aside>
+          This is a terrible joke, which usually gets made whenever anyone
+          talks about recursion.<br><br>
+          So let's get a better joke...
+        </aside>
+      </section>
+      <section><img src="images/xkcdLogo.png" width="500"/>
+        <aside>
+          ... from XKCD.<br><br>I love reading XKCD because it's either going to make
+          me laugh, or it's going to teach me something, or both.<br><br>First up:
+        </aside>
+      </section>
+      <section><img src="images/tabletop_roleplaying.png" width="350"/><a href="http://xkcd.com/244/">
+          <cite>http://xkcd.com/244/</cite></a>
+        <aside>
+          So here are some people playing Dungeons & Dragons - nothing weird
+          here, right? But one of them wants to start playing another game of
+          D&D inside this game of D&D. Which sounds like a bad idea.
+        </aside>
+      </section>
+      <section><img src="images/ozymandias.png" width="450"/><a href="http://xkcd.com/1557/">
+          <cite>http://xkcd.com/1557/</cite></a>
+        <aside>
+          And here someone is reading the first lines of _Ozymandias_ by
+          Percy Bysshe Shelly - hooray culture. And she's got into a bit of a
+          loop because the traveller keeps refering to the first line of the
+          poem that they're in. This poem may never end.<br><br>
+          So I hope that's enough humour - recursion is about self reference.
+          Now for some real fun!
+        </aside>
+      </section>
+      <section>
+        <h2>MATHS</h2>
+        <aside>
+          We are going to need to talk about a little bit of maths, if only
+          because it's where programming gets its idea of recursion from.
+          Hopefully this will be painless
+        </aside>
+      </section>
+      <section><img src="images/freak-out.gif" width="450"/></section>
+      <section>
+        <h2>MATHS</h2>
+        <h3>(kinda)</h3>
+        <aside>
+          We are going to need to talk about a little bit of maths, if only
+          because it's where programming gets its idea of recursion from.
+          Hopefully this will be painless
+        </aside>
+      </section>
+      <section>
+        <pre><code class="language-javascript">3 x (2 + (6 / 3))</code></pre>
+        <h3>Answer = ?</h3>
+        <aside>
+          So here's a sum - we could call it an expression. How do we go about
+          working out the answer?
+        </aside>
+      </section>
+      <section>
+        <pre><code class="language-javascript">3 x (2 + (6 / 3))</code></pre>
+        <h4>Evaluate (i.e. work out) innermost</h4>
+        <pre><code class="language-javascript">6 / 3 = 2</code></pre>
+        <h4>So ... Answer =</h4>
+        <pre><code class="language-javascript">3 x (2 + 2)</code></pre>
+        <aside>
+          We 'evaluate the innermost expression' - work out the brackets in
+          the middle - first.  So 6 / 3 is 2, and we're a bit closer.
+        </aside>
+      </section>
+      <section>
+        <pre><code class="language-javascript">3 x (2 + 2)</code></pre>
+        <h4>Evaluate innermost expression</h4>
+        <pre><code class="language-javascript">2 + 2 = 4</code></pre>
+        <h4>So ... Answer =</h4>
+        <pre><code class="language-javascript">3 x 4</code></pre>
+        <aside>Same again, but on the next innermost set of brackets</aside>
+      </section>
+      <section>
+        <h3>Answer =</h3>
+        <pre><code class="language-javascript">3 x 4</code></pre>
+        <pre><code class="language-javascript">12</code></pre>
+        <aside>
+          We start in the middle, work out what each bit evaluates to,
+          until we can evaluate the outermost bit.
+        </aside>
+      </section>
+      <section>
+        <h2>Recursion in Maths</h2>
+        <aside>
+          So that's simple evaluation. But we're looking at recursion. And the
+          way it works in maths is pretty much the way it works in programming.
+          So let's look at the maths way first.
+        </aside>
+      </section>
+      <section>
+        <h2>Factorial (!)</h2>
+        <pre><code class="language-javascript">3! = 1 x 2 x 3 = 6</code></pre>
+        <pre><code class="language-javascript">5! = 1 x 2 x 3 x 4 x 5 = 120</code></pre>
+        <pre><code class="language-javascript">0! = 1</code></pre>
+        <aside>
+          Factorial is a good place to start from. The factorial of a number is
+          all of the numbers from one up to the number multiplied together.<br><br>
+          Mathematicians use recursions to define this relationship with what's
+          called a recursive definition.
+        </aside>
+      </section>
+      <section>
+        <h3>Recursive definition of Factorial:<br><br><img src="images/factorial.svg" width="500"/></h3><a href="https://en.wikipedia.org/wiki/Factorial">
+          <cite>https://en.wikipedia.org/wiki/Factorial</cite></a>
+        <aside>
+          OK, now this sort of thing scares the bejeezus out of me, so let's all
+          brace ourselves and read through it.
+          First `n` is a variable. So `n!` is `factorial of n`
+          The big curly brace is just a mathsy way of saying `um... depends`
+          So it's `1` `if n = 0`
+          and `if n > 0`
+          it's `(factorial of n - 1) times n`<br><br>
+          So the cool bit is... we can translate this straight over to JavaScript
+          and Ruby.
+        </aside>
+      </section>
+      <section>
+        <pre><code class="language-javascript">function factorial(n) {
+  if (n === 0) return 1;
+  if (n > 0) return factorial(n - 1) * n;
+}
+</code></pre>
+      </section>
+      <section>
+        <pre><code class="language-ruby">def factorial(n)
+  return 1 if n == 0
+  factorial(n - 1) * n if n > 0
+end
+</code></pre>
+      </section>
+      <section>
+        <pre><code class="language-javascript">function factorial(n) {
+  if (n === 0) return 1;
+  if (n > 0) return factorial(n - 1) * n;
+}</code></pre>
+        <aside>But I prefer JavaScript. So deal with it Rubyists ;)</aside>
+      </section>
+      <section>
+        <pre><code class="language-javascript">factorial(3)</code></pre>
+        <aside>
+          The best way to see what happens when we run this is to walk through
+          the code. So lets work out 3!
+        </aside>
+      </section>
+      <section>
+        <pre><code class="language-javascript">function factorial(n) {
+  if (n === 0) return 1;
+  if (n > 0) return factorial(n - 1) * n;
+}</code></pre>
+        <pre><code class="language-javascript">if (3 === 0) ... // nope</code></pre>
+        <pre><code class="language-javascript">if (3 > 0)  ... // yep</code></pre>
+        <pre><code class="language-javascript">return factorial(3 - 1) * 3;</code></pre>
+        <aside>
+          So let's kick this off with n set to (bound to) the number 3
+          is 3 equal to 0? Nope<br>
+          is 3 greater than 0? Yep!<br>
+          so we return factorial(3 - 1) * 3
+        </aside>
+      </section>
+      <section>
+        <pre><code class="language-javascript">factorial(3)</code></pre>
+        <pre><code class="language-javascript">factorial(2) * 3;</code></pre>
+        <aside>
+          So now we know that factorial(3) is equivalent to factorial(2) * 3<br>
+          So what's factorial(2)
+        </aside>
+      </section>
+      <section>
+        <pre><code class="language-javascript">factorial(2)</code></pre>
+        <pre><code class="language-javascript">if (2 === 0) ... // nope</code></pre>
+        <pre><code class="language-javascript">if (2 > 0)  ... // yep</code></pre>
+        <pre><code class="language-javascript">return factorial(2 - 1) * 2;</code></pre>
+        <aside>Same again</aside>
+      </section>
+      <section>
+        <pre><code class="language-javascript">factorial(3)</code></pre>
+        <pre><code class="language-javascript">factorial(2) * 3;</code></pre>
+        <pre><code class="language-javascript">(factorial(1) * 2) * 3;</code></pre>
+        <aside>So we know what factorial(2) is now ... but what's factorial(1)</aside>
+      </section>
+      <section>
+        <pre><code class="language-javascript">factorial(1)</code></pre>
+        <pre><code class="language-javascript">if (1 === 0) ... // nope</code></pre>
+        <pre><code class="language-javascript">if (1 > 0)  ... // yep</code></pre>
+        <pre><code class="language-javascript">return factorial(1 - 1) * 1;
+</code></pre>
+      </section>
+      <section>
+        <pre><code class="language-javascript">factorial(3)</code></pre>
+        <pre><code class="language-javascript">factorial(2) * 3;</code></pre>
+        <pre><code class="language-javascript">(factorial(1) * 2) * 3;</code></pre>
+        <pre><code class="language-javascript">((factorial(0) * 1) * 2) * 3;
+</code></pre>
+      </section>
+      <section>
+        <pre><code class="language-javascript">factorial(0)</code></pre>
+        <pre><code class="language-javascript">if (0 === 0) ... // yep!</code></pre>
+        <pre><code class="language-javascript">return 1
+</code></pre>
+      </section>
+      <section>
+        <pre><code class="language-javascript">factorial(3)</code></pre>
+        <pre><code class="language-javascript">factorial(2) * 3;</code></pre>
+        <pre><code class="language-javascript">(factorial(1) * 2) * 3;</code></pre>
+        <pre><code class="language-javascript">((factorial(0) * 1) * 2) * 3;</code></pre>
+        <pre><code class="language-javascript">((1 * 1) * 2) * 3;
+</code></pre>
+      </section>
+      <section>
+        <pre><code class="language-javascript">((1 * 1) * 2) * 3</code></pre>
+        <pre><code class="language-javascript">(1 * 2) * 3</code></pre>
+        <pre><code class="language-javascript">2 * 3</code></pre>
+        <pre><code class="language-javascript">6
+</code></pre>
+      </section>
+      <section>
+        <ul>
+          <li>
+            <h4>This</h4>
+            <pre><code class="language-javascript">((1 * 1) * 2) * 3</code></pre>
+          </li>
+          <li>
+            <h4>is just like this
+              <pre><code class="language-javascript">1 x (2 + (6 / 3))</code></pre>
+            </h4>
+          </li>
+          <li>
+            <h3>So what's the difference?</h3>
+          </li>
+        </ul>
+      </section>
+      <section>
+        <ul>
+          <li>
+            <h4>This</h4>
+            <pre><code class="language-javascript">1 x (2 + (6 / 3))</code></pre>
+            <h4>Has an innermost expression</h4>
+          </li>
+          <li>
+            <h4>But this</h4>
+            <pre><code class="language-javascript">factorial(3)</code></pre>
+            <h4>Needs to work out what its innermost expression is</h4>
+          </li>
+        </ul>
+        <aside>Which it does by diving down a recursive hole</aside>
+      </section>
+      <section><img src="images/recursion.gif" width="500"/>
+        <aside>
+          This is the difference
+          With recursion you build the expression out of multiple copies of
+          the function. And you need to know when to stop.
+        </aside>
+      </section>
+      <section>
+        <pre><code class="language-javascript">function infinity(n) {
+  return infinity(n);
+}</code></pre>
+        <aside>
+          This is the gif, as javascript. This is what we need to avoid.
+          Once we've gone far enough 'down', we always need a way to get back 'up'
+          So how do we make sure we can always get back out?
+        </aside>
+      </section>
+      <section>
+        <h1>Rule 1:</h1>
+        <h2>Always have a way to stop</h2>
+        <h2>(a 'base' case or cases)</h2>
+      </section>
+      <section>
+        <pre><code class="language-javascript">function factorial(n) {
+  if (n === 0) return 1; // <-- STOP HERE
+  
+  if (n > 0) return factorial(n - 1) * n;
+}</code></pre>
+        <aside>
+          The base case of factorial is when n == 0; at this point we stop
+          recurring (recursing?)
+        </aside>
+      </section>
+      <section>
+        <pre><code class="language-javascript">function fibonacci (n) {
+  if (n === 0) return 0;  // <-- STOP HERE
+  if (n === 1) return 1;  // <-- OR HERE
+  
+  return fibonacci(n - 2) + fibonacci(n - 1);
+}</code></pre>
+        <aside>
+          You can have multiple base cases, as with this example of a function
+          that generates the fibonacci numbers
+        </aside>
+      </section>
+      <section>
+        <h1>Rule 2:</h1>
+        <h2>Always get closer to stopping</h2>
+      </section>
+      <section>
+        <pre><code class="language-javascript">function factorial(n) {
+  if (n === 0) return 1;
+  
+  if (n > 0) return factorial(n - 1) * n;
+      // ONE STEP CLOSER      ^^^
+}</code></pre>
+        <aside>
+          When we recur - when we call factorial again - we _must_ get closer
+          the base case.
+        </aside>
+      </section>
+      <section>
+        <pre><code class="language-javascript">function fibonacci (n) {
+  if (n === 0) return 0;
+  if (n === 1) return 1;
+  
+  return fibonacci(n - 2) + fibonacci(n - 1);
+  //               ^^^^^GETTING THERE ^^^^^
+}</code></pre>
+        <aside>
+          Here we're getting closer with the fibonacci function - we know that
+          eventually n will be 0 or 1.
+        </aside>
+      </section>
+      <section><img src="images/recursion2.gif" width="400"/>
+        <aside>This all over again</aside>
+      </section>
+      <section>
+        <h1>Why?</h1>
+      </section>
+      <section><img src="images/functional.png" width="350"/><a href="http://xkcd.com/1207/">
+          <cite>http://xkcd.com/1270/</cite></a></section>
+      <section>
+        <h1>No, seriously - why?</h1>
+      </section>
+      <section>
+        <pre><code class="language-javascript">function factorial(n) {
+  var result = 1;
+  
+  for (var i = n; i > 0; i--) {
+    result = result * i;
+  }
+  
+  return result;
+}
+</code></pre>
+        <aside>
+          So this is factorial written without recursion - as a loop
+          Now I can tell you two things about this
+        </aside>
+      </section>
+      <section>
+        <ul>
+          <li>
+            <h2>1. It's faster</h2>
+          </li>
+          <li>
+            <h2>2. It's more memory efficient</h2>
+          </li>
+        </ul>
+        <aside>
+          So this is factorial written without recursion - as a loop
+          Now I can tell you two things about this
+        </aside>
+      </section>
+      <section>
+        <h1>But is it easier to read?</h1>
+        <aside>
+          So this is factorial written without recursion - as a loop
+          Now I can tell you two things about this
+        </aside>
+      </section>
+      <section>
+        <pre><code class="language-javascript">function factorial(n) {
+  if (n === 0) return 1;
+  
+  if (n > 0) return factorial(n - 1) * n;
+}
+</code></pre>
+      </section>
+      <section>
+        <pre><code class="language-javascript">function factorial(n) {
+  var result = 1;
+  
+  for (var i = n; i > 0; i--) {
+    result = result * i;
+  }
+  
+  return result;
+}
+</code></pre>
+      </section>
+      <section>
+        <h2>Always pick the one that expresses the idea the best</h2>
+      </section>
+      <section>
+        <h2>(I think it's the recursive one)</h2>
+      </section>
+      <section>
+        <h2>Further reading</h2><img src="images/little-schemer.jpg" width="300"/><a href="https://mitpress.mit.edu/books/little-schemer">
+          <h3>The Little Schemer</h3></a>
+      </section>
+      <section><a href="https://github.com/gypsydave5/recursion-presentation/blob/master/examples/arithmetic.js">
+          <h3>Arithmetic as recursion</h3></a><a href="https://github.com/gypsydave5/recursion-presentation/blob/master/examples/lists.js">
+          <h3>Data structures as recursion</h3></a></section>
+      <section>
+        <h1>Ta!</h1>
+      </section>
+    </article>
+    <script src="build/build.js"></script>
+  </body>
+</html>
