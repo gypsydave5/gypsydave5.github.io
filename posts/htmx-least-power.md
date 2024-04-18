@@ -21,7 +21,7 @@ He continues:
 
 > Many Web technologies are designed to exploit the Rule of Least Power. HTML is intentionally designed not to be a full programming language, so that many different things can be done with an HTML document: software can present the document in various styles, extract tables of contents, index it, and so on. Similarly, CSS is a declarative styling language that is easily analyzed. The Semantic Web is an attempt, largely, to map large quantities of existing data onto a common language so that the data can be analyzed in ways never dreamed of by its creators… Thus, HTML, CSS and the Semantic Web are examples of Web technologies designed with “least power” in mind. Web resources that use these technologies are more likely to be reused in flexible ways than those expressed in more powerful languages.
 
-If you sign up to this - and I do, to be clear - they you’re going to feel very uncomfortable about the direction frontend frameworks like React and others, where we wind up doing everything in the most powerful part of the frontend stack - the JavaScript.
+If you sign up to this - and I do, to be clear - then you’re going to feel very uncomfortable about the direction frontend frameworks like React and others, where we wind up doing everything in the most powerful part of the frontend stack - the JavaScript.
 
 If we were to graph, in a very realistic and not made up way, the different power levels of the three classic frontend technologies - HTML, CSS and JavaScript - we’d see something like this:
 
@@ -33,7 +33,7 @@ And we don’t like React et al because they essentially encourage you to only u
 
 And so we, the True Believers, avoid the frameworks, and use the least powerful tool for the job. The end.
 
-Well…
+Well...
 
 Take a look at that graph again:
 
