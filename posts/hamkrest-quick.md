@@ -1,6 +1,6 @@
 ---
 title: A Quick Guide to Hamkrest
-description: Quick!
+description: A short description of the built in matchers, along with a guide to how I write custom matchers.
 published: true
 date: 2024-04-21 22:52:55
 ---
