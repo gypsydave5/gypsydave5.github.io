@@ -43,12 +43,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {{template "mathjax"}}
     <link rel="stylesheet" href="/css/style.css">
+    <title>{{.TitleText}}</title>
+
+    <meta name="description" content="{{.Metadata.Description}}">
+
     <meta property="og:title" content="{{.TitleText}}" />
     <meta property="og:type" content="article" />
     <meta property="og:url" content="https://blog.gypsydave5.com/posts/{{.Path}}" />
-    <meta property="og:image" content="https://avatars.githubusercontent.com/u/5469544" />
+    <meta property="og:image" content="https://blog.gypsydave5.com/images/white.png" />
     <meta property="og:description" content="{{.Metadata.Description}}" />
-    <title>{{.TitleText}}</title>
+
+    <meta name="twitter:card" content="https://blog.gypsydave5.com/images/white.png">
+    <meta property="twitter:domain" content="blog.gypsydave5.com">
+    <meta property="twitter:url" content="https://blog.gypsydave5.com/posts/{{.Path}}">
+    <meta name="twitter:title" content="{{.TitleText}}">
+    <meta name="twitter:description" content="{{.Metadata.Description}}">
+    <meta name="twitter:image" content="https://blog.gypsydave5.com/images/white.png">
+
   </head>
 {{end}}
 
