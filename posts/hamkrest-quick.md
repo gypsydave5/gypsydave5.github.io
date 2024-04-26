@@ -5,8 +5,6 @@ published: true
 date: 2024-04-21 22:52:55
 ---
 
-# Hamkrest: A Quick Guide
-
 [Hamkrest](https://github.com/npryce/hamkrest) is a Kotlin implementation of the long-in-tooth-but-widely-revered assertion library [Hamcrest](https://hamcrest.org/).
 
 ## Who is this for?
