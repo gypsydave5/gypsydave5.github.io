@@ -1,7 +1,7 @@
 {{define "post"}}
 <!DOCTYPE html>
 <html lang="en">
-  {{template "head" .Post.TitleText}}
+  {{template "postHead" .Post}}
   <body>
     <main>
     {{template "header"}}
@@ -35,6 +35,19 @@
   <link rel="stylesheet" href="/css/style.css">
   <title>{{.}}</title>
 </head>
+{{end}}
+
+{{define "postHead"}}
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {{template "mathjax"}}
+    <link rel="stylesheet" href="/css/style.css">
+    <meta property="og:title" content="{{.TitleText}}" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://blog.gypsydave5.com/posts/{{.Path}}" />
+    <title>{{.TitleText}}</title>
+  </head>
 {{end}}
 
 {{define "header"}}
