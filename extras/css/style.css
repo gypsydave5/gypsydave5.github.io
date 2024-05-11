@@ -11,7 +11,7 @@ h3 {
   line-height: 1.2;
 }
 
-:not(pre) code {
+:not(pre) > code {
   font-family: monospace;
   background: #e0e0e0;
   padding: 0 4px;
