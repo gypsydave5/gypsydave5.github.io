@@ -11,6 +11,12 @@ h3 {
   line-height: 1.2;
 }
 
+code {
+  font-family: monospace;
+  background: #e0e0e0;
+  padding: 0 4px;
+}
+
 pre {
   white-space: pre-wrap;
   border: 1px solid black;
