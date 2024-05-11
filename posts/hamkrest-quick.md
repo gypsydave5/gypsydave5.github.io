@@ -528,8 +528,7 @@ Here we want to use the built-in matcher of `startsWith` inside our own `hasGive
 ```
 fun <S : CaseSensitivity> hasGivenName(matcher: StringMatcher<S>): Matcher<User> =
     object : Matcher<User> {
-        override val description: String =
-            "has a given name "
+        override val description: String = "has a given name "
         override fun invoke(actual: User): MatchResult = matcher(actual.givenName)
     }
 ```
