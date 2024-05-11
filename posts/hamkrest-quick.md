@@ -9,7 +9,7 @@ date: 2024-04-21 22:52:55
 
 ## Who is this for?
 
-This is aimed more at developers who have never used Hamkrest or Hamcrest and want to ~leverage its expressive power~ write tests that read nice.
+This is aimed more at developers who have never used Hamkrest or Hamcrest and want to ~~leverage its expressive power~~ write tests that read nice.
 
 ## The basics
 
