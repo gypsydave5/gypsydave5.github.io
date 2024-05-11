@@ -434,8 +434,8 @@ object hasGeraldAsTheirFirstName: Matcher<User> {
 	    if (actual.givenName == "Gerald") {
 		    MatchResult.Match
 	    } else {
-	      MatchResult.Mismatch("the given name was '${actual.givenName}'")
-      }
+	        MatchResult.Mismatch("the given name was '${actual.givenName}'")
+        }
 }
 ```
 
