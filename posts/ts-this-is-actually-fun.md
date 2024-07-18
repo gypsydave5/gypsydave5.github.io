@@ -4,7 +4,7 @@ title: "`this` is my type"
 date: 2022-01-26 19:12:28
 tags:
     - TypeScript
-published: false
+published: true
 ---
 
 Ah man, the shit you can do in TypeScript with `this` as a type. Let me show you:
@@ -14,7 +14,12 @@ Ah man, the shit you can do in TypeScript with `this` as a type. Let me show you
 Who hasn't written something using the builder pattern? Ok, so probably a few of you. The idea is that you construct an object by adding to it incrementally with method calls, then "finalize" it using another method. Like this:
 
 ```typescript
-    const dog = new DogBuilder().withName('Erik').withWeightKg(15).withCoat(Colors.OrangeRoan).withBreed(Breeds.CockerSpaniel).build()
+const dog = new DogBuilder()
+	.withName('Erik')
+	.withWeightKg(15)
+	.withCoat(Colors.OrangeRoan)
+	.withBreed(Breeds.CockerSpaniel)
+	.build()
 ```
 
 There are benefits, there are downsides, blah blah blah. You might prefer to do the same thing using a configuration object with defaults. Go read and have fun.
@@ -210,7 +215,7 @@ setTimeout(rover.sayHello, 10)
 // => Hello, I'm a undefined called undefined
 ```
 
-Curse you `this`! Yeah, this happens to every JavaScript and TypeScript developer - we've lost our binding to the reciever when we passed the function uncalled into `setTimeout`. So now this is `undefined`.
+Curse you `this`! Yeah, this happens to every JavaScript and TypeScript developer - we've lost our binding to the receiver when we passed the function uncalled into `setTimeout`. So now this is `undefined`.
 
 How can we fix this? Well, that's also one of the first things you will work out: you use `bind()`:
 
