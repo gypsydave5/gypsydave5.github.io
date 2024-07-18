@@ -439,7 +439,7 @@ For that one, but for the directory that can only be used by the owner:
 These magic octal file permission numbers come up _disturbingly_ often - more
 often than you'd think was necessary in the twenty first century. For instance,
 exciting modern programming language Go [needed to model file
-permissions](https://golang.org/pkg/os/#FileMode), it did so by using as 32 bit
+permissions](https://golang.org/pkg/os/#FileMode), it did so by using a 32 bit
 _number_ where the nine 'least significant bits' (i.e.  the end of the number)
 represented `rwxrwxrwx` permissions as above. The same occurs in Python, and
 [NodeJS](https://nodejs.org/api/fs.html#fs_file_modes).
