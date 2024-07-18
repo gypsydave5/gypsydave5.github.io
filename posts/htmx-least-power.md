@@ -77,7 +77,7 @@ And here’s the pitch: a tool like [HTMX](https://htmx.org/) is explicitly tryi
 
 Yes, it is ‘like’ React in that it is something you’re adding to the mix. And, yes, it’s written in JavaScript - that’s to be expected, as most of our simpler technologies are built on top of much more powerful ones.[^1]
 
-But the difference is that it doesn’t try to extend JavaScript to make it the one stop shop for all your webdev needs. Instead it inserts itself between HTML + CSS and JavaScript as a mid-power technology. Instead of being embedded in a high-power language, it’s actually an extension of the low-power language - HTML - extending its capabilities to give
+But the difference is that it doesn’t try to extend JavaScript to make it the one stop shop for all your webdev needs. Instead it inserts itself between HTML + CSS and JavaScript as a mid-power technology. Instead of being embedded in a high-power language, it’s actually an extension of the low-power language - HTML - extending its capabilities to give it what you need.
 
 You need to do [click to edit](https://htmx.org/examples/click-to-edit/), [lazy loading](https://htmx.org/examples/lazy-load/), [infinite scroll](https://htmx.org/examples/infinite-scroll/), a [live search](https://htmx.org/examples/active-search/), or anything else that you’d normally be reaching for JavaScript to accomplish, you can now add HTMX to the stack, write a few more attributes on your HTML, get what you need done, _and never have to use JavaScript_. Instead you’ve used a less powerful tool (HTMX) to achieve what you wanted.
 
