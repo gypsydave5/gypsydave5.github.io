@@ -7,7 +7,7 @@ date: 2024-07-05 22:52:55
 
 What does it mean to integrate continuously?
 
-Two branches in a version control system, each containing new features. In isolation. We pull them together - we merge them. We get a merge conflict. We resolve the conflict - we say parts will stay and which will go. We integrate the two branches. We end with a single system.
+Two branches in a version control system, each containing new features. In isolation. We pull them together - we merge them. We get a merge conflict. We resolve the conflict - we say which parts will stay and which will go. We integrate the two branches. We end with a single system.
 
 But why was there a conflict?
 
