@@ -112,7 +112,7 @@ What's everyone's favourite log message?
 '{"message":"service failed to do the thing","error":"{\\"message\\":\\"something went wrong with this request\\",\\"request\\":\\"{\\\\\\"headers\\\\\\":\\\\\\"{\\\\\\\\\\\\\\"content-type\\\\\\\\\\\\\\":\\\\\\\\\\\\\\"application/json\\\\\\\\\\\\\\"}\\\\\\",\\\\\\"body\\\\\\":\\\\\\"{\\\\\\\\\\\\\\"message\\\\\\\\\\\\\\":\\\\\\\\\\\\\\"hello world\\\\\\\\\\\\\\"}\\\\\\",\\\\\\"method\\\\\\":\\\\\\"POST\\\\\\",\\\\\\"url\\\\\\":\\\\\\"http://hello\\\\\\"}\\"}"}'
 ```
 
-Yes, that's right - it's nested JSON. Nothing like nested JSON to ruin your day, as you repeatedly paste and pares each individual bit to understand what the hell went wrong, or try to strip the forward-slashes using the power of your mind. No, that doesn't work.
+Yes, that's right - it's nested JSON. Nothing like nested JSON to ruin your day, as you repeatedly paste and parse each individual bit to understand what the hell went wrong, or try to strip the forward-slashes using the power of your mind. No, that doesn't work.
 
 Nested JSON messages are what happens when you just add a little bit extra on to an error message to give context, but decide that that context is probably an object like the request you just sent. And so you `JSON.stringify` that object into the error message string. But the that error message string winds up inside another object that, unknown to you, _also_ gets `JSON.stringify`'d, and etc and so on until you get to forward slash city.
 
