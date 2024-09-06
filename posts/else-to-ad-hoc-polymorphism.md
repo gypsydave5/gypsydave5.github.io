@@ -12,7 +12,7 @@ Sometimes I want a Union type of two types in Kotlin - but I can’t. Kotlin has
 
 Usually this can be avoided, if you have control over your types, with a [Sealed Class](https://kotlinlang.org/docs/sealed-classes.html). But if your type hierarchy has to be open, you don’t have that option.
 
-An example I had recently. We initialise two sorts of Http4k web application at work: ones built using Http4k’s built in routing (a `RoutingHttpHandler`) and ones built using Krouton (a `ResourceRouter`).
+An example I had recently. We initialise two sorts of [Http4k](https://www.http4k.org/) web application at work: ones built using Http4k’s built in routing (a [`RoutingHttpHandler`](https://www.http4k.org/api/org.http4k.routing/-routing-http-handler/)) and ones built using [Krouton](https://github.com/npryce/krouton) (a [`ResourceRouter`](https://github.com/npryce/krouton/blob/master/src/main/kotlin/com/natpryce/krouton/http4k/routing.kt#L58)).
 
 Both of these types implement the `HttpHandler` interface.
 
