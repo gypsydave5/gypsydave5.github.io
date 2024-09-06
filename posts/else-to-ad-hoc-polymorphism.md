@@ -12,100 +12,122 @@ Sometimes I want a Union type of two types in Kotlin - but I can’t. Kotlin has
 
 Usually this can be avoided, if you have control over your types, with a [Sealed Class](https://kotlinlang.org/docs/sealed-classes.html). But if your type hierarchy has to be open, you don’t have that option.
 
-An example I had recently. We initialise two sorts of [Http4k](https://www.http4k.org/) web application at work: ones built using Http4k’s built in routing (a [`RoutingHttpHandler`](https://www.http4k.org/api/org.http4k.routing/-routing-http-handler/)) and ones built using [Krouton](https://github.com/npryce/krouton) (a [`ResourceRouter`](https://github.com/npryce/krouton/blob/master/src/main/kotlin/com/natpryce/krouton/http4k/routing.kt#L58)).
-
-Both of these types implement the `HttpHandler` interface.
-
-When we bootstrap the app, we need to add observability to the routers provided, recording things like the request method and - yes - the path routed to. And we need to add observability to both of the router types.
-
-The natural response would be, as we can’t have a Sealed Class of these two routers (as we don’t own either of the types), a type that represents their union - `RoutingHttpHandler | ResourceRouter` in Scala or similar languages. 
+Say we wanted a function that feeds my pet:
 
 ```kotlin
-fun createHttp4kHandler(
-        applicationHandler: RoutingHttpHandler | ResourceRouter,
-    ): HttpHandler {
-        val filters = OpenTelemetryFilters.server(openTelemetry)
-            .then(statsDMetricsFilters.server)
-            .then(prometheusMetricsFilters.server)
-            .then(IncomingRequestMonitoringFilter(httpMonitor, logging, clock))
-
-        return when (applicationHandler) {
-            is RoutingHttpHandler -> routes(
-                AppAnatomyHttp4kHandlers.create(collectorRegistry),
-                filters.then(applicationHandler),
-            )
-
-            is ResourceRouter -> AppAnatomyHttp4kHandlers.kroutons(collectorRegistry)
-                .apply { otherwise(applicationHandler.withFilterIncludingHandlerIfNoMatch(filters)) }
-                .toHandler()
-        }
-    }
+fun feedMyPet(pet: Animal)
 ```
 
-But this isn’t a feature available in Kotlin.
+But, sadly, `Animal` is not a sealed class. Tragically, we don't own it. And, even worse, there’s no unified interface for feeding.
 
-The alternative, keeping the same pattern, would be to use a shared type for both - `HttpHandler` and then downcast with a type switch again:
+If I’ve got a `Dog`:
 
 ```kotlin
-fun createHttp4kHandler(
-        applicationHandler: HttpHandler,
-    ): HttpHandler {
-        val filters = OpenTelemetryFilters.server(openTelemetry)
-            .then(statsDMetricsFilters.server)
-            .then(prometheusMetricsFilters.server)
-            .then(IncomingRequestMonitoringFilter(httpMonitor, logging, clock))
-
-        return when (applicationHandler) {
-            is RoutingHttpHandler -> routes(
-                AppAnatomyHttp4kHandlers.create(collectorRegistry),
-                filters.then(applicationHandler),
-            )
-
-            is ResourceRouter -> AppAnatomyHttp4kHandlers.kroutons(collectorRegistry)
-                .apply { otherwise(applicationHandler.withFilterIncludingHandlerIfNoMatch(filters)) }
-                .toHandler()
-
-            else -> error("Unsupported application handler type: ${applicationHandler::class}. You must either use http4k routing, or krouton.")
-        }
-    }
+class Dog : Animal {
+	fun fillUpTheDogFoodBowl()
+}
 ```
 
-The problem here is that we lose some helpful type safety: I don’t want to be able to accept a `HttpHandler` - that will cause an error and problems (hence the `error` in the else branch). Problems that will only show themselves when the program runs.
-
-(I’ve also seen attempts to create ad-hoc “wrapper” sealed classes around these missing unions; it adds a lot of extra types and noise to the system. I dislike it so much that I’m not even going to put the example in, it’s left as an exercise for the reader.)
-
-The solution which I’ve used a few times now (so I guess it’s a pattern) is to replace the open-ended type switch with [ad-hoc polymorphism](https://en.wikipedia.org/wiki/Ad_hoc_polymorphism) - [function overloading](https://en.wikipedia.org/wiki/Function_overloading):
-
+And a `Fish`:
 
 ```kotlin
-    internal fun createHttp4kHandler(
-        applicationHandler: ResourceRouter,
-    ): HttpHandler {
-        val filters = OpenTelemetryFilters.server(openTelemetry)
-            .then(statsDMetricsFilters.server)
-            .then(prometheusMetricsFilters.server)
-            .then(IncomingRequestMonitoringFilter(httpMonitor, logging, clock))
-
-        return AppAnatomyHttp4kHandlers.kroutons(collectorRegistry)
-            .apply { otherwise(applicationHandler.withFilterIncludingHandlerIfNoMatch(filters)) }
-            .toHandler()
-    }
-
-    internal fun createHttp4kHandler(
-        applicationHandler: RoutingHttpHandler,
-    ): HttpHandler {
-        val filters = OpenTelemetryFilters.server(openTelemetry)
-            .then(statsDMetricsFilters.server)
-            .then(prometheusMetricsFilters.server)
-            .then(IncomingRequestMonitoringFilter(httpMonitor, logging, clock))
-
-        return routes(
-            AppAnatomyHttp4kHandlers.create(collectorRegistry),
-            filters.then(applicationHandler),
-        )
-    }
+class Fish : Animal {
+	fun sprinkleFishFoodOnTheTank()
+}
 ```
 
-(The duplicated `filters` logic can by extracted easily, I’ve left it there to make the comparison easier).
+Then the implementation of `feedMyPet` becomes harder. We can do it with a type switch:
 
-Here the overload creates an ad-hoc union between `RoutingHttpHandler` and `ResourceRouter` at the call sites of `createHttp4kHandler`. We maintain type safety and avoid an `else` - can’t use this union elsewhere in the code (and perhaps we’d refactor to some wrapper sealed class later if this concept turns out to be less ad-hoc and more useful).
+```kotlin
+fun feedMyPet(pet: Animal) {
+	when (pet) {
+		is Fish -> pet.sprinkleFoodOnTheTank()
+		is Dog -> pet.fillUpTheDogFoodBowl()
+		else -> error("I don't know how to feed a ${pet::class}")
+	}
+}
+```
+
+But the problem here is that I would like callers of `feedMyPet` to know that it can only work with a `Fish` or a `Dog`. I don’t want them to be surprised by runtime errors when they try to feed an `Iguana`:
+
+```kotlin
+val ivanTheIguana = Iguana()
+
+feedMyPet(ivanTheIguana)
+// => "I don't know how to feed a Iguana"
+```
+
+In other languages, we could introduce a union type - `Fish | Dog` - to limit the types that `feedMyPet` would accept. But Kotlin does not currently support union types.
+
+One solution would be to create my own sealed class to represent the pets that I own:
+
+```kotlin
+sealed class MyPet
+class MyDog(val dog: Dog) : MyPet
+class MyFish(val fish: Fish): MyPet
+```
+
+Which would then let us get rid of the `else` clause.
+
+```kotlin
+fun feedMyPet(pet: MyPet) {
+	when (pet) {
+		is MyFish -> pet.fish.sprinkleFoodOnTheTank()
+		is MyDog -> pet.dog.fillUpTheDogFoodBowl()
+	}
+}
+```
+
+Or even better:
+
+```kotlin
+sealed class MyPet {
+  fun feed()
+}
+
+class MyDog(private val dog: Dog) : MyPet {
+	fun feed() = dog.fillUpTheDogFoodBowl()
+}
+
+class MyFish(private val fish: Fish): MyPet {
+  fun feed() = fish.sprinkleFoodOnTheTank()
+}
+
+fun feedMyPet(pet: MyPet) {
+	pet.feed()
+}
+```
+
+But this might not be the nicest interface to use: 
+
+```kotlin
+val freddyTheFish = Fish()
+val duncanTheDog = Dog()
+
+feedMyPet(MyFish(freddyTheFish))
+feedMyPet(MyDog(duncanTheDog))
+```
+
+If I’m having to wrap my `Dog` or `Fish` every time I want to `feedMyPet`, I’m going to get annoyed.
+
+Now, maybe this is a _good thing_. Perhaps we’re being told that  we need a new abstraction, a representation of ‘pet types that I own’ that doesn’t leak the types of `Animal` all over the code.
+
+In the case of domain types (yes, like `Cat` and `Fish` here), we should take the hint and start only using `MyPet`s everywhere.
+
+But what if this was more incidental code that I needed to call on an ad-hoc basis? If the only time I care about `MyPet` is when I’m feeding it, but for the rest of the `Animal`s life it just gets treated as an `Animal`, `MyPet` is then an irritant in the `feedMyPet` interface.
+
+My preferred solution would be to use [ad-hoc polymorphism](https://en.wikipedia.org/wiki/Ad_hoc_polymorphism), namely [function overloading](https://en.wikipedia.org/wiki/Function_overloading):
+
+```kotlin
+fun feedMyPet(fish: Fish) {
+	fish.sprinkleFoodOnTheTank()
+}
+
+fun feedMyPet(dog: Dog) {
+	dog.fillUpTheDogFoodBowl()
+}
+```
+
+This is definitely _ad-hoc_ polymorphism - if I saw myself repeating this pattern more than once I’d most likely replace it with the sealed class.
+
+But, when that seems like overkill, it’s a good pattern.
