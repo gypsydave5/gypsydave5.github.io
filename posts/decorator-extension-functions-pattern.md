@@ -245,8 +245,8 @@ fun NotifierDecorator.then(finally: Notifier): Notifier = this(finally)
 This will give us the `then` behaviour we've already seen:
 
 ```kotlin
-val notifier = SlackNotifierDecorator2(SlackClient())
-    .then(EmailNotifierDecorator2(EmailClient()))
+val notifier = SlackNotifierDecorator(SlackClient())
+    .then(EmailNotifierDecorator(EmailClient()))
     .then(nullNotifier)
 ```
 
@@ -262,8 +262,8 @@ fun notifyWith(vararg notifiers: NotifierDecorator) =
     notifiers.reduce { first, next -> first.then(next) }
 
 val notifier = notifyWith(
-    SlackNotifierDecorator2(SlackClient()),
-    EmailNotifierDecorator2(EmailClient())
+    SlackNotifierDecorator(SlackClient()),
+    EmailNotifierDecorator(EmailClient())
 ).then(nullNotifier)
 ```
 
