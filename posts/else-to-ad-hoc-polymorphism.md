@@ -41,7 +41,7 @@ Then the implementation of `feedMyPet` becomes harder. We can do it with a type 
 ```kotlin
 fun feedMyPet(pet: Animal) {
 	when (pet) {
-		is Fish -> pet.sprinkleFoodOnTheTank()
+		is Fish -> pet.sprinkleFishFoodOnTheTank()
 		is Dog -> pet.fillUpTheDogFoodBowl()
 		else -> error("I don't know how to feed a ${pet::class}")
 	}
@@ -81,16 +81,16 @@ fun feedMyPet(pet: MyPet) {
 Or even better:
 
 ```kotlin
-sealed class MyPet {
-  fun feed()
+sealed interface MyPet {
+  abstract fun feed()
 }
 
-class MyDog(private val dog: Dog) : MyPet {
-	fun feed() = dog.fillUpTheDogFoodBowl()
+class MyDog(val dog: Dog) : MyPet {
+	override fun feed() = dog.fillUpTheDogFoodBowl()
 }
 
-class MyFish(private val fish: Fish): MyPet {
-  fun feed() = fish.sprinkleFoodOnTheTank()
+class MyFish(val fish: Fish): MyPet {
+  override fun feed() = fish.sprinkleFoodOnTheTank()
 }
 
 fun feedMyPet(pet: MyPet) {
@@ -120,11 +120,11 @@ My preferred solution would be to use [ad-hoc polymorphism](https://en.wikipedia
 
 ```kotlin
 fun feedMyPet(fish: Fish) {
-	fish.sprinkleFoodOnTheTank()
+	fish.sprinkleFishFoodOnTheTank()
 }
 
-fun feedMyPet(dog: Dog) {
-	dog.fillUpTheDogFoodBowl()
+fun feedMyPet(dog: Dog) { 
+    dog.fillUpTheDogFoodBowl()
 }
 ```
 
