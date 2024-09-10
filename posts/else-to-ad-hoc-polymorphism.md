@@ -5,7 +5,7 @@ published: true
 date: 2024-09-06 22:52:55
 tags:
 - kotlin
-- patterns
+- pattern
 ---
 
 Sometimes I want a Union type of two types in Kotlin - but I can’t. Kotlin has no Union type.
