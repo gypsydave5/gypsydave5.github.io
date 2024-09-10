@@ -102,7 +102,7 @@ val myNotifier = nullNotifier
 
 Which reads a lot better.
 
-## Real World Example
+### Real World Example
 
 This pattern can be seen in the popular Kotlin HTTP library [http4k](https://www.http4k.org/)’s implementation of filters to transform HTTP request and responses.
 
