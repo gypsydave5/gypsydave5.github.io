@@ -119,10 +119,13 @@ val myHandler: HttpHandler = { Response(Status.OK) }
 
 val debuggingFilter =
   DebuggingFilters.PrintRequestAndResponse(System.out)
+
 val requestTracingFilter =
   ServerFilters.RequestTracing()
+
 val setContentTypeFilter =
   ServerFilters.SetContentType(ContentType.TEXT_PLAIN)
+
 val openTelemetryFilter =
   ServerFilters.OpenTelemetryTracing
 
