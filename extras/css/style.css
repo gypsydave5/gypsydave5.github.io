@@ -14,6 +14,9 @@ h3 {
 code {
   font-family: monospace;
   background-color: #f0f0f0;
+}
+
+p code {
   padding: 0 4px;
 }
 
