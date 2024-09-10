@@ -230,7 +230,7 @@ we now have `(OtherArgs) -> (Notifier) -> Notifier` - the last bit of which is o
 Instead of implementing `Notifier` as a class in these two cases, we're just implementing the interface on an
 anonymous object. You were warned.
 
-Now we've got an abstract interface to play with (in the way of a function signature), we can now raise our decoration
+Now we've got an abstract interface to play with (in the way of a function signature), we can raise our decoration
 game to the same level as http4k's `Filter`s.
 
 First we define a pair of extension functions which should be familiar:
