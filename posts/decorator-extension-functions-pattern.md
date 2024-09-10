@@ -163,4 +163,108 @@ val server = ServerFilters.OpenTelemetryTracing
 
 We can see clearly that the open telemetry filter happens _first_, _then_ the content type filter, _then_... etc, until the transformed request reaches the handler.
 
+### Evolution to Final Form
+
+And when even this becomes too repetitive with multiple calls to `then`, we can write ourselves a _real_
+compose function to stack up these decorators:
+
+```kotlin
+fun stack(vararg filters: Filter): Filter =
+    filters.reduce { first, next -> first.then(next) }
+```
+
+```kotlin
+val server = stack(
+    ServerFilters.OpenTelemetryTracing,
+    ServerFilters.SetContentType(ContentType.TEXT_PLAIN),
+    ServerFilters.RequestTracing(),
+    DebuggingFilters.PrintRequestAndResponse(System.out),
+).then(myHandler)
+```
+
+This is possible for `Filter`s because of their abstract interface of `(HttpHandler) -> HttpHandler`. How can we achieve this with
+our `Notifier` decorators?
+
+**WARNING**
+
+I'd recommend stopping here unless you're _really_ interested in how to compose decorators on an industrial scale.
+What follows is really an overgrown footnote.
+
+**/WARNING**
+
+If we declare the type of `NotifierDecorator` to be `(Notifier) -> Notifier`:
+
+```kotlin
+fun interface NotifierDecorator : (Notifier) -> Notifier
+```
+
+We can then implement it in our notifier decorators:
+
+```kotlin
+class SlackNotifierDecorator(
+    private val slackClient: SlackClient,
+) : NotifierDecorator {
+    override operator fun invoke(next: Notifier): Notifier = object : Notifier {
+        override fun notify(message: String) {
+            slackClient.ping(message)
+            next.notify(message)
+        }
+    }
+}
+
+class EmailNotifierDecorator(
+    private val emailClient: EmailClient,
+) : NotifierDecorator {
+    override fun invoke(next: Notifier): Notifier = object : Notifier {
+        override fun notify(message: String) {
+            emailClient.send(message)
+            next.notify(message)
+        }
+    }
+}
+```
+
+What we have is a pattern that acts like a curried version of our old constructor: instead of `(Notifier, OtherArgs) -> Notifier`
+we now have `(OtherArgs) -> (Notifier) -> Notifier` - the last bit of which is our `NotifierDecorator`.
+
+Instead of implementing `Notifier` as a class in these two cases, we're just implementing the interface on an
+anonymous object. You were warned.
+
+Now we've got an abstract interface to play with (in the way of a function signature), we can now raise our decoration
+game to the same level as http4k's `Filter`s.
+
+First we define a pair of extension functions which should be familiar:
+
+```kotlin
+fun NotifierDecorator.then(next: NotifierDecorator): NotifierDecorator =
+    NotifierDecorator { notifier: Notifier -> next(this(notifier)) }
+
+fun NotifierDecorator.then(finally: Notifier): Notifier = this(finally)
+```
+
+This will give us the `then` behaviour we've already seen:
+
+```kotlin
+val notifier = SlackNotifierDecorator2(SlackClient())
+    .then(EmailNotifierDecorator2(EmailClient()))
+    .then(nullNotifier)
+```
+
+With this we never need to write custom extension functions for each new decorator we add - you now
+get their composition for free as long as they implement the `NotifierDecorator` interface. This is a big 
+benefit in a library like http4k where everyone and anyone might want to extend the library by writing a custom
+filter, but you might consider if the complexity is worth it for your own project.
+
+That said, we can now build the 'final form' with a function to compose `NotifierDecorator`s:
+
+```kotlin
+fun notifyWith(vararg notifiers: NotifierDecorator) =
+    notifiers.reduce { first, next -> first.then(next) }
+
+val notifier = notifyWith(
+    SlackNotifierDecorator2(SlackClient()),
+    EmailNotifierDecorator2(EmailClient())
+).then(nullNotifier)
+```
+
 [^1]: Although it’s perhaps not how I’d do notifications.
