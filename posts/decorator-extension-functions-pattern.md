@@ -17,12 +17,12 @@ But if you use a decorator repeatedly it can get confusing. The website [Refacto
 Here, instead of using inheritance, a `Notifier` is composed by stacking together a series of `Notifier` decorators:
 
 ```kotlin
-interface Notifier { 
+interface Notifier {
     fun notify(message: String)
 }
 
-val nullNotifier = object : Notifier {
-	fun notify(message: String) {} // the `nullNotifier` does nothing
+val nullNotifier = object : Notifier { 
+    fun notify(message: String) {} // the `nullNotifier` does nothing
 }
 
 class EmailNotifierDecorator(
@@ -48,10 +48,10 @@ And a `SlackNotifierDecorator` for slack notifications:
 class SlackNotifierDecorator(
     val notifier: Notifier, 
     val slackClient: SlackClient,
-) : Notifier {
-  override fun notify(message: String) {
-	  slackClient.send(message)
-	  notifier.notify(message)
+) : Notifier { 
+    override fun notify(message: String) { 
+        slackClient.send(message)
+        notifier.notify(message)
   }
 } 
 
@@ -66,10 +66,10 @@ But this soon looks nasty when you perform more than two decorations at a time:
 val myNotifier = SlackNotifierDecorator(
     FacebookNotifierDecorator(
         EmailNotifierDecorator(
-          nullNotifier,
-          EmailClient()
-        ),
-        FacebookClient(),
+            nullNotifier, 
+            EmailClient()
+        ), 
+        FacebookClient()
     ), 
     SlackClient(),
 )
