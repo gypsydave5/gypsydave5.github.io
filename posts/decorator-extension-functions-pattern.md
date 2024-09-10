@@ -17,8 +17,8 @@ But if you use a decorator repeatedly it can get confusing. The website [Refacto
 Here, instead of using inheritance, a `Notifier` is composed by stacking together a series of `Notifier` decorators:
 
 ```kotlin
-interface Notifier {
-	fun notify(message: String)
+interface Notifier { 
+    fun notify(message: String)
 }
 
 val nullNotifier = object : Notifier {
@@ -26,8 +26,8 @@ val nullNotifier = object : Notifier {
 }
 
 class EmailNotifierDecorator(
-  val notifier: Notifier, 
-  val emailClient: EmailClient,
+    val notifier: Notifier, 
+    val emailClient: EmailClient,
 ) : Notifier {
   override fun notify(message: String) {
 	  emailClient.send(message)
@@ -46,8 +46,8 @@ And a `SlackNotifierDecorator` for slack notifications:
 
 ```kotlin
 class SlackNotifierDecorator(
-  val notifier: Notifier, 
-  val slackClient: SlackClient,
+    val notifier: Notifier, 
+    val slackClient: SlackClient,
 ) : Notifier {
   override fun notify(message: String) {
 	  slackClient.send(message)
@@ -85,14 +85,14 @@ We can do this with our decorators by adding an extension function to each of th
 ```kotlin
 // In practice you'd locate these decorators with their classes and import them as and when you needed them.
 
-fun Notifier.withEmail(emailClient: EmailClient) =
-	EmailNotifierDecorator(this, emailClient)
+fun Notifier.withEmail(emailClient: EmailClient) = 
+    EmailNotifierDecorator(this, emailClient)
 
-fun Notifier.withSlack(slackClient: SlackClient) =
-	SlackNotifierDecorator(this, slackClient)
+fun Notifier.withSlack(slackClient: SlackClient) = 
+    SlackNotifierDecorator(this, slackClient)
 
-fun Notifier.withFacebook(facebookClient: FacebookClient) =
-	FacebookNotifierDecorator(this, facebookClient)
+fun Notifier.withFacebook(facebookClient: FacebookClient) = 
+    FacebookNotifierDecorator(this, facebookClient)
 
 val myNotifier = nullNotifier
     .withSlack(SlackClient())
@@ -143,12 +143,12 @@ val server = openTelemetryFilter(
 But with a very simple [pair of extension functions](https://github.com/http4k/http4k/blob/87a98624c4428dc6d9b77a1a9628747363cac9a4/http4k-core/src/main/kotlin/org/http4k/core/Http4k.kt#L13-L15):
 
 ```kotlin
-fun Filter.then(next: Filter): Filter =
-  Filter { this(next(it)) }
+fun Filter.then(next: Filter): Filter = 
+    Filter { this(next(it)) }
 
 
-fun Filter.then(next: HttpHandler): HttpHandler =
-  this(next)
+fun Filter.then(next: HttpHandler): HttpHandler = 
+    this(next)
 ```
 
 We can turn the nesting into something serial that expresses the flow of the request:
