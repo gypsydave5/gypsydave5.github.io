@@ -1,0 +1,76 @@
+:root {
+    --code-background: rgba(0,0,0,0.45);
+    --code-border: rgba(0,0,0,0.7);
+    --code-text: #F7F7F7;
+    --code-comment: #80878D;
+    --code-type: #EF98A8;
+    --code-include: #C596C9;
+    --code-string: #A59CC7;
+    --code-class-name: #94A5CB;
+    --code-numbers: #E8D670;
+    --code-variables: #77B5E3;
+    --code-functions: #DF8DC0;
+    --code-literal: #F6B99A;
+
+  --dark-code-background: rgba(0,0,0,0.7);
+  --dark-code-border: rgba(0,0,0,0.7);
+  --dark-code-text: #F7F7F7;
+  --dark-code-comment: #80878D;
+  --dark-code-type: #EF98A8;
+  --dark-code-include: #C596C9;
+  --dark-code-string: #A59CC7;
+  --dark-code-class-name: #94A5CB;
+  --dark-code-numbers: #E8D670;
+  --dark-code-variables: #77B5E3;
+  --dark-code-functions: #DF8DC0;
+  --dark-code-literal: #F6B99A;
+}
+
+@font-face { font-family: "Inter"; font-style: normal; font-weight: 400; font-display: swap; src: url("fonts/Inter-Regular.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-style: italic; font-weight: 400; font-display: swap; src: url("fonts/Inter-Italic.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-style: normal; font-weight: 500; font-display: swap; src: url("fonts/Inter-Medium.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-style: italic; font-weight: 500; font-display: swap; src: url("fonts/Inter-MediumItalic.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-style: normal; font-weight: 600; font-display: swap; src: url("fonts/Inter-SemiBold.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-style: italic; font-weight: 600; font-display: swap; src: url("fonts/Inter-SemiBoldItalic.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-style: normal; font-weight: 700; font-display: swap; src: url("fonts/Inter-Bold.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-style: italic; font-weight: 700; font-display: swap; src: url("fonts/Inter-BoldItalic.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-style: normal; font-weight: 800; font-display: swap; src: url("fonts/Inter-ExtraBold.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-style: italic; font-weight: 800; font-display: swap; src: url("fonts/Inter-ExtraBoldItalic.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-style: normal; font-weight: 900; font-display: swap; src: url("fonts/Inter-Black.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-style: italic; font-weight: 900; font-display: swap; src: url("fonts/Inter-BlackItalic.woff2") format("woff2"); }
+
+section > :not([class*="layout-"]) h1,
+[class*="layout-"] > div h1
+{
+    font-weight:900;
+}
+
+section > :not([class*="layout-"]) h2,
+[class*="layout-"] > div h2{
+    font-weight: 800;
+}
+
+section > :not([class*="layout-"]) h3,
+[class*="layout-"] > div h3,
+section > :not([class*="layout-"]) h4,
+[class*="layout-"] > div h4{
+    font-weight: 700;
+}
+
+
+.variable-size-headings section > :not([class*="layout-"]) h5,
+.variable-size-headings [class*="layout-"] > div h5,
+.variable-size-headings section > :not([class*="layout-"]) h6,
+.variable-size-headings [class*="layout-"] > div h6{
+    font-weight: 600;
+}
+.hljs{
+    box-shadow:rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+
+table td{
+	font-variation-settings: "wdth" 60;
+}
+
+

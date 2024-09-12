@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="viewport-fit=cover, width=device-width, height=device-height, initial-scale=1" />
+<link rel="stylesheet" href="engine/main.css">
+<link rel="stylesheet" href="theme/sanfrancisco.css">
+<link rel="stylesheet" href="engine/katex/katex.min.css">
+<link rel="stylesheet" href="engine/ia-viewer.css">
+<style>
+:root{
+--logo: ;
+--darkaccent1color: #fff;
+--lightaccent1color: #fff;
+--accent2: #43aa8b;
+--accent3: #f9c74f;
+--accent4: #90be6d;
+--accent5: #f8961e;
+--accent6: #577590;
+--lighttitletextcolor: #fff;
+--darktitletextcolor: #fff;
+--lightbodytextcolor: #fff;
+--darkbodytextcolor: #fff;
+--lightbackgroundcolor: transparent;
+--darkbackgroundcolor: transparent;
+--bodyfont: Inter;
+--titlefont: Inter;
+--lightframecolor: #000000;
+--darkframecolor: #000000;
+} 
+
+</style>
+</head>
+<body class="responsive">
+<div class="reveal">
+<div class="slides">
+<section class="variable-size-headings light v-split-container responsive present fit-warning has-dark-background fitted" data-background-color="#00a8ff" data-updated="true" style="display: grid;">
+
+      <div class="header"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+      <div class="layout-v-split media-grid" style="width: 100%; font-size: 0.766rem;">
+        <div style=""><h1 id="decorativedecorators">Decorative Decorators</h1>
+
+<h4 id="makingyourdecoratorsbeautiful">Making your decorators <em>beautiful</em></h4></div>
+        <figure style=""><img src="images/Clipboard%203.png" class=" position-center-center"></figure>
+      </div>
+      <div class="footnotes"></div>
+      <div class="footer"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+</section><section class="variable-size-headings light full-image-container responsive present has-dark-background fitted" data-background-color="#0d86ff" data-updated="true" style="display: grid;">
+
+      <div class="header"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+      <div class="layout-full-image media-grid" style="width: 100%; font-size: 1rem;">
+        <figure style=""><img src="images/Clipboard%208.png" class=" size-contain position-center-center"></figure>
+        
+      </div>
+      <div class="footnotes"></div>
+      <div class="footer"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+</section><section class="variable-size-headings light full-image-container responsive present has-dark-background fitted" data-background-color="#1b65ff" data-updated="true" style="display: grid;">
+
+      <div class="header"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+      <div class="layout-full-image media-grid" style="width: 100%; font-size: 1rem;">
+        <figure style=""><img src="images/Clipboard%201.png" class=" size-contain position-center-center"></figure>
+        
+      </div>
+      <div class="footnotes"></div>
+      <div class="footer"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+</section><section class="variable-size-headings light default-container responsive present has-dark-background fitted" data-background-color="#2944ff" data-updated="true" style="display: grid;">
+
+      <div class="header"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+      <div class="layout-default" style="width: 100%; font-size: 1rem;">
+        <div style=""><blockquote class="is-single-quote"><div class="line"></div>
+<p>Decorator is a structural design pattern that lets you attach new behaviors to objects by placing these objects inside special wrapper objects that contain the behaviors. </p>
+<div class="line"></div></blockquote></div>
+      </div>
+      <div class="footnotes"></div>
+      <div class="footer"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+      
+</section><section class="variable-size-headings light v-split-container responsive present has-dark-background fitted" data-background-color="#372eff" data-updated="true" style="display: grid;">
+
+      <div class="header"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+      <div class="layout-v-split media-grid" style="width: 100%; font-size: 0.953rem;">
+        <div style=""><h2 id="whentouseadecorator">When to Use A Decorator?</h2>
+
+<h4 id="cross-cuttingconcernse.g.">Cross-cutting concerns e.g.</h4>
+
+<ul>
+<li>caching</li>
+<li>monitoring</li>
+</ul></div>
+        <figure style=""><img src="images/Clipboard%207.png" class=" position-center-center"></figure>
+      </div>
+      <div class="footnotes"></div>
+      <div class="footer"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+</section><section class="variable-size-headings light default-container responsive present has-dark-background fitted" data-background-color="#441cff" data-updated="true" style="display: grid;">
+
+      <div class="header"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+      <div class="layout-default" style="width: 100%; font-size: 1rem;">
+        <div style=""><h3 id="notthis:">Not this:</h3>
+
+<pre><code class="kotlin hljs"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">HttpDraftRepository</span></span>(
+    client: HttpHandler,
+    metrics: Metrics,
+    logging: Logging
+) : DraftRepository
+</code></pre></div>
+      </div>
+      <div class="footnotes"></div>
+      <div class="footer"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+      
+</section><section class="variable-size-headings light default-container responsive present has-dark-background fitted" data-background-color="#510aff" data-updated="true" style="display: grid;">
+
+      <div class="header"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+      <div class="layout-default" style="width: 100%; font-size: 0.953rem;">
+        <div style=""><h3 id="this:">This:</h3>
+
+<pre><code class="kotlin hljs"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">HttpDraftRepository</span></span>(
+    client: HttpHandler,
+) : DraftRepository
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">DraftRepositoryMonitor</span></span>(
+    draftRepo: DraftRepository,
+    metrics: Metrics,
+    logging: Logging
+) : DraftRepository
+</code></pre></div>
+      </div>
+      <div class="footnotes"></div>
+      <div class="footer"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+      
+</section><section class="variable-size-headings light v-split-container responsive present has-dark-background fitted" data-background-color="#5e00ff" data-updated="true" style="display: grid;">
+
+      <div class="header"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+      <div class="layout-v-split media-grid" style="width: 100%; font-size: 1rem;">
+        <div style=""><h1 id="anyway">Anyway</h1></div>
+        <figure style=""><img src="images/Clipboard%201.png" class=" size-contain position-center-center"></figure>
+      </div>
+      <div class="footnotes"></div>
+      <div class="footer"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+</section><section class="variable-size-headings light default-container responsive present has-dark-background fitted" data-background-color="#6a00ff" data-updated="true" style="display: grid;">
+
+      <div class="header"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+      <div class="layout-default" style="width: 100%; font-size: 1rem;">
+        <div style=""><h3 id="notifier">Notifier</h3>
+
+<pre><code class="hljs kotlin"><span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">Notifier</span> </span>{
+    <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">notify</span><span class="hljs-params">(message: <span class="hljs-type">String</span>)</span></span>
+}
+</code></pre></div>
+      </div>
+      <div class="footnotes"></div>
+      <div class="footer"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+      
+</section><section class="variable-size-headings light default-container responsive present has-dark-background fitted" data-background-color="#7700ff" data-updated="true" style="display: grid;">
+
+      <div class="header"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+      <div class="layout-default" style="width: 100%; font-size: 0.953rem;">
+        <div style=""><h3 id="emailnotifier">Email Notifier</h3>
+
+<pre><code class="hljs angelscript"><span class="hljs-keyword">class</span> <span class="hljs-symbol">EmailNotifierDecorator</span>(
+    <span class="hljs-symbol">val</span> <span class="hljs-symbol">notifier: <span class="hljs-symbol">Notifier</span>, 
+    <span class="hljs-symbol">val</span></span> <span class="hljs-symbol">emailClient: <span class="hljs-symbol">EmailClient</span>,
+</span>) : <span class="hljs-symbol">Notifier</span> {
+  <span class="hljs-keyword">override</span> fun notify(message: String) {
+      emailClient.send(message)
+      notifier.notify(message)
+  }
+}
+</code></pre></div>
+      </div>
+      <div class="footnotes"></div>
+      <div class="footer"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+      
+</section><section class="variable-size-headings light default-container responsive present has-dark-background fitted" data-background-color="#8400ff" data-updated="true" style="display: grid;">
+
+      <div class="header"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+      <div class="layout-default" style="width: 100%; font-size: 0.906rem;">
+        <div style=""><h3 id="slacknotifier">Slack Notifier</h3>
+
+<pre><code class="hljs angelscript"><span class="hljs-keyword">class</span> <span class="hljs-symbol">SlackNotifierDecorator</span>(
+    <span class="hljs-symbol">private</span> <span class="hljs-symbol">val</span> <span class="hljs-symbol">notifier: <span class="hljs-symbol">Notifier</span>,
+    <span class="hljs-symbol">private</span></span> <span class="hljs-symbol">val</span> <span class="hljs-symbol">slackClient: <span class="hljs-symbol">SlackClient</span>,
+</span>) : <span class="hljs-symbol">Notifier</span> {
+    <span class="hljs-keyword">override</span> fun notify(message: String) {
+        slackClient.ping(message)
+        notifier.notify(message)
+    }
+}
+</code></pre></div>
+      </div>
+      <div class="footnotes"></div>
+      <div class="footer"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+      
+</section><section class="variable-size-headings light default-container responsive present has-dark-background fitted" data-background-color="#9500ff" data-updated="true" style="display: grid;">
+
+      <div class="header"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+      <div class="layout-default" style="width: 100%; font-size: 0.906rem;">
+        <div style=""><h3 id="facebooknotifier">Facebook Notifier</h3>
+
+<pre><code class="hljs angelscript"><span class="hljs-keyword">class</span> <span class="hljs-symbol">FacebookNotifierDecorator</span>(
+    <span class="hljs-symbol">private</span> <span class="hljs-symbol">val</span> <span class="hljs-symbol">notifier: <span class="hljs-symbol">Notifier</span>,
+    <span class="hljs-symbol">private</span></span> <span class="hljs-symbol">val</span> <span class="hljs-symbol">facebookClient: <span class="hljs-symbol">FacebookClient</span>,
+</span>) : <span class="hljs-symbol">Notifier</span> {
+    <span class="hljs-keyword">override</span> fun notify(message: String) {
+        facebookClient.poke(message)
+        notifier.notify(message)
+    }
+}
+</code></pre></div>
+      </div>
+      <div class="footnotes"></div>
+      <div class="footer"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+      
+</section><section class="variable-size-headings light default-container responsive present has-dark-background fitted" data-background-color="#a700ff" data-updated="true" style="display: grid;">
+
+      <div class="header"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+      <div class="layout-default" style="width: 100%; font-size: 1rem;">
+        <div style=""><h3 id="inuse">In use</h3>
+
+<pre><code class="hljs lisp">val originalNotifier = OriginalNotifier()
+
+val myNotifier = 
+    FacebookNotifierDecorator(
+        <span class="hljs-name">originalNotifer</span>,
+        FacebookClient(),
+)
+</code></pre></div>
+      </div>
+      <div class="footnotes"></div>
+      <div class="footer"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+      
+</section><section class="variable-size-headings light v-split-container responsive present fit-warning has-dark-background fitted" data-background-color="#b800ff" data-updated="true" style="display: grid;">
+
+      <div class="header"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+      <div class="layout-v-split media-grid" style="width: 100%; font-size: 0.766rem;">
+        <div style=""><h1 id="decorateallthethings">DECORATE ALL THE THINGS!!!</h1></div>
+        <figure style=""><img src="images/Clipboard%204.png" class=" position-center-center"></figure>
+      </div>
+      <div class="footnotes"></div>
+      <div class="footer"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+</section><section class="variable-size-headings light default-container responsive present has-dark-background fitted" data-background-color="#c600f7" data-updated="true" style="display: grid;">
+
+      <div class="header"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+      <div class="layout-default" style="width: 100%; font-size: 0.813rem;">
+        <div style=""><h4 id="decorateallthethings">Decorate all the things</h4>
+
+<pre><code class="hljs lisp">val originalNotifier = OriginalNotifier()
+
+val myNotifier = SlackNotifierDecorator(
+    <span class="hljs-name">FacebookNotifierDecorator</span>(
+        <span class="hljs-name">EmailNotifierDecorator</span>(
+            <span class="hljs-name">originalNotifier</span>, 
+            EmailClient(),
+        ), 
+        FacebookClient(),
+    ), 
+    SlackClient(),
+)
+</code></pre></div>
+      </div>
+      <div class="footnotes"></div>
+      <div class="footer"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+      
+</section><section class="variable-size-headings light v-split-container responsive present has-dark-background fitted" data-background-color="#d200ed" data-updated="true" style="display: grid;">
+
+      <div class="header"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+      <div class="layout-v-split media-grid" style="width: 100%; font-size: 1rem;">
+        <div style=""><h1 id="butwait">BUT WAIT</h1></div>
+        <figure style=""><img src="images/photo-1599689444589-133726281155.jpg" class=" position-center-center"><figcaption>Photo by Michał Parzuchowski on <a href="https://unsplash.com/photos/people-walking-on-pedestrian-lane-during-daytime-Bt0PM7cNJFQ">Unsplash</a></figcaption></figure>
+      </div>
+      <div class="footnotes"></div>
+      <div class="footer"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+</section><section class="variable-size-headings light v-split-container responsive present has-dark-background fitted" data-background-color="#df00e3" data-updated="true" style="display: grid;">
+
+      <div class="header"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+      <div class="layout-v-split media-grid" style="width: 100%; font-size: 1rem;">
+        <div style=""><h1 id="kotlin">Kotlin!</h1></div>
+        <figure style=""><img src="images/photo-1588864721034-4afdb05a5799.jpg" class=" position-center-center"><figcaption>Photo by Marc Reichelt on <a href="https://unsplash.com/photos/yellow-and-black-triangular-on-gray-rock-near-body-of-water-during-daytime-azJJSiwWW90">Unsplash</a></figcaption></figure>
+      </div>
+      <div class="footnotes"></div>
+      <div class="footer"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+</section><section class="variable-size-headings light default-container responsive present fit-warning has-dark-background fitted" data-background-color="#e901d4" data-updated="true" style="display: grid;">
+
+      <div class="header"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+      <div class="layout-default" style="width: 100%; font-size: 0.625rem;">
+        <div style=""><h3 id="fromthefunctionalprogrammingplaybook">From the Functional Programming Playbook</h3>
+
+<h5 id="clojure">Clojure</h5>
+
+<pre><code class="hljs livecodeserver">;; Arguably <span class="hljs-keyword">a</span> bit cumbersome <span class="hljs-built_in">to</span> <span class="hljs-built_in">read</span>:
+user=&gt; (<span class="hljs-keyword">first</span> (.<span class="hljs-built_in">split</span> (.<span class="hljs-built_in">replace</span> (.toUpperCase <span class="hljs-string">"a b c d"</span>) <span class="hljs-string">"A"</span> <span class="hljs-string">"X"</span>) <span class="hljs-string">" "</span>))
+<span class="hljs-string">"X"</span>
+
+;; Perhaps easier <span class="hljs-built_in">to</span> <span class="hljs-built_in">read</span>:
+user=&gt; (-&gt; <span class="hljs-string">"a b c d"</span> 
+           .toUpperCase 
+           (.<span class="hljs-built_in">replace</span> <span class="hljs-string">"A"</span> <span class="hljs-string">"X"</span>) 
+           (.<span class="hljs-built_in">split</span> <span class="hljs-string">" "</span>) 
+           <span class="hljs-keyword">first</span>)
+</code></pre></div>
+      </div>
+      <div class="footnotes"></div>
+      <div class="footer"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+      
+</section><section class="variable-size-headings light cover-container responsive present has-dark-background fitted" data-background-color="#f103c2" data-updated="true" style="display: grid;">
+
+      <div class="header"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+      <div class="layout-cover" style="width: 100%; font-size: 1rem;">
+        <div style=""><h1 id="sowhatdowedoinkotlin">So what do we do in Kotlin?</h1></div>
+      </div>
+      <div class="footnotes"></div>
+      <div class="footer"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+      
+</section><section class="variable-size-headings light v-split-container responsive present has-dark-background fitted" data-background-color="#f806af" data-updated="true" style="display: grid;">
+
+      <div class="header"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+      <div class="layout-v-split media-grid" style="width: 100%; font-size: 0.813rem;">
+        <div style=""><h1 id="decoratorextensionfunctions">Decorator Extension Functions!</h1></div>
+        <figure style=""><img src="images/Clipboard%202.png" class=" position-center-center"></figure>
+      </div>
+      <div class="footnotes"></div>
+      <div class="footer"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+</section><section class="variable-size-headings light default-container responsive present fit-warning has-dark-background fitted" data-background-color="#ff0a9c" data-updated="true" style="display: grid;">
+
+      <div class="header"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+      <div class="layout-default" style="width: 100%; font-size: 0.766rem;">
+        <div style=""><h3 id="decoratorextensionfunctionexample">Decorator Extension Function Example</h3>
+
+<pre><code class="hljs kotlin">
+
+<span class="hljs-function"><span class="hljs-keyword">fun</span> Notifier.<span class="hljs-title">withEmail</span><span class="hljs-params">(emailClient: <span class="hljs-type">EmailClient</span>)</span></span> =
+    EmailNotifierDecorator(
+        <span class="hljs-keyword">this</span>,
+        emailClient,
+    )
+
+
+</code></pre></div>
+      </div>
+      <div class="footnotes"></div>
+      <div class="footer"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+      
+</section><section class="variable-size-headings light default-container responsive present has-dark-background fitted" data-background-color="#ff1984" data-updated="true" style="display: grid;">
+
+      <div class="header"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+      <div class="layout-default" style="width: 100%; font-size: 0.906rem;">
+        <div style=""><h3 id="before">Before</h3>
+
+<pre><code class="hljs lisp">val myNotifier = SlackNotifierDecorator(
+    <span class="hljs-name">FacebookNotifierDecorator</span>(
+        <span class="hljs-name">EmailNotifierDecorator</span>(
+            <span class="hljs-name">originalNotifier</span>, 
+            EmailClient(),
+        ), 
+        FacebookClient(),
+    ), 
+    SlackClient(),
+)
+</code></pre></div>
+      </div>
+      <div class="footnotes"></div>
+      <div class="footer"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+      
+</section><section class="variable-size-headings light default-container responsive present has-dark-background fitted" data-background-color="#ff276c" data-updated="true" style="display: grid;">
+
+      <div class="header"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+      <div class="layout-default" style="width: 100%; font-size: 1rem;">
+        <div style=""><h3 id="after">After</h3>
+
+<pre><code class="hljs reasonml"><span class="hljs-keyword">val</span> myNotifier = originalNotifier
+    .<span class="hljs-keyword">with</span><span class="hljs-constructor">Slack(SlackClient()</span>)
+    .<span class="hljs-keyword">with</span><span class="hljs-constructor">Email(EmailClient()</span>)
+    .<span class="hljs-keyword">with</span><span class="hljs-constructor">Facebook(FacebookClient()</span>)
+</code></pre></div>
+      </div>
+      <div class="footnotes"></div>
+      <div class="footer"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+      
+</section><section class="variable-size-headings light v-split-container responsive present has-dark-background fitted" data-background-color="#ff3654" data-updated="true" style="display: grid;">
+
+      <div class="header"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+      <div class="layout-v-split media-grid" style="width: 100%; font-size: 1rem;">
+        <div style=""><h3 id="realworldexample:">Real World Example:</h3>
+
+<h3 id="http4kfilters">http4k Filters</h3></div>
+        <figure style=""><img src="images/Clipboard%205.png" class=" position-center-center"></figure>
+      </div>
+      <div class="footnotes"></div>
+      <div class="footer"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+</section><section class="variable-size-headings light default-container responsive present has-dark-background fitted" data-background-color="#ff4142" data-updated="true" style="display: grid;">
+
+      <div class="header"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+      <div class="layout-default" style="width: 100%; font-size: 1rem;">
+        <div style=""><h1 id="filter">Filter</h1>
+
+<pre><code class="kotlin hljs">
+
+<span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-keyword">interface</span> Filter : <span class="hljs-params">(HttpHandler)</span></span> -&gt; HttpHandler
+
+
+</code></pre></div>
+      </div>
+      <div class="footnotes"></div>
+      <div class="footer"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+      
+</section><section class="variable-size-headings light default-container responsive present fit-warning has-dark-background fitted" data-background-color="#ff4b31" data-updated="true" style="display: grid;">
+
+      <div class="header"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+      <div class="layout-default" style="width: 100%; font-size: 0.766rem;">
+        <div style=""><h1 id="filterextensions">Filter Extensions</h1>
+
+<pre><code class="kotlin hljs">
+<span class="hljs-comment">// compose</span>
+<span class="hljs-function"><span class="hljs-keyword">fun</span> Filter.<span class="hljs-title">then</span><span class="hljs-params">(next: <span class="hljs-type">Filter</span>)</span></span>: Filter = 
+    Filter { <span class="hljs-keyword">this</span>(next(it)) }
+
+<span class="hljs-comment">// terminate</span>
+<span class="hljs-function"><span class="hljs-keyword">fun</span> Filter.<span class="hljs-title">then</span><span class="hljs-params">(next: <span class="hljs-type">HttpHandler</span>)</span></span>: HttpHandler = 
+    <span class="hljs-keyword">this</span>(next)
+    
+    
+</code></pre></div>
+      </div>
+      <div class="footnotes"></div>
+      <div class="footer"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+      
+</section><section class="variable-size-headings light default-container responsive present fit-warning has-light-background fitted" data-background-color="#ff551f" data-updated="true" style="display: grid;">
+
+      <div class="header"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+      <div class="layout-default" style="width: 100%; font-size: 0.672rem;">
+        <div style=""><h3 id="filterextensionsinuse">Filter Extensions In Use</h3>
+
+<pre><code class="kotlin hljs">
+<span class="hljs-keyword">val</span> myServer : HttpHandler = Server() 
+
+<span class="hljs-keyword">val</span> server = ServerFilters.OpenTelemetryTracing
+    .then(ServerFilters.SetContentType(ContentType.TEXT_PLAIN))
+    .then(ServerFilters.RequestTracing())
+    .then(DebuggingFilters.PrintRequestAndResponse(System.<span class="hljs-keyword">out</span>))
+    .then(myServer)
+
+
+</code></pre></div>
+      </div>
+      <div class="footnotes"></div>
+      <div class="footer"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+      
+</section><section class="variable-size-headings light default-container responsive present fit-warning has-light-background fitted" data-background-color="#ff6114" data-updated="true" style="display: grid;">
+
+      <div class="header"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+      <div class="layout-default" style="width: 100%; font-size: 0.672rem;">
+        <div style=""><h1 id="stackoffilters">Stack (of Filters)</h1>
+
+<pre><code class="hljs kotlin"><span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">stack</span><span class="hljs-params">(<span class="hljs-keyword">vararg</span> filters: <span class="hljs-type">Filter</span>)</span></span>: Filter =
+    filters.reduce { first, next -&gt; first.then(next) }
+    
+<span class="hljs-keyword">val</span> filterStack = stack(
+    ServerFilters.OpenTelemetryTracing,
+    ServerFilters.SetContentType(ContentType.TEXT_PLAIN),
+    ServerFilters.RequestTracing(),
+    DebuggingFilters.PrintRequestAndResponse(System.<span class="hljs-keyword">out</span>),
+)
+
+<span class="hljs-keyword">val</span> server = filterStack.then(myHandler)
+</code></pre></div>
+      </div>
+      <div class="footnotes"></div>
+      <div class="footer"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+      
+</section><section class="variable-size-headings light cover-container responsive present has-light-background fitted" data-background-color="#ff6d0c" data-updated="true" style="display: grid;">
+
+      <div class="header"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+      <div class="layout-cover" style="width: 100%; font-size: 0.906rem;">
+        <div style=""><h1 id="butwhataboutthenotifierdecorators">But What About The Notifier Decorators?</h1>
+
+<h4 id="cantheyhaveasingleextensionmethodlikefilterdoes">Can They Have A Single Extension Method Like <code class="hljs arcade"><span class="hljs-built_in">Filter</span></code> Does?</h4></div>
+      </div>
+      <div class="footnotes"></div>
+      <div class="footer"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+      
+</section><section class="variable-size-headings light v-split-container responsive present has-light-background fitted" data-background-color="#ff7a05" data-updated="true" style="display: grid;">
+
+      <div class="header"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+      <div class="layout-v-split media-grid" style="width: 100%; font-size: 0.859rem;">
+        <div style=""><h1 id="yeswecan">Yes We Can!</h1>
+
+<h3 id="ofcourseweareprogrammerswecandoanythingbyaddingmorelambdas">Of course, we are programmers, we can do anything by adding more lambdas</h3>
+
+<h6 id="butmaybeweshouldnt">(but maybe we shouldn't)</h6></div>
+        <figure style=""><img src="images/Clipboard%206.png" class=" position-center-center"></figure>
+      </div>
+      <div class="footnotes"></div>
+      <div class="footer"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+</section><section class="variable-size-headings light cover-container responsive present has-light-background fitted" data-background-color="#ff8800" data-updated="true" style="display: grid;">
+
+      <div class="header"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+      <div class="layout-cover" style="width: 100%; font-size: 1rem;">
+        <div style=""><h1 id="butletsnotdothishere">But let's not do this here</h1>
+
+<h4 id="doitatthisblogpostinstead.">Do it <a href="https://blog.gypsydave5.com/posts/2024/9/9/pattern-decorator-extension-functions/#evolution-to-final-form">at this blog post</a> instead.</h4></div>
+      </div>
+      <div class="footnotes"></div>
+      <div class="footer"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+      
+</section><section class="variable-size-headings light default-container responsive present has-light-background fitted" data-background-color="#ff9c00" data-updated="true" style="display: grid;">
+
+      <div class="header"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+      <div class="layout-default" style="width: 100%; font-size: 0.906rem;">
+        <div style=""><h1 id="inconclusion">In Conclusion</h1>
+
+<ul>
+<li>do decorators for cross cutting concerns</li>
+<li>don't put up with crazy nesting</li>
+<li>do use extension functions to make it linear</li>
+<li>look at http4k code for nice examples</li>
+</ul></div>
+      </div>
+      <div class="footnotes"></div>
+      <div class="footer"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+      
+</section><section class="variable-size-headings light cover-container responsive present has-light-background fitted" data-background-color="#ffb000" data-updated="true" style="display: grid;">
+
+      <div class="header"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+      <div class="layout-cover" style="width: 100%; font-size: 1rem;">
+        <div style=""><h1 id="thankyou">THANK YOU</h1></div>
+      </div>
+      <div class="footnotes"></div>
+      <div class="footer"><div class="leading"></div><div class="middle"></div><div class="trailing"></div></div>
+      
+</section></div>
+</div>
+<script src="engine/index.js"></script>
+<script src="engine/pptxgen.min.js"></script>
+<script src="engine/pfill.js"></script>
+<script src="engine/published.js"></script>
+<script>
+Reveal.configure({
+progress:true,
+progress:true,
+dependencies: [
+  {
+    src: "engine/highlight.js",
+    sync: true,
+    callback: function () {
+      hljs.initHighlightingOnLoad();
+    },
+  },
+],
+});
+</script>
+</body>
+</html>
