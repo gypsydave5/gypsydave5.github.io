@@ -140,7 +140,7 @@ val server = openTelemetryFilter(
 )
 ```
 
-But with a very simple [pair of extension functions](https://github.com/http4k/http4k/blob/87a98624c4428dc6d9b77a1a9628747363cac9a4/http4k-core/src/main/kotlin/org/http4k/core/Http4k.kt#L13-L15):
+But with a very simple [pair of extension functions](https://github.com/http4k/http4k/blob/87a98624c4428dc6d9b77a1a9628747363cac9a4/http4k-core/src/main/kotlin/org/http4k/core/Http4k.kt#L13-L15)[^2]:
 
 ```kotlin
 fun Filter.then(next: Filter): Filter = 
@@ -192,7 +192,8 @@ What follows is really an overgrown footnote.
 
 **/WARNING**
 
-If we declare the type of `NotifierDecorator` to be `(Notifier) -> Notifier`:
+If we declare the type of `NotifierDecorator` to be `(Notifier) -> Notifier`, using a [Functional (SAM) interface](https://kotlinlang.org/docs/fun-interfaces.html) in
+the same way that the http4k `Filter` does:
 
 ```kotlin
 fun interface NotifierDecorator : (Notifier) -> Notifier
@@ -267,4 +268,52 @@ val notifier = notifyWith(
 ).then(nullNotifier)
 ```
 
+## It Was Functional Programming All Along
+
+You may now be thinking "surely I can now abstract the idea of decorator composition into a generic function". And 
+the answer is, of course, yes you can. But you might be disappointed to discover that all you've really done is 
+rediscover function composition.
+
+If we were to write unary function composition as an operator in Kotlin we could have something like:
+
+```kotlin
+operator fun <P, Q, R> ((P) -> Q).plus(other: ((Q) -> R)): ((P) -> R) =
+    { other(this(it)) }
+```
+
+Which would let us rewrite all our decorator composers like this:
+
+```kotlin
+fun NotifierDecorator.then(next: NotifierDecorator): NotifierDecorator = 
+    NotifierDecorator (this + next)
+```
+
+or alternatively we could just do without a specific decorator composer:
+
+```kotlin
+val notifier: NotifierDecorator =
+    NotifierDecorator(
+        SlackNotifierDecorator(SlackClient())
+                + EmailNotifierDecorator(EmailClient())
+                + FacebookNotifierDecorator(FacebookClient())
+    )
+```
+
+Which looks even better if we choose to do without the SAM conversion to the `NotifierDecorator` type (we could choose to make it an alias):
+
+```kotlin
+val notifier = SlackNotifierDecorator(SlackClient())
+                + EmailNotifierDecorator(EmailClient())
+                + FacebookNotifierDecorator(FacebookClient())
+```
+
+We started with an object-oriented programming pattern, and ended up writing a classic functional programming higher-order function?
+Does this mean something? Well, a useful observation I would make is that functional programming is often about solving the problem
+of composition - how to put the bits of the pipe together - and that's really all we're seeing here
+
+
+
+https://kotlinlang.org/docs/fun-interfaces.html
+
 [^1]: Although it’s perhaps not how I’d do notifications.
+[^2]: If the first one looks a little confusing, read up about [Functional (SAM) Interfaces](https://kotlinlang.org/docs/fun-interfaces.html)
