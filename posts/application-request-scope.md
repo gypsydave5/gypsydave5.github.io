@@ -20,7 +20,7 @@ For the “Application Bean Scope” the documentation says:
 
 Which is wordy, and full of very Spring-y ideas I have no interest in. But, if we get rid of some of the unnecessary and translate the obscure we get to:
 
-> Scopes a single ~bean definition~ object to the lifecycle of a ~ServletContext~ web server.
+> Scopes a single ~~bean definition~~ object to the lifecycle of a ~~ServletContext~~ web server.
 
 A “Request Bean Scope” goes from
 
@@ -28,7 +28,7 @@ A “Request Bean Scope” goes from
 
 to:
 
-> Scopes a single ~bean definition~ object to the lifecycle of a single HTTP request. That is, each HTTP request has its own instance of ~a bean~ an object, created off the back of a ~single bean definition~ class.
+> Scopes a single ~~bean definition~~ object to the lifecycle of a single HTTP request. That is, each HTTP request has its own instance of ~~a bean~~ an object, created off the back of a ~~single bean definition~~ class.
 
 Which is all a very long winded way of saying the following:
 
