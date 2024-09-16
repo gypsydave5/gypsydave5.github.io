@@ -5,6 +5,11 @@ body {
   font: 1.2em/1.62 sans-serif;
 }
 
+blockquote {
+  border-left: 3px solid lightgrey;
+  padding-left: 10px;
+}
+
 h1,
 h2,
 h3 {
