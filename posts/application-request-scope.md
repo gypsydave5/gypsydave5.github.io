@@ -165,7 +165,9 @@ val perRequestOnlyOneRepo: PerRequestOnlyOneArticleRepository = { request ->
 ```
 
 ```kotlin
-class ArticleApp(private val perRequestOnlyOneArticleRepo: PerRequestOnlyOneArticleRepository) : HttpHandler {
+class ArticleApp(
+    private val perRequestOnlyOneArticleRepo: PerRequestOnlyOneArticleRepository
+) : HttpHandler {
     private fun getArticle(request: Request): Response {
         val articleRepo = perRequestOnlyOneArticleRepo(request)
         val article = articleRepo.getArticle()
@@ -188,11 +190,12 @@ application out of the configuration that, and what happens there is...
 ```kotlin
 val connectionPool = PGConnectionPool(port, url, connectionInfo)
 
-val perRequestOnlyOneArticleRepo: PerRequestOnlyOneArticleRepository = { request ->
-    val articleId = ArticleId.parse(req.path("articleId"))
+val perRequestOnlyOneArticleRepo: PerRequestOnlyOneArticleRepository = 
+    { request ->
+        val articleId = ArticleId.parse(req.path("articleId"))
 
-    PostgresOnlyOneArticleRepository(connectionPool, articleId)
-}
+        PostgresOnlyOneArticleRepository(connectionPool, articleId) 
+    }
 
 val app = ArticleApp(perRequestOnlyOneArticleRepo)
 
@@ -203,12 +206,13 @@ This doesn't seem like much, but when you're creating multiple dependencies both
 closure, it's very easy to do this:
 
 ```kotlin
-val perRequestOnlyOneArticleRepo: PerRequestOnlyOneArticleRepository = { request ->
-    val connectionPool = PGConnectionPool(port, url, connectionInfo)
-    val articleId = ArticleId.parse(req.path("articleId"))
+val perRequestOnlyOneArticleRepo: PerRequestOnlyOneArticleRepository = 
+    { request ->
+        val connectionPool = PGConnectionPool(port, url, connectionInfo)
+        val articleId = ArticleId.parse(req.path("articleId"))
 
-    PostgresOnlyOneArticleRepository(connectionPool, articleId)
-}
+        PostgresOnlyOneArticleRepository(connectionPool, articleId)
+    }
 
 val app = ArticleApp(perRequestOnlyOneArticleRepo)
 
@@ -220,7 +224,7 @@ and pretty soon the database runs out of connections, bringing everything to a g
 
 ---
 
-Another example, but slightly more understandable, is moving authentication inside the domain. Returning to the more
+Another example, but slightly more understandable, is moving the act of authentication inside our class. Returning to the more
 sane version of our repository:
 
 ```kotlin
@@ -246,7 +250,7 @@ class PostgresArticleRepository(connectionPool: ConnectionPool, authenticator: A
 
 But what is the authenticator authenticating? Apparently nothing at all... but it's giving us a nice domain type as a `UserId`.
 
-Somewhere on the outside however...
+Meanwhile, somewhere on the outside...
 
 ```kotlin
 class Authenticator(userService: UserService, request: Request) {
@@ -257,8 +261,10 @@ class Authenticator(userService: UserService, request: Request) {
 }
 ```
 
-This is hugely simplified. And, well, you probably feel like you're a bit safer from coupling your `Repository` to
-a request because we're not passing one in the constructor. But look:
+This is a hugely simplified version of an authentictation flow, but you get the idea I hope.
+
+You now might feel like you're a bit safer from coupling your `Repository` to a request because we're not passing one in
+the constructor. But look:
 
 ```kotlin
 val connectionPool = PGConnectionPool(port, url, connectionInfo)
@@ -273,8 +279,9 @@ val perRequestArticleRepo: PerRequesArticleRepository = { request ->
 Again, you've got to the same pattern: the dependency on `Request` is transitive.
 
 On top of this, what happens when you want to test the behaviour your `ArticleRepository` when dealing with interactions
-with multiple users (for instance: "Bob saves an article, so Mary can't access it")? You'd have to mutate the `Authenticator` between
-interactions so that it returns a different user... or only test the `PerRequest` version, and so every test becomes coupled to the HTTP adaptors.
+with multiple users (for instance: "Bob saves an article, so Mary can't access it")? You'd have to mutate some stub version of the  `Authenticator`
+between interactions so that it returns a different user... or only test the `PerRequest` version, and so every test becomes coupled 
+to the HTTP adaptors. These all sound like bad choices.
 
 ---
 
@@ -301,19 +308,16 @@ All of those objects share at least one reason to change (a new request came in)
 instance) do not share that reason for change. They are _not_ in the _Request Scope_. They are in the _Application Scope_. And
 just as the dependency becomes transitive, the reason for change becomes transitive. You do not want to do this.
 
-In the words of Robert Martin, when clarifying his Single Responsibility Principle: 
+In the words of Robert Martin, when clarifying the Single Responsibility Principle: 
 
 > Gather together the things that change for the same reasons. Separate those things that change for different reasons.[^2]
 
-So think of it as a special case of the Single Responsibility Principle. Or think about it as keeping request scoped things together. Or just think of it as some special case of mechanical sympathy, engineering your application to fit in with the flow of web servers.
-
-Think of it any way you want, but _please_ think about it, notice it when it's happening, pay attention to your tests and
-_don't try and hide it under the carpet with a lambda_.
+So think of it as a special case of the Single Responsibility Principle. Or think about it as keeping request scoped things together.
+Or just think of it as some special case of mechanical sympathy, engineering your application to fit in with the flow of web servers.
 
 
 
-[^1]: That's written with object-oriented programming in mind, but the functional equivalent is the same - instead of objects you'd
-build some functions, and when a request comes in you'd call the functions
+[^1]: That's written with object-oriented programming in mind, but the functional equivalent is the same - instead of objects you'd build some functions, and when a request comes in you'd call the functions
 [^2]: https://blog.cleancoder.com/uncle-bob/2014/05/08/SingleReponsibilityPrinciple.html
 
 
