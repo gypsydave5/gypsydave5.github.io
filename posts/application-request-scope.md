@@ -30,17 +30,17 @@ to:
 
 > Scopes a single ~~bean definition~~ object to the lifecycle of a single HTTP request. That is, each HTTP request has its own instance of ~~a bean~~ an object, created off the back of a ~~single bean definition~~ class.
 
-Which is all a very long winded way of saying the following:
+Which is all a very long-winded way of saying the following:
 
 > Some objects you can have when you have started your application. Other objects you can only have when you get an HTTP request.
 
 Spring makes this quite hard to understand all of this because it bundles up the construction of objects into these bean _things_, and you use an annotation on a class to indicate how and where you would create it. Happily other web libraries are available where one can either create objects with constructors or a data type, where object creation isn’t quite so fraught.
 
-But by making this quite obvious idea in every other web library:
+But by making this quite obvious idea:
 
 > Some objects you can have when you have started your application. Other objects you can only have when you get an HTTP request.
 
-We can easily forget about it and, worse, gloss over its consequences for dependency management and how to design a web application.
+implicit in every other web library, we can easily forget about it and, worse, gloss over its consequences for dependency management and how to design a web application.
 
 ---
 
@@ -68,12 +68,12 @@ class PostgresArticleRepository(connectionPool: ConnectionPool): ArticleReposito
 }
 ```
 
-And a nice web server / http handler to put it on the internet. We’ll use http4k:
+And a nice web server / HTTP handler to put it on the internet. We’ll use http4k:
 
 ```kotlin
 val server : HttpHandler = routes(
     "/articles/{articleId}" bind GET to { request: Request ->
-        val articleId = ArticleId.parse(req.path("articleId"))
+        val articleId = ArticleId.parse(request.path("articleId"))
         val article = articleRepository.getArticle(articleId)
         Response(Status.OK).body(article.toHtml())
     }
@@ -85,7 +85,7 @@ and to tidy up, we can make a nice object for our server which has its dependenc
 ```kotlin
 class ArticleApp(private val articleRepository: ArticleRepository) : HttpHandler {
     private fun getArticle(request: Request): Response {
-        val articleId = ArticleId.parse(req.path("articleId"))
+        val articleId = ArticleId.parse(request.path("articleId"))
         val article = articleRepository.getArticle(articleId)
         return Response(Status.OK).body(article.toHtml())
     }
@@ -123,7 +123,7 @@ And if we want to use it we'd have to do something like this:
 ```kotlin
 class ArticleApp(private val connectionPool: ConnectionPool) : HttpHandler {
     private fun getArticle(request: Request): Response {
-        val articleId = ArticleId.parse(req.path("articleId"))
+        val articleId = ArticleId.parse(request.path("articleId"))
         val article = PostgresOnlyOneRepository(connectionPool, articleId).getArticle()
         return Response(Status.OK).body(article.toHtml())
     }
@@ -158,7 +158,7 @@ inside it looks like this:
 
 ```kotlin
 val perRequestOnlyOneRepo: PerRequestOnlyOneArticleRepository = { request ->
-    val articleId = ArticleId.parse(req.path("articleId"))
+    val articleId = ArticleId.parse(request.path("articleId"))
     
     PostgresOnlyOneArticleRepository(connectionPool, articleId)
 }
@@ -192,7 +192,7 @@ val connectionPool = PGConnectionPool(port, url, connectionInfo)
 
 val perRequestOnlyOneArticleRepo: PerRequestOnlyOneArticleRepository = 
     { request ->
-        val articleId = ArticleId.parse(req.path("articleId"))
+        val articleId = ArticleId.parse(request.path("articleId"))
 
         PostgresOnlyOneArticleRepository(connectionPool, articleId) 
     }
@@ -209,7 +209,7 @@ closure, it's very easy to do this:
 val perRequestOnlyOneArticleRepo: PerRequestOnlyOneArticleRepository = 
     { request ->
         val connectionPool = PGConnectionPool(port, url, connectionInfo)
-        val articleId = ArticleId.parse(req.path("articleId"))
+        val articleId = ArticleId.parse(request.path("articleId"))
 
         PostgresOnlyOneArticleRepository(connectionPool, articleId)
     }
@@ -295,12 +295,15 @@ an argument:
 
 ```kotlin
 class PostgresArticleRepository(connectionPool: ConnectionPool): ArticleRepository {
-    fun getArticle(articleId: ArticleId, userId: UserId): Article = connectionPool.use { connection ->
-        val article = fetch(articleId, connection)
-        if (userId.allowedToView(article)) article else error("unauthorized")
-    }
+    fun getArticle(articleId: ArticleId, userId: UserId): Article =
+        connectionPool.use { connection ->
+            val article = fetch(articleId, connection)
+            if (userId.allowedToView(article)) article else error("unauthorized") 
+        }
 }
 ```
+
+and to keep the concern of authentication away from authorization (our repo needs to do authorization, not authentication). 
 
 The broader principle is to recognise that `UserId` is a _Request Scoped_ object. It should live with other _Request Scoped_ objects, conventionally within the parameters of methods called in a request. If another object depends on a _Request Scoped_ object, it too becomes _Request Scoped_ (because that dependency is transitive).
 
@@ -314,7 +317,6 @@ In the words of Robert Martin, when clarifying the Single Responsibility Princip
 
 So think of it as a special case of the Single Responsibility Principle. Or think about it as keeping request scoped things together.
 Or just think of it as some special case of mechanical sympathy, engineering your application to fit in with the flow of web servers.
-
 
 
 [^1]: That's written with object-oriented programming in mind, but the functional equivalent is the same - instead of objects you'd build some functions, and when a request comes in you'd call the functions
