@@ -287,8 +287,7 @@ to the HTTP adaptors. These all sound like bad choices.
 
 You can make this work. You can make _anything_ work - you're a software developer. A few lambdas can easily paper over
 a poor design. However, you _will_ find it increasingly hard to extend your application and to test your code: tests that allow an
-`Authenticator` with the above design will first become complex, and then become impossible to change because of this complexity
-- this _incidental_ complexity that we've inflicted upon ourselves.
+`Authenticator` with the above design will first become complex, and then become impossible to change because of this complexity - this _incidental_ complexity that we've inflicted upon ourselves.
 
 The local answer to this particular problem is to let the `ArticleRepository.getArticle()` method take a `UserId` as 
 an argument:

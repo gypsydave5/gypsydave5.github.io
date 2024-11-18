@@ -36,3 +36,7 @@ pre {
     max-width: none;
   }
 }
+
+@view-transition {
+  navigation: auto;
+}
