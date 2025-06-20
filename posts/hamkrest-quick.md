@@ -344,7 +344,7 @@ So why would you even want to make your own matchers for Hamkrest?
 
 In order to have a domain-specific (testing) language to test _your_ domain.
 
-For example, the increasingly-popular Kotlin HTTP library Http4k comes bundled with a selection of Hamkrest matchers for asserting on its domain - the domain of HTTP.
+For example, the increasingly-popular Kotlin HTTP library http4k comes bundled with a selection of Hamkrest matchers for asserting on its domain - the domain of HTTP.
 
 These matchers give you a good interface for asserting on http4k objects in tests. You can (and will) reuse them time and again.
 
@@ -533,7 +533,7 @@ fun <S : CaseSensitivity> hasGivenName(matcher: StringMatcher<S>): Matcher<User>
     }
 ```
 
-This is about as complicated as it’ll get with the built in matchers, as it’s a `StringMatcher` we’re taking as an argument (not unreasonably as it’s a string we’re matching against).
+This is about as complicated as it’ll get with the built-in matchers, as it’s a `StringMatcher` we’re taking as an argument (not unreasonably as it’s a string we’re matching against).
 
 And that’s it! We now have the tools we need to start growing our test assertions upwards, towards our domain types, and reusing them again and again.
 
