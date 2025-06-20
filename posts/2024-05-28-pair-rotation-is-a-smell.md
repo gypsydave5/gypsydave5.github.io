@@ -10,8 +10,6 @@ tags:
   - team dynamics
 ---
 
-# Pair Rotation is a Smell
-
 It's Tuesday morning. Time for the daily stand-up. The cards are moved, updates given, and then comes the familiar, slightly awkward question: "So... do we rotate pairs today?"
 
 A nervous energy fills the air. Perhaps you've had enough of working on a dry database migration for what feels like an eternity and you're desperate for a change of scenery. Maybe someone else has their eye on that shiny new third-party integration and wants a piece of the action. Or maybe you just want to find out how that database migration is *actually* working without having to interrupt the pair already on it.
