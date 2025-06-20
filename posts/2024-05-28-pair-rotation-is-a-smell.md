@@ -2,7 +2,7 @@
 title: "Pair Rotation is a Smell"
 date: 2025-06-20 22:52:55
 published: true
-description: "Why rigid pair rotation policies can be counterproductive in software teams"
+description: "This article argues that scheduled pair rotation is a smell, treating the symptom of knowledge silos rather than the disease of oversized user stories."
 tags:
   - programming
   - pair programming
