@@ -1,10 +1,8 @@
 ---
 title: "Pair Rotation is a Smell"
-date: 2025-06-20
+date: 2025-06-20 22:52:55
 published: true
 description: "Why rigid pair rotation policies can be counterproductive in software teams"
-toc: false
-images:
 tags:
   - programming
   - pair programming
@@ -90,7 +88,11 @@ Challenge your team. Make it a primary goal that no story is large enough to sur
 [^2]: Trunk Based Development is the practice of having all developers commit to a single shared branch (the 'trunk', or 'main'). For a comprehensive guide, see trunkbaseddevelopment.com.
 
 [^3]: The benefits of small stories (or small batch sizes) are a cornerstone of modern software development, supported by multiple methodologies:
-* **Extreme Programming (XP):** The practice of "Small Releases" is core to XP, advocating for releasing the smallest increment of value to get rapid feedback. See Ron Jeffries' article "Getting to Small Stories".
-* **Lean & DevOps (DORA):** The book "Accelerate" (Forsgren, Humble, and Kim, 2018) provides years of statistical data showing that small batch sizes are a key predictor of elite-performing teams, directly improving throughput and stability.
-* **User Story Best Practice (INVEST):** The INVEST acronym, created by Bill Wake, provides a checklist for good user stories. The "S" stands for "Small," highlighting its importance. See Mike Cohn's "User Stories Applied" for a detailed breakdown.
-* **Product Development Flow:** Don Reinertsen's "The Principles of Product Development Flow" makes a powerful economic case for why reducing batch size is critical for reducing queues and improving overall development speed.
+
+    * **Extreme Programming (XP):** The practice of "Small Releases" is core to XP, advocating for releasing the smallest increment of value to get rapid feedback. See Ron Jeffries' article "Getting to Small Stories".
+
+    * **Lean & DevOps (DORA):** The book "Accelerate" (Forsgren, Humble, and Kim, 2018) provides years of statistical data showing that small batch sizes are a key predictor of elite-performing teams, directly improving throughput and stability.
+
+    * **User Story Best Practice (INVEST):** The INVEST acronym, created by Bill Wake, provides a checklist for good user stories. The "S" stands for "Small," highlighting its importance. See Mike Cohn's "User Stories Applied" for a detailed breakdown.
+
+    * **Product Development Flow:** Don Reinertsen's "The Principles of Product Development Flow" makes a powerful economic case for why reducing batch size is critical for reducing queues and improving overall development speed.
