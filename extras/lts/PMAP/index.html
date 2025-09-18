@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="viewport-fit=cover, width=device-width, height=device-height, initial-scale=1" />
+<style>
+:root{
+--logo: ;
+--logo-size: ;
+--header-scale-intensity: ;
+--darkaccent1color: #000;
+--lightaccent1color: #FFF;
+--accent2: #43aa8b;
+--accent3: #f9c74f;
+--accent4: #90be6d;
+--accent5: #f8961e;
+--accent6: #577590;
+--lighttitletextcolor: #FFF;
+--darktitletextcolor: #000;
+--lightbodytextcolor: #FFF;
+--darkbodytextcolor: #000;
+--lightbackgroundcolor: #FFF;
+--darkbackgroundcolor: #000;
+--bodyfont: Helvetica;
+--titlefont: Helvetica;
+--lightframecolor: #FFFFFF;
+--darkframecolor: #000000;
+} 
+
+</style>
+<link rel="stylesheet" href="engine/main.css">
+<link rel="stylesheet" href="theme/zurich.css">
+<link rel="stylesheet" href="engine/katex/katex.min.css">
+</head>
+<body class="responsive ">
+<div class="reveal">
+<div class="slides">
+<section class="fixed-size-headings light title-container responsive" style="">
+<div class="header">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div> 
+<div class="layout-title slide-contents"> 
+ <div class="element-group">
+  <h2 id="pmapinkotlin">PMap in Kotlin</h2> 
+  <h4 id="or">or</h4> 
+  <h3 id="howtomakefriendsandinfluencepeoplewithfunctionalprogrammingandconcurrency"><em>How to make friends and influence people with functional programming and concurrency</em></h3>
+ </div> 
+</div> 
+<div class="footnotes"></div> 
+<div class="footer">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div>
+</section>
+<section class="fixed-size-headings light title-and-columns-container responsive" style="">
+<div class="header">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div> 
+<div class="layout-title-and-columns slide-contents columns-items-3 media-grid"> 
+ <div class="title-part element-group">
+  <h1 id="agoodday">A Good Day</h1>
+ </div> 
+ <figure class="">
+  <img src="media/Clipboard 3.png" class=" size-contain position-center-center" />
+ </figure>
+ <figure class="">
+  <img src="media/Clipboard 4.png" class=" size-contain position-center-center" />
+ </figure>
+ <figure class="">
+  <img src="media/Clipboard 6.png" class=" size-contain position-center-center" />
+ </figure> 
+</div> 
+<div class="footnotes"></div> 
+<div class="footer">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div>
+</section>
+<section class="fixed-size-headings light cover-container responsive" style="">
+<div class="header">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div> 
+<div class="layout-cover slide-contents"> 
+ <div class="element-group">
+  <h1 id="oneweirdtrick">One Weird Trick</h1>
+ </div> 
+</div> 
+<div class="footnotes"></div> 
+<div class="footer">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div>
+</section>
+<section class="fixed-size-headings light default-container responsive" style="">
+<div class="header">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div> 
+<div class="layout-default slide-contents media-grid"> 
+ <div class="element-group has-media has-media-last">
+  <h1 id="map"><code>map</code></h1> 
+  <div class="single-image-wrapper">
+   <figure class="">
+    <img src="media/overview.svg" class=" size-contain position-center-center" />
+   </figure>
+  </div>
+ </div> 
+</div> 
+<div class="footnotes"></div> 
+<div class="footer">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div>
+</section>
+<section class="fixed-size-headings light full-image-container responsive" style="">
+<div class="header">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div> 
+<div class="layout-full-image slide-contents media-grid"> 
+ <figure class="">
+  <img src="media/Clipboard.png" class=" size-contain position-center-center" />
+ </figure> 
+</div> 
+<div class="footnotes"></div> 
+<div class="footer">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div>
+</section>
+<section class="fixed-size-headings light full-image-container responsive" style="">
+<div class="header">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div> 
+<div class="layout-full-image slide-contents media-grid"> 
+ <figure class="">
+  <img src="media/sync1.svg" class=" size-contain position-center-center" />
+ </figure> 
+</div> 
+<div class="footnotes"></div> 
+<div class="footer">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div>
+</section>
+<section class="fixed-size-headings light full-image-container responsive" style="">
+<div class="header">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div> 
+<div class="layout-full-image slide-contents media-grid"> 
+ <figure class="">
+  <img src="media/sync2.svg" class=" size-contain position-center-center" />
+ </figure> 
+</div> 
+<div class="footnotes"></div> 
+<div class="footer">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div>
+</section>
+<section class="fixed-size-headings light full-image-container responsive" style="">
+<div class="header">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div> 
+<div class="layout-full-image slide-contents media-grid"> 
+ <figure class="">
+  <img src="media/sync3.svg" class=" size-contain position-center-center" />
+ </figure> 
+</div> 
+<div class="footnotes"></div> 
+<div class="footer">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div>
+</section>
+<section class="fixed-size-headings light full-image-container responsive" style="">
+<div class="header">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div> 
+<div class="layout-full-image slide-contents media-grid"> 
+ <figure class="">
+  <img src="media/sync4.svg" class=" size-contain position-center-center" />
+ </figure> 
+</div> 
+<div class="footnotes"></div> 
+<div class="footer">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div>
+</section>
+<section class="fixed-size-headings light full-image-container responsive" style="">
+<div class="header">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div> 
+<div class="layout-full-image slide-contents media-grid"> 
+ <figure class="">
+  <img src="media/sync5.svg" class=" size-contain position-center-center" />
+ </figure> 
+</div> 
+<div class="footnotes"></div> 
+<div class="footer">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div>
+</section>
+<section class="fixed-size-headings light full-image-container responsive" style="">
+<div class="header">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div> 
+<div class="layout-full-image slide-contents media-grid"> 
+ <figure class="">
+  <img src="media/sync6.svg" class=" size-contain position-center-center" />
+ </figure> 
+</div> 
+<div class="footnotes"></div> 
+<div class="footer">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div>
+</section>
+<section class="fixed-size-headings light full-image-container responsive" style="">
+<div class="header">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div> 
+<div class="layout-full-image slide-contents media-grid"> 
+ <figure class="">
+  <img src="media/sync7.svg" class=" size-contain position-center-center" />
+ </figure> 
+</div> 
+<div class="footnotes"></div> 
+<div class="footer">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div>
+</section>
+<section class="fixed-size-headings light full-image-container responsive" style="">
+<div class="header">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div> 
+<div class="layout-full-image slide-contents media-grid"> 
+ <figure class="">
+  <img src="media/sync8.svg" class=" size-contain position-center-center" />
+ </figure> 
+</div> 
+<div class="footnotes"></div> 
+<div class="footer">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div>
+</section>
+<section class="fixed-size-headings light cover-container responsive" style="">
+<div class="header">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div> 
+<div class="layout-cover slide-contents"> 
+ <div class="element-group">
+  <h1 id="rulesformap">Rules For <code>map</code></h1> 
+  <h3 id="1.sizeofoutputissameassizeofinput">1. Size of output is same as size of input</h3> 
+  <h3 id="2.wedontchangetheinput">2. We don't change the input</h3> 
+  <h3 id="3.thefunctionwemapwithshouldbepure.">3. <strong>The function we map with should be "pure".</strong></h3>
+ </div> 
+</div> 
+<div class="footnotes"></div> 
+<div class="footer">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div>
+</section>
+<section class="fixed-size-headings light cover-container responsive" style="">
+<div class="header">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div> 
+<div class="layout-cover slide-contents"> 
+ <div class="element-group">
+  <h1 id="3.thefunctionwemapwithshouldbepure.">3. <mark><strong>The function we map with should be "pure".</strong></mark></h1>
+ </div> 
+</div> 
+<div class="footnotes"></div> 
+<div class="footer">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div>
+</section>
+<section class="fixed-size-headings light title-container responsive" style="">
+<div class="header">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div> 
+<div class="layout-title slide-contents"> 
+ <div class="element-group">
+  <h2 id="butwhatifits...slow">But what if it's... slow?</h2>
+ </div> 
+</div> 
+<div class="footnotes"></div> 
+<div class="footer">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div>
+</section>
+<section class="fixed-size-headings light default-container responsive" style="">
+<div class="header">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div> 
+<div class="layout-default slide-contents media-grid"> 
+ <div class="element-group has-media has-media-last">
+  <h2 id="butwhatifits...slow">But what if it's... slow?</h2> 
+  <div class="single-image-wrapper">
+   <figure class="">
+    <img src="media/sync8.svg" class=" size-contain position-center-center" />
+   </figure>
+  </div>
+ </div> 
+</div> 
+<div class="footnotes"></div> 
+<div class="footer">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div>
+</section>
+<section class="fixed-size-headings light grid-container responsive" style="">
+<div class="header">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div> 
+<div class="layout-grid {@{HAS_MEDIA_CLASSES}@} slide-contents grid-items-0 has-only-media media-grid"> 
+</div> 
+<div class="footnotes"></div> 
+<div class="footer">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div>
+</section>
+<section class="fixed-size-headings light cover-container responsive" style="">
+<div class="header">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div> 
+<div class="layout-cover slide-contents"> 
+ <div class="element-group">
+  <h1 id="hopethroughpurity">Hope through purity</h1>
+ </div> 
+</div> 
+<div class="footnotes"></div> 
+<div class="footer">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div>
+</section>
+<section class="fixed-size-headings light v-split-container responsive" style="">
+<div class="header">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div> 
+<div class="layout-v-split slide-contents"> 
+ <div class="element-group">
+  <h2 id="wellthatsembarrassing...">Well, that's Embarrassing...</h2>
+ </div> 
+ <div class="element-group">
+  <p><strong>Embarrassingly Parallel</strong> (<em>adj.</em>): A problem so straightforward to solve with concurrency that explaining it to another developer feels awkward, as if you're stating the obvious.</p>
+ </div> 
+</div> 
+<div class="footnotes"></div> 
+<div class="footer">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div>
+</section>
+<section class="fixed-size-headings light title-container responsive" style="">
+<div class="header">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div> 
+<div class="layout-title slide-contents"> 
+ <div class="element-group">
+  <h2 id="pmap:anniceabstraction"><code>pmap</code>: An Nice Abstraction</h2>
+ </div> 
+</div> 
+<div class="footnotes"></div> 
+<div class="footer">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div>
+</section>
+<section class="fixed-size-headings light grid-container responsive" style="">
+<div class="header">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div> 
+<div class="layout-grid {@{HAS_MEDIA_CLASSES}@} slide-contents grid-items-5 media-grid"> 
+ <div class="element-group">
+  <h2 id="priorart:pmapelsewhere">Prior Art: <code>pmap</code> Elsewhere</h2>
+ </div>
+ <div class="element-group">
+  <h3 id="clojure"><a href="https://clojuredocs.org/clojure.core/pmap">Clojure</a></h3> 
+  <pre><code class="clojure">;; Sequential
+(map inc [1 2 3 4])
+
+;; Parallel
+(pmap inc [1 2 3 4])
+</code></pre>
+ </div>
+ <div class="element-group">
+  <h3 id="scala"><a href="https://docs.scala-lang.org/overviews/parallel-collections/overview.html">Scala</a></h3> 
+  <pre><code class="scala">// Sequential
+List(1, 2, 3, 4).map(_ + 1)
+
+// Parallel
+List(1, 2, 3, 4).par.map(_ + 1)
+</code></pre>
+ </div>
+ <div class="element-group">
+  <h3 id="rust"><a href="https://docs.rs/rayon/latest/rayon/iter/trait.ParallelIterator.html">Rust</a></h3> 
+  <pre><code class="rust">// Sequential
+vec![1, 2, 3, 4].iter().map(|n| n + 1).collect::&lt;Vec&lt;i32&gt;&gt;();
+
+// Parallel (with the rayon crate)
+use rayon::prelude::*;
+vec![1, 2, 3, 4].par_iter().map(|n| n + 1).collect::&lt;Vec&lt;i32&gt;&gt;();
+</code></pre>
+ </div>
+ <div class="element-group">
+  <h3 id="python"><a href="https://docs.python.org/3/library/multiprocessing.html">Python</a></h3> 
+  <pre><code class="python"># Sequential
+def increment(n):
+    return n + 1
+
+list(map(increment, [1, 2, 3, 4]))
+
+# Parallel
+from multiprocessing import Pool
+
+with Pool() as p:
+    p.map(increment, [1, 2, 3, 4])
+</code></pre>
+ </div> 
+</div> 
+<div class="footnotes"></div> 
+<div class="footer">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div>
+</section>
+<section class="fixed-size-headings light title-container responsive" style="">
+<div class="header">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div> 
+<div class="layout-title slide-contents"> 
+ <div class="element-group">
+  <h2 id="backtotherobots">Back to the robots</h2>
+ </div> 
+</div> 
+<div class="footnotes"></div> 
+<div class="footer">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div>
+</section>
+<section class="fixed-size-headings light default-container responsive" style="">
+<div class="header">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div> 
+<div class="layout-default slide-contents media-grid"> 
+ <div class="element-group has-media has-media-last">
+  <h1 id="moarrobots">MOAR ROBOTS</h1> 
+  <div class="single-image-wrapper">
+   <figure class="">
+    <img src="media/con1.svg" class=" size-contain position-center-center" />
+   </figure>
+  </div>
+ </div> 
+</div> 
+<div class="footnotes"></div> 
+<div class="footer">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div>
+</section>
+<section class="fixed-size-headings light full-image-container responsive" style="">
+<div class="header">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div> 
+<div class="layout-full-image slide-contents media-grid"> 
+ <figure class="">
+  <img src="media/con2.svg" class=" size-contain position-center-center" />
+ </figure> 
+</div> 
+<div class="footnotes"></div> 
+<div class="footer">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div>
+</section>
+<section class="fixed-size-headings light full-image-container responsive" style="">
+<div class="header">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div> 
+<div class="layout-full-image slide-contents media-grid"> 
+ <figure class="">
+  <img src="media/co3.svg" class=" size-contain position-center-center" />
+ </figure> 
+</div> 
+<div class="footnotes"></div> 
+<div class="footer">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div>
+</section>
+<section class="fixed-size-headings light full-image-container responsive" style="">
+<div class="header">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div> 
+<div class="layout-full-image slide-contents media-grid"> 
+ <figure class="">
+  <img src="media/con4.svg" class=" size-contain position-center-center" />
+ </figure> 
+</div> 
+<div class="footnotes"></div> 
+<div class="footer">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div>
+</section>
+<section class="fixed-size-headings light full-image-container responsive" style="">
+<div class="header">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div> 
+<div class="layout-full-image slide-contents media-grid"> 
+ <figure class="">
+  <img src="media/con5.svg" class=" size-contain position-center-center" />
+ </figure> 
+</div> 
+<div class="footnotes"></div> 
+<div class="footer">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div>
+</section>
+<section class="fixed-size-headings light title-container responsive" style="">
+<div class="header">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div> 
+<div class="layout-title slide-contents"> 
+ <div class="element-group">
+  <h2 id="alltherobotsallthetime">All the robots, all the time?</h2>
+ </div> 
+</div> 
+<div class="footnotes"></div> 
+<div class="footer">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div>
+</section>
+<section class="fixed-size-headings light default-container responsive" style="">
+<div class="header">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div> 
+<div class="layout-default slide-contents media-grid"> 
+ <div class="element-group has-media has-media-last">
+  <h2 id="dontdosyourself">Don't DoS Yourself</h2> 
+  <div class="single-image-wrapper">
+   <figure class="">
+    <img src="media/dos.svg" class=" size-contain position-center-center" />
+   </figure>
+  </div>
+ </div> 
+</div> 
+<div class="footnotes"></div> 
+<div class="footer">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div>
+</section>
+<section class="fixed-size-headings light full-image-container responsive" style="">
+<div class="header">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div> 
+<div class="layout-full-image slide-contents media-grid"> 
+ <figure class="">
+  <img src="media/Clipboard 2.png" class=" size-contain position-center-center" />
+ </figure> 
+</div> 
+<div class="footnotes"></div> 
+<div class="footer">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div>
+</section>
+<section class="fixed-size-headings light full-image-container responsive" style="">
+<div class="header">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div> 
+<div class="layout-full-image slide-contents media-grid"> 
+ <figure class="">
+  <img src="media/bcon1.svg" class=" size-contain position-center-center" />
+ </figure> 
+</div> 
+<div class="footnotes"></div> 
+<div class="footer">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div>
+</section>
+<section class="fixed-size-headings light full-image-container responsive" style="">
+<div class="header">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div> 
+<div class="layout-full-image slide-contents media-grid"> 
+ <figure class="">
+  <img src="media/bcon2.svg" class=" size-contain position-center-center" />
+ </figure> 
+</div> 
+<div class="footnotes"></div> 
+<div class="footer">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div>
+</section>
+<section class="fixed-size-headings light full-image-container responsive" style="">
+<div class="header">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div> 
+<div class="layout-full-image slide-contents media-grid"> 
+ <figure class="">
+  <img src="media/bcon3.svg" class=" size-contain position-center-center" />
+ </figure> 
+</div> 
+<div class="footnotes"></div> 
+<div class="footer">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div>
+</section>
+<section class="fixed-size-headings light full-image-container responsive" style="">
+<div class="header">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div> 
+<div class="layout-full-image slide-contents media-grid"> 
+ <figure class="">
+  <img src="media/bcon4.svg" class=" size-contain position-center-center" />
+ </figure> 
+</div> 
+<div class="footnotes"></div> 
+<div class="footer">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div>
+</section>
+<section class="fixed-size-headings light full-image-container responsive" style="">
+<div class="header">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div> 
+<div class="layout-full-image slide-contents media-grid"> 
+ <figure class="">
+  <img src="media/bcon5.svg" class=" size-contain position-center-center" />
+ </figure> 
+</div> 
+<div class="footnotes"></div> 
+<div class="footer">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div>
+</section>
+<section class="fixed-size-headings light full-image-container responsive" style="">
+<div class="header">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div> 
+<div class="layout-full-image slide-contents media-grid"> 
+ <figure class="">
+  <img src="media/bcon6.svg" class=" size-contain position-center-center" />
+ </figure> 
+</div> 
+<div class="footnotes"></div> 
+<div class="footer">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div>
+</section>
+<section class="fixed-size-headings light full-image-container responsive" style="">
+<div class="header">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div> 
+<div class="layout-full-image slide-contents media-grid"> 
+ <figure class="">
+  <img src="media/bcon7.svg" class=" size-contain position-center-center" />
+ </figure> 
+</div> 
+<div class="footnotes"></div> 
+<div class="footer">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div>
+</section>
+<section class="fixed-size-headings light cover-container responsive" style="">
+<div class="header">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div> 
+<div class="layout-cover slide-contents"> 
+ <div class="element-group">
+  <h1 id="butwhatif...itgoeswrong">But what if... it goes wrong?</h1>
+ </div> 
+</div> 
+<div class="footnotes"></div> 
+<div class="footer">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div>
+</section>
+<section class="fixed-size-headings light full-image-container responsive" style="">
+<div class="header">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div> 
+<div class="layout-full-image slide-contents media-grid"> 
+ <figure class="">
+  <img src="media/robot_error.svg" class=" size-contain position-center-center" />
+ </figure> 
+</div> 
+<div class="footnotes"></div> 
+<div class="footer">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div>
+</section>
+<section class="fixed-size-headings light v-split-container responsive" style="">
+<div class="header">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div> 
+<div class="layout-v-split slide-contents"> 
+ <div class="element-group">
+  <h2 id="ourkotlinpmap:thesignature">Our Kotlin <code>pmap</code>: The Signature</h2>
+ </div> 
+ <div class="element-group">
+  <pre><code class="kotlin">private fun &lt;T, R&gt; Iterable&lt;T&gt;.pmap(
+    maxConcurrency: Int,
+    transform: (T) -&gt; R,
+): List&lt;Result&lt;PMapError, R&gt;&gt;
+</code></pre>
+ </div> 
+</div> 
+<div class="footnotes"></div> 
+<div class="footer">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div>
+</section>
+<section class="fixed-size-headings light v-split-container responsive" style="">
+<div class="header">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div> 
+<div class="layout-v-split slide-contents"> 
+ <div class="element-group">
+  <h2 id="coreconcept1:robotsvirtualthreads">Core Concept #1: <del>Robots</del> Virtual Threads</h2>
+ </div> 
+ <div class="element-group">
+  <pre><code class="diff">private fun &lt;T, R&gt; Iterable&lt;T&gt;.pmap(...) {
+    val semaphore = Semaphore(maxConcurrency + 1)
++   val executor = Executors.newVirtualThreadPerTaskExecutor()
+
+    try {
+        val futures: List&lt;Future&lt;Result&lt;PMapError, R&gt;&gt;&gt; = map { item -&gt;
++           executor.submit&lt;Result&lt;PMapError, R&gt;&gt; {
+                // ...
+            }
+        }
+        // ...
+    } finally {
++       executor.shutdown()
+    }
+}
+</code></pre>
+ </div> 
+</div> 
+<div class="footnotes"></div> 
+<div class="footer">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div>
+</section>
+<section class="fixed-size-headings light v-split-container responsive" style="">
+<div class="header">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div> 
+<div class="layout-v-split slide-contents"> 
+ <div class="element-group">
+  <h2 id="coreconcept2:numberofrobotssemaphore">Core Concept #2: <del>Number of Robots</del> <code>Semaphore</code></h2>
+ </div> 
+ <div class="element-group">
+  <pre><code class="diff">private fun &lt;T, R&gt; Iterable&lt;T&gt;.pmap(...) {
++   val semaphore = Semaphore(maxConcurrency + 1)
+    val executor = Executors.newVirtualThreadPerTaskExecutor()
+
+    try {
+        val futures: List&lt;Future&lt;Result&lt;PMapError, R&gt;&gt;&gt; = map { item -&gt;
+            executor.submit&lt;Result&lt;PMapError, R&gt;&gt; {
++               semaphore.acquire()
+                try {
+                    // ...
+                } finally {
++                   semaphore.release()
+                }
+            }
+        }
+        // ...
+    } finally {
+        executor.shutdown()
+    }
+}
+</code></pre>
+ </div> 
+</div> 
+<div class="footnotes"></div> 
+<div class="footer">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div>
+</section>
+<section class="fixed-size-headings light v-split-container responsive" style="">
+<div class="header">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div> 
+<div class="layout-v-split slide-contents"> 
+ <div class="element-group">
+  <h2 id="coreconcept3:redandgreenboxestheresulttype">Core Concept #3: <del>Red and Green Boxes</del> The <code>Result</code> Type</h2>
+ </div> 
+ <div class="element-group">
+  <pre><code class="diff">private fun &lt;T, R&gt; Iterable&lt;T&gt;.pmap(
+    maxConcurrency: Int,
+    transform: (T) -&gt; R,
++): List&lt;Result&lt;PMapError, R&gt;&gt; {
+    // ...
+    try {
+        val futures: List&lt;Future&lt;Result&lt;PMapError, R&gt;&gt;&gt; = map { item -&gt;
+            executor.submit&lt;Result&lt;PMapError, R&gt;&gt; {
+                // ...
+                try {
++                   Success(transform(item))
++               } catch (e: Throwable) {
++                   Failure(PMapError("Exception during pmap: $e", e))
+                } finally {
+                    // ...
+                }
+            }
+        }
+
++       return futures.map { it.get() }
+    } finally {
+        // ...
+    }
+}
+</code></pre>
+ </div> 
+</div> 
+<div class="footnotes"></div> 
+<div class="footer">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div>
+</section>
+<section class="fixed-size-headings light v-split-container responsive" style="">
+<div class="header">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div> 
+<div class="layout-v-split slide-contents"> 
+ <div class="element-group">
+  <h2 id="thefullimplementation">The Full Implementation</h2> 
+  <p><a href="https://github.com/springernature/anura/blob/a87293c50cdc5a4bf1c9c5a3ef06cf43589fd126/lib/core/src/main/kotlin/anura/common/fp/PMap.kt">on GitHub</a></p>
+ </div> 
+ <div class="element-group">
+  <pre><code class="kotlin">private fun &lt;T, R&gt; Iterable&lt;T&gt;.pmap(
+    maxConcurrency: Int,
+    transform: (T) -&gt; R,
+): List&lt;Result&lt;PMapError, R&gt;&gt; {
+    val semaphore = Semaphore(maxConcurrency + 1)
+    val executor = Executors.newVirtualThreadPerTaskExecutor()
+
+    try {
+        val futures: List&lt;Future&lt;Result&lt;PMapError, R&gt;&gt;&gt; = map { item -&gt;
+            executor.submit&lt;Result&lt;PMapError, R&gt;&gt; {
+                semaphore.acquire()
+                try {
+                    Success(transform(item))
+                } catch (e: Throwable) {
+                    Failure(PMapMError("Exception during pmap: $e", e))
+                } finally {
+                    semaphore.release()
+                }
+            }
+        }
+
+        return futures.map { it.get() }
+    } finally {
+        executor.shutdown()
+    }
+}
+</code></pre>
+ </div> 
+</div> 
+<div class="footnotes"></div> 
+<div class="footer">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div>
+</section>
+<section class="fixed-size-headings light title-container responsive" style="">
+<div class="header">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div> 
+<div class="layout-title slide-contents"> 
+ <div class="element-group">
+  <h2 id="demo">Demo</h2> 
+  <p><a href="https://github.com/springernature/anura/blob/5fe0ed963191f9d145ede19915291ab8da2bed91/lib/core/src/test/kotlin/anura/common/fp/PMapTests.kt">on GitHub</a></p>
+ </div> 
+</div> 
+<div class="footnotes"></div> 
+<div class="footer">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div>
+</section>
+<section class="fixed-size-headings light title-container responsive" style="">
+<div class="header">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div> 
+<div class="layout-title slide-contents"> 
+ <div class="element-group">
+  <h2 id="gotchasconsiderations">Gotchas &amp; Considerations</h2>
+ </div> 
+</div> 
+<div class="footnotes"></div> 
+<div class="footer">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div>
+</section>
+<section class="fixed-size-headings light section-container responsive" style="">
+<div class="header">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div> 
+<div class="layout-section slide-contents"> 
+ <div class="element-group"> 
+  <h3 id="1.itsnotalwaysfaster">1. It's not always faster</h3> 
+ </div> 
+</div> 
+<div class="footnotes"></div> 
+<div class="footer">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div>
+</section>
+<section class="fixed-size-headings light section-container responsive" style="">
+<div class="header">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div> 
+<div class="layout-section slide-contents"> 
+ <div class="element-group"> 
+  <h3 id="2.keepitpure.noreally.">2. Keep it pure. NO REALLY.</h3> 
+ </div> 
+</div> 
+<div class="footnotes"></div> 
+<div class="footer">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div>
+</section>
+<section class="fixed-size-headings light section-container responsive" style="">
+<div class="header">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div> 
+<div class="layout-section slide-contents"> 
+ <div class="element-group"> 
+  <h3 id="3.dontddosyourself">3. Don't DDOS yourself</h3> 
+ </div> 
+</div> 
+<div class="footnotes"></div> 
+<div class="footer">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div>
+</section>
+<section class="fixed-size-headings light section-container responsive" style="">
+<div class="header">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div> 
+<div class="layout-section slide-contents"> 
+ <div class="element-group"> 
+  <h3 id="4.onlyworksforioboundoperations">4. Only Works For I/O Bound Operations</h3> 
+ </div> 
+</div> 
+<div class="footnotes"></div> 
+<div class="footer">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div>
+</section>
+<section class="fixed-size-headings light title-container responsive" style="">
+<div class="header">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div> 
+<div class="layout-title slide-contents"> 
+ <div class="element-group">
+  <h2 id="conclusion">Conclusion</h2>
+ </div> 
+</div> 
+<div class="footnotes"></div> 
+<div class="footer">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div>
+</section>
+<section class="fixed-size-headings light cover-container responsive" style="">
+<div class="header">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div> 
+<div class="layout-cover slide-contents"> 
+ <div class="element-group">
+  <h1 id="questions">Questions?</h1>
+ </div> 
+</div> 
+<div class="footnotes"></div> 
+<div class="footer">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div>
+</section>
+<section class="fixed-size-headings light grid-container responsive" style="">
+<div class="header">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div> 
+<div class="layout-grid {@{HAS_MEDIA_CLASSES}@} slide-contents grid-items-0 has-only-media media-grid"> 
+</div> 
+<div class="footnotes"></div> 
+<div class="footer">
+ <div class="leading"></div>
+ <div class="middle"></div>
+ <div class="trailing"></div>
+</div>
+</section>
+</div>
+</div>
+<script src="engine/index.js"></script>
+<script src="engine/pptxgen.min.js"></script>
+<script src="engine/pfill.js"></script>
+<script src="engine/published.js"></script>
+<script>
+Reveal.configure({
+progress:true,
+progress:true,
+dependencies: [
+  {
+    src: "engine/highlight.js",
+    sync: true,
+    callback: function () {
+      hljs.initHighlightingOnLoad();
+    },
+  },
+],
+});
+</script>
+</body>
+</html>

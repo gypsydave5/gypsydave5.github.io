@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="460" viewBox="0 0 680 460" font-family="system-ui,-apple-system,Segoe UI,Roboto,sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#333"/>
+    </marker>
+    <style>
+      .arr rect { fill:#f3f7fb; stroke:#4577a3; stroke-width:1.2 }
+      .arr text { font-size:16px; fill:#1d3342; dominant-baseline:middle; text-anchor:middle }
+      .label { font-size:13px; fill:#444 }
+      .title { font-size:18px; font-weight:600; fill:#222 }
+      .func-box { fill:#fff6e5; stroke:#d99400; stroke-width:1.4; rx:6 }
+      .out rect { fill:#eef9f0; stroke:#2f7d3c; stroke-width:1.2 }
+      .out text { fill:#194422; font-size:16px; dominant-baseline:middle; text-anchor:middle }
+      .note { font-size:12px; fill:#555 }
+      .arrow { stroke:#333; stroke-width:1.1; fill:none; marker-end:url(#arrow) }
+    </style>
+  </defs>
+
+  <text x="340" y="26" class="title" text-anchor="middle"> fun map((A) -> B), List&lt;A&gt;): List&lt;B&gt;</text>
+
+  <!-- Input (8 elements) -->
+  <text x="340" y="54" class="label" text-anchor="middle">Input (List&lt;Int&gt;)</text>
+  <g class="arr" transform="translate(60,68)">
+    <rect x="0" y="0" width="70" height="60" rx="4"/>
+    <rect x="70" y="0" width="70" height="60" rx="4"/>
+    <rect x="140" y="0" width="70" height="60" rx="4"/>
+    <rect x="210" y="0" width="70" height="60" rx="4"/>
+    <rect x="280" y="0" width="70" height="60" rx="4"/>
+    <rect x="350" y="0" width="70" height="60" rx="4"/>
+    <rect x="420" y="0" width="70" height="60" rx="4"/>
+    <rect x="490" y="0" width="70" height="60" rx="4"/>
+    <text x="35" y="30">1</text>
+    <text x="105" y="30">2</text>
+    <text x="175" y="30">3</text>
+    <text x="245" y="30">4</text>
+    <text x="315" y="30">5</text>
+    <text x="385" y="30">6</text>
+    <text x="455" y="30">7</text>
+    <text x="525" y="30">8</text>
+  </g>
+
+  <!-- Function -->
+  <text x="340" y="158" class="label" text-anchor="middle">Mapping function (higher-order)</text>
+  <g transform="translate(60,170)">
+    <rect class="func-box" x="0" y="0" width="560" height="70"/>
+    <text x="280" y="28" font-size="16" fill="#7a4b00" text-anchor="middle">f = (Int) -> Int</text>
+    <text x="280" y="50" font-size="14" fill="#7a4b00" text-anchor="middle">fun f(x: Int) = x * 2</text>
+  </g>
+
+  <!-- Output (8 elements) -->
+  <text x="340" y="270" class="label" text-anchor="middle">Output (List&lt;Int&gt;)</text>
+  <g class="out" transform="translate(60,286)">
+    <rect x="0" y="0" width="70" height="60" rx="4"/>
+    <rect x="70" y="0" width="70" height="60" rx="4"/>
+    <rect x="140" y="0" width="70" height="60" rx="4"/>
+    <rect x="210" y="0" width="70" height="60" rx="4"/>
+    <rect x="280" y="0" width="70" height="60" rx="4"/>
+    <rect x="350" y="0" width="70" height="60" rx="4"/>
+    <rect x="420" y="0" width="70" height="60" rx="4"/>
+    <rect x="490" y="0" width="70" height="60" rx="4"/>
+    <text x="35"  y="30">2</text>
+    <text x="105" y="30">4</text>
+    <text x="175" y="30">6</text>
+    <text x="245" y="30">8</text>
+    <text x="315" y="30">10</text>
+    <text x="385" y="30">12</text>
+    <text x="455" y="30">14</text>
+    <text x="525" y="30">16</text>
+  </g>
+
+  <!-- Arrows: input -> function (centers at 95 + 70*i) -->
+  <path class="arrow" d="M95 128 L95 170"/>
+  <path class="arrow" d="M165 128 L165 170"/>
+  <path class="arrow" d="M235 128 L235 170"/>
+  <path class="arrow" d="M305 128 L305 170"/>
+  <path class="arrow" d="M375 128 L375 170"/>
+  <path class="arrow" d="M445 128 L445 170"/>
+  <path class="arrow" d="M515 128 L515 170"/>
+  <path class="arrow" d="M585 128 L585 170"/>
+
+  <!-- Arrows: function -> output -->
+  <path class="arrow" d="M95 240 L95 286"/>
+  <path class="arrow" d="M165 240 L165 286"/>
+  <path class="arrow" d="M235 240 L235 286"/>
+  <path class="arrow" d="M305 240 L305 286"/>
+  <path class="arrow" d="M375 240 L375 286"/>
+  <path class="arrow" d="M445 240 L445 286"/>
+  <path class="arrow" d="M515 240 L515 286"/>
+  <path class="arrow" d="M585 240 L585 286"/>
+
+  <!-- Notes -->
+  <g transform="translate(30,400)">
+    <text class="note" x="0" y="0">Properties:</text>
+    <text class="note" x="0" y="18">1. Pure transformation (output[i] = f(input[i])).</text>
+    <text class="note" x="0" y="36">2. Length preserved (8 -> 8).</text>
+    <text class="note" x="0" y="54">3. Order preserved.</text>
+    <text class="note" x="0" y="72">4. Returns new list (no mutation).</text>
+  </g>
+</svg>
