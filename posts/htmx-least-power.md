@@ -37,7 +37,7 @@ Well...
 
 Take a look at that graph again:
 
-![jspowergraph.png](/extras/images/jspowergraph.png)
+![jspowergraph.png](/images/jspowergraph.png)
 
 Now, obviously this is not to scale - JavaScript is far more powerful than the other two. Waaaay more. It’s a whole general purpose programming language. We can write servers in it. We can program fridges with it. Waaaaaaay powerful.
 
