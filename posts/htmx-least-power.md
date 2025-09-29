@@ -15,7 +15,7 @@ The [Rule of Least Power](https://www.w3.org/2001/tag/doc/leastPower.html)
 
 > suggests choosing the least powerful [computer] language suitable for a given purpose
 
-As a principal it’s applicable for all programming, but it finds particular relevance when working in the frontend of web development. The link above is to the W3C article on the subject, written by Tim Berners-Lee.
+As a principle it’s applicable for all programming, but it finds particular relevance when working in the frontend of web development. The link above is to the W3C article on the subject, written by Tim Berners-Lee.
 
 He continues:
 
@@ -29,7 +29,7 @@ If we were to graph, in a very realistic and not made up way, the different powe
 
 JavaScript is super powerful… but we know from the Rule of Least Power that this is _not a good thing_.
 
-And we don’t like React et al because they essentially encourage you to only use the most powerful tool available to you. They sucking the life out of the other technologies and into JavaScript. This is where we get to golden hammers etc.
+And we don’t like React et al because they essentially encourage you to only use the most powerful tool available to you. They suck the life out of the other technologies and into JavaScript. This is where we get to golden hammers etc.
 
 And so we, the True Believers, avoid the frameworks, and use the least powerful tool for the job. The end.
 
@@ -51,7 +51,7 @@ Imagine these weren’t web technologies.
 
 Imagine they were knives, and you wanted to cut up a melon.
 
-`butter knife / cheese knife / lightsabre`
+`butter knife / cheese knife / lightsaber`
 
 or if they were weapons:
 
@@ -61,7 +61,7 @@ or books:
 
 `Goodnight Moon / Spot the Dog / Ulysses`
 
-I hope I’m making my point here and don’t have to think of any more stupid examples. What I’m trying to say is that there’s a real escalation that happens when we move from HTML + CSS to JavaScript. We’re drawing on one of the most powerful forces in the universe to… checks notes… load a bit of HTML onto the page?
+I hope I’m making my point here and don’t have to think of any more stupid examples. What I’m trying to say is that there’s a real escalation that happens when we move from HTML + CSS to JavaScript. We’re drawing on one of the most powerful forces in the universe to… _checks notes_… load a bit of HTML onto the page?
 
 Add a spinner?
 
@@ -81,7 +81,7 @@ But the difference is that it doesn’t try to extend JavaScript to make it the 
 
 You need to do [click to edit](https://htmx.org/examples/click-to-edit/), [lazy loading](https://htmx.org/examples/lazy-load/), [infinite scroll](https://htmx.org/examples/infinite-scroll/), a [live search](https://htmx.org/examples/active-search/), or anything else that you’d normally be reaching for JavaScript to accomplish, you can now add HTMX to the stack, write a few more attributes on your HTML, get what you need done, _and never have to use JavaScript_. Instead you’ve used a less powerful tool (HTMX) to achieve what you wanted.
 
-Yes, there is some overhead - a new dependency, a new thing to learn. Nothing is free in this life. But it’s very distinct to frontend frameworks embedded in JavaScript which pull you in to more JavaScript, all the JavaScript, all the time. HTMX wants you to write _no_ JavaScript _unless you need to_.
+Yes, there is some overhead - a new dependency, a new thing to learn. Nothing is free in this life. But it’s very distinct from frontend frameworks embedded in JavaScript which pull you in to more JavaScript, all the JavaScript, all the time. HTMX wants you to write _no_ JavaScript _unless you need to_.
 
 ## Conclusion
 
