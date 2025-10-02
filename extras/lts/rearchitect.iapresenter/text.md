@@ -72,21 +72,61 @@ When a system has to ask another system for data it should control, you've broke
 
 ---
 ## What is a Bounded Context?
-	Think of it Like a Kitchen
+	Think of it Like Cooking Lasagne
 
-Imagine your kitchen at home. Everything you need to cook is there: ingredients, tools, recipes. You don't have to ask your neighbor for salt or run to the garage for a pan.
+Imagine you're making lasagne at home. You have your kitchen with all the ingredients, tools, and oven. You cook it, it's delicious, and it's ready to eat.
 
-	**A bounded context is like a well-organized kitchen - everything needed for a specific job is in one place, under one management.**
+	**But here's what we're doing now:** We take our finished lasagne to our neighbour's house and ask them to store it for us.
 
-Now imagine if your salt was stored in your neighbor's house. Every time you cook, you'd have to ask them for it. That's what's happening with our submission data.
+Every time we want to eat our own lasagne, we have to go to the neighbour's house and bring it back home. Over and over again.
+
+---
+### The Current Mess: Lasagne at the Neighbour's
+	We Cook It, They Store It, We Retrieve It
+
+**What happens in our system:**
+- Submission system "cooks" the author data (processes uploads, validates, organises)
+- Hands the "finished lasagne" (complete submission) to Editorial to store
+- Every time it needs its own data, it has to go to Editorial and ask for it back
+
+This is as ass backwards as storing your own dinner at someone else's house.
+
+---
+### The Responsibility Problem
+	Half-Cooked Lasagne for Guests
+
+**Even worse:** Sometimes we invite neighbours (Editorial) over for dinner, but we give them a half-cooked lasagne and tell them to ENJOY!
+
+	**Translation:** Submission system sends submissions with unscanned files to Editorial, expecting Editors to be able to do their work with it.
+
+This violates the principle that whoever cooks the lasagne and _invites the neighbours around to eat it_, should _finish cooking the lasagne_. You don't serve half-raw food to guests.
+
+Please, please stop thinking of all the counter example of how you deal with lasagne.
+
+---
+### What Should Happen
+	Cook Completely, Store At Your Home, Share When Ready
+
+--- 
+### The right way
+	- Cook your lasagne completely in your own kitchen
+	- Store it in your own fridge
+	- When neighbours want some, bring them a proper serving
+	- Never ask neighbours to store your food or finish cooking it - _that's weird!_
+---
+### Translation
+	- Submission system processes author data completely
+	- Stores it in its own system  
+	- When Editorial needs submission data, Submission system provides it
+	- Never sends incomplete data or asks Editorial to store submission data - _that's weird!_
 
 ---
 ### The Submission System Should Be Like This Kitchen
-	Self-Contained and Self-Sufficient
+	Self-Contained Lasagne Making
 
-The event storming revealed that submission operations form a natural unity. Just like a kitchen has everything needed for cooking, the submission system should have everything needed for managing author data.
+The event storming revealed that submission operations form a natural unity. Just like making lasagne from start to finish in one kitchen, the submission system should handle author data from start to finish.
 
-	**Right now, our "kitchen" has to ask other "houses" for its own ingredients.**
+	**Right now, our "lasagne" lives in someone else's fridge, and we have to keep asking for it back.**
 
 This violates the natural boundary that the research showed us exists.
 
@@ -98,27 +138,27 @@ Based on the bounded context research, here are the principles that should guide
 
 ---
 ### 1. Well-Encapsulated Unity
-	The Submission System Should Be Complete
+	Keep Your Lasagne in Your Own Kitchen
 
-	**Principle:** The submission system should be a self-contained, well-organized "kitchen" for all author data operations.
+	**Principle:** The submission system should be a complete "kitchen" where lasagne is made from start to finish and stored properly.
 
-Everything needed to manage submission data should be within this boundary. No essential pieces scattered elsewhere.
+Everything needed to make and keep submission data should be within this boundary. No storing your dinner at someone else's house.
 
 ---
 ### 2. Single Source of Responsibility
-	Only the Submission System Changes Author Data
+	Whoever Cooks the Lasagne, Finishes the Lasagne
 
-	**Principle:** The submission system should be responsible for author-provided data. It should be the only place that changes it.
+	**Principle:** The submission system should be responsible for author-provided data. It should cook it completely and be the only one that changes it.
 
-Just like only the cook should manage what's in their kitchen, only the submission system should modify submission data. Other systems can read it, but they don't change it.
+Don't send half-cooked lasagne to your neighbours and expect them to finish it. Complete the work in your own kitchen, then share the finished product.
 
 ---
 ### 3. Never Ask for Your Own Data
-	Other Systems Come to You
+	Don't Store Your Dinner at the Neighbor's
 
-	**Principle:** The submission system should never need to get author data from other systems. Other systems should get that information from it when they need it.
+	**Principle:** The submission system should never need to ask other systems for submission data it created. Other systems should ask it when they need submission information.
 
-The cook doesn't ask the neighbour for their own salt. The submission system shouldn't ask Editorial for submission data it should own.
+You shouldn't have to go to your neighbour's house to get your own lasagne back. Keep your food in your own fridge.
 
 ---
 ### These Principles Guide All Work
@@ -132,7 +172,3 @@ When we're building features, we should ask:
 Following these principles will gradually fix our architecture through normal feature work.
 
 ---
-
-### Notes
-
-Make it about lasagna.
