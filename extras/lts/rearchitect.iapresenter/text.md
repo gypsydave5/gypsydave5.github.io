@@ -84,6 +84,10 @@ Every time we want to eat our own lasagne, we have to go to the neighbour's hous
 ### The Current Mess: Lasagne at the Neighbour's
 	We Cook It, They Store It, We Retrieve It
 
+/assets/lasagne-cooking.jpg
+size: contain
+x: right
+
 **What happens in our system:**
 - Submission system "cooks" the author data (processes uploads, validates, organises)
 - Hands the "finished lasagne" (complete submission) to Editorial to store
@@ -107,12 +111,17 @@ Please, please stop thinking of all the counter example of how you deal with las
 ### What Should Happen
 	Cook Completely, Store At Your Home, Share When Ready
 
+/assets/finished-lasagne.jpg
+size: contain
+x: right
+
 --- 
 ### The right way
 	- Cook your lasagne completely in your own kitchen
 	- Store it in your own fridge
 	- When neighbours want some, bring them a proper serving
 	- Never ask neighbours to store your food or finish cooking it - _that's weird!_
+
 ---
 ### Translation
 	- Submission system processes author data completely
@@ -139,6 +148,10 @@ Based on the bounded context research, here are the principles that should guide
 ---
 ### 1. Well-Encapsulated Unity
 	Keep Your Lasagne in Your Own Kitchen
+
+/assets/organized-kitchen.jpg
+size: contain
+x: left
 
 	**Principle:** The submission system should be a complete "kitchen" where lasagne is made from start to finish and stored properly.
 
