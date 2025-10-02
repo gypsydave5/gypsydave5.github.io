@@ -195,6 +195,48 @@ Editorial is now free to focus on what it does best: managing peer review.
 Sometimes starting fresh is worth the extra effort.
 
 ---
+## Alternative: Evolutionary Approach
+	No Big Bang Required
+
+	**Different Strategy:** We don't have to do this all at once. As we build new features, we can gradually shift the boundary.
+
+Each time we work on submission-related features, we move more author-generated data responsibility back where it belongs: the Submission system.
+
+---
+### Shifting Boundaries with Feature Work
+	Move Responsibility Incrementally
+
+**The Principle:** Every time we touch submission data, ask "Should this live in Editorial or Submission?"
+
+**Examples:**
+- New author metadata fields → Store in Submission system
+- Draft title updates → Keep the logic in Submission system  
+- Author contact changes → Submission system owns this lifecycle
+- File upload improvements → Direct to Submission storage
+
+Each feature becomes an opportunity to correct the boundary violation.
+
+---
+### Benefits of the Evolutionary Path
+	Less Risk, Continuous Improvement
+
+- **No Big Migration:** Avoid the complexity of moving all data at once
+- **Feature-Driven:** Improvements happen as part of valuable work
+- **Lower Risk:** Each change is smaller and easier to validate
+- **Immediate Payoff:** Every shift reduces coupling incrementally
+- **Learning Opportunity:** Discover edge cases gradually
+
+We fix the architecture while delivering business value.
+
+---
+### The End State is the Same
+	Just a Different Journey
+
+Whether we migrate everything at once or shift boundaries with each feature, we end up in the same place: properly separated concerns and clearer ownership.
+
+The evolutionary approach just spreads the work across multiple feature cycles, reducing risk and coordination overhead.
+
+---
 ## The Payoff
 	What We Get When We're Done
 
@@ -213,8 +255,17 @@ Right now, we spend too much time working around our architecture instead of thr
 
 ---
 ## Next Steps
-	Ready to Break the Bottleneck?
+	Two Paths Forward
 
 This isn't just a technical improvement - it's an investment in our ability to move fast and safely. The architecture should serve the product, not the other way around.
 
-	**The Question:** Are we ready to untangle this knot and get back to building?
+---
+### Choose Your Strategy
+	Big Migration or Evolutionary Shift
+
+	**Path 1:** Full migration with the 4-phase plan - faster to complete, requires coordination
+	**Path 2:** Evolutionary boundary shifting - lower risk, spreads across feature work
+
+Both paths lead to the same destination: an architecture that respects natural boundaries and eliminates the Editorial bottleneck.
+
+	**The Question:** Which approach fits our team's capacity and risk tolerance?
