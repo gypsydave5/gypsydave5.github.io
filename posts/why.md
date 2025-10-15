@@ -7,7 +7,6 @@ tags:
   - computerscience
   - beginners
 ---
-
 One of the goals of computer programming is to provide the user of our software
 with a good _abstraction_; we don't want our web browsers to be forcing us to
 think about HTTP requests, we want to click links and see pages. We don't want

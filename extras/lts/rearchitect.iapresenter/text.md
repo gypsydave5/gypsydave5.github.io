@@ -16,7 +16,7 @@ This tight coupling makes every change slow and risky. A simple data update ripp
 ## The Research
 	Event Storming Revealed the Truth
 
-We ran event storming sessions with multiple SNAPP teams to map out how operations actually flow through our system. The results were eye-opening. MAYBE SHARE THEM???
+We ran event storming sessions with multiple SNAPP teams to map out how operations actually flow through our system. Although many of you didn't get to come along, or see the results, I hope that I can explain them here in a way that's obvious enough.
 
 ---
 ### What We Discovered
@@ -55,8 +55,8 @@ The Submission system even has to ask Editorial for its own historical data thro
 ### What's Wrong Here?
 	We've Mixed Two Different Things
 
-	**Submission Data:** The science itself - changes when authors revise
-	**Review Data:** The review process - changes when editors take action
+	**Submission Data:** The science and other data - changes when authors revise
+	**Editorial Data:** The review process - changes when editors take action
 
 These change for different reasons, interest different people, but we've tied them together. This makes it impossible to evolve each independently.
 
@@ -72,26 +72,28 @@ When a system has to ask another system for data it should control, you've broke
 
 ---
 ## What is a Bounded Context?
-	Think of it Like Cooking Lasagne
+	Think of it like cooking lasagne
 
 Imagine you're making lasagne at home. You have your kitchen with all the ingredients, tools, and oven. You cook it, it's delicious, and it's ready to eat.
 
-	**But here's what we're doing now:** We take our finished lasagne to our neighbour's house and ask them to store it for us.
-
-Every time we want to eat our own lasagne, we have to go to the neighbour's house and bring it back home. Over and over again.
 
 ---
-### The Current Mess: Lasagne at the Neighbour's
-	We Cook It, They Store It, We Retrieve It
 
 /assets/lasagne-cooking.jpg
 size: contain
-x: right
 
-**What happens in our system:**
-- Submission system "cooks" the author data (processes uploads, validates, organises)
-- Hands the "finished lasagne" (complete submission) to Editorial to store
-- Every time it needs its own data, it has to go to Editorial and ask for it back
+---
+
+### Lasagne at the Neighbour's
+	We Cook It, They Store It, We Retrieve It
+
+	We take our finished lasagne to our neighbour's house and ask them to store it for us.
+
+Every time we want to eat our own lasagne, we have to go to the neighbour's house and bring it back home. Over and over again.
+
+
+	**Translation**
+	Submission system "cooks" the author data (processes uploads, validates, organises). It hands the "finished lasagne" (complete submission) to Editorial to store. Every time it needs its own data, it has to go to Editorial and ask for it back
 
 This is as ass backwards as storing your own dinner at someone else's house.
 
@@ -153,9 +155,25 @@ Based on the bounded context research, here are the principles that should guide
 size: contain
 x: left
 
+Everything needed to make and keep submission data should be within this boundary. No storing your dinner at someone else's house.
+
+---
+### 1. Well-Encapsulated Unity
+	Keep Your Lasagne in Your Own Kitchen
+
 	**Principle:** The submission system should be a complete "kitchen" where lasagne is made from start to finish and stored properly.
 
-Everything needed to make and keep submission data should be within this boundary. No storing your dinner at someone else's house.
+Just like a well-organized kitchen has all the tools, ingredients, and storage space needed for cooking, the submission system should contain everything needed for managing author data.
+
+---
+### 2. Single Source of Responsibility
+	Whoever Cooks the Lasagne, Finishes the Lasagne
+
+/assets/chef-cooking.jpg
+size: contain
+x: right
+
+Don't send half-cooked lasagne to your neighbours and expect them to finish it. Complete the work in your own kitchen, then share the finished product.
 
 ---
 ### 2. Single Source of Responsibility
@@ -163,15 +181,25 @@ Everything needed to make and keep submission data should be within this boundar
 
 	**Principle:** The submission system should be responsible for author-provided data. It should cook it completely and be the only one that changes it.
 
-Don't send half-cooked lasagne to your neighbours and expect them to finish it. Complete the work in your own kitchen, then share the finished product.
+When you start cooking lasagne, you see it through to completion. Similarly, when the submission system receives author data, it should process it completely before sharing with other systems.
 
 ---
 ### 3. Never Ask for Your Own Data
-	Don't Store Your Dinner at the Neighbor's
+	Don't Store Your Dinner at the Neighbour's
+
+/assets/own-fridge.jpg
+size: contain
+x: left
+
+You shouldn't have to go to your neighbour's house to get your own lasagne back. Keep your food in your own fridge.
+
+---
+### 3. Never Ask for Your Own Data
+	Don't Store Your Dinner at the Neighbour's
 
 	**Principle:** The submission system should never need to ask other systems for submission data it created. Other systems should ask it when they need submission information.
 
-You shouldn't have to go to your neighbour's house to get your own lasagne back. Keep your food in your own fridge.
+Just as you wouldn't store your dinner at someone else's house and then ask for it back every time you want to eat, the submission system shouldn't store its data elsewhere and then retrieve it.
 
 ---
 ### These Principles Guide All Work

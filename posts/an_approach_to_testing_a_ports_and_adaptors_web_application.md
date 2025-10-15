@@ -7,6 +7,8 @@ tags:
   - PortsAndAdaptors
 ---
 
+# An Approach to Architecting, Wiring and Testing a Clean Ports and Adaptors Web Application
+
 This document offers an opinionated approach to a system architecture.
 
 It is chiefly aimed at web applications, but the principles should be applicable to other types of systems.
@@ -207,7 +209,7 @@ In this model, the domain underpins _everything_; objects and types of the Domai
 
 ### What are my out ports?
 
-1. In production, your outports are generated from Bootstrap.
+1. In production, your out ports are generated from Bootstrap.
 2. In test, in order to avoid starting the whole application, we can provide an object implements the OutPorts interface, but provides In Memory / Fake implementations of each of the out ports.
 3. The behaviour of the real and fake implementations should be indistinguishable.
 4. This is guaranteed by a contract test.

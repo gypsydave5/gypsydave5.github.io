@@ -20,7 +20,7 @@ blawg
 ```
 
 in the project directory
-
+l
 To serve locally, you can use any one of the [plethora of one-liners][one-line-static],
 or there's a Go 'script' you can run:
 

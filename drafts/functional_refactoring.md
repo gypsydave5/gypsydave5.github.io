@@ -1,19 +1,19 @@
 # Four Functional Refactors
 
 These are the four functional refactoring that Jim Weirich lists while
-demonstrating a a derivation of the Y-combinator in Ruby. It's a great video
+demonstrating a derivation of the Y-combinator in Ruby. It's a great video
 - well worth a watch. I'll pop it at the end of this article if you've got the
 time to enjoy it.
 
 Refactors like these help to restructure your code to allow you to introduce new
 behaviours,
 
-I find it useful having these refactors in my head when working. Maybe you will
+I find it useful having these refactorings in my head when working. Maybe you will
 too!
 
-### 1. Tennant Correspondence Principle ###
+### 1. Tennent Correspondence Principle ###
 
-Originally based on an observation about languages, this 'principle' states that
+Originally based on an _observation_ about languages, this 'principle' states that
 wrapping any expression in a lambda that returns that expression will act in the
 same way as the expression itself.
 
@@ -90,7 +90,7 @@ happy to call it with an extra argument:[^1]
 // 16
 ```
 
-### 3. η-conversion ###
+### 3. n-conversion ###
 
 I'm calling this one "η-conversion" as that's the name it has as one of the
 three basic reductions in the Lambda calculus. But it could easily be called

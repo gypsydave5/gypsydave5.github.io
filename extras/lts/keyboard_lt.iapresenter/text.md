@@ -275,8 +275,8 @@ Remap it to Control, Escape, or Backspace. You'll be amazed how often you use it
 ---
 
 ## Google Already Knows
-
 /assets/chromebook_no_capslock.jpg
+size: contain
 
 Chromebooks don't have Caps Lock.
 
