@@ -225,7 +225,7 @@ But QWERTY stayed. Why?
 
 ---
 
-## Network Effects
+## Path Dependent Lock-In
 Everyone learned QWERTY. Every keyboard had QWERTY. Every typing course taught QWERTY.
 
 The original problem disappeared in the 1960s. We've been living with the solution for 60+ years after the problem ceased to exist.
