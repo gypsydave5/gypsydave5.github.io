@@ -66,7 +66,10 @@ This made perfect sense on a mechanical typewriter. It was a legitimate ergonomi
 ---
 
 ## Then Everything Changed
-Typewriters went electric. Then they disappeared entirely.
+
+/assets/selectric.gif
+
+	Typewriters went electric.
 
 IBM Selectric typewriters (1961) used a rotating ball—much lighter mechanism. Electronic keyboards (1970s onwards) have no mechanism at all. Just switches sending signals.
 
@@ -77,6 +80,7 @@ But the shift lock persisted, becoming "Caps Lock." And it stayed in its prime p
 ## The Great Swap
 
 /assets/appleiie.jpg
+x: left
 
 Early computer keyboards put Ctrl in the prime spot.
 
@@ -89,6 +93,7 @@ This made sense. Control is actually useful in computing. Caps Lock... not so mu
 ## IBM's Decision
 
 /assets/dvorak_ibm_keyboard.jpg
+x: left
 
 In 1986, IBM swapped Ctrl and Caps Lock.
 
