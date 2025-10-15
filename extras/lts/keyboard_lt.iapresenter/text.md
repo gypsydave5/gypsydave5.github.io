@@ -16,6 +16,10 @@ Look at your keyboard. Three features stand out: Caps Lock in prime real estate.
 ---
 
 ## Caps Lock
+
+/assets/simple_capslock.jpg
+x: left
+
 Prime real estate. Next to the home row. Bigger than most keys.
 
 What does it do?
@@ -225,19 +229,6 @@ But QWERTY stayed. Why?
 
 ---
 
-## Path Dependent Lock-In
-
-/assets/typing_pool_2.jpg
-
-
-Everyone learned QWERTY. Every keyboard had QWERTY. Every typing course taught QWERTY.
-
-The original problem disappeared in the 1960s. We've been living with the solution for 60+ years after the problem ceased to exist.
-
-This is a vestigial feature at civilisation scale.
-
----
-
 ## Alternatives Exist
 
 /assets/dvorak_ibm_keyboard.jpg
@@ -246,7 +237,7 @@ Dvorak (1936), Colemak (2006), and others optimise for actual typing efficiency.
 
 Dvorak puts the most common letters on the home row. Your fingers travel less. It's measurably more efficient.
 
-But almost nobody uses it. The switching cost is too high when the entire world uses QWERTY.
+But almost nobody uses it. The switching cost is too high when the entire world uses QWERTY. 
 
 ---
 
@@ -264,20 +255,35 @@ Those problems are gone. But the solutions remain, embedded in billions of keybo
 ---
 
 ## We're Typing on Ghosts
-Each keypress is haunted by constraints from 150 years ago.
+/assets/typing_pool.jpg
+/assets/selectric.gif
+/assets/typing_pool_2.jpg
 
+
+Each keypress is haunted by constraints from 150 years ago.
 Your pinky stretches for Control because of a 1986 decision. Keys sit at diagonal angles because of linkage spacing. Your fingers jump across the keyboard because of hammer collisions.
 
 We're not just using old technology. We're preserving the shape of problems we no longer have.
 
 ---
 
-## Breaking Free?
-Change is possible. But it's hard.
+## Path Dependent Lock-In
 
-You can remap Caps Lock (and you should). You can buy an ortholinear keyboard. You can learn Dvorak or Colemak.
 
-But each change fights against decades of muscle memory and the installed base of the entire world.
+Everyone learned X. Every keyboard had X. Every typing course taught X.
+
+The original problem disappeared in the 1960s. We've been living with the solution for 60+ years after the problem ceased to exist.
+
+This is a vestigial feature at civilisation scale.
+
+---
+
+## Path Dependent Lock-In
+	- VHS vs Betamax
+	- Railroad Track Gauges
+	- Urban Planning
+	- Fossil Fuel Reliance
+	- MICROSOFT and F$%!@*$ TEAMS
 
 ---
 
@@ -295,19 +301,6 @@ Remap it to Control, Escape, or Backspace. You'll be amazed how often you use it
 
 ---
 
-## Google Already Knows
-
-/assets/chromebook_no_capslock.jpg
-size: contain
-
-Chromebooks don't have Caps Lock.
-
-Google removed it. Put a search key there instead. The sky didn't fall. People adapted.
-
-Maybe the keyboard doesn't have to stay frozen in 1986 after all.
-
----
-
 ## The Lesson
 Technology evolves. Constraints disappear. But their solutions can live forever.
 
@@ -321,3 +314,26 @@ Our tools carry their history in their design. Sometimes that history is baggage
 Thanks for listening!
 
 Remember: every tool you use has a history. Sometimes understanding that history helps you use the tool better. Sometimes it helps you choose a different tool.
+
+---
+
+## Resources
+Further Reading on Path Dependence and Keyboard History
+
+**Path Dependence & Lock-In:**
+- Paul David (1985): "Clio and the Economics of QWERTY"
+- W. Brian Arthur: "Increasing Returns and Path Dependence in the Economy"
+- Wikipedia: "Path dependence"
+
+**Keyboard Layouts:**
+- Dvorak Simplified Keyboard: https://www.dvorak-keyboard.com/
+- Colemak: https://colemak.com/
+
+**Hardware:**
+- ErgoDox: https://ergodox-ez.com/
+- ZSA Moonlander, Planck, and other ortholinear keyboards
+
+**Remapping Tools:**
+- Karabiner-Elements (Mac): https://karabiner-elements.pqrs.org/
+- AutoHotkey (Windows): https://www.autohotkey.com/
+- XKB (Linux): Built-in X11 keyboard configuration
