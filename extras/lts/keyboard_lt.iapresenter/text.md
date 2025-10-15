@@ -226,6 +226,10 @@ But QWERTY stayed. Why?
 ---
 
 ## Path Dependent Lock-In
+
+/assets/typing_pool_2.jpg
+
+
 Everyone learned QWERTY. Every keyboard had QWERTY. Every typing course taught QWERTY.
 
 The original problem disappeared in the 1960s. We've been living with the solution for 60+ years after the problem ceased to exist.
@@ -294,6 +298,7 @@ Remap it to Control, Escape, or Backspace. You'll be amazed how often you use it
 ## Google Already Knows
 
 /assets/chromebook_no_capslock.jpg
+size: contain
 
 Chromebooks don't have Caps Lock.
 
