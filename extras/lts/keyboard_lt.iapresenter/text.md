@@ -1,7 +1,7 @@
 # Keyboard Fossils
 Vestigial Features of the Modern Keyboard
 
-Your keyboard carries the ghosts of typewriters past. Let's talk about Caps Lock, QWERTY, and key stagger.
+Your keyboard carries the ghosts of typewriters past. Let's talk about Caps Lock, key stagger, and QWERTY.
 
 ---
 
@@ -11,7 +11,7 @@ Your keyboard carries the ghosts of typewriters past. Let's talk about Caps Lock
 
 Your keyboard is a museum piece. Every day you're using design decisions made over 150 years ago.
 
-Look at your keyboard. Three features stand out: Caps Lock in prime real estate. QWERTY layout. Keys offset in diagonal rows. All relics from the age of mechanical typewriters. All solving problems that no longer exist.
+Look at your keyboard. Three features stand out: Caps Lock in prime real estate. Keys offset in diagonal rows. QWERTY layout. All relics from the age of mechanical typewriters. All solving problems that no longer exist.
 
 ---
 
@@ -69,7 +69,7 @@ This made perfect sense on a mechanical typewriter. It was a legitimate ergonomi
 
 /assets/selectric.gif
 
-	Typewriters went electric.
+Typewriters went electric. Then they disappeared entirely.
 
 IBM Selectric typewriters (1961) used a rotating ball—much lighter mechanism. Electronic keyboards (1970s onwards) have no mechanism at all. Just switches sending signals.
 
@@ -116,6 +116,55 @@ Caps Lock—a solution to a mechanical problem that hasn't existed for 50+ years
 Meanwhile, actually useful keys like Control, Escape, and even Backspace are harder to reach.
 
 It's a vestigial feature. An appendix of the keyboard.
+
+---
+
+## Key Stagger
+Why are the keys offset in diagonal rows?
+
+Look at your keyboard. Notice how each row is slightly offset from the one above it? There's a reason. A very old reason.
+
+---
+
+## The Mechanical Constraint
+
+/assets/pic-hartford.jpg
+
+Early typewriters had mechanical linkages underneath each key.
+
+The hammers were arranged in a circular basket. Each key connected to its hammer at a specific angle. The keys had to be staggered so the mechanical linkages wouldn't interfere with each other.
+
+This wasn't a design choice—it was an engineering necessity.
+
+---
+
+## The Constraint Disappears
+
+/assets/Space-cadet.jpg
+
+Electronic keyboards have no mechanical linkages. The keys could be arranged in any pattern.
+
+Modern keyboards use rubber domes, mechanical switches, or capacitive sensors. There's no physical reason for the stagger any more.
+
+But we keep it. Why?
+
+---
+
+## Muscle Memory
+Your fingers learned the stagger. Changing it feels wrong.
+
+Manufacturers tried making straight-column keyboards. Typists hated them. Not because they're worse—because they're different.
+
+Your muscle memory is calibrated to compensate for a constraint that hasn't existed since the 1970s.
+
+---
+
+## Modern Alternatives
+Ortholinear and ergonomic keyboards eliminate the stagger.
+
+Keyboards like the ErgoDox, Planck, and Microsoft Sculpt use straight columns. Your fingers move in natural paths. Less strain, less travel.
+
+But they require retraining. And they look weird. So most people stick with staggered keys.
 
 ---
 
@@ -180,63 +229,14 @@ But almost nobody uses it. The switching cost is too high when the entire world 
 
 ---
 
-## Key Stagger
-Why are the keys offset in diagonal rows?
-
-Look at your keyboard. Notice how each row is slightly offset from the one above it? There's a reason. A very old reason.
-
----
-
-## The Mechanical Constraint
-
-/assets/pic-hartford.jpg
-
-Early typewriters had mechanical linkages underneath each key.
-
-The hammers were arranged in a circular basket. Each key connected to its hammer at a specific angle. The keys had to be staggered so the mechanical linkages wouldn't interfere with each other.
-
-This wasn't a design choice—it was an engineering necessity.
-
----
-
-## The Constraint Disappears
-
-/assets/Space-cadet.jpg
-
-Electronic keyboards have no mechanical linkages. The keys could be arranged in any pattern.
-
-Modern keyboards use rubber domes, mechanical switches, or capacitive sensors. There's no physical reason for the stagger any more.
-
-But we keep it. Why?
-
----
-
-## Muscle Memory
-Your fingers learned the stagger. Changing it feels wrong.
-
-Manufacturers tried making straight-column keyboards. Typists hated them. Not because they're worse—because they're different.
-
-Your muscle memory is calibrated to compensate for a constraint that hasn't existed since the 1970s.
-
----
-
-## Modern Alternatives
-Ortholinear and ergonomic keyboards eliminate the stagger.
-
-Keyboards like the ErgoDox, Planck, and Microsoft Sculpt use straight columns. Your fingers move in natural paths. Less strain, less travel.
-
-But they require retraining. And they look weird. So most people stick with staggered keys.
-
----
-
 ## The Pattern
-Caps Lock. QWERTY. Key stagger. All vestigial features.
+Caps Lock. Key stagger. QWERTY. All vestigial features.
 
 They solved real problems in mechanical typewriters:
 
 - Caps Lock: made holding shift easier
+- Key stagger: accommodated mechanical linkages
 - QWERTY: prevented hammer jams
-- Stagger: accommodated mechanical linkages
 
 Those problems are gone. But the solutions remain, embedded in billions of keyboards worldwide.
 
@@ -245,7 +245,7 @@ Those problems are gone. But the solutions remain, embedded in billions of keybo
 ## We're Typing on Ghosts
 Each keypress is haunted by constraints from 150 years ago.
 
-Your pinky stretches for Control because of a 1986 decision. Your fingers jump across the keyboard because of hammer collisions. Keys sit at diagonal angles because of linkage spacing.
+Your pinky stretches for Control because of a 1986 decision. Keys sit at diagonal angles because of linkage spacing. Your fingers jump across the keyboard because of hammer collisions.
 
 We're not just using old technology. We're preserving the shape of problems we no longer have.
 
@@ -254,7 +254,7 @@ We're not just using old technology. We're preserving the shape of problems we n
 ## Breaking Free?
 Change is possible. But it's hard.
 
-You can remap Caps Lock (and you should). You can learn Dvorak or Colemak. You can buy an ortholinear keyboard.
+You can remap Caps Lock (and you should). You can buy an ortholinear keyboard. You can learn Dvorak or Colemak.
 
 But each change fights against decades of muscle memory and the installed base of the entire world.
 
@@ -275,8 +275,8 @@ Remap it to Control, Escape, or Backspace. You'll be amazed how often you use it
 ---
 
 ## Google Already Knows
+
 /assets/chromebook_no_capslock.jpg
-size: contain
 
 Chromebooks don't have Caps Lock.
 
