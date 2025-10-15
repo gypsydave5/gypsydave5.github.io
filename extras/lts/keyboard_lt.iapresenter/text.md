@@ -120,6 +120,9 @@ It's a vestigial feature. An appendix of the keyboard.
 ---
 
 ## Key Stagger
+
+/assets/appleiie.jpg
+
 Why are the keys offset in diagonal rows?
 
 Look at your keyboard. Notice how each row is slightly offset from the one above it? There's a reason. A very old reason.
@@ -153,6 +156,10 @@ But we keep it. Why?
 ## Muscle Memory
 Your fingers learned the stagger. Changing it feels wrong.
 
+
+/assets/typing_pool.jpg
+
+
 Manufacturers tried making straight-column keyboards. Typists hated them. Not because they're worse—because they're different.
 
 Your muscle memory is calibrated to compensate for a constraint that hasn't existed since the 1970s.
@@ -161,6 +168,10 @@ Your muscle memory is calibrated to compensate for a constraint that hasn't exis
 
 ## Modern Alternatives
 Ortholinear and ergonomic keyboards eliminate the stagger.
+
+
+/assets/planck.jpg
+
 
 Keyboards like the ErgoDox, Planck, and Microsoft Sculpt use straight columns. Your fingers move in natural paths. Less strain, less travel.
 
@@ -172,6 +183,8 @@ But they require retraining. And they look weird. So most people stick with stag
 Why are the keys arranged this way?
 
 The QWERTY layout was designed in the 1870s. Not for speed. Not for ergonomics. For something much stranger.
+
+QWERTY was there to speed you up... by slowing you down.
 
 ---
 
@@ -201,6 +214,10 @@ Think about it: common pairs like "TH" and "ER" require your fingers to jump acr
 
 ## It Worked... Too Well
 QWERTY became the standard. Then everything changed.
+
+
+/assets/selectric.gif
+
 
 IBM Selectric typewriters (1961) used a rotating ball—no hammers, no jamming possible. Electronic keyboards (1970s onwards) have no mechanical constraints at all.
 
