@@ -1,7 +1,7 @@
 # Keyboard Fossils
 Vestigial Features of the Modern Keyboard
 
-Our keyboards carry the ghosts of typewriters past. Let's talk about Caps Lock, QWERTY, and key stagger.
+Your keyboard carries the ghosts of typewriters past. Let's talk about Caps Lock, QWERTY, and key stagger.
 
 ---
 
@@ -9,16 +9,13 @@ Our keyboards carry the ghosts of typewriters past. Let's talk about Caps Lock, 
 
 /assets/simple_capslock.jpg
 
-Your keyboard is a museum piece. Every day you use design decisions made over 150 years ago.
+Your keyboard is a museum piece. Every day you're using design decisions made over 150 years ago.
 
-Look at your keyboard. Three features stand out: Caps Lock in a prime position. QWERTY layout. Keys offset in diagonal rows. All relics from the age of mechanical typewriters. All solving problems that no longer exist.
+Look at your keyboard. Three features stand out: Caps Lock in prime real estate. QWERTY layout. Keys offset in diagonal rows. All relics from the age of mechanical typewriters. All solving problems that no longer exist.
 
 ---
 
 ## Caps Lock
-
-/assets/simple_capslock.jpg
-
 Prime real estate. Next to the home row. Bigger than most keys.
 
 What does it do?
@@ -69,7 +66,6 @@ This made perfect sense on a mechanical typewriter. It was a legitimate ergonomi
 ---
 
 ## Then Everything Changed
-
 Typewriters went electric. Then they disappeared entirely.
 
 IBM Selectric typewriters (1961) used a rotating ball—much lighter mechanism. Electronic keyboards (1970s onwards) have no mechanism at all. Just switches sending signals.
@@ -131,7 +127,7 @@ The QWERTY layout was designed in the 1870s. Not for speed. Not for ergonomics. 
 
 Those same mechanical typewriters had another problem: jamming.
 
-When you pressed a key, a metal hammer swung up to strike the paper. Press keys too quickly in sequence, and neighboring hammers would collide and jam.
+When you pressed a key, a metal hammer swung up to strike the paper. Press keys too quickly in sequence, and neighbouring hammers would collide and jam.
 
 Early typewriters needed frequent unjamming. This was a serious usability problem.
 
@@ -143,14 +139,13 @@ Early typewriters needed frequent unjamming. This was a serious usability proble
 
 Christopher Latham Sholes designed QWERTY to *slow you down*.
 
-The layout separates commonly-used letter pairs. Not to make typing faster—to prevent the hammers from colliding. It's an anti-optimization.
+The layout separates commonly-used letter pairs. Not to make typing faster—to prevent the hammers from colliding. It's an anti-optimisation.
 
 Think about it: common pairs like "TH" and "ER" require your fingers to jump across the keyboard.
 
 ---
 
 ## It Worked... Too Well
-
 QWERTY became the standard. Then everything changed.
 
 IBM Selectric typewriters (1961) used a rotating ball—no hammers, no jamming possible. Electronic keyboards (1970s onwards) have no mechanical constraints at all.
@@ -160,12 +155,11 @@ But QWERTY stayed. Why?
 ---
 
 ## Network Effects
-
 Everyone learned QWERTY. Every keyboard had QWERTY. Every typing course taught QWERTY.
 
 The original problem disappeared in the 1960s. We've been living with the solution for 60+ years after the problem ceased to exist.
 
-This is a vestigial feature at civilization scale.
+This is a vestigial feature at civilisation scale.
 
 ---
 
@@ -173,7 +167,7 @@ This is a vestigial feature at civilization scale.
 
 /assets/dvorak_ibm_keyboard.jpg
 
-Dvorak (1936), Colemak (2006), and others optimize for actual typing efficiency.
+Dvorak (1936), Colemak (2006), and others optimise for actual typing efficiency.
 
 Dvorak puts the most common letters on the home row. Your fingers travel less. It's measurably more efficient.
 
@@ -206,15 +200,14 @@ This wasn't a design choice—it was an engineering necessity.
 
 Electronic keyboards have no mechanical linkages. The keys could be arranged in any pattern.
 
-Modern keyboards use rubber domes, mechanical switches, or capacitive sensors. There's no physical reason for the stagger anymore.
+Modern keyboards use rubber domes, mechanical switches, or capacitive sensors. There's no physical reason for the stagger any more.
 
 But we keep it. Why?
 
 ---
 
 ## Muscle Memory
-
-Our fingers learned the stagger. Changing it feels wrong.
+Your fingers learned the stagger. Changing it feels wrong.
 
 Manufacturers tried making straight-column keyboards. Typists hated them. Not because they're worse—because they're different.
 
@@ -223,7 +216,6 @@ Your muscle memory is calibrated to compensate for a constraint that hasn't exis
 ---
 
 ## Modern Alternatives
-
 Ortholinear and ergonomic keyboards eliminate the stagger.
 
 Keyboards like the ErgoDox, Planck, and Microsoft Sculpt use straight columns. Your fingers move in natural paths. Less strain, less travel.
@@ -233,10 +225,10 @@ But they require retraining. And they look weird. So most people stick with stag
 ---
 
 ## The Pattern
-
 Caps Lock. QWERTY. Key stagger. All vestigial features.
 
 They solved real problems in mechanical typewriters:
+
 - Caps Lock: made holding shift easier
 - QWERTY: prevented hammer jams
 - Stagger: accommodated mechanical linkages
@@ -246,7 +238,6 @@ Those problems are gone. But the solutions remain, embedded in billions of keybo
 ---
 
 ## We're Typing on Ghosts
-
 Each keypress is haunted by constraints from 150 years ago.
 
 Your pinky stretches for Control because of a 1986 decision. Your fingers jump across the keyboard because of hammer collisions. Keys sit at diagonal angles because of linkage spacing.
@@ -256,7 +247,6 @@ We're not just using old technology. We're preserving the shape of problems we n
 ---
 
 ## Breaking Free?
-
 Change is possible. But it's hard.
 
 You can remap Caps Lock (and you should). You can learn Dvorak or Colemak. You can buy an ortholinear keyboard.
@@ -271,9 +261,9 @@ But each change fights against decades of muscle memory and the installed base o
 
 Start small. Remap Caps Lock.
 
-On Mac: System Settings → Keyboard → Keyboard Shortcuts → Modifier Keys
-On Linux: XKB configuration
-On Windows: Registry edit or AutoHotkey
+- **Mac**: System Settings → Keyboard → Keyboard Shortcuts → Modifier Keys
+- **Linux**: XKB configuration
+- **Windows**: Registry edit or AutoHotkey
 
 Remap it to Control, Escape, or Backspace. You'll be amazed how often you use it now that it's actually useful.
 
@@ -292,7 +282,6 @@ Maybe the keyboard doesn't have to stay frozen in 1986 after all.
 ---
 
 ## The Lesson
-
 Technology evolves. Constraints disappear. But their solutions can live forever.
 
 The next time you mistype because you hit Caps Lock, or your pinky stretches awkwardly for Control, remember: you're feeling the echo of a problem solved 150 years ago.
@@ -302,7 +291,6 @@ Our tools carry their history in their design. Sometimes that history is baggage
 ---
 
 ## Questions?
-
 Thanks for listening!
 
 Remember: every tool you use has a history. Sometimes understanding that history helps you use the tool better. Sometimes it helps you choose a different tool.
