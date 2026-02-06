@@ -5,130 +5,206 @@
 Alistair Cockburn put this on a mug: "Incremental supports the process. Iterative supports the product."
 
 ---
-### The Thumbnail Version
-	[Jeff Patton's Mona Lisa](https://jpattonassociates.com/dont_know_what_i_want/)
-https://jpattonassociates.com/wp-content/uploads/2008/01/incrementing.jpg
-size: contain
-	**Incremental:** Quadrant by quadrant - pieces don't help until complete
-
----
-
-### The Thumbnail Version
-	[Jeff Patton's Mona Lisa](https://jpattonassociates.com/dont_know_what_i_want/)
-https://jpattonassociates.com/wp-content/uploads/2008/01/iterating.jpg
-size: contain
-	**Iterative:** Whole picture refined each pass - always usable
-
-*Credit: [Jeff Patton](https://jpattonassociates.com/dont_know_what_i_want/)*
-
----
-
-### Henrik Kniberg's Classic
-	Making Sense of This Better Than I Can
-https://blog.crisp.se/wp-content/uploads/2016/01/Making-sense-of-MVP-.jpg
-size: contain
-
-
-**Top row (incremental):** Chassis → body → wheels → nothing works until the end
-
-**Bottom row (iterative):** Skateboard → scooter → bike → car → each step is functional
-
----
-### But What If...
-	Iteration Is Constrained?
-
-https://images.fineartamerica.com/images/artworkimages/mediumlarge/2/ford-factory-hulton-archive.jpg
-
-Sometimes you *can't* ship the scooter or bicycle:
-- Regulations require a full car
-- Market won't accept intermediate steps
-- Technical constraints prevent partial solutions
-
-**The trap:** "Can't iterate? Then build the whole car in one go!"
-
-**The reality:** You still need incremental work *internally*.
-
----
-### Still Increment
-	Even When You Can't Iterate
-
-Build the car incrementally:
-- Working engine (tested in isolation)
-- Working steering (integrated and tested)
-- Working brakes (integrated and tested)
-
-Small batches. Continuous integration. Reduced risk.
-
-You don't get *user* feedback until the end, but you get *team* feedback constantly.
-
-Process benefits still matter.
-
----
 ## Iterative Development
 	Supporting the Product
 
-With each iteration, you ship something *whole* and *usable*.
+https://jpattonassociates.com/wp-content/uploads/2008/01/iterating.jpg
+size: contain
 
-This means you can:
-- Test assumptions with real users
-- Discover you've already "won" 
-- Change direction based on learning
-- Validate you're solving the right problem
+Deliver a *whole, working version* each time.
+- Rough sketch → better proportions → refined details
+- Always complete, always usable
 
-**The feedback loop matters more than the plan.**
+**Ship it. Learn from users. Improve.**
+
+*Credit: [Jeff Patton](https://jpattonassociates.com/dont_know_what_i_want/)*
 
 ---
 ## Incremental Development
 	Supporting the Process
 
-Break big problems into manageable chunks.
+https://jpattonassociates.com/wp-content/uploads/2008/01/incrementing.jpg
+size: contain
 
-This helps you:
-- Plan the work clearly
-- Parallelize across a team
-- Track progress with confidence
-- "Knife and fork" complexity
+Deliver *pieces*, assemble at the end.
+- Quadrant by quadrant
+- Nothing usable until complete
 
-**But:** Pieces aren't usable until assembled.
+**Break big problems into chunks. Manage complexity.**
+
+*Credit: [Jeff Patton](https://jpattonassociates.com/dont_know_what_i_want/)*
 
 ---
-### The Danger
+### Henrik Kniberg's Classic
+	The Ideal: Iterate With Users
+
+https://blog.crisp.se/wp-content/uploads/2016/01/Making-sense-of-MVP-.jpg
+size: contain
+
+**Top row (incremental):** Car parts → nothing works until the end
+
+**Bottom row (iterative):** Skateboard → scooter → bike → car
+
+Each iteration delivers *transportation* - the real user need.
+
+---
+### The First Danger
 	Being Purely Incremental
 
-Building pieces without asking: "Does the *whole thing* work?"
+Building pieces without asking: "Does the *whole thing* work for users?"
 
 You can perfectly execute a plan for the wrong product.
 
-The smile alone doesn't help anyone.
+**Missing: User feedback. Product validation.**
 
 ---
-### The Other Danger
-	Refusing the Incremental
+### The Second Danger
+	Refusing to Increment
 
 "Everything must be a whole, releasable product!"
 
-Sounds iterative. But leads to:
+Sounds iterative. But if iterations last two months:
 - Large batches of work
-- Long feedback cycles *within* the team
+- Long feedback cycles *within the team*
 - Integration hell
-- Risk piling up
+- Work becomes invisible, ad hoc
 
-**You're still incremental** - just with massive, unwieldy increments.
-
-Process suffers even if the product thinking is right.
+**You're still incremental - just with massive, unwieldy increments.**
 
 ---
-## The Sweet Spot
-	Both Together
+### The Real World
+	Iteration Is Often Constrained
 
-Use **incremental** *within* **iterations**.
+https://images.fineartamerica.com/images/artworkimages/mediumlarge/2/ford-factory-hulton-archive.jpg
 
-Break work into pieces, but ensure each iteration delivers something complete enough to learn from.
+Sometimes you *can't* ship the scooter or bicycle:
+- Regulations require a complete car
+- Market won't accept intermediate products
+- Technical constraints prevent partial solutions
 
-Process *and* product. Planning *and* adaptation.
+**The trap:** "Can't iterate? Build the whole car in one go!"
+
+**The reality:** You still choose *how* to work internally.
+
+---
+## Three Ways to Build a Car
+	When You Can't Release Until It's Complete
+
+You can't iterate with users.
+
+But you can still control your internal process.
+
+---
+### Approach 1: Parallel
+	Everything At Once
+
+/assets/ParallelCar.png
+size: contain
+
+All parts advance simultaneously.
+- High work-in-progress
+- Nothing complete until the end
+- **Big bang integration**
+
+---
+### Approach 2: Sequential Component
+	Finish Each Part First
+
+/assets/SequentialComponentCar.png
+size: contain
+
+Complete components, then integrate.
+- Wheels finished → Chassis finished → Assembly
+- Each deliverable **testable in isolation**
+- **Continuous integration**
+
+---
+### Approach 3: Steel Thread
+	Build the Skeleton First
+
+/assets/SteelThreadCar.png
+size: contain
+
+End-to-end structure, then enhance.
+- Chassis → Add wheels (it rolls!) → Add body
+- Minimal **working system** at each stage
+- Learn about the **whole** as you go
+
+---
+### Which Is Best?
+	It Depends
+
+**Sequential Component:** Clear dependencies, thorough testing. Risk: late integration issues.
+
+**Steel Thread:** Early integration, continuous learning. Risk: may need rebuilding.
+
+**Parallel:** Fast if teams are independent. Risk: Integration hell.
+
+---
+### The Hidden Truth
+	Work Decomposes Anyway
+
+Humans are sequential. We work on one thing at a time.
+
+**The question isn't IF work gets broken up.**
+
+**The question is WHEN and HOW.**
+
+---
+### Choose Your Decomposition
+	Or Let It Choose You
+
+**No deliberate breakdown:**
+- Decomposition happens invisibly
+- No conscious decisions about boundaries
+- No reviews until the end
+
+**Deliberate breakdown (Sequential/Steel Thread):**
+- Clear, reviewable deliverables
+- Regular reflection points
+- Questions asked early
+
+**Control the breakdown. Don't let it control you.**
+
+---
+## The Practical Takeaway
+	Don't Hand Over "Complete User Stories"
+
+The anti-pattern: A "complete" feature as a single story.
+
+What happens:
+- Work lasts two months
+- Becomes invisible, ad hoc
+- Other disciplines excluded
+- Questions go unasked
+- No fast feedback
+
+**The work disappears into a black box.**
+
+---
+### The Solution
+	Deliberate Increments
+
+**Can't ship to users every 2 days?** Fine.
+
+**But don't let work vanish for 2 months.**
+
+Break into incremental steps:
+- Steel thread first, then layers
+- Or complete components, then integrate
+
+**Each step:**
+- Analyzed beforehand (questions early)
+- Reviewed afterward (all disciplines)
+- Progress visible
+
+**Make the process explicit, not ad hoc.**
 
 ---
 ##### Remember
 # Iterate to Learn
 # Increment to Manage
-	Ship working versions. Get feedback. Adapt.
+	Don't let "complete user stories" hide months of invisible work.
+
+Break it down. Review early. Review often.
+
