@@ -1,0 +1,40 @@
+{
+  "Presets": [
+    {
+      "Name": "Light",
+      "TitleFont": "Helvetica",
+      "BodyFont": "Helvetica",
+      "DarkBodyTextColor": "#000",
+      "LightBodyTextColor": "#FFF",
+      "DarkTitleTextColor": "#000",
+      "LightTitleTextColor": "#FFF",
+      "DarkBackgroundColor": "#000",
+      "LightBackgroundColor": "#FFF",
+      "Appearance": "light",
+      "Accent1": "#FF3333",
+      "Accent2": "#43aa8b",
+      "Accent3": "#f9c74f",
+      "Accent4": "#90be6d",
+      "Accent5": "#f8961e",
+      "Accent6": "#577590"
+    },
+    {
+      "Name": "Dark",
+      "TitleFont": "Helvetica",
+      "BodyFont": "Helvetica",
+      "DarkBodyTextColor": "#000",
+      "LightBodyTextColor": "#FFF",
+      "DarkTitleTextColor": "#000",
+      "LightTitleTextColor": "#FFF",
+      "DarkBackgroundColor": "#000",
+      "LightBackgroundColor": "#FFF",
+      "Appearance": "dark",
+      "Accent1": "#FF3333",
+      "Accent2": "#333",
+      "Accent3": "#666",
+      "Accent4": "#999",
+      "Accent5": "#CCC",
+      "Accent6": "#EEE"
+    }
+  ]
+}

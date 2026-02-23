@@ -1,0 +1,41 @@
+:root {
+  --text-horizontal-align-layout-cover: left;
+  --text-vertical-align-layout-cover: center;
+  --text-horizontal-align-layout-title: left;
+  --text-vertical-align-layout-title: center;
+  --text-horizontal-align-layout-section: left;
+  --text-vertical-align-layout-section: center;
+  --text-horizontal-align-layout-default: left;
+  --text-vertical-align-layout-default: center;
+  --text-horizontal-align-layout-caption: left;
+  --text-vertical-align-layout-split: center;
+  --text-vertical-align-layout-3-column: center;
+}
+
+section.light.has-light-background figure.default-image {
+  filter: invert(1);
+  opacity: 0.5;
+}
+section.light.has-dark-background figure.default-image {
+  filter: initial;
+  opacity: 0.6;
+}
+
+section.dark.has-light-background figure.default-image {
+  filter: invert(1);
+  opacity: 0.5;
+}
+section.dark.has-dark-background figure.default-image {
+  filter: initial;
+  opacity: 0.6;
+}
+
+/* Web sharing */
+.presentation-display-mode-handout .content.handout figure.default-image img {
+  filter: invert(1);
+  opacity: 0.5;
+}
+.presentation-display-mode-handout.dark .content.handout figure.default-image img {
+  filter: initial;
+  opacity: 0.6;
+}
