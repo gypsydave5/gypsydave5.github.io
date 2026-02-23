@@ -1,3 +1,13 @@
+---
+title: "The Incremental and the Iterative"
+date: 2026-02-23 00:00:00
+published: false
+description: "Explaining the difference between iterative and incremental development, and why both matter."
+tags:
+  - agile
+  - iterative
+  - incremental
+---
 # The Incremental and the Iterative
 
 Alistair Cockburn has a mug that says:
