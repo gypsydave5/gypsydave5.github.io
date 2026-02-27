@@ -226,20 +226,24 @@ We're in the map room now. We'd better make sure the maps are good.
 
 [cf]: /posts/2026-02-27-continuous-feedback
 
-[^discontinuous]: I've written about this more fully in [Continuous Feedback Distributes Surprise][cf]. The short version: continuous feedback distributes surprise across many
-small moments. Discontinuous feedback concentrates it into crises. AI-assisted
-development, unless we're careful, concentrates surprise.
-[^smartbear]: Jason Cohen, "Best Kept Secrets of Peer Code Review," SmartBear Software (2006) The study analysed 2,500 code reviews at Cisco Systems. The finding that review
-effectiveness drops sharply beyond 200-400 LOC has been widely cited, including in
-SmartBear's later "Best Practices for Code Review" guide.
-[^svechin]: This three-level framework was first articulated by Aleksandr Svechin in *Strategy* (1926) and has since become doctrine. See US Joint Chiefs of Staff, *JP 3-0:
-Joint Operations*, for the modern formulation.
+[^discontinuous]: I've written about this more fully in [Continuous Feedback Distributes Surprise][cf]. The short version: continuous feedback distributes surprise across many small moments. Discontinuous feedback concentrates it into crises. AI-assisted development, unless we're careful, concentrates surprise.
+
+[^smartbear]: Jason Cohen, "Best Kept Secrets of Peer Code Review," SmartBear Software (2006). The study analysed 2,500 code reviews at Cisco Systems. The finding that review effectiveness drops sharply beyond 200-400 LOC has been widely cited, including in SmartBear's later "Best Practices for Code Review" guide.
+
+[^svechin]: This three-level framework was first articulated by Aleksandr Svechin in *Strategy* (1926) and has since become doctrine. See US Joint Chiefs of Staff, *JP 3-0: Joint Operations*, for the modern formulation.
+
 [^sicp]: Harold Abelson and Gerald Jay Sussman, *Structure and Interpretation of Computer Programs* (MIT Press, 1985), preface. I'm happy to argue about this if you think they're wrong.
-[^mda]: Object Management Group, "MDA Guide Version 1.0.1," 2003. The original MDA specification was adopted in 2001. The dream: platform-independent models transformed
-automatically into platform-specific code.
+
+[^mda]: Object Management Group, "MDA Guide Version 1.0.1," 2003. The original MDA specification was adopted in 2001. The dream: platform-independent models transformed automatically into platform-specific code.
+
 [^fowler]: Martin Fowler, "Model Driven Architecture," MartinFowler.com, 2004. Fowler's critique was that MDA repeated the mistakes of CASE tools from the late 1980s — assuming that the hard part of software was typing it in, rather than figuring out what to type.
+
 [^c4]: Simon Brown, "The C4 model for visualising software architecture," [c4model.com](https://c4model.com/). Brown's model is explicitly designed to provide views at different levels of abstraction — exactly the problem we're facing.
+
 [^kay]: Alan Kay, "The Early History of Smalltalk," *ACM SIGPLAN Notices* 28(3), March 1993. Kay has said repeatedly that he regrets coining the term "object-oriented" because people focus on the objects rather than the messages between them. "The big idea is messaging."
+
 [^crc]: Kent Beck and Ward Cunningham, "A Laboratory for Teaching Object-Oriented Thinking," *OOPSLA '89 Proceedings*. CRC cards are deliberately low-fidelity — index cards, handwritten — because the point is rapid physical modelling of relationships, not precision.
+
 [^cic]: "Regardless of the vessel or command locus, each CIC organizes and processes information into a form more convenient and usable by the commander in authority." See [Combat Information Center](https://en.wikipedia.org/wiki/Combat_information_center), Wikipedia.
+
 [^girba]: Tudor Girba, "Moldable Development," [gtoolkit.com](https://gtoolkit.com/). Glamorous Toolkit builds on the Pharo Smalltalk tradition, extending it with custom inspectors, views, and analyses that developers build for their specific codebase.
