@@ -155,20 +155,20 @@ tactical. You're drowning in detail you can't synthesise.
 across nine maps covering 38.5 square feet. Strategic scope, tactical resolution. Four
 thousand counters. Four folding tables, minimum.
 
-![War in Europe — "4 folding tables should do it..."](https://cf.geekdo-images.com/cyi_QZj5-R7Y6eJmH3upQw__imagepage/img/cOwOmzcre51ZHO843w3mpBj3F-w=/fit-in/900x600/filters:no_upscale():strip_icc()/pic124745.jpg)
+![War in Europe — "4 folding tables should do it..."](/images/wargames/war-in-europe-full.jpg)
 _War in Europe (SPI, 1976) — 4,000 counters across nine maps. ([source](https://boardgamegeek.com/image/124745/war-in-europe-second-edition))_
 
-![War in Europe — Soviets invading Germany, zoomed in](https://cf.geekdo-images.com/W_uLooP07r6IO75YgmOrmQ__imagepage/img/G_IMeVaArxvQgpBArANE7YQGOcM=/fit-in/900x600/filters:no_upscale():strip_icc()/pic910500.jpg)
+![War in Europe — Soviets invading Germany, zoomed in](/images/wargames/war-in-europe-zoomed.jpg)
 _Zoomed in: the Soviets invade Germany. Every division has its own counter. Can you tell what's happening? ([source](https://boardgamegeek.com/image/910500/war-in-europe-second-edition))_
 
 Now compare *Battle for Germany* (SPI, 1975). Same theatre. Same war. But at the right
 level of abstraction. Armies, not divisions. Fronts, not individual hexes. You can
 *see* what's happening.
 
-![Battle for Germany — full map](https://cf.geekdo-images.com/nR1xDH6GP00WLO7cSRgbmQ__imagepage/img/qwuG8dsaFlDRlSnf4eiwpvs9Ykw=/fit-in/900x600/filters:no_upscale():strip_icc()/pic309979.jpg)
+![Battle for Germany — full map](/images/wargames/battle-for-germany-full.jpg)
 _Battle for Germany (SPI, 1975) — the same theatre, at the right level of abstraction. You can see the front lines. ([source](https://boardgamegeek.com/image/309979/battle-for-germany))_
 
-![Battle for Germany — zoomed in, Eastern Front](https://cf.geekdo-images.com/q7mLV9ysybz7js6xwi7o-A__imagepage/img/q64Ik0VElG8vqHhOTxdH6D_hlN8=/fit-in/900x600/filters:no_upscale():strip_icc()/pic2239165.jpg)
+![Battle for Germany — zoomed in, Eastern Front](/images/wargames/battle-for-germany-eastern.jpg)
 _Zoomed in: the Eastern Front. Armies, fronts, pressure — the shape of the situation is visible. ([source](https://boardgamegeek.com/image/2239165/battle-for-germany))_
 
 The monster wargame is reading the AI's diff. Thousands of counters on a vast map,

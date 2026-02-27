@@ -73,6 +73,7 @@
   <ul class="links">
     <li><a href="/pages/about/">about</a></li>
     <li><a href="/posts/">posts</a></li>
+    <li><a href="/drafts/">drafts</a></li>
   </ul>
 </header>
 {{end}}
@@ -129,6 +130,20 @@
 </script>
 {{end}}
 
+{{define "draft"}}
+<!DOCTYPE html>
+<html lang="en">
+  {{template "postHead" .Draft}}
+  <body>
+    <main>
+      {{template "header"}}
+      <p><strong>⚠ This is a draft — work in progress.</strong></p>
+      {{template "article" .Draft}}
+    </main>
+  </body>
+</html>
+{{end}}
+
 {{define "index"}}
 <!DOCTYPE html>
 <html lang="en">
@@ -137,6 +152,26 @@
     <main>
       {{template "header"}}
       {{template "postlist" .}}
+    </main>
+  </body>
+</html>
+{{end}}
+
+{{define "drafts-index"}}
+<!DOCTYPE html>
+<html lang="en">
+  {{template "head" "Drafts"}}
+  <body>
+    <main>
+      {{template "header"}}
+      <section class="post-list">
+        <h1>Drafts</h1>
+        <ul>
+          {{range .}}
+          <li><a href="/{{.Path}}">{{.TitleText}}</a></li>
+          {{end}}
+        </ul>
+      </section>
     </main>
   </body>
 </html>
