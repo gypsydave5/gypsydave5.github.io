@@ -40,3 +40,10 @@ pre {
 @view-transition {
   navigation: auto;
 }
+
+.draft-notice {
+  background: #fff3cd;
+  border-left: 4px solid #e6a817;
+  padding: 0.75em 1em;
+  margin-bottom: 1.5em;
+}
