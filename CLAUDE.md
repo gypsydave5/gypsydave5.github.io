@@ -37,4 +37,4 @@ tags:
 
 ## Writing style
 
-See `.claude/projects/-Users-gypsydave5-projects-gypsydave5-github-io/memory/writing-style.md` for the comprehensive style guide. Key points: British English, conversational but rigorous, strong opinions, footnotes as endnotes at the bottom of the file.
+See `.claude/memory/writing-style.md` for the comprehensive style guide. Key points: British English, conversational but rigorous, strong opinions, footnotes as endnotes at the bottom of the file.
