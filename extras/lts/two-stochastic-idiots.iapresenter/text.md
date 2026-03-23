@@ -1,98 +1,99 @@
 ##### Multi-Agent AI
 # Two Stochastic Idiots Are Better Than One
-Why a supervisor and a worker outperform a single agent working alone.
+A lightning talk about getting AI agents to supervise each other — and why it works.
 
 
 
 ---
 
-### The Intuition
-	Roll the dice
+### Two AI agents working together produce better results than one working alone.
+	Not because they're smarter. Because they correct each other.
 
-You roll one die. You get a 3. Or a 6. Or a 1. Wildly variable.
+I'm not talking about anything clever. I'm talking about one agent writing code and another one nagging it to rebase.
 
-You roll a hundred dice and take the average. You get something close to 3.5. Every time.
-
-This is the Central Limit Theorem. More samples, less variance, better estimates. Simple enough.
-
-But here's the thing: that's not actually what's happening when two agents collaborate. The real mechanism is more interesting.
+And it works. Unreasonably well.
 
 ---
 
-### Not Averaging -- Correcting
-	Closed-loop feedback
+### The Problem
+	"I should be more disciplined"
 
-A thermostat doesn't average the temperature readings and hope for the best. It _measures_, _compares_ to a target, and _acts_ to close the gap.
+I was using an AI agent to write code. Good agent. Smart agent. But it could not remember to rebase/test/commit. Every single time — it forgot.
 
-That's a closed-loop feedback system. The output feeds back into the input. Errors get corrected rather than accumulated.
+I asked the AI how to fix this. Its answer? "I should be more disciplined."
 
-Two agents talking to each other are a feedback loop. The supervisor reads the worker's output. If it's drifting, the supervisor says so. The worker adjusts. The error doesn't compound -- it gets caught.
+My process thinking hat went on. That's not a solution. That's a wish. Sure, there's no way to _guarantee_ someone follows a rule correctly — Wittgenstein will tell you that — but it doesn't mean we shouldn't try to make it _easier_ to comply.
 
-One agent working alone is an open loop. No feedback. No correction. Just vibes.
-
----
-
-### Ensemble Methods
-	Multiple weak learners, one strong model
-
-Machine learning figured this out decades ago. A single decision tree is fragile and overfits. But a _forest_ of mediocre trees -- each trained on different data, each making different mistakes -- combines into something far more robust.
-
-Random Forests. Boosting. Bagging. The principle is always the same: diversity of perspective reduces error.
-
-The supervisor and the worker bring different perspectives. The worker is deep in the code -- syntax, types, test output. The supervisor holds the big picture -- architecture, commit discipline, the plan. Different views. Same problem.
+What I wanted was basically me, popping in every few minutes, shouting "REBASE. TEST. COMMIT."
 
 ---
 
-### Actor-Critic
-	A pattern from reinforcement learning
+### The Accident
+	Finding hcom
 
-Konda and Tsitsiklis formalised this in 1999. Two components:
+I was browsing a repo of extensions for OpenCode — my coding agent — and stumbled on hcom. A tool for making AI agents talk to each other.
 
-- The **actor** decides what to do (the _policy_)
-- The **critic** evaluates how good that decision was (the _value function_)
+That was what I needed. A second agent. A supervisor. One whose entire job is to shout "REBASE. TEST. COMMIT."
+
+But once you have a supervisor, the options open up. Maybe _it_ holds the big plan. Maybe the worker just executes small pieces, and the supervisor gives feedback — as well as yammering on about commit discipline.
+
+So that's what I did. And it worked.
+
+---
+
+### Why Does It Work?
+	First intuition — the dice
+
+Roll one die. You get a 3. Or a 6. Or a 1. Wildly variable.
+
+Roll a hundred dice, take the average. You get something close to 3.5. Every time.
+
+Central Limit Theorem. More samples, less variance. Simple enough.
+
+But that's not actually what's happening here. The real mechanism is better.
+
+---
+
+### Not Averaging — Correcting
+	The thermostat
+
+A thermostat doesn't average temperature readings and hope for the best. It _measures_, _compares_ to a target, and _acts_ to close the gap.
+
+That's a closed-loop feedback system. Errors get corrected, not accumulated.
+
+Two agents talking to each other _are_ a feedback loop. The supervisor reads the worker's output. If it's drifting, it says so. The worker adjusts.
+
+One agent alone is an open loop. No feedback. No correction. Just vibes.
+
+---
+
+### The Actor-Critic Pattern
+	Discovered twenty-five years ago
+
+Like all great patterns, this one already existed. [Konda and Tsitsiklis][konda-1999] formalised it in 1999:
+
+- The **actor** decides what to do — the _policy_
+- The **critic** evaluates how good that decision was — the _value function_
 
 The actor proposes. The critic appraises. The actor learns from the appraisal.
 
-This maps directly onto the worker/supervisor pattern. The worker (actor) writes code, runs tests, makes changes. The supervisor (critic) reviews the output, checks it against the plan, feeds back.
+Worker = actor. Supervisor = critic. We reinvented [reinforcement learning][wiki-ac] by accident.
 
-Neither is smart enough alone. Together they converge.
-
----
-
-### The Actual Problem
-	Discipline collapses under cognitive load
-
-When an agent is twenty files deep in a refactor, discipline is the first casualty. Rebase before you test? Forgotten. Test before you commit? Skipped. Separate behaviour from cleanup? Everything lands in one enormous commit.
-
-This isn't a knowledge problem. The agent _knows_ the rules. It just can't hold them in working memory while also reasoning about the code.
-
-Sound familiar? It's the same reason _you_ skip the tests when you're deep in a gnarly bug.
+[konda-1999]: https://proceedings.neurips.cc/paper/1999/file/6449f44a102fde848669bdd9eb6b76fa-Paper.pdf "Konda & Tsitsiklis (1999). Actor-Critic Algorithms. NeurIPS 12."
+[wiki-ac]: https://en.wikipedia.org/wiki/Actor-critic_algorithm "Actor-critic algorithm — Wikipedia"
 
 ---
 
-### The Supervisor Fixes This
-	Big picture context, persistent attention
+### Not Foolproof
+	Does the supervisor need a supervisor?
 
-The supervisor doesn't write code. It maintains context. It watches the worker's output and asks:
+Sometimes the supervisor gets off track. Forgets it's not meant to be _implementing_. Starts writing code instead of reviewing it.
 
-- Did you rebase onto the latest master?
-- Did you run the tests?
-- Is this commit mixing a behaviour change with cleanup?
+Does it need its own supervisor? Infinite regress, each layer approaching but never reaching perfection...
 
-It's not doing the work. It's doing the _oversight_ that the worker can't do while doing the work. The thermostat, not the boiler.
+For the most part though — it works. The supervisor stays on task. The worker stays disciplined. The code gets rebased, tested, and committed.
 
----
-
-### The Human Benefit
-	You stop being the supervisor
-
-Without multi-agent collaboration, _you_ are the supervisor. You're reading every diff, catching every missed test, reminding the agent about commit conventions.
-
-That's exhausting. And you're not even good at it -- you're checking your phone, making tea, context-switching. You're an open loop too.
-
-A dedicated supervisor agent is relentless. It doesn't get bored. It doesn't check Twitter. It reads every line of output and feeds back immediately.
-
-You get to be the _director_ instead. Set the goal, review the result. Skip the babysitting.
+Needs to be codified. Turned into a repeatable skill. But the pattern is sound.
 
 ---
 
@@ -101,11 +102,11 @@ You get to be the _director_ instead. Set the goal, review the result. Skip the 
 
 Neither agent is brilliant. The worker makes mistakes. The supervisor misses things. Individually, they're stochastic idiots.
 
-But together -- with a feedback loop between them -- errors get caught, discipline holds, and the output converges on something better than either could produce alone.
+But together — with a feedback loop between them — errors get caught, discipline holds, and the output converges on something better than either could produce alone.
 
 Not because they're averaging out noise. Because they're _correcting_ each other.
 
-Two stochastic idiots, one closed loop, zero babysitting.
+Two stochastic idiots. One closed loop. Zero babysitting.
 
 ---
 
