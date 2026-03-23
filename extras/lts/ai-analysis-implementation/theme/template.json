@@ -1,0 +1,11 @@
+{
+  "Name": "Helvetica",
+  "Version": "1.0.6",
+  "Author": "iA",
+  "ShortDescription": "International Typographic Style",
+  "LongDescription": "The International Typographic Style, also known as the Swiss Style, emphasizes clarity, readability, and objectivity, using grid systems, sans-serif typefaces, and a strong focus on typography and visual hierarchy.",
+  "Css": "helvetica.css",
+  "TitleFont": "Helvetica",
+  "BodyFont": "Helvetica",
+  "CssClasses": "variable-size-headings"
+}
