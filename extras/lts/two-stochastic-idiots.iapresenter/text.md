@@ -1,5 +1,6 @@
 ##### Multi-Agent AI
 # Two Stochastic Idiots Are Better Than One
+
 A lightning talk about getting AI agents to supervise each other — and why it works.
 
 /assets/dumb-and-dumber.jpg background: true
@@ -17,6 +18,8 @@ And it works. Unreasonably well.
 
 ### The Problem
 	"I should be more disciplined"
+
+/assets/motivator.jpg x: right
 
 I was using an AI agent to write code. Good agent. Smart agent. But it could not remember to rebase/test/commit. Every single time — it forgot.
 
@@ -70,11 +73,11 @@ Two agents talking to each other _are_ a feedback loop. The supervisor reads the
 One agent alone is an open loop. No feedback. No correction. Just vibes.
 
 ---
-
+/assets/feedback-loop.svg
+size: contain
 ### The Actor-Critic Pattern
 	Discovered twenty-five years ago
 
-/assets/feedback-loop.svg x: right
 
 Like all great patterns, this one already existed. [Konda and Tsitsiklis][konda-1999] formalised it in 1999:
 
