@@ -44,6 +44,8 @@ So that's what I did. And it worked.
 ### Why Does It Work?
 	First intuition — the dice
 
+/assets/dice.jpg x: right
+
 Roll one die. You get a 3. Or a 6. Or a 1. Wildly variable.
 
 Roll a hundred dice, take the average. You get something close to 3.5. Every time.
@@ -57,6 +59,8 @@ But that's not actually what's happening here. The real mechanism is better.
 ### Not Averaging — Correcting
 	The thermostat
 
+/assets/thermostat.jpg x: right
+
 A thermostat doesn't average temperature readings and hope for the best. It _measures_, _compares_ to a target, and _acts_ to close the gap.
 
 That's a closed-loop feedback system. Errors get corrected, not accumulated.
@@ -69,6 +73,8 @@ One agent alone is an open loop. No feedback. No correction. Just vibes.
 
 ### The Actor-Critic Pattern
 	Discovered twenty-five years ago
+
+/assets/feedback-loop.svg x: right
 
 Like all great patterns, this one already existed. [Konda and Tsitsiklis][konda-1999] formalised it in 1999:
 
