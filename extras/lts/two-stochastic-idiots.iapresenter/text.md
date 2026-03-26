@@ -22,16 +22,16 @@ I was using an AI agent to write code. Good agent. Smart agent. But it could not
 
 I asked the AI how to fix this. Its answer? "I should be more disciplined."
 
-My process thinking hat went on. That's not a solution. That's a wish. Sure, there's no way to _guarantee_ someone follows a rule correctly — Wittgenstein will tell you that — but it doesn't mean we shouldn't try to make it _easier_ to comply.
+My process thinking hat went on. That's not a solution. That's a wish. Sure, there's no way to _guarantee_ someone follows a rule correctly — [Wittgenstein][wittgenstein] will tell you that — but it doesn't mean we shouldn't try to make it _easier_ to comply.
 
 What I wanted was basically me, popping in every few minutes, shouting "REBASE. TEST. COMMIT."
 
 ---
 
 ### The Accident
-	Finding hcom
+	Finding `hcom`
 
-I was browsing a repo of extensions for OpenCode — my coding agent — and stumbled on hcom. A tool for making AI agents talk to each other.
+I was browsing a repo of extensions for [OpenCode] — my coding agent — and stumbled on [`hcom`][hcom]. A tool for making AI agents talk to each other.
 
 That was what I needed. A second agent. A supervisor. One whose entire job is to shout "REBASE. TEST. COMMIT."
 
@@ -48,7 +48,7 @@ Roll one die. You get a 3. Or a 6. Or a 1. Wildly variable.
 
 Roll a hundred dice, take the average. You get something close to 3.5. Every time.
 
-Central Limit Theorem. More samples, less variance. Simple enough.
+[Central Limit Theorem][clt]. More samples, less variance. Simple enough.
 
 But that's not actually what's happening here. The real mechanism is better.
 
@@ -78,9 +78,6 @@ Like all great patterns, this one already existed. [Konda and Tsitsiklis][konda-
 The actor proposes. The critic appraises. The actor learns from the appraisal.
 
 Worker = actor. Supervisor = critic. We reinvented [reinforcement learning][wiki-ac] by accident.
-
-[konda-1999]: https://proceedings.neurips.cc/paper/1999/file/6449f44a102fde848669bdd9eb6b76fa-Paper.pdf "Konda & Tsitsiklis (1999). Actor-Critic Algorithms. NeurIPS 12."
-[wiki-ac]: https://en.wikipedia.org/wiki/Actor-critic_algorithm "Actor-critic algorithm — Wikipedia"
 
 ---
 
@@ -112,4 +109,9 @@ Two stochastic idiots. One closed loop. Zero babysitting.
 
 # Questions?
 
-
+[konda-1999]: https://proceedings.neurips.cc/paper/1999/file/6449f44a102fde848669bdd9eb6b76fa-Paper.pdf "Konda & Tsitsiklis (1999). Actor-Critic Algorithms. NeurIPS 12."
+[wiki-ac]: https://en.wikipedia.org/wiki/Actor-critic_algorithm "Actor-critic algorithm — Wikipedia"
+[hcom]: https://github.com/aannoo/hcom "hcom — multi-agent communication for AI coding agents"
+[OpenCode]: https://opencode.ai "OpenCode — AI coding agent"
+[clt]: https://en.wikipedia.org/wiki/Central_limit_theorem "Central limit theorem — Wikipedia"
+[wittgenstein]: https://en.wikipedia.org/wiki/Rule_following "Rule-following — Wikipedia (Wittgenstein, Philosophical Investigations §185–242)"
