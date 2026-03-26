@@ -2,7 +2,7 @@
 # Two Stochastic Idiots Are Better Than One
 A lightning talk about getting AI agents to supervise each other — and why it works.
 
-
+/assets/dumb-and-dumber.jpg background: true
 
 ---
 
