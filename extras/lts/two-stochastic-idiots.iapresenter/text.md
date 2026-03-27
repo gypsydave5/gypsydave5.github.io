@@ -19,15 +19,29 @@ And it works. Unreasonably well.
 ### The Problem
 	"I should be more disciplined"
 
-/assets/motivator.jpg x: right
+/assets/motivator.jpg xsize: contain
+: right
 
-I was using an AI agent to write code. Good agent. Smart agent. But it could not remember to rebase/test/commit. Every single time — it forgot.
+I was using an AI agent to write code. Good agent. Smart agent. Probably Opus according to my usage stats from James. But it could not remember to rebase/test/commit. Every single time — it forgot.
 
 I asked the AI how to fix this. Its answer? "I should be more disciplined."
 
 My process thinking hat went on. That's not a solution. That's a wish. Sure, there's no way to _guarantee_ someone follows a rule correctly — [Wittgenstein][wittgenstein] will tell you that — but it doesn't mean we shouldn't try to make it _easier_ to comply.
 
 What I wanted was basically me, popping in every few minutes, shouting "REBASE. TEST. COMMIT."
+
+---
+
+### Why Discipline Can't Work
+	It's not laziness. It's physics.
+
+The instruction to "rebase, test, commit" goes in at the top of the context window. Then the agent starts working. Tool calls. Code. Errors. Retries. Output accumulates — thousands of tokens of it.
+
+That early instruction doesn't disappear. It just gets drowned. The model attends to recent tokens far more than distant ones. Your behavioural rule is still technically *in* the context. It has no power.
+
+Then the context fills up. Compaction kicks in. The agent summarises what came before — and a high-level instruction like "always rebase" is exactly the kind of thing that gets collapsed into nothing.
+
+You're not dealing with a forgetful employee. You're dealing with an architecture that structurally cannot hold early instructions at full weight indefinitely. Discipline isn't a solution. It's a category error.
 
 ---
 
