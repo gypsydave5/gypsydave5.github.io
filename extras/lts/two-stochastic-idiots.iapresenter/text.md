@@ -35,22 +35,29 @@ What I wanted was basically me, popping in every few minutes, shouting "REBASE. 
 ### Why Discipline Can't Work
 	It's not laziness. It's physics.
 
+
+/assets/Clipboard.png
+
+
 The instruction to "rebase, test, commit" goes in at the top of the context window. Then the agent starts working. Tool calls. Code. Errors. Retries. Output accumulates — thousands of tokens of it.
 
 That early instruction doesn't disappear. It just gets drowned. The model attends to recent tokens far more than distant ones. Your behavioural rule is still technically *in* the context. It has no power.
 
 Then the context fills up. Compaction kicks in. The agent summarises what came before — and a high-level instruction like "always rebase" is exactly the kind of thing that gets collapsed into nothing.
 
-You're not dealing with a forgetful employee. You're dealing with an architecture that structurally cannot hold early instructions at full weight indefinitely. Discipline isn't a solution. It's a category error.
+You're not dealing with a forgetful employee. You're dealing with an architecture that structurally cannot hold early instructions at full weight indefinitely. "Discipline" isn't a solution. It's a category error.
 
+That said it _is_ like dealing with a forgetful employee - or a forgetful _me_. Developers have often used techniques to keep them disciplined. For instance, if we want to keep line lengths short, we add a linter. If we want to commit regularly, we start a pomodoro timer (I don't - I'm even too lazy for that).
+
+When _I_ am trying to be disciplined, I add tools and techniques in to help me. That's what my robot buddy needs.
 ---
 
 ### The Accident
 	Finding `hcom`
 
-I was browsing a repo of extensions for [OpenCode] — my coding agent — and stumbled on [`hcom`][hcom]. A tool for making AI agents talk to each other.
+So I was browsing a repo of extensions for [OpenCode] — my coding agent — and stumbled on [`hcom`][hcom]. A tool for making AI agents talk to each other.
 
-That was what I needed. A second agent. A supervisor. One whose entire job is to shout "REBASE. TEST. COMMIT."
+That was what I needed. A second agent. A supervisor. A little pomodoro timer guy who would shout  One whose entire job is to shout "REBASE. TEST. COMMIT."
 
 But once you have a supervisor, the options open up. Maybe _it_ holds the big plan. Maybe the worker just executes small pieces, and the supervisor gives feedback — as well as yammering on about commit discipline.
 
@@ -105,7 +112,11 @@ Worker = actor. Supervisor = critic. We reinvented [reinforcement learning][wiki
 ---
 
 ### Not Foolproof
-	Does the supervisor need a supervisor?
+	Quis custodiet ipsos custodes?
+
+/assets/Clipboard 2.png
+
+
 
 Sometimes the supervisor gets off track. Forgets it's not meant to be _implementing_. Starts writing code instead of reviewing it.
 
@@ -117,16 +128,30 @@ Needs to be codified. Turned into a repeatable skill. But the pattern is sound.
 
 ---
 
+
+/assets/Clipboard 3.png
+
 ### Two Idiots > One Genius
 	The punchline
 
-Neither agent is brilliant. The worker makes mistakes. The supervisor misses things. Individually, they're stochastic idiots.
+Neither agent is brilliant. The worker makes mistakes. The supervisor misses things. Individually, they're stochastic idiots. Sophisticated stochastic idiots. But still idiots.
 
 But together — with a feedback loop between them — errors get caught, discipline holds, and the output converges on something better than either could produce alone.
 
 Not because they're averaging out noise. Because they're _correcting_ each other.
 
 Two stochastic idiots. One closed loop. Zero babysitting.
+
+---
+
+### The Industry Noticed
+	Frameworks built on the same pattern
+
+Nobody sat down and derived actor-critic from first principles. They just noticed that multi-agent systems worked better — and built tooling around it.
+
+[AutoGen](https://microsoft.github.io/autogen/) (Microsoft), [LangGraph](https://www.langchain.com/langgraph), [CrewAI](https://www.crewai.com/) — all of them have explicit supervisor/worker patterns. [OpenAI's Swarm](https://github.com/openai/swarm). Anthropic's own multi-agent guidance. The pattern is everywhere.
+
+The industry reinvented the thermostat. Independently. Repeatedly. That's usually a sign you've found something real.
 
 ---
 
