@@ -363,6 +363,20 @@ flowchart TD
     end
 ```
 
+## So what was all that for?
+
+The architecture, in the end, is the easy part. The hexagon has been drawn a thousand times, and you can find the definitions of ports and adaptors anywhere. I'm almost sick to death of seeing it. It's the easy part. Drawing a map is easy.
+
+The harder bit is the _order and the wiring_ - building the city the same way every time, one layer from the last, with exactly one place where each kind of thing gets made. Do that, and you make the architecture _scream_. Do that, and you make the two edges of your application _scream_ too. And if you can do that then you can get some very interesting and useful advantages.
+
+First, you know exactly where to put the things you're adding. A new database? Bootstrap an out-port in the box above. A new use case? Goes in the use cases. And you'll see how to wire it all up too, without one big messy file full of cross-cutting wiring.
+
+Next, because you've done this, you now have a perfect view on your out-ports. They are now the single seam in the application - they are the only place anything gets faked. Everything above them is real, always real, wired the same in a test as it is in production.
+
+Finally, you have a perfect view on your in-ports. They are the single _language_ that your application speaks to the outside world. Because a use case is written to express what the application does - in domain terms, readably, for a user - that's the language you write your tests in. And because every in-adaptor has an inverse - a _driver_ that turns the same domain-level calls into HTTP, or a CLI invocation, or whatever the adaptor speaks - you can point that one suite of tests straight at the use cases, or _through_ the HTTP adaptor into the running server, and it reads identically either way. Every test, at every level, speaks the application's own language. None of them speak JSON.
+
+That symmetry is what the whole testing strategy hangs off. One place to fake, one language to drive, and the same suite means something whether it's running against in-memory fakes in a millisecond or against the real database over real HTTP. It's why "the only thing you ever fake is an out-port" is worth repeating until it's boring. Get the wiring right and the tests almost write themselves; get it wrong - smear the construction across the codebase, let a use case lean on another use case, mock something in the middle - and no amount of clever testing will buy the confidence back.
+
 [screaming]: https://blog.cleancoder.com/uncle-bob/2011/09/30/Screaming-Architecture.html
 
 [^cqs]: Two acronyms, easily confused. **CQS** (Command-Query Separation, Bertrand Meyer) is the rule that a thing either _changes_ state and returns nothing, or _reports_ state and changes nothing - never both. **CQRS** (Command-Query Responsibility Segregation, Greg Young) takes that same split and pushes it much further down, into the model itself: a separate write model for the commands and a read model for the queries, sometimes with separate data stores behind them. What I'm describing here is the modest version - CQS drawn at the use-case boundary, so each handler is purely one or purely the other. If you wanted to, you could push that separation all the way down into the domain and end up with something much closer to full CQRS. It's the same idea, just taken further - and a much bigger commitment than this document needs.
