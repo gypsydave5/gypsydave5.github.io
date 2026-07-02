@@ -55,6 +55,10 @@ When _I_ am trying to be disciplined, I add tools and techniques in to help me. 
 ### The Accident
 	Finding `hcom`
 
+
+/assets/Clipboard 4.png
+
+
 So I was browsing a repo of extensions for [OpenCode] — my coding agent — and stumbled on [`hcom`][hcom]. A tool for making AI agents talk to each other.
 
 That was what I needed. A second agent. A supervisor. A little pomodoro timer guy who would shout  One whose entire job is to shout "REBASE. TEST. COMMIT."
@@ -132,7 +136,6 @@ Needs to be codified. Turned into a repeatable skill. But the pattern is sound.
 /assets/Clipboard 3.png
 
 ### Two Idiots > One Genius
-	The punchline
 
 Neither agent is brilliant. The worker makes mistakes. The supervisor misses things. Individually, they're stochastic idiots. Sophisticated stochastic idiots. But still idiots.
 
@@ -149,9 +152,13 @@ Two stochastic idiots. One closed loop. Zero babysitting.
 
 Nobody sat down and derived actor-critic from first principles. They just noticed that multi-agent systems worked better — and built tooling around it.
 
-[AutoGen](https://microsoft.github.io/autogen/) (Microsoft), [LangGraph](https://www.langchain.com/langgraph), [CrewAI](https://www.crewai.com/) — all of them have explicit supervisor/worker patterns. [OpenAI's Swarm](https://github.com/openai/swarm). Anthropic's own multi-agent guidance. The pattern is everywhere.
+	- [AutoGen](https://microsoft.github.io/autogen/) (Microsoft)
+	- [LangGraph](https://www.langchain.com/langgraph)
+	- [CrewAI](https://www.crewai.com/)
+	- [OpenAI's Swarm](https://github.com/openai/swarm)
 
-The industry reinvented the thermostat. Independently. Repeatedly. That's usually a sign you've found something real.
+All of them have explicit supervisor/worker patterns. The pattern is everywhere.
+
 
 ---
 

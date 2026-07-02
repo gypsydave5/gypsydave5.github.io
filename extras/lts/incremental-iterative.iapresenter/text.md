@@ -1,251 +1,300 @@
 ##### Cockburn's Mug
 # The Incremental and the Iterative
-	Two approaches to software development. What's the difference? Why does it matter?
+Two approaches to software development. What's the difference? Why does it matter?
+
+---
+
+/assets/Clipboard 1.png
+size: contain
 
 ---
 ### To Quote Alistair Cockburn
 ##### (well, his mug)
 
-	> Incremental means add on to. It helps improve the process.
+	> Incremental means add on to. It helps improve the process.  
 	> Iterative means revise. It helps improve the product.
-Alistair Cockburn put this on a mug: "Incremental supports the process. Iterative supports the product."
 
 ---
 ## Iterative Development
-	Supporting the Product
+Supporting the Product
+
 https://jpattonassociates.com/wp-content/uploads/2008/01/iterating.jpg
 size: contain
 
 Deliver a *whole, working version* each time.
-- Rough sketch → better proportions → refined details
-- Always complete, always usable
 
-**Ship it. Learn from users. Improve.**
+You can learn from users. Discover you've already "won". Change direction.
+
+**The feedback loop matters more than the plan.**
 
 *Credit: [Jeff Patton](https://jpattonassociates.com/dont_know_what_i_want/)*
 
 ---
 ## Incremental Development
-	Supporting the Process
+Supporting the Process
+
 https://jpattonassociates.com/wp-content/uploads/2008/01/incrementing.jpg
 size: contain
 
 Deliver *pieces*, assemble at the end.
-- Quadrant by quadrant
-- Nothing usable until complete
-- Requires a unified view at all times
 
-**Break big problems into chunks. Manage complexity.**
+Break big problems into chunks. Manage complexity.
+
+**But pieces aren't usable until assembled.**
 
 *Credit: [Jeff Patton](https://jpattonassociates.com/dont_know_what_i_want/)*
 
 ---
-### Henrik Kniberg's Classic
-	The Ideal: Iterate With Users
+### The Ideal
+Kniberg's Skateboard → Car
 
 https://blog.crisp.se/wp-content/uploads/2016/01/Making-sense-of-MVP-.jpg
 size: contain
 
-**Top row (incremental):** Car parts → nothing works until the end
+**Bottom row:** Skateboard → scooter → bike → car
 
-**Bottom row (iterative):** Skateboard → scooter → bike → car
+Each iteration delivers *transportation*.
 
-Each iteration delivers *transportation* - the real user need.
+This is **external product iteration** - the ideal.
 
----
-# The Danger
-	Being Purely Incremental
-
-https://images.unsplash.com/photo-1625726411847-8cbb01fcd823?w=800
-size: contain
-
-Building pieces without asking: "Does the *whole thing* work for users?"
-
-You can perfectly execute a plan for the wrong product.
-
-**Missing: User feedback. Product validation.**
-
-I think this is the danger we're most used to addressing - at least I am. This is what Kniberg and Patton are arguing against. And they should, they're product people. You should try to work on and  release something that's complete enough for users to use and give you feedback on.
-
-But there is another danger. 
+*Credit: [Henrik Kniberg](https://blog.crisp.se/2016/01/25/henrikkniberg/making-sense-of-mvp)*
 
 ---
+## The First Danger
+# Being Purely Incremental
 
-/assets/Clipboard.png
+Building pieces perfectly but never validating the whole solves the user's problem.
+
+You can execute flawlessly on the **wrong product**.
 
 ---
-# The Other Danger
-	Being Purely Iterative
+## The Second Danger
+# Refusing to Increment
 
-https://images.unsplash.com/photo-1625726411847-8cbb01fcd823?w=800
+"Everything must be a complete, releasable feature!"
 
-"Everything must be a whole, releasable feature that the user can use!"
-
-Sounds iterative. But if iterations last two months:
-- Large batch sizes
-- Long feedback cycles *within the team*
+But if that takes two months:
+- Large batches
+- Invisible work  
+- No internal feedback
 - Integration hell
-- No sense of progress
-- Work becomes invisible, ad hoc
+
+**Massive, unwieldy increments.**
 
 ---
-
-### Meanwhile, In The Real World...
-	Iteration Is Often Constrained
-
+# The "Real" World
+Iteration Is Often Constrained
 https://images.fineartamerica.com/images/artworkimages/mediumlarge/2/ford-factory-hulton-archive.jpg
 
-Sometimes you *can't* ship the scooter or bicycle:
-- Regulations require a complete car
-- Market won't accept intermediate products
-- Technical constraints prevent small partial solutions
+You can't always ship to users incrementally:
+- Regulations
+- Market constraints
+- Technical limitations
 
-**The trap:** "Can't iterate? Build the whole car in one go!"
-
-**The reality:** You still choose *how* to work internally.
+**But you don't give up on iteration entirely.**
 
 ---
-# _Nobody_ builds a car like this
+## What sort of idiot builds a car like this?
 /assets/SequentialComponentCar.png
 size: contain
 
 ---
-## Three Ways to Build a Car
-	When You Can't Release Until It's Complete
-
-You can't iterate with users.
-
-But you can still control your process.
-
----
-### Approach 1: Parallel Component
-	Everything At Once
-/assets/ParallelComponentCar.png
-size: contain
-All parts advance simultaneously.
-- High work-in-progress
-- Nothing complete until the end
-- **Big bang integration**
-
----
-### Approach 2: Sequential Component
-	Finish Each Part First
-/assets/SequentialComponentCar.png
+yes it's steel thread time
+/assets/Gemini_Generated_Image_681vx7681vx7681v.png
 size: contain
 
-Complete components, then integrate.
-- Wheels finished → Chassis finished → Assembly
-- Each deliverable **testable in isolation**
-- **Continuous integration**
 
 ---
-### Approach 3: "Steel Thread"
-	Build the Skeleton First
+## The Steel Thread
+Multiple Dimensions Simultaneously
 /assets/SteelThreadCar.png
 size: contain
 
-End-to-end structure, then enhance.
-- Chassis → Add wheels (it rolls!) → Add body
-- Integration concerns addressed at every stage
-- Minimal **working system** at each stage
-- Learn about how to build the **whole** as you go
+Now, from the point of view of that end user, who wanted a car, the steel thread is incremental.
+
+But from another view, it's **iterative in multiple ways**.
 
 ---
-# Which Is Best?
-	"It Depends"
-	_but probably steel thread_
+### Steel Thread: Integration
+	Always Present, Always Improving
 
+**Integration is iterated from day one.**
 
-**Parallel:** Fast if teams are independent. Risk: Integration hell.
+Not: Build pieces → assemble → hope
 
-**Steel Thread:** Early integration, continuous learning. Risk: may need rebuilding.
+But: Integrated flow → refine connections → validate continuously
 
-I'd favour the steel thread approach, as in my experience  the time spent on fixing late integration issues 
+Stub becomes real client. Mock becomes live service.
 
----
-### The Hidden Truth
-	Work Will Be Broken Down Anyway
-
-Humans are sequential. We work on one thing at a time. We break up problems
-
-**The question isn't IF work gets broken up.**
-
-**The question is WHEN and HOW and by WHO.**
+**The system is always wired together.**
 
 ---
-### Choose Your How You Break Work Down
-	Or It Will Be Chosen For You
+### Steel Thread: Components
+Iteratively Refined
+Components are **added** incrementally.
+But each **evolves** iteratively:
+	Stub → Partial → Full implementation
 
-**No deliberate breakdown:**
-- Decomposition happens invisibly
-- No conscious decisions about boundaries
-- No reviews until the end
+Incrementing *what exists* while iterating *what it does*.
 
-**Deliberate breakdown (Sequential/Steel Thread):**
-- Clear, reviewable deliverables
-- Regular reflection points
-- Questions asked early
-
-**Control the breakdown. Don't let it control you.**
+And as your steel thread will include "stubs" at all the integration points, you're set up for iteration from the start.
 
 ---
-## The Practical Takeaway
-#### Iterations are the best, but small stories are better.
-	- Always try to deliver small iterations
-	- If you can't do small iterations, do small increments
-	- If you're delivering small increments, prefer a steel thread
-	- If you can't deliver small increments, try harder
+### Steel Thread: Behaviour
+	Present From Iteration One
 
-Don't get me wrong - if you can work on and deliver a single iteration of your product and have it in front of your users in two days _every time_, then - bravo. We should all be aiming for this.
+**The behavior exists from the first test.**
 
-But if you _can't_ get your iterations down to this size, it doesn't mean that we just give up and work with two month long stories. We have to fall back to more incremental techniques - preferably a steel thread, then more of an isolated component approach.
+No step change from "no feature" to "feature exists."
 
-Otherwise we get:
+Even the enabling test describes the actual behavior you want.
 
-- Work lasts two months
-- Becomes invisible, ad hoc
-- Other disciplines excluded
-- Questions go unasked
-- No fast feedback
-
-**The work disappears into a black box.**
+Just with constrained scope or audience initially.
 
 ---
-## The Solution
-	Deliberate Increments
+### Steel Thread: Product Feedback
+	Iterate With Constrained Audiences
 
-**Can't ship to users every 2 days?** Fine.
+and because these are iterations, they can be show to users. Well, maybe not all the users. Maybe just some. Maybe just _you_. But it's still a user, and they can still give feedback.
 
-**But don't let work vanish for 2 months.**
+Show it to:
+- The team
+- The PO
+- A group of friendly users
+- Your mum
+- Yourself
 
-Break into incremental steps:
-- Preferably get to steel thread first, layer
-- If that's not practicable, complete component, then integrate
+**Get feedback on the whole feature from the beginning.**
 
-**Each step:**
-- Analyzed beforehand (questions early)
-- Reviewed afterward (all disciplines)
-- Progress visible
-
-**Make the process explicit, not ad hoc.**
+Internal product iteration, not just integration testing.
 
 ---
-## How do we ensure this?
-	Story Mapping and Example Mapping are Useful Tools
+### What Actually Increments?
+	Only incremental from a certain point of view
 
-Story Mapping and Example Mapping are techniques that should be driving you towards breaking things up into smaller parts - iterable or incremental - at the earliest possible stages of work.
+Some behaviour is there from iteration one.
+
+What increments:
+- Production-readiness
+- Robustness (stub → real)
+- Scale/performance
+- Audience reach (team → all users)
+
+**Steel thread: iterate until you hit some tipping point, ready for full release.**
 
 ---
-## But We Still Have To Think
-	There Is No Royal Road, You Have To Work
+# The Key Insight
+### Iterative (development)
+### Within Incremental (product)
 
-Even with these techniques, you still have to apply your product brain and your developer brain to think about what can make up an iteration, and what the most sensible way to sequence and break up increments would be. Nothing is ever easy, eh?
+Cockburn: Incremental delivery improves the process by breaking work into pieces.
+
+**We agree - with a caveat:**
+
+Even incremental features can be delivered iteratively:
+- At the system level (integration)
+- At the product level (constrained audiences)
 
 ---
-##### Remember
-# Small Iterations to Learn
-# Small Increments to Manage
-	Don't let your  "complete user stories" hide months of invisible work.
+# Features Are Increments
+## How You Build Them Is Iterative
 
-Break it down. Review early. Review often.
+Adding a new feature? That's incrementing functionality.
 
+But build it iteratively:
+- Iterate its integration with existing system
+- Iterate its behaviour with friendly users
+- Keep learning
+
+**The feature is an increment. The approach is iterative.**
+
+---
+# The Practical Application
+### (or what does this mean for stories?)
+
+---
+
+# 1. Small is Beautiful
+	keep it that way
+	keep your stories small to benefit the product
+Stories that you're working on should be _small_. The benefits of working in small batches are huge.
+
+Small keeps your feedback loop tight, keeps your focus tight, keeps your work visible, keeps you on track.
+
+About two days. Fight me,
+
+**Make the process visible.**
+
+---
+
+# 2. Ideally, Product Iterations
+	iterating on the product features
+And ideally, each story should be an iteration of a product. At the end of a story you immediately release value which the user can give you feedback on.
+
+---
+
+# 3. Otherwise, Steel Thread
+	aka iterating without release
+Minimum: Iterate Integration, but at maximum you are building tiny little bits of product that can be consumed by the right audience _for feedback_ so you can _learn_. You, the PO, your close family.
+
+When you can't iterate externally:
+
+1. Keep integration present from day one
+2. Increment components while iterating connections
+3. Get product feedback from constrained audiences
+---
+
+# 4. Purely Incremental as the Last Resort
+	i.e. multiple teams, parallelism
+
+---
+## Remember
+	Work Gets Broken Down Anyway
+
+Humans are sequential. We work one thing at a time.
+
+**Work will be decomposed.**
+
+The question is: **by design or by accident?**
+
+---
+##### In Summary
+# Iterate to Learn
+# Increment to Manage
+
+/assets/graceful-degradation.svg
+size: contain
+
+Steel thread lets you do both.
+
+Integration iterates from day one.  
+Components increment while improving.  
+Behaviour validates with constrained users.
+
+**Don't let "complete stories" hide months where nothing integrates.**
+
+---
+
+# BUT WAIT
+### What's really going on here
+
+I said iterate to learn, but really I also mean, iterate to reduce risks, to learn to improve, but to avoid dangers.
+
+The danger isn't "not being iterative" - iteration isn't a goal in itself. And "small" isn't an end in itself. 
+
+The benefits of these two 
+
+---
+
+So really what I mean is
+#### In a system governed by ignorance (i.e. software)
+# Continuity distributes surprise
+# Discontinuity concentrates surprise
+##### both at the product and technical level
+##### both nasty and pleasant
+
+---
+
+# Questions?
+
+https://www.se.rit.edu/~swen-256/resources/UsingBothIncrementalandIterativeDevelopment-AlistairCockburn.pdf

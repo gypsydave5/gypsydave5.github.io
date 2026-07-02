@@ -21,7 +21,7 @@ Familiarity with all of the above will be useful.
 
 - Overview of a Ports + Adaptors architecture
 - Definition of terminology 
-- Description of the organisation of the code in this architecture in the abstract (package dependencies)
+- Description of the organisation of the code in this architecture in the abstract
 - Description of the organisation of the code in this architecture when initialising the application (wiring up)
 - A testing strategy related to both
 
@@ -31,7 +31,7 @@ Familiarity with all of the above will be useful.
 1. The architecture should be apparent from the code
 2. Therefore, we should be able to see the parts of the architecture in the code.
 3. This visibility should extend to the packages, the package names, the names of the objects, classes, interfaces, and also to how they all interact with each other.
-4. Screaming Architecture.
+4. Screaming Architecture. It should be _hard_ to misunderstand the architecture. Not only should the approach be documented, but the objects and their names should make it very apparent.
 5. There is no reason not to name parts of the code after the terms in the ports and adaptors architecture.
 6. Similarly for DDD.
 
@@ -39,18 +39,18 @@ Familiarity with all of the above will be useful.
 
 The domain has no dependencies.
 
-We have an anaemic domain. This means that much of our domain logic lives in our Application Services and Use Cases.
+There are two schools of thought on where business logic lives in the domain:
 
-A rich domain would have the business logic in the domain types.
+**Anaemic domain** — domain types are plain data structures; all business logic lives in Application Services and Use Cases. Logic is easy to locate (it’s always in the use case layer), and this pairs naturally with CQRS. The downside: domain objects can’t protect their own invariants, so nothing stops you putting an object into an invalid state.
 
-We prefer an anaemic domain.
+**Rich domain** — business logic lives inside the domain types themselves. Domain objects enforce their own invariants and are self-protecting. The upside is strong encapsulation; the downside is that logic is harder to locate and can become entangled with the domain’s data model, which can fight against the clean separation that CQRS wants.
 
-_Note: I think we prefer an anaemic domain as that promotes a separation of behaviour and data, but don’t quote me on that._
+For simple domains, anaemic is usually fine — the use cases are the right place for the logic. As the domain grows more complex, a richer domain model starts to pay for itself. This is a judgement call, not a rule.
 
 #### Application
 An application is application of the domain types to solve a business problem
 
-If the whole application has an interface, it is the Use Cases. Concretely, the Command and Query Handlers
+If the whole application has an interface, it is the Use Cases. If that interface has an implementation, then it's the collection of Command and Query Handlers
 
 An application is made up of
 
@@ -67,11 +67,9 @@ The Application is the Domain “in action”, applied to solve a problem.
 
 #### Application Service
 
-An application service is one of the objects that does work inside the application. All the ports are application services. There may be more application services - think shared behaviour between use cases.
+An application service is an orchestration object: it coordinates domain logic and out-ports to perform a business activity. Use case implementations can (and often should) call out-ports directly: there's no requirement for an application service to exist. But when you see the same coordination logic repeated across multiple use cases, that's the signal to extract it into an application service.
 
 #### Port
-
-All ports are application services (but not all application services are ports)
 
 There are two kinds of port:
 
@@ -106,7 +104,7 @@ A _database adaptor_ could implement the “Repository” out port. An _http ada
 
 #### Command / Query Handler
 
-All Use Cases can (should?) be divided into two types: Command Handlers and Query Handlers.
+All Use Cases can be divided into two types: Command Handlers and Query Handlers.
 
 Both of these are implementations of Use Cases.
 
@@ -120,9 +118,42 @@ Please read around [Command-Query Responsibility Segregation (CQRS)][https://mar
 
 Again, I repeat: it’s more important that there is consistency around this than perfection.
 
-#### Hub
+```mermaid
+flowchart LR
+    subgraph InAdaptors["In-Adaptors"]
+        HTTP["HTTP Handler"]
+        CLI["CLI Handler"]
+    end
 
-A hub is just a word that we use for the union of the use cases for (part of) an application. Or part of the application.
+    subgraph Application["Application"]
+        InPorts["In-Ports / Use Cases<br>(interfaces)"]
+        CQH["Command / Query Handlers<br>(implementations)"]
+        AppSvc["Application Services<br>(shared orchestration)"]
+        OutPorts["Out-Ports<br>(interfaces)"]
+    end
+
+    subgraph Domain["Domain"]
+        DomainTypes["Domain Types"]
+    end
+
+    subgraph OutAdaptors["Out-Adaptors"]
+        DB["Database Adaptor"]
+        ExtSvc["HTTP Service Adaptor"]
+    end
+
+    HTTP --> InPorts
+    CLI --> InPorts
+    InPorts --> CQH
+    CQH --> AppSvc
+    CQH --> OutPorts
+    AppSvc --> OutPorts
+    OutPorts --> DB
+    OutPorts --> ExtSvc
+
+    DomainTypes -. "used by" .-> CQH
+    DomainTypes -. "used by" .-> AppSvc
+    DomainTypes -. "used by" .-> OutPorts
+```
 
 ## Wiring Up and Starting Your Application
 
@@ -142,7 +173,7 @@ Although in one way the Out-Ports are in the equivalent level of  abstraction as
 #### `Bootstrap`
 
 1. There should be an object, that provides the dependencies used to construct the Out-Ports.
-2. In Anura, we call this object [Bootstrap](https://paperauthoringtool.com/).
+2. We shall call this Bootstrap.
 3. Bootstrap provides configuration as environment variables i.e. db connection strings, Uris
 4. It also provides HTTP clients to build the http adaptors of “out” ports.
 5. What follows is a continuation of this pattern, where a single object handles the ‘wiring’ of a single layer.
@@ -155,14 +186,13 @@ Although in one way the Out-Ports are in the equivalent level of  abstraction as
 5. The OutPorts interface must have at least _one_ implementation, which is constructed depending on the Bootstrap object. `BootstrappedOutPorts`. This “real” implementation will construct the out ports that the production application will use.
 6. There may be more implementations - see testing later.
 
-### The ~~Domain~~ `ApplicationServices` object
+### The  `ApplicationServices` object
 
 1. In the same way we build the OutPorts from Bootstrap, we build the concrete implementation of the `ApplicationServices` object from OutPorts.
-2. ApplicationServices represents how all of the out ports are wired together into the business logic in order to perform business activities.
-2. The `ApplicationServices` object should _not_ be an interface; there is never a need to provide an “alternative” set of business logic.
-3. The `ApplicationServices` object presents _all_ of the objects that are needed to fulfil the UseCases (in ports).
-
-_Note: maybe this doesn't need to exist? We could go straight from OutPorts to UseCases?_
+2. ApplicationServices represents how all of the out ports are wired together in order to perform business activities that are shared between UseCases.
+3. The `ApplicationServices` object should _not_ be an interface; there is never a need to provide an “alternative” set of business logic.
+4. The `ApplicationServices` object presents _all_ of the objects that are needed to fulfil the UseCases (in ports).
+5. If some UseCases depend directly on an OutPort - if there is no logic shared between UseCases for the orchestration of the OutPorts in some cases, then the OutPorts in question can be passed directly through with the application services.
 
 ### The `UseCases` object
 
@@ -199,6 +229,18 @@ I refer to each of these steps as _layers_ as in a layered architecture.
 
 In this model, the domain underpins _everything_; objects and types of the Domain will be used at every layer.
 
+```mermaid
+flowchart TD
+    Bootstrap["Bootstrap<br>(env config, HTTP clients)"]
+
+    Bootstrap -->|"constructs"| BOP["BootstrappedOutPorts"]
+    BOP -. "implements" .-> OP["OutPorts<br>(interface)"]
+
+    OP -->|"constructs"| AS["ApplicationServices"]
+    AS -->|"constructs"| UC["UseCases"]
+    UC -->|"constructs"| HA["HttpAdaptors"]
+    HA -->|"starts"| App["▶ Running Application"]
+```
 
 ## Testing
 1. Testing is done in the context of ports and adaptors.
@@ -215,13 +257,87 @@ In this model, the domain underpins _everything_; objects and types of the Domai
 4. This is guaranteed by a contract test.
 5. This “fake” OutPorts object can be used in the “production” Domain construction (as the domain should always be wired up the same way).
 6. And so on, each layer wired the same way, but from a different (faster, easier to control), set of Out Ports.
+7. This feature we can use when constructing Domain-Driven Tests
 
-### At What Layer Should I Test?
+### Domain-Driven Tests (DDTs)
 
-1. Depending on where you stop your wiring, that is where you can test.
-2. Anything after and including the UseCase layer can be the subject of a DDD (we can test from the handlers, the use case, the deployed server)
+A DDT (Domain-Driven Test) is a test suite written against the in-ports of the application — the Use Cases — using domain types. It is, admittedly, a poor name. What it actually describes is closer to a mega-contract around the whole application: a suite that specifies the invariants of application behaviour, independent of how the application is driven and independent of what backs the out-ports.
+
+The name reflects where the tests are *written from* (the domain boundary) not any particular testing philosophy.
+
+```mermaid
+flowchart LR
+    Tests["DDT Suite<br>(written in domain types)"]
+
+    Tests --> Direct["Direct Driver<br>(calls in-ports directly)"]
+    Tests --> HTTP["HTTP Driver<br>(calls in-ports via HTTP adaptor)"]
+
+    Direct --> InPorts["In-Ports / Use Cases"]
+    HTTP --> HttpAdaptor["HTTP Adaptor"] --> InPorts
+
+    InPorts --> OutPorts["Out-Ports (interface)"]
+
+    OutPorts --> InMem["In-Memory Fakes<br>(fast, controlled)"]
+    OutPorts --> Real["Real Adaptors\n(integration)"]
+    OutPorts --> Failing["Failing Fakes\n(fault injection)"]
+```
+
+#### Two axes of variation
+
+If the wiring has been done well, the application can be tested across two independent axes:
+
+**How you drive the in-ports:**
+- Call the in-ports directly (no transport overhead)
+- Call the in-ports through an in-adaptor — e.g. HTTP
+
+**What the out-ports are:**
+- In-memory fakes (fast, controlled)
+- Real out-port implementations (integration)
+- Failing fakes (fault injection)
+
+These combine freely:
+
+| Driver | Out-ports | What you're testing |
+|---|---|---|
+| Direct | In-memory fakes | Application logic, fast |
+| HTTP adaptor | In-memory fakes | HTTP wiring + logic |
+| Direct | Real out-ports | Logic + persistence integration |
+| HTTP adaptor | Real out-ports | Full stack |
+| Direct | Failing fakes | Failure handling |
+
+The same test suite runs across all configurations. The tests don't change, _only what they're wired to_.
+
+#### How DDTs are written
+
+Tests are written using domain types, against the in-port interfaces directly. The "unwrapped" configuration calls the use case implementations directly. The "wrapped" configuration passes the same interactions through a transport adaptor (HTTP, for example) which converts them to requests and back.
+
+This means the HTTP adaptor tests are not a separate suite asserting on JSON shapes and status codes. They are the *same* behavioural assertions, exercised through HTTP. If the adaptor is wired correctly, the suite passes. If it isn't, it fails in the same terms as the direct tests, the domain terms, not HTTP terms.
+
+The confidence this gives is significant: the in-memory out-ports are trusted (by contract tests); the wiring is trusted (by the DDT suite in the direct configuration); the adaptors are trusted (by the DDT suite in the wrapped configuration). Each layer's correctness is verified by the same suite, not by separate, disconnected tests.
 
 ### Fault injection
 
-1. At each layer of the applic
+The contract test guarantees happy-path behaviour only. How the application handles failures above the adaptor level is covered by DDTs with failing fake out-ports (see above). But there is one gap: you cannot reliably trigger failure states *inside* a real adaptor — you can't make your database return a connection error on demand (unless you have remote fault injection available, but that's another post).
 
+To test the adaptor's own error-handling logic, inject a fake transport layer (a fake HTTP client, a fake DB driver) into the *real* adaptor implementation. This lets you assert on what the adaptor returns when it receives a 500, a timeout, or a malformed response — in isolation, without needing the real external system to misbehave.
+
+```mermaid
+flowchart TD
+    subgraph "Contract Test (happy path)"
+        FakeAdaptor["Fake Adaptor"] -. "implements" .-> OutPort["OutPort (interface)"]
+        RealAdaptor["Real Adaptor"] -. "implements" .-> OutPort
+        ContractTest["Contract Test"] --> FakeAdaptor
+        ContractTest --> RealAdaptor
+    end
+
+    subgraph "Adaptor Failure Test"
+        RealAdaptor2["Real Adaptor"] --> FakeTransport["Fake Transport<br>(returns 500 / timeout / bad data)"]
+        AdaptorTest["Unit Test"] --> RealAdaptor2
+    end
+
+    subgraph "Layer Failure Test"
+        FailingFake["Failing Fake OutPorts<br>(returns errors on demand)"] --> AppServices["ApplicationServices"]
+        AppServices --> UseCases["UseCases"]
+        LayerTest["Layer Test"] --> UseCases
+    end
+```
