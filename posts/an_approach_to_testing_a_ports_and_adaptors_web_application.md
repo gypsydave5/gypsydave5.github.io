@@ -1,13 +1,13 @@
 ---
-title: An Approach to Architecting, Wiring and Testing a Clean Ports and Adaptors Web Application
-description: Opinions.
+title: The Architecture Is the Easy Part
+description: Anyone can draw the hexagon. The value is in how you wire a ports-and-adaptors application together, and the testing strategy that falls out of it.
 published: false
 date: 2024-11-27 10:36:45
 tags:
   - PortsAndAdaptors
 ---
 
-# An Approach to Architecting, Wiring and Testing a Clean Ports and Adaptors Web Application
+# The Architecture Is the Easy Part
 
 This is an opinionated approach to building a system. It's aimed at web applications, but there's nothing here that wouldn't apply just as well to anything else that takes input from the world, does something, and gives something back.
 
@@ -369,7 +369,7 @@ The architecture, in the end, is the easy part. The hexagon has been drawn a tho
 
 The harder bit is the _order and the wiring_ - building the city the same way every time, one layer from the last, with exactly one place where each kind of thing gets made. Do that, and you make the architecture _scream_. Do that, and you make the two edges of your application _scream_ too. And if you can do that then you can get some very interesting and useful advantages.
 
-First, you know exactly where to put the things you're adding. A new database? Bootstrap an out-port in the box above. A new use case? Goes in the use cases. And you'll see how to wire it all up too, without one big messy file full of cross-cutting wiring.
+First, you know exactly where to put the things you're adding. A new database? Bootstrap an out-port in the box above. A new use case? Goes in the use cases. And you'll see how to wire it all up too, without one big messy file full of cross-cutting wiring that's just waiting for you to make a mistake and mess up your architecture.
 
 Next, because you've done this, you now have a perfect view on your out-ports. They are now the single seam in the application - they are the only place anything gets faked. Everything above them is real, always real, wired the same in a test as it is in production.
 
