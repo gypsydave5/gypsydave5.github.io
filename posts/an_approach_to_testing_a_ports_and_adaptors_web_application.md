@@ -9,114 +9,109 @@ tags:
 
 # An Approach to Architecting, Wiring and Testing a Clean Ports and Adaptors Web Application
 
-This document offers an opinionated approach to a system architecture.
+This is an opinionated approach to building a system. It's aimed at web applications, but there's nothing here that wouldn't apply just as well to anything else that takes input from the world, does something, and gives something back.
 
-It is chiefly aimed at web applications, but the principles should be applicable to other types of systems.
+It draws heavily on Ports and Adaptors (aka Hexagonal Architecture) and Clean Architecture, as laid out in [Getting Your Hands Dirty With Clean Architecture](https://learning.oreilly.com/api/v1/continue/9781805128373/). Where I think the book could be clearer, I depart from it. Familiarity with all of the above will help, but I'll define my terms as I go.
 
-It draws heavily from Ports and Adaptors architecture (aka Hexagonal Architecture) and Clean Architecture, as explained in the book [Getting Your Hands Dirty With Clean Architecure](https://learning.oreilly.com/api/v1/continue/9781805128373/). It departs from the book when we think it could be made more clear.
+Here's what I want to cover:
 
-Familiarity with all of the above will be useful.
+- an overview of a Ports and Adaptors architecture, and the terminology that goes with it;
+- how the code is organised in the abstract: which type depends on which;
+- how the code is organised when you _start_ the thing up: the wiring;
+- and a testing strategy that falls out of both.
 
-## Goals
+But first, I'd like to try and explain why I'm doing this with a metaphor:
 
-- Overview of a Ports + Adaptors architecture
-- Definition of terminology 
-- Description of the organisation of the code in this architecture in the abstract
-- Description of the organisation of the code in this architecture when initialising the application (wiring up)
-- A testing strategy related to both
+An architecture is a map of a city. It tells you where things are and how they connect — the domain in the middle, the ports at the edges, the roads between them. It's genuinely useful. But a map doesn't tell you how to _build_ the city. Hand someone a map and a pile of bricks and you'll get a mess.
+
+What I actually want is the instructions. Not a blueprint but a Lego kit: _this_ bit first, then _this_ bit, then _this_ — a fixed order, one bag at a time, with the picture on the box to check yourself against.
+
+The order is the point, because the order is what stops you making a mess. If there is exactly _one_ place where objects of type A get built, then you always know where to add the next one — and, just as importantly, you know you've done something wrong the moment you find yourself constructing an A somewhere else. An adaptor conjured up ad hoc inside an HTTP handler is the software equivalent of throwing up a warehouse in the middle of a residential street. If all the commercial buildings go up together, in the commercial-buildings step, the zoning violations get a lot harder to commit by accident.
+
+The metaphor breaks down in one obvious place: we don't knock cities down and rebuild them from nothing every morning. But we do exactly that with software — every time the process starts, the whole city goes up again from an empty field. Software is weird like that. If anything it makes having the building instructions even more important.
+
+OK, let's get going. Starting with our city map, the architecture.
 
 ## Architecture
 
 ### Names
-1. The architecture should be apparent from the code
-2. Therefore, we should be able to see the parts of the architecture in the code.
-3. This visibility should extend to the packages, the package names, the names of the objects, classes, interfaces, and also to how they all interact with each other.
-4. Screaming Architecture. It should be _hard_ to misunderstand the architecture. Not only should the approach be documented, but the objects and their names should make it very apparent.
-5. There is no reason not to name parts of the code after the terms in the ports and adaptors architecture.
-6. Similarly for DDD.
+
+The architecture should be apparent from the code. Not documented-in-a-wiki apparent, but _apparent from what you can see in front of you_. You should be able to open the source, look at the packages, the package names, the classes and interfaces, and see the shape of the whole thing and how the parts talk to each other. This is sometimes called [Screaming Architecture][screaming]: the code should shout what it is. It ought to be _hard_ to misunderstand.
+
+(If you're in a city, you don't need a glossary to know you're in a residential street - you look, and it's a street with residences. And there might be street sign to really drive that home).
+
+The easiest way to get there is to name the things after the role they play in the architecture. There is no prize for inventing your own vocabulary. If it's an out-port, call it an out-port. Same goes for the DDD terms. Consistency beats cleverness every time.
+
 
 #### Domain
 
-The domain has no dependencies.
+The domain has no dependencies. Nothing. It sits at the bottom and everything else is built on top of it.
 
-There are two schools of thought on where business logic lives in the domain:
+There are two schools of thought about where the business logic lives.
 
-**Anaemic domain** — domain types are plain data structures; all business logic lives in Application Services and Use Cases. Logic is easy to locate (it’s always in the use case layer), and this pairs naturally with CQRS. The downside: domain objects can’t protect their own invariants, so nothing stops you putting an object into an invalid state.
+**Anaemic domain** - the domain types are plain data structures, and all the behaviour lives in the Application Services and Use Cases (we'll meet them soon). The logic is easy to find, because it's always in the same place: the use case layer. It pairs naturally with CQS[^cqs]. The cost is that your domain objects can't protect their own invariants: nothing stops you putting one into an invalid state.
 
-**Rich domain** — business logic lives inside the domain types themselves. Domain objects enforce their own invariants and are self-protecting. The upside is strong encapsulation; the downside is that logic is harder to locate and can become entangled with the domain’s data model, which can fight against the clean separation that CQRS wants.
+**Rich domain** - the behaviour lives inside the domain types themselves. The objects enforce their own invariants and are self-protecting. You get strong encapsulation, but the logic is harder to locate, and it can get tangled up with the data model in a way that fights the clean separation CQS wants.
 
-For simple domains, anaemic is usually fine — the use cases are the right place for the logic. As the domain grows more complex, a richer domain model starts to pay for itself. This is a judgement call, not a rule.
+For a simple domain, anaemic is usually fine; the use cases are the right home for the logic. As the domain gets more complicated, a richer model starts to earn its keep. This is a judgement call, not a rule, and anyone who tells you otherwise is selling something. And of course, there's a lot of space between the two where you can do something in-between.
+
+If you care deeply about this bit (and you should), read the Domain-Driven Design book(s), but for the purposes of this document it's a detail.
 
 #### Application
-An application is application of the domain types to solve a business problem
 
-If the whole application has an interface, it is the Use Cases. If that interface has an implementation, then it's the collection of Command and Query Handlers
+An application is the domain types _applied_ to solve a business problem.
 
-An application is made up of
+If the whole application has an interface, that interface is the Use Cases. If that interface has an implementation, that implementation is the collection of Command and Query Handlers (they're on their way, promise).
 
-- the Out-Ports (interfaces)
-- other Application Services
-- the Use Cases (In-Ports) (interfaces)
-- the Command and Query Handlers
+An application is made up of:
 
-All of them depend on the Domain.
+- the Out-Ports (interfaces);
+- Application Services (holding some of them together);
+- the Use Cases, aka the In-Ports (interfaces);
+- and the Command and Query Handlers.
 
-Each of these will have access to and use types from the Domain.
-
-The Application is the Domain “in action”, applied to solve a problem.
-
-#### Application Service
-
-An application service is an orchestration object: it coordinates domain logic and out-ports to perform a business activity. Use case implementations can (and often should) call out-ports directly: there's no requirement for an application service to exist. But when you see the same coordination logic repeated across multiple use cases, that's the signal to extract it into an application service.
+All of them depend on the domain, and all of them use its types. The application is the domain in motion.
 
 #### Port
 
 There are two kinds of port:
 
-- **Out**-Port: a port that the application uses to communicate with an external service. Also called a "driving" port because it's where our system makes something else _do something_.
-- **In**-Port: a port that other programs use to communicate with our service. Also called a "driven" port because it's where other things make our system _do something_.
+- an **Out**-Port is how the application talks to an external service. Also called a "driven" port, because it's where our system makes something else _do something_ — the external thing is driven by us.
+- an **In**-Port is how other programs talk to our service. Also called a "driving" port, because it's where other things make our system _do something_ — they're in the driving seat.
 
-Ports are _abstract_. They are interfaces.
+Ports are _abstract_. They are interfaces. That's the whole point of them.
 
 #### Use Case
 
-A Use Case may be used interchangeably with an In-Port. I prefer this term, as it helps capture the idea that the In-Port should be doing something for a user.
-
-That said, it is more important that we are naming things consistently.
+I use "Use Case" and "In-Port" interchangeably, but I prefer Use Case, because it keeps you honest: an in-port should be doing something _for a user_. That said, pick one and stick to it — consistency matters more than my preference.
 
 #### Adaptor
 
-An adaptor brings external things into the application, or brings the application to external things.
+An adaptor brings the outside world into the application, or carries the application out to the outside world. Adaptors are always paired with ports.
 
-They are used with ports.
+On the in side, an adaptor wraps an in-port to present an external interface. The application hands an in-port to an HTTP adaptor so it can be spoken to over HTTP; a command-line handler could wrap the same in-port to let you drive it from a terminal.
 
-In-Ports work with adaptors. An In-Port is given by the Application to an HttpAdapter so that the application can be communicated with over HTTP.
+On the out side, an adaptor implements an out-port. A database connection gets wrapped up as an adaptor that implements the `Repository` out-port; a call to some other service gets wrapped as an adaptor implementing a `Service` out-port.
 
-An _http handler (adaptor)_ could wrap an in port. A _command line handler (adaptor)_ could wrap an in port.
-
-Out-Ports work with adaptors. A database connection can be wrapped with an Adaptor. In this case, the Adaptor will implement the Out-Port interface.
-
-A _database adaptor_ could implement the “Repository” out port. An _http adaptor_ could implement a “Service” out port.
-
-“In adaptors” wrap In-Ports from the application, to present an external interface to the outside.
-
-“Out adaptors” wrap an external interface from the outside, to present an Out-Port to the application.
+So: **in-adaptors** wrap in-ports to face the world, and **out-adaptors** wrap the world to present an out-port to the application.
 
 #### Command / Query Handler
 
-All Use Cases can be divided into two types: Command Handlers and Query Handlers.
+Every use case is either a Command Handler or a Query Handler. Both are implementations of use cases; the difference is what they do.
 
-Both of these are implementations of Use Cases.
+A query returns data and has no side effects. A command has side effects and returns nothing. Drawing that line at the level of the use case is [Command-Query Separation](https://martinfowler.com/bliki/CommandQuerySeparation.html) — CQS — applied to whole handlers rather than to individual methods.[^cqs]
 
-One accepts commands. One responds to queries.
+As before: being consistent about this matters more than getting it theoretically perfect.
 
-Queries return data, but have no side effects.
+#### Application Service
 
-Commands have side effects, but do/should not return data.
+An application service is an orchestration object: it coordinates domain logic and Out-Ports to get a piece of business done.[^appservice]
 
-Please read around [Command-Query Responsibility Segregation (CQRS)][https://martinfowler.com/bliki/CQRS.html] for more details.
+You don't always need one. A use case implementation can — and often should — call the out-ports directly. But when you notice the same coordination logic turning up in use case after use case, that repetition is the signal. Pull it out into an application service and share it.
 
-Again, I repeat: it’s more important that there is consistency around this than perfection.
+---
+
+Put all of that together and the architecture looks like this:
 
 ```mermaid
 flowchart LR
@@ -155,79 +150,82 @@ flowchart LR
     DomainTypes -. "used by" .-> OutPorts
 ```
 
+
+
+If you've seen the standard hexagonal architecture picture before, this is that, but I've just drawn left-to-right and with the names I'm going to use for the rest of the post, and I've used Mermaid because I'm lazy.
+
+Right, so that's what we're aiming for in terms of a design. But how do we _build_ up that design from nothing?
+
 ## Wiring Up and Starting Your Application
 
-When we start our program, we create objects and then combine them in particular ways in order to produce the desired effects, both in terms of the business logic and how it communicates with the outside world.
+When you start a program you create a pile of objects and then combine them in particular ways to get the effects you want, both the business logic and the way it talks to the outside world. This creating-and-combining is usually called _wiring up_, and that's what I'm going to call it too. 
 
-This creation and combination is often called the 'wiring up’ of  the program. We will use this term.
+Here's the thing the diagram above doesn't quite show. On paper the out-ports and the use cases sit at the same level of abstraction. In practice there's a dependency tree: the use cases depend on the application services, which depend on the out-ports. And that tree dictates the order you have to build things in.
 
-Although in one way the Out-Ports are in the equivalent level of  abstraction as the Use Cases, in practice there is a dependency tree where the Use Cases depend on Application Services, which depend on the Out-Ports.
+This is ultimately the reason I've written all of this. I see a lot of lip-service paid to ports and adaptors, and some attempts to get there. But when it comes to the wiring up of big applications, people get confused about how to do it, then get lazy, and then the mess really begins. So here's some strong opinions.
 
 ### Ordering
 
-1. The implementations of the Out-Ports - the “out” _adaptors_ - are the _first_ things that your application must create.
-2. This is because your application services and use cases will depend on these ports.
-3. Ultimately your domain is made of “out” ports + business logic.
-4. And so “out ports” must come first.
+The out-adaptors - the concrete implementations of the out-ports - are the _first_ things your application has to create. Everything else leans on them: the application services and use cases all depend on the out-ports, and ultimately your domain in action is just out-ports plus business logic. So the out-ports come first, and we work our way up from there. They are the rock upon which you will build your church, they are the place you will stand to move the world.
+
+We are going to call each part of this "building-up" from the out-ports a _layer_, in honour and reference to layered architecture, and also because that's really what's happening: we're building our ports-and-adaptors application in layers. Because it's easy to think about it in that way, and harder to mess up, and harder to start leaking things between the layers if you can actually see the bloody layers.
+
+What follows is a single idea applied over and over: an object is responsible for building the objects in a single layer, and it builds that layer by wiring together the objects of the layer below.
+
+And to stop us from getting lost, we'll bundle together all the objects of each layer into a single fat object and pass that around (instead of having a method call with like xity billion arguments).
 
 #### `Bootstrap`
 
-1. There should be an object, that provides the dependencies used to construct the Out-Ports.
-2. We shall call this Bootstrap.
-3. Bootstrap provides configuration as environment variables i.e. db connection strings, Uris
-4. It also provides HTTP clients to build the http adaptors of “out” ports.
-5. What follows is a continuation of this pattern, where a single object handles the ‘wiring’ of a single layer.
+At the very bottom you need something to provide the raw materials for the out-ports. Call it `Bootstrap`.
+
+`Bootstrap` reads the configuration - the environment variables, the database connection strings, the URIs - and hands out the HTTP clients you'll need to build the out-adaptors. It's the one and only place that touches the messy outside-configuration world, so the rest of the wiring doesn't have to.
 
 #### The `OutPorts` Interface
-1. To make the architecture apparent from the code, we should construct all our “out” ports at the same time, and then use them to construct our domain types.
-2. To do so, we should have an interface that represents all of the out ports
-3. It must be an interface, as all our our out ports are interfaces as we are using _dependency inversion_; the domain should not be aware of the implementations of the out ports.
-4. This interface will expose all of the out ports to the next layer that is constructed: the domain.
-5. The OutPorts interface must have at least _one_ implementation, which is constructed depending on the Bootstrap object. `BootstrappedOutPorts`. This “real” implementation will construct the out ports that the production application will use.
-6. There may be more implementations - see testing later.
 
-### The  `ApplicationServices` object
+We want to build all the out-ports together, in one place, and then hand them to the layer above. So we give them a home: an `OutPorts` interface that exposes every out-port the application has.
 
-1. In the same way we build the OutPorts from Bootstrap, we build the concrete implementation of the `ApplicationServices` object from OutPorts.
-2. ApplicationServices represents how all of the out ports are wired together in order to perform business activities that are shared between UseCases.
-3. The `ApplicationServices` object should _not_ be an interface; there is never a need to provide an “alternative” set of business logic.
-4. The `ApplicationServices` object presents _all_ of the objects that are needed to fulfil the UseCases (in ports).
-5. If some UseCases depend directly on an OutPort - if there is no logic shared between UseCases for the orchestration of the OutPorts in some cases, then the OutPorts in question can be passed directly through with the application services.
+It has to be an interface, because every out-port is an interface - that's dependency inversion at work, and it's why the domain never has to know what's actually implementing its out-ports. `OutPorts` needs _at least_ one real implementation, built up from the `Bootstrap` components - let's call it `BootstrappedOutPorts` - which constructs the out-ports the real life production application runs on. There may be others - there _will_ be others - but we'll get to them when we talk about testing.
 
-### The `UseCases` object
+#### The `ApplicationServices` object
 
-1. In the same way we build the OutPorts from Bootstrap, and ApplicationServices from OutPorts, we build the `UseCases` object from the ApplicationServices object.
-2. The `UseCases` object represents all of the Use Cases of the application.
-3. A UseCase is another word for an “in” port
-4. An implementation of a UseCase is a `CommandHandler` or a `QueryHandler`.
-5. The `UseCases` object should _not_ be an interface. There should be only one way for the application to be used; the domain types should always be used in the same way in the use cases.
-6. (The individual use cases should be interfaces, however, as dependency inversion)
-7. This “layer” is properly called an Application, because it is the Application of the Domain model to solve a business problem.
-8. The unification of all `UseCases` in a single interface is called a hub.
-9. Therefore another way of structuring the `UseCases` object would be a `Hub` interface.
+Just as we built `OutPorts` from `Bootstrap`, we build `ApplicationServices` from `OutPorts`. It represents all the out-ports wired together into the shared logic the use cases lean on.
 
-### The `HttpAdaptors` object 
-1. In the same way we build the OutPorts from Bootstrap, and Domain from OutPorts, and the UseCases from the ApplicationServices, we build the HttpAdaptors from the UseCases.
-2. In an HTTP application the HttpAdaptors are all HTTP adaptors that respond to an HTTP request with a response.
-3. A router, a handler, controllers - these are the adaptors of the UseCases.
-4. Again, the HttpAdaptors object should be concrete, and tied to how the application is presented to the user (HTTP, command line, desktop, embedded)
-5. The HttpAdaptors should then be executed in a context - i.e. start listening for HTTP requests.
-6. There should be a mapping of one UseCase to one HTTP route. Probably.
+Unlike the out-ports, this one is _not_ an interface. There's never a reason to swap in an "alternative" business logic - the business logic is the business logic, there are no two ways about it. `ApplicationServices` presents everything the use cases need to do their jobs.
+
+And if some use cases don't need any shared orchestration — if they just want to call an out-port directly — then that out-port can be passed straight through. Not every use case needs a service in front of it.
+
+#### The `UseCases` /  `Application` object
+
+Same move again: we build `UseCases` from `ApplicationServices`. This object represents every use case the application has, and a use case, remember, is just an in-port. Its implementation is a `CommandHandler` or a `QueryHandler`.
+
+`UseCases` is _not_ an interface either. There should be exactly _one_ way for the application to be used - the domain types are always used the same way - so there's nothing to abstract over. (The individual use cases _are_ interfaces, mind you. That's dependency inversion again).
+
+This layer could properly be called the `Application`, because it's where the domain model is finally applied to solve the business problem. If you gather all the use cases behind a single interface, I'd recommend calling it the `Application`.[^hub] 
+
+#### The `Adaptors` (`HttpAdaptors`) object
+
+And once more, from the top: we build `HttpAdaptors` from `UseCases`. In an HTTP application these are the adaptors that turn a request into a response - the router, the handlers, the controllers. They're the in-adaptors of the use cases.
+
+Like the layers below, this object is concrete, and it's tied to _how_ the application faces the world: HTTP here, but it could just as well be a command line, a desktop UI, or something embedded. The rule of thumb is one use case to one route.
+
+Bundling this all up, in HTTP with routing, the final interface we have is very simple:
+
+```
+Request -> Response
+```
+
+Once we've got this, we can set it running in a context - for HTTP, that's the internet, so we start listening for those requests on a port - and the application is alive.
 
 ### Overview
 
-1. Build the `Bootstrap` from nothing
-2. Build the `OutPorts` from `Bootstrap` (as adaptors) (_application_)
-3. Build the `ApplicationServices` from `OutPorts` (_application_)
-4. Build the `UseCases` (the Application) from the `ApplicationServices` (_application_)
-5. Build the `HttpAdaptors` or other adaptors (HTTP handlers) from the `UseCases`
-6. Start the app
+So the whole startup, from nothing to running, is:
 
-This same ordering will occur in both test and in production, _but may start and end at different points_.
-
-I refer to each of these steps as _layers_ as in a layered architecture.
-
-In this model, the domain underpins _everything_; objects and types of the Domain will be used at every layer.
+1. Build `Bootstrap` from nothing.
+2. Build `OutPorts` from `Bootstrap` (as out-adaptors).
+3. Build `ApplicationServices` from `OutPorts`.
+4. Build `UseCases` — the Application — from `ApplicationServices`.
+5. Build `HttpAdaptors` (or whatever other in-adaptors) from `UseCases`.
+6. Start the app.
 
 ```mermaid
 flowchart TD
@@ -242,28 +240,38 @@ flowchart TD
     HA -->|"starts"| App["▶ Running Application"]
 ```
 
+This same ordering happens in test _and_ in production - but, crucially, a test may start and stop at different points along the chain. Hold onto that thought, because it's the whole trick behind the testing strategy.
+
+To reiterate: I call each of these steps a _layer_, in the layered-architecture sense. And underneath all of them sits the domain: its types are used at every single layer.
+
+---
+
+So we now have the "city map" of the architecture, and also the "blueprints" for how we build the city from nothing every time we construct our software. Now for the fun bit: testing.
+
 ## Testing
-1. Testing is done in the context of ports and adaptors.
-2. Testing of the application should ask two questions:
-3. What do I need my out ports to be?
-4. At what layer will I test?
-5. Other questions will arise for testing of failure scenarios.
 
-### What are my out ports?
+Testing here is done in terms of ports and adaptors, and it comes down to two questions:
 
-1. In production, your out ports are generated from Bootstrap.
-2. In test, in order to avoid starting the whole application, we can provide an object implements the OutPorts interface, but provides In Memory / Fake implementations of each of the out ports.
-3. The behaviour of the real and fake implementations should be indistinguishable.
-4. This is guaranteed by a contract test.
-5. This “fake” OutPorts object can be used in the “production” Domain construction (as the domain should always be wired up the same way).
-6. And so on, each layer wired the same way, but from a different (faster, easier to control), set of Out Ports.
-7. This feature we can use when constructing Domain-Driven Tests
+- what do I want my out-ports to be?
+- and at which layer am I going to test?
+
+Get those two right and the failure scenarios mostly answer themselves.
+
+### What do I want my out-ports to be?
+
+In production, your out-ports come from `Bootstrap` — the real database, the real services.
+
+In a test you usually don't want to stand all that up. So instead you provide a _different_ implementation of the `OutPorts` interface: one that hands out in-memory fakes for each out-port. As far as the rest of the application is concerned, nothing has changed — it's the same interface, wired up the same way — but now it's fast and easy to control.
+
+The catch, and it's the important bit: the real and fake implementations must be _indistinguishable_ in behaviour. You don't get to hope this is true. You guarantee it with a contract test that runs against both.
+
+Once you trust the fakes, you can drop them into the ordinary production wiring and build the domain on top of them exactly as you would for real — each layer wired the same way, just standing on a faster, more controllable set of out-ports. That's the feature we lean on to build Domain-Driven Tests.
 
 ### Domain-Driven Tests (DDTs)
 
-A DDT (Domain-Driven Test) is a test suite written against the in-ports of the application — the Use Cases — using domain types. It is, admittedly, a poor name. What it actually describes is closer to a mega-contract around the whole application: a suite that specifies the invariants of application behaviour, independent of how the application is driven and independent of what backs the out-ports.
+A DDT is a test suite written against the in-ports of the application — the use cases — using domain types. It's a poor name, I'll admit. What it really is is a sort of mega-contract wrapped around the whole application: a suite that pins down the _invariants of the application's behaviour_, independent of how you drive it and independent of what's behind the out-ports.
 
-The name reflects where the tests are *written from* (the domain boundary) not any particular testing philosophy.
+The name is about where the tests are written _from_ — the domain boundary — not about any particular testing religion.
 
 ```mermaid
 flowchart LR
@@ -278,24 +286,19 @@ flowchart LR
     InPorts --> OutPorts["Out-Ports (interface)"]
 
     OutPorts --> InMem["In-Memory Fakes<br>(fast, controlled)"]
-    OutPorts --> Real["Real Adaptors\n(integration)"]
-    OutPorts --> Failing["Failing Fakes\n(fault injection)"]
+    OutPorts --> Real["Real Adaptors<br>(integration)"]
+    OutPorts --> Failing["Failing Fakes<br>(fault injection)"]
 ```
 
 #### Two axes of variation
 
-If the wiring has been done well, the application can be tested across two independent axes:
+If the wiring has been done well, you can test the application across two independent axes.
 
-**How you drive the in-ports:**
-- Call the in-ports directly (no transport overhead)
-- Call the in-ports through an in-adaptor — e.g. HTTP
+The first is **how you drive the in-ports**: call them directly, with no transport in the way, or call them through an in-adaptor such as HTTP.
 
-**What the out-ports are:**
-- In-memory fakes (fast, controlled)
-- Real out-port implementations (integration)
-- Failing fakes (fault injection)
+The second is **what backs the out-ports**: in-memory fakes (fast, controlled), the real implementations (integration), or deliberately failing fakes (fault injection).
 
-These combine freely:
+And these combine freely:
 
 | Driver | Out-ports | What you're testing |
 |---|---|---|
@@ -305,21 +308,23 @@ These combine freely:
 | HTTP adaptor | Real out-ports | Full stack |
 | Direct | Failing fakes | Failure handling |
 
-The same test suite runs across all configurations. The tests don't change, _only what they're wired to_.
+The same test suite runs across every one of these configurations. The tests don't change — _only what they're wired to_.
 
 #### How DDTs are written
 
-Tests are written using domain types, against the in-port interfaces directly. The "unwrapped" configuration calls the use case implementations directly. The "wrapped" configuration passes the same interactions through a transport adaptor (HTTP, for example) which converts them to requests and back.
+The tests are written in domain types, against the in-port interfaces. In the "unwrapped" configuration they call the use case implementations directly. In the "wrapped" configuration the very same interactions are pushed through a transport adaptor — HTTP, say — which turns them into requests and back again.
 
-This means the HTTP adaptor tests are not a separate suite asserting on JSON shapes and status codes. They are the *same* behavioural assertions, exercised through HTTP. If the adaptor is wired correctly, the suite passes. If it isn't, it fails in the same terms as the direct tests, the domain terms, not HTTP terms.
+The consequence is worth dwelling on: your HTTP adaptor tests are _not_ a separate suite fussing over JSON shapes and status codes. They're the _same_ behavioural assertions, run through HTTP. If the adaptor is wired up correctly, the suite passes. If it isn't, it fails in domain terms — not HTTP terms.
 
-The confidence this gives is significant: the in-memory out-ports are trusted (by contract tests); the wiring is trusted (by the DDT suite in the direct configuration); the adaptors are trusted (by the DDT suite in the wrapped configuration). Each layer's correctness is verified by the same suite, not by separate, disconnected tests.
+The confidence that buys you stacks up nicely. The in-memory out-ports are trusted, because of the contract tests. The wiring is trusted, because the DDT suite passes in the direct configuration. The adaptors are trusted, because the same DDT suite passes in the wrapped configuration. Every layer's correctness is checked by one suite, not by a scattering of disconnected tests that each know a little and trust a lot.
 
 ### Fault injection
 
-The contract test guarantees happy-path behaviour only. How the application handles failures above the adaptor level is covered by DDTs with failing fake out-ports (see above). But there is one gap: you cannot reliably trigger failure states *inside* a real adaptor — you can't make your database return a connection error on demand (unless you have remote fault injection available, but that's another post).
+The contract test only promises the happy path. How the application copes with failures _above_ the adaptor is already covered — that's DDTs with failing fake out-ports, from the table above.
 
-To test the adaptor's own error-handling logic, inject a fake transport layer (a fake HTTP client, a fake DB driver) into the *real* adaptor implementation. This lets you assert on what the adaptor returns when it receives a 500, a timeout, or a malformed response — in isolation, without needing the real external system to misbehave.
+That leaves one gap. You can't reliably provoke a failure _inside_ a real adaptor. You can't make your database throw a connection error on demand — not without some form of remote fault injection, and that's another post.
+
+So to test the adaptor's own error handling, you go underneath it: inject a fake transport — a fake HTTP client, a fake DB driver — into the _real_ adaptor. Now you can make the transport return a 500, a timeout, or a lump of malformed nonsense, and assert on what the adaptor does with it. All in isolation, without needing the real external system to have a bad day on cue.
 
 ```mermaid
 flowchart TD
@@ -334,10 +339,12 @@ flowchart TD
         RealAdaptor2["Real Adaptor"] --> FakeTransport["Fake Transport<br>(returns 500 / timeout / bad data)"]
         AdaptorTest["Unit Test"] --> RealAdaptor2
     end
-
-    subgraph "Layer Failure Test"
-        FailingFake["Failing Fake OutPorts<br>(returns errors on demand)"] --> AppServices["ApplicationServices"]
-        AppServices --> UseCases["UseCases"]
-        LayerTest["Layer Test"] --> UseCases
-    end
 ```
+
+[screaming]: https://blog.cleancoder.com/uncle-bob/2011/09/30/Screaming-Architecture.html
+
+[^cqs]: Two acronyms, easily confused. **CQS** (Command-Query Separation, Bertrand Meyer) is the rule that a thing either _changes_ state and returns nothing, or _reports_ state and changes nothing — never both. **CQRS** (Command-Query Responsibility Segregation, Greg Young) takes that same split and pushes it much further down, into the model itself: a separate write model for the commands and a read model for the queries, sometimes with separate data stores behind them. What I'm describing here is the modest version — CQS drawn at the use-case boundary, so each handler is purely one or purely the other. If you wanted to, you could push that separation all the way down into the domain and end up with something much closer to full CQRS. It's the same idea, just taken further — and a much bigger commitment than this document needs.
+
+[^appservice]: In proper DDD the use cases _are_ application services too — a command or query handler is just an application service that happens to be an in-port. I'm drawing a line between them on purpose, though, because the distinction earns its keep in practice: it stops people wiring a use case up with _another use case_ as a dependency. Application services are for shared orchestration below the use cases; use cases sit at the top and don't depend on each other. Keep them separate in your head and you won't be tempted.
+
+[^hub]: I've seen it called a `Hub` before in some situations - you can picture it as the bit in the middle of the hexagon where the individual use cases form the spokes of a wheel - but I think this muddies things too much with a new word.
