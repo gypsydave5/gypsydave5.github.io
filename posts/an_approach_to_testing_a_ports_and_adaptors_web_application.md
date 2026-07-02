@@ -269,7 +269,7 @@ Once you trust the fakes, you can drop them into the ordinary production wiring 
 
 ### Domain-Driven Tests (DDTs)
 
-A DDT is a test suite written against the in-ports of the application — the use cases — using domain types. It's a poor name, I'll admit. What it really is is a sort of mega-contract wrapped around the whole application: a suite that pins down the _invariants of the application's behaviour_, independent of how you drive it and independent of what's behind the out-ports.
+A DDT is a test suite written against the in-ports of the application — the use cases — using domain types.[^ddt-refs] It's a poor name, I'll admit. What it really is is a sort of mega-contract wrapped around the whole application: a suite that pins down the _invariants of the application's behaviour_, independent of how you drive it and independent of what's behind the out-ports.
 
 The name is about where the tests are written _from_ — the domain boundary — not about any particular testing religion.
 
@@ -312,7 +312,7 @@ The same test suite runs across every one of these configurations. The tests don
 
 #### How DDTs are written
 
-The tests are written in domain types, against the in-port interfaces. In the "unwrapped" configuration they call the use case implementations directly. In the "wrapped" configuration the very same interactions are pushed through a transport adaptor — HTTP, say — which turns them into requests and back again.
+The tests are written in domain types, against the in-port interfaces. In the "unwrapped" configuration they call the use case implementations directly. In the "wrapped" configuration the very same interactions are pushed through a transport adaptor — HTTP, say — which turns them into requests and back again.[^driver-refs]
 
 The consequence is worth dwelling on: your HTTP adaptor tests are _not_ a separate suite fussing over JSON shapes and status codes. They're the _same_ behavioural assertions, run through HTTP. If the adaptor is wired up correctly, the suite passes. If it isn't, it fails in domain terms — not HTTP terms.
 
@@ -346,5 +346,9 @@ flowchart TD
 [^cqs]: Two acronyms, easily confused. **CQS** (Command-Query Separation, Bertrand Meyer) is the rule that a thing either _changes_ state and returns nothing, or _reports_ state and changes nothing — never both. **CQRS** (Command-Query Responsibility Segregation, Greg Young) takes that same split and pushes it much further down, into the model itself: a separate write model for the commands and a read model for the queries, sometimes with separate data stores behind them. What I'm describing here is the modest version — CQS drawn at the use-case boundary, so each handler is purely one or purely the other. If you wanted to, you could push that separation all the way down into the domain and end up with something much closer to full CQRS. It's the same idea, just taken further — and a much bigger commitment than this document needs.
 
 [^appservice]: In proper DDD the use cases _are_ application services too — a command or query handler is just an application service that happens to be an in-port. I'm drawing a line between them on purpose, though, because the distinction earns its keep in practice: it stops people wiring a use case up with _another use case_ as a dependency. Application services are for shared orchestration below the use cases; use cases sit at the top and don't depend on each other. Keep them separate in your head and you won't be tempted.
+
+[^ddt-refs]: I didn't invent any of this — I've just given it a name I can remember. If you want it from people who've thought about it harder than I have: Aslak Hellesøy [walks through the idea here](https://www.youtube.com/watch?v=sUclXYMDI94), and Nat Pryce [does the same here](https://www.youtube.com/watch?v=Fk4rCn4YLLU). Both are, sadly, YouTube videos.
+
+[^driver-refs]: The trick underneath this — separating the _test driver_ from the _implementation_ of the test, with a little DSL in the middle so the same tests can run against different bindings — is covered beautifully by Chris James and Riya Dattani [in this talk](https://www.youtube.com/watch?v=ZMWJCk_0WrY), and again, in Go and in writing, by Chris James in [Learn Go with Tests](https://quii.gitbook.io/learn-go-with-tests/testing-fundamentals/working-without-mocks).
 
 [^hub]: I've seen it called a `Hub` before in some situations - you can picture it as the bit in the middle of the hexagon where the individual use cases form the spokes of a wheel - but I think this muddies things too much with a new word.
