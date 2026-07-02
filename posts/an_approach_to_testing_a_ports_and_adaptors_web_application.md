@@ -22,13 +22,13 @@ Here's what I want to cover:
 
 But first, I'd like to try and explain why I'm doing this with a metaphor:
 
-An architecture is a map of a city. It tells you where things are and how they connect — the domain in the middle, the ports at the edges, the roads between them. It's genuinely useful. But a map doesn't tell you how to _build_ the city. Hand someone a map and a pile of bricks and you'll get a mess.
+An architecture is a map of a city. It tells you where things are and how they connect - the domain in the middle, the ports at the edges, the roads between them. It's genuinely useful. But a map doesn't tell you how to _build_ the city. Hand someone a map and a pile of bricks and you'll get a mess.
 
-What I actually want is the instructions. Not a blueprint but a Lego kit: _this_ bit first, then _this_ bit, then _this_ — a fixed order, one bag at a time, with the picture on the box to check yourself against.
+What I actually want is the instructions. Not a blueprint but a Lego kit: _this_ bit first, then _this_ bit, then _this_ - a fixed order, one bag at a time, with the picture on the box to check yourself against.
 
-The order is the point, because the order is what stops you making a mess. If there is exactly _one_ place where objects of type A get built, then you always know where to add the next one — and, just as importantly, you know you've done something wrong the moment you find yourself constructing an A somewhere else. An adaptor conjured up ad hoc inside an HTTP handler is the software equivalent of throwing up a warehouse in the middle of a residential street. If all the commercial buildings go up together, in the commercial-buildings step, the zoning violations get a lot harder to commit by accident.
+The order is the point, because the order is what stops you making a mess. If there is exactly _one_ place where objects of type A get built, then you always know where to add the next one - and, just as importantly, you know you've done something wrong the moment you find yourself constructing an A somewhere else. An adaptor conjured up ad hoc inside an HTTP handler is the software equivalent of throwing up a warehouse in the middle of a residential street. If all the commercial buildings go up together, in the commercial-buildings step, the zoning violations get a lot harder to commit by accident.
 
-The metaphor breaks down in one obvious place: we don't knock cities down and rebuild them from nothing every morning. But we do exactly that with software — every time the process starts, the whole city goes up again from an empty field. Software is weird like that. If anything it makes having the building instructions even more important.
+The metaphor breaks down in one obvious place: we don't knock cities down and rebuild them from nothing every morning. But we do exactly that with software - every time the process starts, the whole city goes up again from an empty field. Software is weird like that. If anything it makes having the building instructions even more important.
 
 OK, let's get going. Starting with our city map, the architecture.
 
@@ -76,14 +76,14 @@ All of them depend on the domain, and all of them use its types. The application
 
 There are two kinds of port:
 
-- an **Out**-Port is how the application talks to an external service. Also called a "driven" port, because it's where our system makes something else _do something_ — the external thing is driven by us.
-- an **In**-Port is how other programs talk to our service. Also called a "driving" port, because it's where other things make our system _do something_ — they're in the driving seat.
+- an **Out**-Port is how the application talks to an external service. Also called a "driven" port, because it's where our system makes something else _do something_ - the external thing is driven by us.
+- an **In**-Port is how other programs talk to our service. Also called a "driving" port, because it's where other things make our system _do something_ - they're in the driving seat.
 
 Ports are _abstract_. They are interfaces. That's the whole point of them.
 
 #### Use Case
 
-I use "use case" and "in-port" interchangeably, but I prefer use case, because it keeps you honest: an in-port should be doing something _for a user_. That said, pick one and stick to it — consistency matters more than my preference.
+I use "use case" and "in-port" interchangeably, but I prefer use case, because it keeps you honest: an in-port should be doing something _for a user_. That said, pick one and stick to it - consistency matters more than my preference.
 
 #### Adaptor
 
@@ -99,7 +99,7 @@ So: **in-adaptors** wrap in-ports to face the world, and **out-adaptors** wrap t
 
 Every use case is either a command handler or a query handler. Both are implementations of use cases; the difference is what they do.
 
-A query returns data and has no side effects. A command has side effects and returns nothing. Drawing that line at the level of the use case is [Command-Query Separation](https://martinfowler.com/bliki/CommandQuerySeparation.html) — CQS — applied to whole handlers rather than to individual methods.[^cqs]
+A query returns data and has no side effects. A command has side effects and returns nothing. Drawing that line at the level of the use case is [Command-Query Separation](https://martinfowler.com/bliki/CommandQuerySeparation.html) - CQS - applied to whole handlers rather than to individual methods.[^cqs]
 
 As before: being consistent about this matters more than getting it theoretically perfect.
 
@@ -107,7 +107,7 @@ As before: being consistent about this matters more than getting it theoreticall
 
 An application service is an orchestration object: it coordinates domain logic and out-ports to get a piece of business done.[^appservice]
 
-You don't always need one. A use case implementation can — and often should — call the out-ports directly. But when you notice the same coordination logic turning up in use case after use case, that repetition is the signal. Pull it out into an application service and share it.
+You don't always need one. A use case implementation can - and often should - call the out-ports directly. But when you notice the same coordination logic turning up in use case after use case, that repetition is the signal. Pull it out into an application service and share it.
 
 ---
 
@@ -192,7 +192,7 @@ Just as we built `OutPorts` from `Bootstrap`, we build `ApplicationServices` fro
 
 Unlike the out-ports, this one is _not_ an interface. There's never a reason to swap in an "alternative" business logic - the business logic is the business logic, there are no two ways about it. `ApplicationServices` presents everything the use cases need to do their jobs.
 
-And if some use cases don't need any shared orchestration — if they just want to call an out-port directly — then that out-port can be passed straight through. Not every use case needs a service in front of it.
+And if some use cases don't need any shared orchestration - if they just want to call an out-port directly - then that out-port can be passed straight through. Not every use case needs a service in front of it.
 
 #### The `UseCases` /  `Application` object
 
@@ -223,7 +223,7 @@ So the whole startup, from nothing to running, is:
 1. Build `Bootstrap` from nothing.
 2. Build `OutPorts` from `Bootstrap` (as out-adaptors).
 3. Build `ApplicationServices` from `OutPorts`.
-4. Build `UseCases` — the Application — from `ApplicationServices`.
+4. Build `UseCases` - the Application - from `ApplicationServices`.
 5. Build `HttpAdaptors` (or whatever other in-adaptors) from `UseCases`.
 6. Start the app.
 
@@ -259,19 +259,19 @@ Get those two right and the failure scenarios mostly answer themselves.
 
 ### What do I want my out-ports to be?
 
-In production, your out-ports come from `Bootstrap` — the real database, the real services.
+In production, your out-ports come from `Bootstrap` - the real database, the real services.
 
-In a test you usually don't want to stand all that up. So instead you provide a _different_ implementation of the `OutPorts` interface: one that hands out in-memory fakes for each out-port. As far as the rest of the application is concerned, nothing has changed — it's the same interface, wired up the same way — but now it's fast and easy to control.
+In a test you usually don't want to stand all that up. So instead you provide a _different_ implementation of the `OutPorts` interface: one that hands out in-memory fakes for each out-port. As far as the rest of the application is concerned, nothing has changed - it's the same interface, wired up the same way - but now it's fast and easy to control.
 
 The catch, and it's the important bit: the real and fake implementations must be _indistinguishable_ in behaviour. You don't get to hope this is true. You guarantee it with a contract test that runs against both.
 
-Once you trust the fakes, you can drop them into the ordinary production wiring and build the domain on top of them exactly as you would for real — each layer wired the same way, just standing on a faster, more controllable set of out-ports. That's the feature we lean on to build Domain-Driven Tests.
+Once you trust the fakes, you can drop them into the ordinary production wiring and build the domain on top of them exactly as you would for real - each layer wired the same way, just standing on a faster, more controllable set of out-ports. That's the feature we lean on to build Domain-Driven Tests.
 
 ### Domain-Driven Tests (DDTs)
 
-A DDT is a test suite written against the in-ports of the application — the use cases — using domain types.[^ddt-refs] It's a poor name, I'll admit. What it really is is a sort of mega-contract wrapped around the whole application: a suite that pins down the _invariants of the application's behaviour_, independent of how you drive it and independent of what's behind the out-ports.
+A DDT is a test suite written against the in-ports of the application - the use cases - using domain types.[^ddt-refs] It's a poor name, I'll admit. What it really is is a sort of mega-contract wrapped around the whole application: a suite that pins down the _invariants of the application's behaviour_, independent of how you drive it and independent of what's behind the out-ports.
 
-The name is about where the tests are written _from_ — the domain boundary — not about any particular testing religion.
+The name is about where the tests are written _from_ - the domain boundary - not about any particular testing religion.
 
 ```mermaid
 flowchart LR
@@ -308,23 +308,23 @@ And these combine freely:
 | HTTP adaptor | Real out-ports | Full stack |
 | Direct | Failing fakes | Failure handling |
 
-The same test suite runs across every one of these configurations. The tests don't change — _only what they're wired to_.
+The same test suite runs across every one of these configurations. The tests don't change - _only what they're wired to_.
 
 #### How DDTs are written
 
-The tests are written in domain types, against the in-port interfaces. In the "unwrapped" configuration they call the use case implementations directly. In the "wrapped" configuration the very same interactions are pushed through a transport adaptor — HTTP, say — which turns them into requests and back again.[^driver-refs]
+The tests are written in domain types, against the in-port interfaces. In the "unwrapped" configuration they call the use case implementations directly. In the "wrapped" configuration the very same interactions are pushed through a transport adaptor - HTTP, say - which turns them into requests and back again.[^driver-refs]
 
-The consequence is worth dwelling on: your HTTP adaptor tests are _not_ a separate suite fussing over JSON shapes and status codes. They're the _same_ behavioural assertions, run through HTTP. If the adaptor is wired up correctly, the suite passes. If it isn't, it fails in domain terms — not HTTP terms.
+The consequence is worth dwelling on: your HTTP adaptor tests are _not_ a separate suite fussing over JSON shapes and status codes. They're the _same_ behavioural assertions, run through HTTP. If the adaptor is wired up correctly, the suite passes. If it isn't, it fails in domain terms - not HTTP terms.
 
 The confidence that buys you stacks up nicely. The in-memory out-ports are trusted, because of the contract tests. The wiring is trusted, because the DDT suite passes in the direct configuration. The adaptors are trusted, because the same DDT suite passes in the wrapped configuration. Every layer's correctness is checked by one suite, not by a scattering of disconnected tests that each know a little and trust a lot.
 
 ### Fault injection
 
-The contract test only promises the happy path. How the application copes with failures _above_ the adaptor is already covered — that's DDTs with failing fake out-ports, from the table above.
+The contract test only promises the happy path. How the application copes with failures _above_ the adaptor is already covered - that's DDTs with failing fake out-ports, from the table above.
 
-That leaves one gap. You can't reliably provoke a failure _inside_ a real adaptor. You can't make your database throw a connection error on demand — not without some form of remote fault injection, and that's another post.
+That leaves one gap. You can't reliably provoke a failure _inside_ a real adaptor. You can't make your database throw a connection error on demand - not without some form of remote fault injection, and that's another post.
 
-So to test the adaptor's own error handling, you go underneath it: inject a fake transport — a fake HTTP client, a fake DB driver — into the _real_ adaptor. Now you can make the transport return a 500, a timeout, or a lump of malformed nonsense, and assert on what the adaptor does with it. All in isolation, without needing the real external system to have a bad day on cue.
+So to test the adaptor's own error handling, you go underneath it: inject a fake transport - a fake HTTP client, a fake DB driver - into the _real_ adaptor. Now you can make the transport return a 500, a timeout, or a lump of malformed nonsense, and assert on what the adaptor does with it. All in isolation, without needing the real external system to have a bad day on cue.
 
 ```mermaid
 flowchart TD
@@ -343,12 +343,12 @@ flowchart TD
 
 [screaming]: https://blog.cleancoder.com/uncle-bob/2011/09/30/Screaming-Architecture.html
 
-[^cqs]: Two acronyms, easily confused. **CQS** (Command-Query Separation, Bertrand Meyer) is the rule that a thing either _changes_ state and returns nothing, or _reports_ state and changes nothing — never both. **CQRS** (Command-Query Responsibility Segregation, Greg Young) takes that same split and pushes it much further down, into the model itself: a separate write model for the commands and a read model for the queries, sometimes with separate data stores behind them. What I'm describing here is the modest version — CQS drawn at the use-case boundary, so each handler is purely one or purely the other. If you wanted to, you could push that separation all the way down into the domain and end up with something much closer to full CQRS. It's the same idea, just taken further — and a much bigger commitment than this document needs.
+[^cqs]: Two acronyms, easily confused. **CQS** (Command-Query Separation, Bertrand Meyer) is the rule that a thing either _changes_ state and returns nothing, or _reports_ state and changes nothing - never both. **CQRS** (Command-Query Responsibility Segregation, Greg Young) takes that same split and pushes it much further down, into the model itself: a separate write model for the commands and a read model for the queries, sometimes with separate data stores behind them. What I'm describing here is the modest version - CQS drawn at the use-case boundary, so each handler is purely one or purely the other. If you wanted to, you could push that separation all the way down into the domain and end up with something much closer to full CQRS. It's the same idea, just taken further - and a much bigger commitment than this document needs.
 
-[^appservice]: In proper DDD the use cases _are_ application services too — a command or query handler is just an application service that happens to be an in-port. I'm drawing a line between them on purpose, though, because the distinction earns its keep in practice: it stops people wiring a use case up with _another use case_ as a dependency. Application services are for shared orchestration below the use cases; use cases sit at the top and don't depend on each other. Keep them separate in your head and you won't be tempted.
+[^appservice]: In proper DDD the use cases _are_ application services too - a command or query handler is just an application service that happens to be an in-port. I'm drawing a line between them on purpose, though, because the distinction earns its keep in practice: it stops people wiring a use case up with _another use case_ as a dependency. Application services are for shared orchestration below the use cases; use cases sit at the top and don't depend on each other. Keep them separate in your head and you won't be tempted.
 
-[^ddt-refs]: I didn't invent any of this — I've just given it a name I can remember. If you want it from people who've thought about it harder than I have: Aslak Hellesøy [walks through the idea here](https://www.youtube.com/watch?v=sUclXYMDI94), and Nat Pryce [does the same here](https://www.youtube.com/watch?v=Fk4rCn4YLLU). Both are, sadly, YouTube videos.
+[^ddt-refs]: I didn't invent any of this - I've just given it a name I can remember. If you want it from people who've thought about it harder than I have: Aslak Hellesøy [walks through the idea here](https://www.youtube.com/watch?v=sUclXYMDI94), and Nat Pryce [does the same here](https://www.youtube.com/watch?v=Fk4rCn4YLLU). Both are, sadly, YouTube videos.
 
-[^driver-refs]: The trick underneath this — separating the _test driver_ from the _implementation_ of the test, with a little DSL in the middle so the same tests can run against different bindings — is covered beautifully by Chris James and Riya Dattani [in this talk](https://www.youtube.com/watch?v=ZMWJCk_0WrY), and again, in Go and in writing, by Chris James in [Learn Go with Tests](https://quii.gitbook.io/learn-go-with-tests/testing-fundamentals/working-without-mocks).
+[^driver-refs]: The trick underneath this - separating the _test driver_ from the _implementation_ of the test, with a little DSL in the middle so the same tests can run against different bindings - is covered beautifully by Chris James and Riya Dattani [in this talk](https://www.youtube.com/watch?v=ZMWJCk_0WrY), and again, in Go and in writing, by Chris James in [Learn Go with Tests](https://quii.gitbook.io/learn-go-with-tests/testing-fundamentals/working-without-mocks).
 
 [^hub]: I've seen it called a `Hub` before in some situations - you can picture it as the bit in the middle of the hexagon where the individual use cases form the spokes of a wheel - but I think this muddies things too much with a new word.
