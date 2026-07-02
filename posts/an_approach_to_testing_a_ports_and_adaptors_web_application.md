@@ -114,6 +114,8 @@ Two rules keep them honest, and they matter more than they look:
 - an application service is **never an interface**, and must **never be faked or mocked**. It is real, always, in every test. The only thing you ever fake is an out-port - much more on this later.
 - use cases **never depend on each other**. If two use cases need the same logic, that logic goes into an application service that sits _below_ them. It does not turn one use case into a dependency of another.
 
+A use case, confusingly, _is_ an interface - the in-port that its handler implements. That's not a contradiction with the rule above: an interface and a _fake boundary_ are two different things, and I'll come back to why when we get to testing. An application service is neither an interface nor a boundary. It's just shared guts.
+
 You don't always need one. A use case can - and often should - just call the out-ports directly.
 
 ---
@@ -266,6 +268,16 @@ In a test you usually don't want to stand all that up. So instead you provide a 
 The catch, and it's the important bit: the real and fake implementations must be _indistinguishable_ in behaviour. You don't get to hope this is true. You guarantee it with a contract test that runs against both.
 
 Once you trust the fakes, you can drop them into the ordinary production wiring and build the domain on top of them exactly as you would for real - each layer wired the same way, just standing on a faster, more controllable set of out-ports. That's the feature we lean on to build Domain-Driven Tests.
+
+This is the moment to clear up the confusion I promised to come back to. There are interfaces at _both_ edges of the application - the in-ports and the out-ports - and both are there for dependency inversion. But an interface is not the same thing as a _fake boundary_, and only one of the two edges is one:
+
+| Thing | An interface? | What a test does with it |
+|---|---|---|
+| In-port / use case | yes | **drives from** it - runs the real implementation underneath |
+| Out-port | yes | **substitutes** it - the _only_ place we ever swap in a fake |
+| Application service | no | nothing - it's internal, and always real |
+
+The in-port is an interface so that something outside - an adaptor, or a test - can _call_ the application without knowing what's behind it. You drive the real thing through it; you never replace it with a fake. The out-port is an interface so that the application can call _out_ without knowing what's behind it - and that's exactly the seam where a test swaps the real thing for a fake. Same language, two completely different jobs. Keep them straight and "the only thing you ever fake is an out-port" stops sounding like a contradiction and starts sounding like the whole point.
 
 ### Domain-Driven Tests (DDTs)
 
