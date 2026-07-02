@@ -2,14 +2,14 @@
 title: Where Does Authentication Go?
 description: A worked example for ports and adaptors - pulling authentication apart into the layer each piece belongs in, and keeping your tests able to see it.
 published: true
-date: 2024-11-28 10:36:45
+date: 2026-07-02 11:36:45
 tags:
   - PortsAndAdaptors
 ---
 
 # Where Does Authentication Go?
 
-This is a follow-on from [The Architecture Is the Easy Part](/posts/2024/11/27/the-architecture-is-the-easy-part), and it leans hard on the vocabulary from it - ports, adaptors, use cases, out-ports, and the DDTs (domain-driven tests) that drive them. If none of those words mean much to you yet, start there; I'll wait.
+This is a follow-on from [The Architecture Is the Easy Part](/posts/2026/7/2/the-architecture-is-the-easy-part), and it leans hard on the vocabulary from it - ports, adaptors, use cases, out-ports, and the DDTs (domain-driven tests) that drive them. If none of those words mean much to you yet, start there; I'll wait.
 
 That post made a promise I want to cash in: get the wiring right and the hard problems fall into obvious places. So let's take a problem everyone has to solve and nearly everyone puts in the wrong place: authentication.
 
@@ -19,7 +19,7 @@ This is almost like some sort of logical proof, so let's turn it into one:
 
 ### Premise: the identity itself is a domain value
 
-The _result_ of authenticating is a small fact: "this call is being made by this user, with these claims". That's a domain type - a `Principal`, a `UserId`, call it what you like. It isn't a token and it isn't a header. It's a value, and like every other domain value it travels _inward_, as part of the command or query the use case receives.
+The _result_ of authenticating is a small fact: "this call is being made by this user, with these claims". That's a domain type - a `UserId`, a `Principal`, call it what you like (I'll use `UserId`). It isn't a token and it isn't a header. It's a value, and like every other domain value it travels _inward_, as part of the command or query the use case receives.
 
 ### Therefore, turning a credential into that identity is adaptor work
 
@@ -29,7 +29,7 @@ Parsing the `Authorization` header, checking a JWT's signature, reading a sessio
 
 A session store, a users table, a call out to an identity provider - these are out-ports like any other, faked and contract-tested exactly as we've described. If your scheme is stateless - a JWT you can verify with a key alone - there's no out-port at all; it stays in the adaptor.
 
-### Authorization - "is this principal _allowed_ to do this?" - goes inside the use case
+### Authorization - "is this user _allowed_ to do this?" - goes inside the use case
 
 This is the one people get wrong, and it's the one this whole approach refuses to let you fudge. Whether a user may perform an action is a _business rule_. It is not a property of HTTP. It belongs below the in-port, in the application, next to the logic it protects.
 
@@ -58,7 +58,7 @@ The way out is to notice that this, too, is just a use case. Authentication that
 
 - an `IdentifyUser` use case takes the raw credential - the token or session id - and returns a `UserId`, or fails;
 - its implementation is a query handler that uses an out-port - a `TokenIntrospector`, an `IdentityProvider`, a `SessionStore`, or all three - to do the exchange;
-- and (here's the science bit) the HTTP adaptor runs it as _middleware_: credential in, `IdentifyUser`, `UserId` out, and only _then_ the business use case, with that principal in hand.
+- and (here's the science bit) the HTTP adaptor runs it as _middleware_: credential in, `IdentifyUser`, `UserId` out, and only _then_ the business use case, with that `UserId` in hand.
 
 So the adaptor still isn't consuming an out-port. It's calling an in-port, exactly as it always does. The round-trip happens _behind_ that in-port, through an out-port, wired like everything else. Authentication just turns out to be another use case - the model recurses, which is usually a sign you've got the model right.
 
@@ -70,9 +70,9 @@ If that "two use cases in one request" makes you itch - good instinct, wrong ala
 
 You might reach instead for a shared application service - an `Authenticator` that the business use case calls to turn an `Identifier` into an `Identity`. Resist it. The moment the use case takes the raw `Identifier`, the token has crossed the boundary and undone the one thing that was doing all the work: now the token leaks inward, every use case has to _remember_ to authenticate (a hole waiting to happen, where middleware is secure by default), and every business test has to drag a valid credential along instead of just handing over the `UserId` it wants. Keep the resolution in front of the use case; pass the resolved identity in as data. (Shared application services still earn their place for logic that runs on an _already-resolved_ identity - working a `UserId`'s roles into effective permissions, say. That lives inside, so it can be shared inside. The token exchange crosses the boundary, so it can't.)
 
-A couple of lines stay firm here. _Which_ routes get wrapped - public versus protected - is adaptor-layer wiring: a fact about how you mount things, not a business rule, so it's happy living at the edge. But whether the principal is _allowed_ to do the thing is still authorization, and that stays down in the business use case. The middleware establishes _who_; the use case decides whether they _may_. The moment the middleware starts making that second call, your DDTs go blind to it again - and we've been here before.
+A couple of lines stay firm here. _Which_ routes get wrapped - public versus protected - is adaptor-layer wiring: a fact about how you mount things, not a business rule, so it's happy living at the edge. But whether the user is _allowed_ to do the thing is still authorization, and that stays down in the business use case. The middleware establishes _who_; the use case decides whether they _may_. The moment the middleware starts making that second call, your DDTs go blind to it again - and we've been here before.
 
-And it stays testable all the way down. The exchange out-port is faked and contract-tested against the real provider, so your fast tests never touch the network but you still trust the real thing. The `IdentifyUser` use case is driven directly in a DDT - a good token gives the right principal, a garbage one gives a clean failure, an expired one takes the expiry path - with no HTTP anywhere. And the business use case still never sees a raw token; it only ever receives a `UserId`. That boundary is exactly the thing that keeps authentication from leaking inwards.
+And it stays testable all the way down. The exchange out-port is faked and contract-tested against the real provider, so your fast tests never touch the network but you still trust the real thing. The `IdentifyUser` use case is driven directly in a DDT - a good token gives the right `UserId`, a garbage one gives a clean failure, an expired one takes the expiry path - with no HTTP anywhere. And the business use case still never sees a raw token; it only ever receives a `UserId`. That boundary is exactly the thing that keeps authentication from leaking inwards.
 
 And when testing all other use cases, well - if we're driving the application directly, we're just passing a `UserId` around, testing authorisation and seeing what our different users can do.
 
@@ -88,4 +88,4 @@ The one-liner survives the complication, only sharper: the raw token belongs to 
 
 ### A whole different domain
 
-And here's another way to see the whole thing, which might be the cleanest of all: authentication is simply _another domain_ - identity and access, with its own language of tokens and sessions and claims - and we've chosen to deal with it _before_ our application's boundary. `IdentifyUser` and its middleware are the border crossing between that domain and ours. On the far side, the currency is tokens; on our side, it's `Principal`s; and the crossing is the one place the two are exchanged. Which is why the token never comes further in - it's foreign currency, a different domain, and we changed it at the border.
+And here's another way to see the whole thing, which might be the cleanest of all: authentication is simply _another domain_ - identity and access, with its own language of tokens and sessions and claims - and we've chosen to deal with it _before_ our application's boundary. `IdentifyUser` and its middleware are the border crossing between that domain and ours. On the far side, the currency is tokens; on our side, it's `UserId`s; and the crossing is the one place the two are exchanged. Which is why the token never comes further in - it's foreign currency, a different domain, and we changed it at the border.

@@ -2,7 +2,7 @@
 title: The Architecture Is the Easy Part
 description: Anyone can draw the hexagon. The value is in how you wire a ports-and-adaptors application together, and the testing strategy that falls out of it.
 published: true
-date: 2024-11-27 10:36:45
+date: 2026-07-02 10:36:45
 tags:
   - PortsAndAdaptors
 ---
@@ -365,7 +365,7 @@ flowchart TD
 
 ## A worked example: where does authentication go?
 
-To keep this from turning into a book, I've pulled the worked example out into its own post: [Where Does Authentication Go?](/posts/2024/11/28/where-does-authentication-go). It takes everything above - use cases, out-ports, DDTs, the single fake seam - and points it at the one problem nearly everyone puts in the wrong place. If the approach here convinced you, that's where you see it earn its keep.
+To keep this from turning into a book, I've pulled the worked example out into its own post: [Where Does Authentication Go?](/posts/2026/7/2/where-does-authentication-go). It takes everything above - use cases, out-ports, DDTs, the single fake seam - and points it at the one problem nearly everyone puts in the wrong place. If the approach here convinced you, that's where you see it earn its keep.
 
 ## So what was all that for?
 
