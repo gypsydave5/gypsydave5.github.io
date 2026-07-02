@@ -49,11 +49,13 @@ The domain has no dependencies. Nothing. It sits at the bottom and everything el
 
 There are two schools of thought about where the business logic lives.
 
-**Anaemic domain** - the domain types are plain data structures, and all the behaviour lives in the application services and use cases (we'll meet them soon). The logic is easy to find, because it's always in the same place: the use case layer. It pairs naturally with CQS[^cqs]. The cost is that your domain objects can't protect their own invariants: nothing stops you putting one into an invalid state.
+**Anaemic domain** - the domain types are plain data structures, and all the behaviour lives in the application services and use cases (we'll meet them soon). The logic is easy to find, because it's always in the same place: the use case layer. The cost is that your domain objects can't protect their own invariants: nothing stops you putting one into an invalid state.
 
-**Rich domain** - the behaviour lives inside the domain types themselves. The objects enforce their own invariants and are self-protecting. You get strong encapsulation, but the logic is harder to locate, and it can get tangled up with the data model in a way that fights the clean separation CQS wants.
+**Rich domain** - the behaviour lives inside the domain types themselves. The objects enforce their own invariants and are self-protecting. You get strong encapsulation, but the logic is harder to locate, and more of your design effort goes into the model.
 
 For a simple domain, anaemic is usually fine; the use cases are the right home for the logic. As the domain gets more complicated, a richer model starts to earn its keep. This is a judgement call, not a rule, and anyone who tells you otherwise is selling something. And of course, there's a lot of space between the two where you can do something in-between.
+
+Whether you keep commands separate from queries is a _different_ question, orthogonal to this one - you can do it with either kind of domain, and doing it inside a rich model is more or less what CQRS is.[^cqs]
 
 If you care deeply about this bit (and you should), read the Domain-Driven Design book(s), but for the purposes of this document it's a detail.
 
@@ -61,7 +63,7 @@ If you care deeply about this bit (and you should), read the Domain-Driven Desig
 
 An application is the domain types _applied_ to solve a business problem.
 
-If the whole application has an interface, that interface is the use cases. If that interface has an implementation, that implementation is the collection of command and query handlers (they're on their way, promise).
+If the whole application has an interface, that interface is all of the use cases together. If that interface has an implementation, that implementation is the collection of all of the command and query handlers (they're on their way, promise).
 
 An application is made up of:
 
@@ -89,9 +91,9 @@ I use "use case" and "in-port" interchangeably, but I prefer use case, because i
 
 An adaptor brings the outside world into the application, or carries the application out to the outside world. Adaptors are always paired with ports.
 
-On the in side, an adaptor wraps an in-port to present an external interface. The application hands an in-port to an HTTP adaptor so it can be spoken to over HTTP; a command-line handler could wrap the same in-port to let you drive it from a terminal.
+On the "in" side, an adaptor wraps an in-port to present an external interface. The application hands an in-port to an HTTP adaptor so it can be spoken to over HTTP; a command-line handler could wrap the same in-port to let you drive it from a terminal.
 
-On the out side, an adaptor implements an out-port. A database connection gets wrapped up as an adaptor that implements the `Repository` out-port; a call to some other service gets wrapped as an adaptor implementing a `Service` out-port.
+On the "out" side, an adaptor implements an out-port. A database connection gets wrapped up as an adaptor that implements the `Repository` out-port; a call to some other service gets wrapped as an adaptor implementing a `Service` out-port.
 
 So: **in-adaptors** wrap in-ports to face the world, and **out-adaptors** wrap the world to present an out-port to the application.
 
