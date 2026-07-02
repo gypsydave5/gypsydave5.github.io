@@ -49,7 +49,7 @@ The domain has no dependencies. Nothing. It sits at the bottom and everything el
 
 There are two schools of thought about where the business logic lives.
 
-**Anaemic domain** - the domain types are plain data structures, and all the behaviour lives in the Application Services and Use Cases (we'll meet them soon). The logic is easy to find, because it's always in the same place: the use case layer. It pairs naturally with CQS[^cqs]. The cost is that your domain objects can't protect their own invariants: nothing stops you putting one into an invalid state.
+**Anaemic domain** - the domain types are plain data structures, and all the behaviour lives in the application services and use cases (we'll meet them soon). The logic is easy to find, because it's always in the same place: the use case layer. It pairs naturally with CQS[^cqs]. The cost is that your domain objects can't protect their own invariants: nothing stops you putting one into an invalid state.
 
 **Rich domain** - the behaviour lives inside the domain types themselves. The objects enforce their own invariants and are self-protecting. You get strong encapsulation, but the logic is harder to locate, and it can get tangled up with the data model in a way that fights the clean separation CQS wants.
 
@@ -61,14 +61,14 @@ If you care deeply about this bit (and you should), read the Domain-Driven Desig
 
 An application is the domain types _applied_ to solve a business problem.
 
-If the whole application has an interface, that interface is the Use Cases. If that interface has an implementation, that implementation is the collection of Command and Query Handlers (they're on their way, promise).
+If the whole application has an interface, that interface is the use cases. If that interface has an implementation, that implementation is the collection of command and query handlers (they're on their way, promise).
 
 An application is made up of:
 
-- the Out-Ports (interfaces);
-- Application Services (holding some of them together);
-- the Use Cases, aka the In-Ports (interfaces);
-- and the Command and Query Handlers.
+- the out-ports (interfaces);
+- application services (holding some of them together);
+- the use cases, aka the in-ports (interfaces);
+- and the command and query handlers.
 
 All of them depend on the domain, and all of them use its types. The application is the domain in motion.
 
@@ -83,7 +83,7 @@ Ports are _abstract_. They are interfaces. That's the whole point of them.
 
 #### Use Case
 
-I use "Use Case" and "In-Port" interchangeably, but I prefer Use Case, because it keeps you honest: an in-port should be doing something _for a user_. That said, pick one and stick to it — consistency matters more than my preference.
+I use "use case" and "in-port" interchangeably, but I prefer use case, because it keeps you honest: an in-port should be doing something _for a user_. That said, pick one and stick to it — consistency matters more than my preference.
 
 #### Adaptor
 
@@ -97,7 +97,7 @@ So: **in-adaptors** wrap in-ports to face the world, and **out-adaptors** wrap t
 
 #### Command / Query Handler
 
-Every use case is either a Command Handler or a Query Handler. Both are implementations of use cases; the difference is what they do.
+Every use case is either a command handler or a query handler. Both are implementations of use cases; the difference is what they do.
 
 A query returns data and has no side effects. A command has side effects and returns nothing. Drawing that line at the level of the use case is [Command-Query Separation](https://martinfowler.com/bliki/CommandQuerySeparation.html) — CQS — applied to whole handlers rather than to individual methods.[^cqs]
 
@@ -105,7 +105,7 @@ As before: being consistent about this matters more than getting it theoreticall
 
 #### Application Service
 
-An application service is an orchestration object: it coordinates domain logic and Out-Ports to get a piece of business done.[^appservice]
+An application service is an orchestration object: it coordinates domain logic and out-ports to get a piece of business done.[^appservice]
 
 You don't always need one. A use case implementation can — and often should — call the out-ports directly. But when you notice the same coordination logic turning up in use case after use case, that repetition is the signal. Pull it out into an application service and share it.
 
