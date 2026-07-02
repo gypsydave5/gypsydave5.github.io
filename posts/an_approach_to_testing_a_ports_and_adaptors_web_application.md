@@ -73,8 +73,8 @@ An application service is an orchestration object: it coordinates domain logic a
 
 There are two kinds of port:
 
-- **Out**-Port: a port that the application uses to communicate with an external service.
-- **In**-Port: a port that other programs use to communicate with our service.
+- **Out**-Port: a port that the application uses to communicate with an external service. Also called a "driving" port because it's where our system makes something else _do something_.
+- **In**-Port: a port that other programs use to communicate with our service. Also called a "driven" port because it's where other things make our system _do something_.
 
 Ports are _abstract_. They are interfaces.
 
