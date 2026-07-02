@@ -105,9 +105,16 @@ As before: being consistent about this matters more than getting it theoreticall
 
 #### Application Service
 
-An application service is an orchestration object: it coordinates domain logic and out-ports to get a piece of business done.[^appservice]
+Sometimes the same coordination logic - the same little dance of domain types and out-ports - turns up in use case after use case. When it does, you pull it out into an _application service_ and share it.
 
-You don't always need one. A use case implementation can - and often should - call the out-ports directly. But when you notice the same coordination logic turning up in use case after use case, that repetition is the signal. Pull it out into an application service and share it.
+That is all an application service is: a bit of shared behaviour lifted out of the use cases that need it. It is emphatically _not_ a layer, and it is _not_ a boundary. In proper DDD a use case _is_ an application service - a command or query handler is just an application service that happens to be an in-port - and I'm only giving the shared bits a name of their own so we remember what they're for.
+
+Two rules keep them honest, and they matter more than they look:
+
+- an application service is **never an interface**, and must **never be faked or mocked**. It is real, always, in every test. The only thing you ever fake is an out-port - much more on this later.
+- use cases **never depend on each other**. If two use cases need the same logic, that logic goes into an application service that sits _below_ them. It does not turn one use case into a dependency of another.
+
+You don't always need one. A use case can - and often should - just call the out-ports directly.
 
 ---
 
@@ -123,9 +130,10 @@ flowchart LR
     subgraph Application["Application"]
         InPorts["In-Ports / Use Cases<br>(interfaces)"]
         CQH["Command / Query Handlers<br>(implementations)"]
-        AppSvc["Application Services<br>(shared orchestration)"]
+        AppSvc["Application Services<br>(optional shared helper,<br>not a layer)"]
         OutPorts["Out-Ports<br>(interfaces)"]
     end
+    style AppSvc stroke-dasharray: 5 5
 
     subgraph Domain["Domain"]
         DomainTypes["Domain Types"]
@@ -160,7 +168,7 @@ Right, so that's what we're aiming for in terms of a design. But how do we _buil
 
 When you start a program you create a pile of objects and then combine them in particular ways to get the effects you want, both the business logic and the way it talks to the outside world. This creating-and-combining is usually called _wiring up_, and that's what I'm going to call it too. 
 
-Here's the thing the diagram above doesn't quite show. On paper the out-ports and the use cases sit at the same level of abstraction. In practice there's a dependency tree: the use cases depend on the application services, which depend on the out-ports. And that tree dictates the order you have to build things in.
+Here's the thing the diagram above doesn't quite show. On paper the out-ports and the use cases sit at the same level of abstraction. In practice there's a dependency tree: the use cases depend on the out-ports (and on any application services we extract, which themselves depend on the out-ports). And that tree dictates the order you have to build things in.
 
 This is ultimately the reason I've written all of this. I see a lot of lip-service paid to ports and adaptors, and some attempts to get there. But when it comes to the wiring up of big applications, people get confused about how to do it, then get lazy, and then the mess really begins. So here's some strong opinions.
 
@@ -186,19 +194,13 @@ We want to build all the out-ports together, in one place, and then hand them to
 
 It has to be an interface, because every out-port is an interface - that's dependency inversion at work, and it's why the domain never has to know what's actually implementing its out-ports. `OutPorts` needs _at least_ one real implementation, built up from the `Bootstrap` components - let's call it `BootstrappedOutPorts` - which constructs the out-ports the real life production application runs on. There may be others - there _will_ be others - but we'll get to them when we talk about testing.
 
-#### The `ApplicationServices` object
-
-Just as we built `OutPorts` from `Bootstrap`, we build `ApplicationServices` from `OutPorts`. It represents all the out-ports wired together into the shared logic the use cases lean on.
-
-Unlike the out-ports, this one is _not_ an interface. There's never a reason to swap in an "alternative" business logic - the business logic is the business logic, there are no two ways about it. `ApplicationServices` presents everything the use cases need to do their jobs.
-
-And if some use cases don't need any shared orchestration - if they just want to call an out-port directly - then that out-port can be passed straight through. Not every use case needs a service in front of it.
-
 #### The `UseCases` /  `Application` object
 
-Same move again: we build `UseCases` from `ApplicationServices`. This object represents every use case the application has, and a use case, remember, is just an in-port. Its implementation is a `CommandHandler` or a `QueryHandler`.
+Same move again: we build `UseCases` from `OutPorts`. This object represents every use case the application has, and a use case, remember, is just an in-port. Its implementation is a `CommandHandler` or a `QueryHandler`.
 
-`UseCases` is _not_ an interface either. There should be exactly _one_ way for the application to be used - the domain types are always used the same way - so there's nothing to abstract over. (The individual use cases _are_ interfaces, mind you. That's dependency inversion again).
+You might have expected an `ApplicationServices` layer to appear here, in between. It doesn't. Application services aren't a layer - they're the shared bits of logic we lift out of the use cases, and they get constructed _in this same step_, from the out-ports, and handed to whichever use cases need them. They sit below the use cases, not between them and the out-ports. Wiring them as their own rung is exactly the mistake that leads someone to think they can be swapped, or faked, or mocked. They can't. The only thing we ever fake is an out-port.
+
+`UseCases` is _not_ an interface. There should be exactly _one_ way for the application to be used - the domain types are always used the same way - so there's nothing to abstract over. (The individual use cases _are_ interfaces, mind you. That's dependency inversion again).
 
 This layer could properly be called the `Application`, because it's where the domain model is finally applied to solve the business problem. If you gather all the use cases behind a single interface, I'd recommend calling it the `Application`.[^hub] 
 
@@ -222,21 +224,19 @@ So the whole startup, from nothing to running, is:
 
 1. Build `Bootstrap` from nothing.
 2. Build `OutPorts` from `Bootstrap` (as out-adaptors).
-3. Build `ApplicationServices` from `OutPorts`.
-4. Build `UseCases` - the Application - from `ApplicationServices`.
-5. Build `HttpAdaptors` (or whatever other in-adaptors) from `UseCases`.
-6. Start the app.
+3. Build `UseCases` - the Application - from `OutPorts` (extracting any shared logic into application services as you go).
+4. Build `HttpAdaptors` (or whatever other in-adaptors) from `UseCases`.
+5. Start the app.
 
 ```mermaid
 flowchart TD
     Bootstrap["Bootstrap<br>(env config, HTTP clients)"]
 
-    Bootstrap -->|"constructs"| BOP["BootstrappedOutPorts"]
+    Bootstrap -->|"is used to construct"| BOP["BootstrappedOutPorts"]
     BOP -. "implements" .-> OP["OutPorts<br>(interface)"]
 
-    OP -->|"constructs"| AS["ApplicationServices"]
-    AS -->|"constructs"| UC["UseCases"]
-    UC -->|"constructs"| HA["HttpAdaptors"]
+    OP -->|"is used to construct"| UC["UseCases<br>(application services<br>extracted within)"]
+    UC -->|"is used to construct"| HA["HttpAdaptors"]
     HA -->|"starts"| App["▶ Running Application"]
 ```
 
@@ -344,8 +344,6 @@ flowchart TD
 [screaming]: https://blog.cleancoder.com/uncle-bob/2011/09/30/Screaming-Architecture.html
 
 [^cqs]: Two acronyms, easily confused. **CQS** (Command-Query Separation, Bertrand Meyer) is the rule that a thing either _changes_ state and returns nothing, or _reports_ state and changes nothing - never both. **CQRS** (Command-Query Responsibility Segregation, Greg Young) takes that same split and pushes it much further down, into the model itself: a separate write model for the commands and a read model for the queries, sometimes with separate data stores behind them. What I'm describing here is the modest version - CQS drawn at the use-case boundary, so each handler is purely one or purely the other. If you wanted to, you could push that separation all the way down into the domain and end up with something much closer to full CQRS. It's the same idea, just taken further - and a much bigger commitment than this document needs.
-
-[^appservice]: In proper DDD the use cases _are_ application services too - a command or query handler is just an application service that happens to be an in-port. I'm drawing a line between them on purpose, though, because the distinction earns its keep in practice: it stops people wiring a use case up with _another use case_ as a dependency. Application services are for shared orchestration below the use cases; use cases sit at the top and don't depend on each other. Keep them separate in your head and you won't be tempted.
 
 [^ddt-refs]: I didn't invent any of this - I've just given it a name I can remember. If you want it from people who've thought about it harder than I have: Aslak Hellesøy [walks through the idea here](https://www.youtube.com/watch?v=sUclXYMDI94), and Nat Pryce [does the same here](https://www.youtube.com/watch?v=Fk4rCn4YLLU). Both are, sadly, YouTube videos.
 
