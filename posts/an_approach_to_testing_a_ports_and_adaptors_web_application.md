@@ -1,7 +1,7 @@
 ---
 title: The Architecture Is the Easy Part
 description: Anyone can draw the hexagon. The value is in how you wire a ports-and-adaptors application together, and the testing strategy that falls out of it.
-published: false
+published: true
 date: 2024-11-27 10:36:45
 tags:
   - PortsAndAdaptors
