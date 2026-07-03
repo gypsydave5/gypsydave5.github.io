@@ -1,13 +1,11 @@
 ---
 title: The Architecture Is the Easy Part
 description: Anyone can draw the hexagon. The value is in how you wire a ports-and-adaptors application together - which is what makes it easy to change, and easy to test.
-published: false
+published: true
 date: 2026-07-02 10:36:45
 tags:
   - PortsAndAdaptors
 ---
-
-# The Architecture Is the Easy Part
 
 This is an opinionated approach to building a system. It's aimed at web applications, but there's nothing here that wouldn't apply just as well to anything else that takes input from the world, does something, and gives something back.
 
@@ -16,10 +14,8 @@ It draws heavily on Ports and Adaptors - [Alistair Cockburn's Hexagonal Architec
 Here's the whole of what I want to get across. It grew too big for one post, so it's really a short series - but the ambition is one joined-up thing:
 
 - the **parts** of a ports and adaptors architecture, and the terminology that goes with them - the domain, the ports, the adaptors, the use cases, and how they depend on one another. That's this post.
-- how you **wire it all up** when the program starts - in what order, from the edges in, and where the construction code belongs. That's [Wiring Up a Ports and Adaptors Application](/drafts/wiring-up-a-ports-and-adaptors-application).
-- the **testing strategy** that falls out of the whole thing - which, it turns out, is most of the reason to bother. That's [How Do You Test a Ports and Adaptors Application?](/drafts/how-do-you-test-a-ports-and-adaptors-application).
-
-And running underneath all three is a single claim, which is the title of this one: the architecture is the easy part. The value isn't the shape - it's that a well-built one is _easy to change_, and (the same thing seen from another angle) easy to test.
+- how you **wire it all up** when the program starts - in what order, from the edges in, and where the construction code belongs. That's [Wiring Up a Ports and Adaptors Application](/posts/2026/7/3/wiring-up-a-ports-and-adaptors-application).
+- the **testing strategy** that falls out of the whole thing - which, it turns out, is most of the reason to bother. That's for later.
 
 But before any of that, let me try to explain why I'm doing it this way, with a metaphor:
 
@@ -88,7 +84,7 @@ So when we come to make a change, we can see how the existing small parts are us
 
 Once the parts fall into distinct categories, working out where a change goes gets a bit easier. This sounds like it shouldn't even be a problem, but I cannot even begin to tell you the amount of time I've spent scratching my chin looking at my IDE and trying to work out _where_ this new magic box will go.
 
-But with a decent architecture - whew! Change to the UI? Fiddle with that view-model and the HTML. New thing the application needs to do? Ooooh, I'll need a use case and some adaptors. Different database? Time to swap out my out-port. (Don't worry about those words yet - they get named and defined properly in [the next post](/drafts/the-parts-of-a-ports-and-adaptors-application). The point is only that there _are_ names, and each name names a home).
+But with a decent architecture - whew! Change to the UI? Fiddle with that view-model and the HTML. New thing the application needs to do? Ooooh, I'll need a use case and some adaptors. Different database? Time to swap out my out-port. (Don't worry about those words yet - they get named and defined properly in [the next post](/posts/2026/7/3/the-parts-of-a-ports-and-adaptors-application). The point is only that there _are_ names, and each name names a home).
 
 And the flip side is, if anything, _more_ useful: you know where a change does _not_ belong. If you're building a database connection in your router, you are doing it wrong.
 
@@ -126,5 +122,5 @@ What you get is the thing this whole post was about: a system that's _easy to ch
 
 And here's the loop that makes it all worth the trouble: the very hinges that make the application easy to _change_ are what make it easy to _test_. To test a thing you have to be able to take it apart and hold a piece still - which is exactly what a hinge is for. Easy-to-change and easy-to-test turn out to be one property seen from two sides; buy one and you've bought the other.
 
-That's the case for the whole approach. What's left is the doing of it: [the parts, named and defined](/drafts/the-parts-of-a-ports-and-adaptors-application); [how you wire them together](/drafts/wiring-up-a-ports-and-adaptors-application); and [the testing that falls out](/drafts/how-do-you-test-a-ports-and-adaptors-application). The architecture, like I said, was the easy part.
+That's the case for the whole approach. What's left is the doing of it: [the parts, named and defined](/posts/2026/7/3/the-parts-of-a-ports-and-adaptors-application); [how you wire them together](/posts/2026/7/3/wiring-up-a-ports-and-adaptors-application); and how the testing falls out.
 

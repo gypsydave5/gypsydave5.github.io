@@ -1,15 +1,13 @@
 ---
 title: The Parts of a Ports and Adaptors Application
 description: A tour of the parts of a ports-and-adaptors architecture and the names for them - domain, ports, adaptors, use cases, handlers - and how they depend on one another.
-published: false
+published: true
 date: 2026-07-03 11:00:00
 tags:
   - PortsAndAdaptors
 ---
 
-# The Parts of a Ports and Adaptors Application
-
-This is the companion to [The Architecture Is the Easy Part](/drafts/the-architecture-is-the-easy-part). That post argues _why_ you'd want this architecture - because it makes change easy. This one is the concrete version: the actual parts, named and defined, and how they fit together. It's the reference you'll want open while reading [the wiring](/drafts/wiring-up-a-ports-and-adaptors-application) and [the testing](/drafts/how-do-you-test-a-ports-and-adaptors-application) posts.
+This is the companion to [The Architecture Is the Easy Part](/posts/2026/7/2/the-architecture-is-the-easy-part). That post argues _why_ you'd want this architecture - because it makes change easy. This one is the concrete version: the actual parts, named and defined, and how they fit together. After this, take a look at [the wiring](/posts/2026/7/3/wiring-up-a-ports-and-adaptors-application) post, and eventually the testing one.
 
 ### Names
 
@@ -24,7 +22,7 @@ The easiest way to get there is to name the things after the role they play in t
 
 The domain has no dependencies. Nothing. It sits at the bottom and everything else is built on top of it.
 
-There are two schools of thought about where the business logic lives.
+There are two schools of thought about where the business logic for you application lives.
 
 **Anaemic domain** - the domain types are plain data structures, and all the behaviour lives in the application services and use cases (we'll meet them soon). The logic is easy to find, because it's always in the same place: the use case layer. The cost is that your domain objects can't protect their own invariants: nothing stops you putting one into an invalid state.
 
@@ -142,6 +140,14 @@ flowchart LR
 
 
 If you've seen the standard hexagonal architecture picture before, this is that, but I've just drawn left-to-right and with the names I'm going to use for the rest of the post, and I've used Mermaid because I'm lazy.
+
+## The architecture should scream
+
+That's the whole cast: the domain, the ports, the adaptors, the use cases and their handlers, and the occasional application service. Not many parts, all told - and each one has a single job and a name that says what that job is.
+
+The naming is the point, and it pays off exactly where I promised it would back in [the argument](/posts/2026/7/2/the-architecture-is-the-easy-part): when you come to make a change, the code itself tells you where it goes. Get the names right and the architecture _screams_ - you open the source and the shape is just _there_, in the packages and the types, impossible to misread. Get the two edges right and they scream too: everything that touches the outside world is an adaptor, and it's obvious which of the two kinds it is.
+
+Which is all very well as a picture. But a picture isn't a program - nothing here runs until something builds it, in the right order, from the edges in. In this sense our architecture isn't _screaming_ enough, we also need to make it harder to put things in the wrong places when doing the wiring. That's the next post: [Wiring Up a Ports and Adaptors Application](/posts/2026/7/3/wiring-up-a-ports-and-adaptors-application).
 
 [screaming]: https://blog.cleancoder.com/uncle-bob/2011/09/30/Screaming-Architecture.html
 

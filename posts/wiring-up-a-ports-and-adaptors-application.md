@@ -1,15 +1,13 @@
 ---
 title: Wiring Up a Ports and Adaptors Application
 description: Once you know the parts of a ports-and-adaptors application, you have to build them - in the right order, from the edges in. This is how, and where the wiring code belongs.
-published: false
+published: true
 date: 2026-07-03 12:36:45
 tags:
   - PortsAndAdaptors
 ---
 
-# Wiring Up a Ports and Adaptors Application
-
-This is a companion to [The Architecture Is the Easy Part](/drafts/the-architecture-is-the-easy-part), and it assumes the parts named there - the domain, the ports, the use cases, the adaptors. If those are unfamiliar, start there.
+This is a companion to [The Architecture Is the Easy Part](/posts/2026/7/2/the-architecture-is-the-easy-part), and it assumes the parts named there - the domain, the ports, the use cases, the adaptors. If those are unfamiliar, start there.
 
 That post drew the design: the hexagon, the two edges, the names for each part. Here's the question it left open - how do you _build_ that design from nothing, every time the program starts?
 
@@ -109,8 +107,6 @@ All of this - the strict order, the fat objects per layer, the one and only one 
 
 The wiring is the one place that can quietly undo the whole architecture. The design is just a picture until something builds it, and if the building is sloppy - dependencies conjured mid-handler, construction smeared everywhere, layers leaking into each other - then the lovely hexagon is a lie. You won't notice for a while. You'll notice the day a simple change fights back.
 
-Do it the disciplined way and the opposite happens: the seams stay real. Because each layer is built from the one below and handed up whole, you can stop the process at any layer you like - which is exactly the trick that makes the whole thing testable. Stand the out-ports up as fakes, build the real use cases on top of them, and drive them directly. That's [the next post](/drafts/how-do-you-test-a-ports-and-adaptors-application).
-
-[The architecture was the easy part](/drafts/the-architecture-is-the-easy-part). This was the bit that makes it true.
+Do it the disciplined way and the opposite happens: the seams stay real. Because each layer is built from the one below and handed up whole, you can stop the process at any layer you like - which is exactly the trick that makes the whole thing testable. Stand the out-ports up as fakes, build the real use cases on top of them, and drive them directly. That's next.
 
 [^hub]: I've seen it called a `Hub` before in some situations - you can picture it as the bit in the middle of the hexagon where the individual use cases form the spokes of a wheel - but I think this muddies things too much with a new word.
