@@ -13,12 +13,15 @@ This is an opinionated approach to building a system. It's aimed at web applicat
 
 It draws heavily on Ports and Adaptors - [Alistair Cockburn's Hexagonal Architecture](https://alistair.cockburn.us/hexagonal-architecture/), which is where the pattern, and most of the terminology I use here, comes from - and on Clean Architecture, as laid out in [Getting Your Hands Dirty With Clean Architecture](https://learning.oreilly.com/api/v1/continue/9781805128373/). Where I think the book or Cockburn could be clearer, I depart from them. Familiarity with all of the above will help, but I'll define my terms as I go.
 
-Here's what I want to cover:
+Here's the whole of what I want to get across. It grew too big for one post, so it's really a short series - but the ambition is one joined-up thing:
 
-- an overview of a Ports and Adaptors architecture, and the terminology that goes with it;
-- how the code is organised in the abstract: which type depends on which;
+- the **parts** of a ports and adaptors architecture, and the terminology that goes with them - the domain, the ports, the adaptors, the use cases, and how they depend on one another. That's this post.
+- how you **wire it all up** when the program starts - in what order, from the edges in, and where the construction code belongs. That's [Wiring Up a Ports and Adaptors Application](/posts/2026/7/3/wiring-up-a-ports-and-adaptors-application).
+- the **testing strategy** that falls out of the whole thing - which, it turns out, is most of the reason to bother. That's [How Do You Test a Ports and Adaptors Application?](/posts/2026/7/3/how-do-you-test-a-ports-and-adaptors-application).
 
-But first, I'd like to try and explain why I'm doing this with a metaphor:
+And running underneath all three is a single claim, which is the title of this one: the architecture is the easy part. The value isn't the shape - it's that a well-built one is _easy to change_, and (the same thing seen from another angle) easy to test.
+
+But before any of that, let me try to explain why I'm doing it this way, with a metaphor:
 
 An architecture is a map of a city. It tells you where things are and how they connect - the domain in the middle, the ports at the edges, the roads between them. It's genuinely useful. But a map doesn't tell you how to _build_ the city. Hand someone a map and a pile of bricks and you'll get a mess.
 
