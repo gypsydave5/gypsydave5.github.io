@@ -48,6 +48,18 @@ th {
   background-color: #f0f0f0;
 }
 
+.mermaid-diagram {
+  overflow-x: auto;
+  margin: 1em 0;
+}
+
+.mermaid-diagram svg {
+  width: auto !important;
+  max-width: none !important;
+  height: auto;
+  display: block;
+}
+
 @media print {
   body {
     max-width: none;
