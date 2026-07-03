@@ -17,7 +17,11 @@ When you start a program you create a pile of objects and then combine them in p
 
 Here's the thing the architecture diagram doesn't quite show. On paper the out-ports and the use cases sit at the same level of abstraction. In practice there's a dependency tree: the use cases depend on the out-ports (and on any application services we extract, which themselves depend on the out-ports). And that tree dictates the order you have to build things in.
 
-This is ultimately the reason I've written all of this. I see a lot of lip-service paid to ports and adaptors, and some attempts to get there. But when it comes to the wiring up of big applications, people get confused about how to do it, then get lazy, and then the mess really begins. So here's some strong opinions.
+And this is the bit where it all goes wrong.
+
+I've seen a lot of lip-service paid to ports and adaptors, and a lot of honest attempts at it. The hexagon gets drawn. The interfaces get defined. Everyone nods along. And then someone has to actually _build_ the thing - construct the objects, connect them together, set it running - and that is where the discipline quietly falls apart. A dependency gets `new`ed up in the middle of a handler because it was easier than threading it through. The construction of a single object ends up smeared across a dozen files. A use case reaches sideways into another use case. None of it shows up in the architecture diagram, which still looks lovely - it shows up six months later, when a change that should have taken an afternoon takes a fortnight.
+
+The architecture doesn't rot in the design. It rots in the wiring. So this is the part where I'm going to be most opinionated, because this is the part that actually protects everything the design promised.
 
 ### Ordering
 
@@ -98,5 +102,15 @@ Each of those "build the next layer from this one" steps is a function or a cons
 They are not part of the application, and they are certainly not part of the domain. A function that takes `OutPorts` and hands you back `UseCases` is _wiring_ - it's infrastructure, the same species of code as the thing that reads your config, the thing that builds `Bootstrap`, and the thing that opens a socket and starts the server listening. So that's where it lives: in the same packages, the same folders, as the rest of your infrastructure. Right at the edge, next to `main`.
 
 This matters because it keeps the temptation out of the domain. The domain and the application never construct their own dependencies; they're _given_ them. The knowledge of how everything is assembled lives in exactly one place, out at the edge, and the inner layers stay blissfully ignorant of it. If you ever find a wiring function reaching into the domain package, something has gone wrong.
+
+## So why be this fussy?
+
+All of this - the strict order, the fat objects per layer, the one and only one place where each thing gets built - is a lot of ceremony for something as dull as constructing objects. So let me say why it earns its keep.
+
+The wiring is the one place that can quietly undo the whole architecture. The design is just a picture until something builds it, and if the building is sloppy - dependencies conjured mid-handler, construction smeared everywhere, layers leaking into each other - then the lovely hexagon is a lie. You won't notice for a while. You'll notice the day a simple change fights back.
+
+Do it the disciplined way and the opposite happens: the seams stay real. Because each layer is built from the one below and handed up whole, you can stop the process at any layer you like - which is exactly the trick that makes the whole thing testable. Stand the out-ports up as fakes, build the real use cases on top of them, and drive them directly. That's [the next post](/posts/2026/7/3/how-do-you-test-a-ports-and-adaptors-application).
+
+[The architecture was the easy part](/posts/2026/7/2/the-architecture-is-the-easy-part). This was the bit that makes it true.
 
 [^hub]: I've seen it called a `Hub` before in some situations - you can picture it as the bit in the middle of the hexagon where the individual use cases form the spokes of a wheel - but I think this muddies things too much with a new word.
