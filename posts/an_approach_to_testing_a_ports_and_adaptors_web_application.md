@@ -96,9 +96,9 @@ Because every part is small, and plays one part in our story, and often has a fe
 
 ##### See that it works
 
-Those same seams let you lift a single part out and hold it still on its own - which is exactly what you need to check that it works. You can run the piece you changed without standing up the entire universe around it: drive it directly, put something predictable on the other side, and look at what comes back.
+By having a small, simple object with limited responsibilities and behaviour, it lets you lift it out of its context and hold it on its own - which is exactly what you need to check that it works. You can run the piece you changed without standing up the entire universe around it: drive it directly, put something predictable on the other side, and look at what comes back.
 
-But also, because of the way that all the stories that our application tells look the same, then we can be consistent about the ways we test them from the beginning to the end. I'm reserving testing strategies for a later post (or two or three), this is what I'm talking about here.
+But quite often we _do_ want to make sure that our objects work in the context of each other. Because our objects are joined together in a consistent way to perform a task, we can also be just as consistent about the ways we test them from end to end. I'm reserving testing strategies for a later post (or two or three), but this is what I'm talking about here.
 
 ##### ...and don't make the next change harder
 
