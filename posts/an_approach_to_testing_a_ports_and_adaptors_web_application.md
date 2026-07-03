@@ -1,6 +1,6 @@
 ---
 title: The Architecture Is the Easy Part
-description: Anyone can draw the hexagon. The value is in how you wire a ports-and-adaptors application together, and the testing strategy that falls out of it.
+description: Anyone can draw the hexagon. The value is in how you wire a ports-and-adaptors application together - which is what makes it easy to change, and easy to test.
 published: true
 date: 2026-07-02 10:36:45
 tags:
@@ -11,14 +11,13 @@ tags:
 
 This is an opinionated approach to building a system. It's aimed at web applications, but there's nothing here that wouldn't apply just as well to anything else that takes input from the world, does something, and gives something back.
 
-It draws heavily on Ports and Adaptors (aka Hexagonal Architecture) and Clean Architecture, as laid out in [Getting Your Hands Dirty With Clean Architecture](https://learning.oreilly.com/api/v1/continue/9781805128373/). Where I think the book could be clearer, I depart from it. Familiarity with all of the above will help, but I'll define my terms as I go.
+It draws heavily on Ports and Adaptors - [Alistair Cockburn's Hexagonal Architecture](https://alistair.cockburn.us/hexagonal-architecture/), which is where the pattern, and most of the terminology I use here, comes from - and on Clean Architecture, as laid out in [Getting Your Hands Dirty With Clean Architecture](https://learning.oreilly.com/api/v1/continue/9781805128373/). Where I think the book or Cockdurn could be clearer, I depart from them. Familiarity with all of the above will help, but I'll define my terms as I go.
 
 Here's what I want to cover:
 
 - an overview of a Ports and Adaptors architecture, and the terminology that goes with it;
 - how the code is organised in the abstract: which type depends on which;
 - how the code is organised when you _start_ the thing up: the wiring;
-- and a testing strategy that falls out of both.
 
 But first, I'd like to try and explain why I'm doing this with a metaphor:
 
@@ -33,6 +32,87 @@ The metaphor breaks down in one obvious place: we don't knock cities down and re
 OK, let's get going. Starting with our city map, the architecture.
 
 ## Architecture
+
+### Why even have an architecture?
+
+This might sound mad, but it's worth at least asking ourselves why we want to choose an architecture. What even is architecture in software, and why do we care about it? I think particularly about when I want to talk to THE BUSINESS. Why do they care?
+
+First, I hate the word architecture. The first thing I think about is architects, who in parodic form (mostly) go about drawing lines and boxes in their ivory towers, never build anything, aren't on the hook for delivering anything, floating around with a smug sense of superiority because they never have to get their hands dirty with the irrelevancies of working software.
+
+I usually prefer the word "design" as it tends to scare people off less. Design is what we do all the time - write a class, a method signature, some functions that all work together. We're always designing. Architecture feels so... distant and grown-up.
+
+Well, let me tell you: architecture is just design, even the really big architectures. It's just design. The only difference is usually scale. We design classes, but we feel like we're architecting distributed systems.
+
+The next thing I want to tell you is that if you can design the interactions between a few stateful objects in object-oriented programming, then congratulations, you have the skills to be an architect. The same problems that come up at the "object" level (usually to do with time and state - it's always time and state and concurrency) exist all the way up the stack. It's one of the benefits of the "object metaphor": an object can be seen as a tiny little computer. So if you can work with lots of tiny little computers, you can also work with lots of big wobbly computers.
+
+The reason we're talking about a ports and adaptors architecture here is because "ports and adaptors design" sounds a bit silly. So architecture it is, but feel free to say "design" in your head.
+
+But we've not answered my question: why architect at all? Two tempting answers, both too thin.
+
+#### It tells you where things are?
+
+In its simplest form, architecture is just a folder structure. We put _this_ sort of function over _here_ and _that_ sort of function over _there_. So now I know where all the functions that deal with maths are.
+
+Well, that's nice. But what sort of functions are we talking about?
+
+#### It makes things work?
+
+The architecture should let the system do the things that it's meant to do. So if it's a web app, then some of those functions we're talking about above are going to have to be what sometimes gets called a "handler" - HTTP request in, HTTP response out.
+
+Or not! You could just have one huge function, right? Does all the routing, does all the handling, does all the logic. A big old `while` loop. So why bother architecting again?
+
+#### It makes things _easy to change_
+
+This is the real answer, and it's worth the whole post. What do I actually need in order to make a change to a system without pain?
+
+- I need to know how the system works right now;
+- I need to decide where the change needs to be made;
+- and how to make that change;
+- then I need to do it...
+- ...see that it works...
+- ...and do all that without making it harder to make any _other_ change in the future.
+
+A good architecture hands you each one. Let's take them in turn.
+
+##### Know how it works right now
+
+The architecture should tell you how the system works now. It should tell a story. It's hard to see that story if there are three different ways of parsing a request and seven ways of serializing JSON - and it's even worse when sometimes you serialize the JSON in a request handler and other times you do it before.
+
+We make the story easier to read by giving it a narrative flow - first _this_, then _this_ - and naming each of the stages. We make it easier to see that two stories are the _same_ by giving the same names to the parts that do the same job. Decomposed and named consistently, the code becomes something you can read.
+
+So when we come to make a change, we can see how the existing small parts are used to tell a story - and how we'd use them to tell a new one.
+
+##### Know where the change goes
+
+<!-- STUB: one obvious home per kind of change - new adaptor / new out-port / new use case - and one obvious place it does *not* belong. This is the beat the conclusion pays off. -->
+
+##### Know how to make it
+
+<!-- STUB: parts are small, uniform, and fall into distinct categories, so you write the new one in imitation of its siblings. You already know the shape. -->
+
+##### Actually make it - locally
+
+<!-- STUB: the change is bounded; it lands in one place and doesn't ripple. No surgery smeared across the codebase. -->
+
+##### See that it works
+
+<!-- STUB: to test a thing you take it apart and hold a piece still - exactly what this architecture lets you do (drive the in-port, fake the out-port). A whole strategy of its own: [the testing post](/posts/2026/7/3/how-do-you-test-a-ports-and-adaptors-application). -->
+
+##### ...and don't make the next change harder
+
+Here's the kicker: when you break your system into small parts, you need to have an eye on the future. It's not enough that it be "easy to change". It should be easy to change _in the way you expect it to change_.
+
+If I've built a web app for internet banking, I'd expect it to be easy to add a new route, add a new sort of account, and change the colour of the home page. I'd expect it to be harder to add a new YouTube video to every account. Harder - but not impossible.
+
+And here's the final kicker: not only do you want it easy to change in the ways you expect, you want to _keep_ it that easy to change after you've changed it. This is where we could go and have a whole discussion about technical debt - which is really just the stuff you added that stops you making the changes you need to make easily, usually because you didn't know what changes were coming.
+
+That trick - seeing into the future to work out what changes are coming down the line - is why good developers spend so long thinking about the _domain_: the situation the application lives in, the problem it's there to solve. Understand the domain and you understand the changes that are realistically coming, so that you know - to pick the classic - that using a floating-point number for an account balance is _a bad idea_.
+
+And to be clear, I don't mean the "business" domain in some grand sense. What ports and adaptors gives you is a design that separates the logic for working with your domain from the concerns of talking to, and changing things in, the rest of the world. It makes change easy by telling a _simple_ story: small objects that translate the outside world into your domain, solve the problem, and translate back out again. Because the story is simple, you can write a new part in imitation of the others; because the objects are small with simple jobs, you know how to write each one; and because they fall into distinct categories, you know where each one goes.
+
+---
+
+Given all of the above, let's go through what I think you should be doing for ports-and-adaptors.
 
 ### Names
 
@@ -113,10 +193,10 @@ That is all an application service is: a bit of shared behaviour lifted out of t
 
 Two rules keep them honest, and they matter more than they look:
 
-- an application service is **never an interface**, and must **never be faked or mocked**. It is real, always, in every test. The only thing you ever fake is an out-port - much more on this later.
+- an application service is **never an interface**, and must **never be faked or mocked**. It is real, always, in every test. The only thing you ever fake is an out-port.
 - use cases **never depend on each other**. If two use cases need the same logic, that logic goes into an application service that sits _below_ them. It does not turn one use case into a dependency of another.
 
-A use case, confusingly, _is_ an interface - the in-port that its handler implements. That's not a contradiction with the rule above: an interface and a _fake boundary_ are two different things, and I'll come back to why when we get to testing. An application service is neither an interface nor a boundary. It's just shared guts.
+A use case, confusingly, _is_ an interface - the in-port that its handler implements. That's not a contradiction with the rule above: an interface and a _fake boundary_ are two different things. The in-port is an interface you _drive from_ - you run the real thing behind it, you never fake it - while the out-port is the interface you _substitute_ a fake for. An application service is neither an interface nor a boundary. It's just shared guts.
 
 You don't always need one. A use case can - and often should - just call the out-ports directly.
 
@@ -244,7 +324,7 @@ flowchart TD
     HA -->|"starts"| App["▶ Running Application"]
 ```
 
-This same ordering happens in test _and_ in production - but, crucially, a test may start and stop at different points along the chain. Hold onto that thought, because it's the whole trick behind the testing strategy.
+This same ordering happens whether you're starting the real thing or standing up a slice of it - and a slice can start and stop at different points along the chain. That flexibility is where a lot of the value hides - enough that it gets [its own post](/posts/2026/7/3/how-do-you-test-a-ports-and-adaptors-application).
 
 To reiterate: I call each of these steps a _layer_, in the layered-architecture sense. And underneath all of them sits the domain: its types are used at every single layer.
 
@@ -256,133 +336,20 @@ They are not part of the application, and they are certainly not part of the dom
 
 This matters because it keeps the temptation out of the domain. The domain and the application never construct their own dependencies; they're _given_ them. The knowledge of how everything is assembled lives in exactly one place, out at the edge, and the inner layers stay blissfully ignorant of it. If you ever find a wiring function reaching into the domain package, something has gone wrong.
 
----
-
-So we now have the "city map" of the architecture, and also the "blueprints" for how we build the city from nothing every time we construct our software. Now for the fun bit: testing.
-
-## Testing
-
-Testing here is done in terms of ports and adaptors, and it comes down to two questions:
-
-- what do I want my out-ports to be?
-- and at which layer am I going to test?
-
-Get those two right and the failure scenarios mostly answer themselves.
-
-### What do I want my out-ports to be?
-
-In production, your out-ports come from `Bootstrap` - the real database, the real services.
-
-In a test you usually don't want to stand all that up. So instead you provide a _different_ implementation of the `OutPorts` interface: one that hands out in-memory fakes for each out-port. As far as the rest of the application is concerned, nothing has changed - it's the same interface, wired up the same way - but now it's fast and easy to control.
-
-The catch, and it's the important bit: the real and fake implementations must be _indistinguishable_ in behaviour. You don't get to hope this is true. You guarantee it with a contract test that runs against both.
-
-Once you trust the fakes, you can drop them into the ordinary production wiring and build the domain on top of them exactly as you would for real - each layer wired the same way, just standing on a faster, more controllable set of out-ports. That's the feature we lean on to build Domain-Driven Tests.
-
-This is the moment to clear up the confusion I promised to come back to. There are interfaces at _both_ edges of the application - the in-ports and the out-ports - and both are there for dependency inversion. But an interface is not the same thing as a _fake boundary_, and only one of the two edges is one:
-
-| Thing | An interface? | What a test does with it |
-|---|---|---|
-| In-port / use case | yes | **drives from** it - runs the real implementation underneath |
-| Out-port | yes | **substitutes** it - the _only_ place we ever swap in a fake |
-| Application service | no | nothing - it's internal, and always real |
-
-The in-port is an interface so that something outside - an adaptor, or a test - can _call_ the application without knowing what's behind it. You drive the real thing through it; you never replace it with a fake. The out-port is an interface so that the application can call _out_ without knowing what's behind it - and that's exactly the seam where a test swaps the real thing for a fake. Same language, two completely different jobs. Keep them straight and "the only thing you ever fake is an out-port" stops sounding like a contradiction and starts sounding like the whole point.
-
-### Domain-Driven Tests (DDTs)
-
-A DDT is a test suite written against the in-ports of the application - the use cases - using domain types.[^ddt-refs] It's a poor name, I'll admit. What it really is is a sort of mega-contract wrapped around the whole application: a suite that pins down the _invariants of the application's behaviour_, independent of how you drive it and independent of what's behind the out-ports.
-
-The name is about where the tests are written _from_ - the domain boundary - not about any particular testing religion.
-
-```mermaid
-flowchart LR
-    Tests["DDT Suite<br>(written in domain types)"]
-
-    Tests --> Direct["Direct Driver<br>(calls in-ports directly)"]
-    Tests --> HTTP["HTTP Driver<br>(calls in-ports via HTTP adaptor)"]
-
-    Direct --> InPorts["In-Ports / Use Cases"]
-    HTTP --> HttpAdaptor["HTTP Adaptor"] --> InPorts
-
-    InPorts --> OutPorts["Out-Ports (interface)"]
-
-    OutPorts --> InMem["In-Memory Fakes<br>(fast, controlled)"]
-    OutPorts --> Real["Real Adaptors<br>(integration)"]
-    OutPorts --> Failing["Failing Fakes<br>(fault injection)"]
-```
-
-#### Two axes of variation
-
-If the wiring has been done well, you can test the application across two independent axes.
-
-The first is **how you drive the in-ports**: call them directly, with no transport in the way, or call them through an in-adaptor such as HTTP.
-
-The second is **what backs the out-ports**: in-memory fakes (fast, controlled), the real implementations (integration), or deliberately failing fakes (fault injection).
-
-And these combine freely:
-
-| Driver | Out-ports | What you're testing |
-|---|---|---|
-| Direct | In-memory fakes | Application logic, fast |
-| HTTP adaptor | In-memory fakes | HTTP wiring + logic |
-| Direct | Real out-ports | Logic + persistence integration |
-| HTTP adaptor | Real out-ports | Full stack |
-| Direct | Failing fakes | Failure handling |
-
-The same test suite runs across every one of these configurations. The tests don't change - _only what they're wired to_.
-
-#### How DDTs are written
-
-The tests are written in domain types, against the in-port interfaces. In the "unwrapped" configuration they call the use case implementations directly. In the "wrapped" configuration the very same interactions are pushed through a transport adaptor - HTTP, say - which turns them into requests and back again.[^driver-refs]
-
-The consequence is worth dwelling on: your HTTP adaptor tests are _not_ a separate suite fussing over JSON shapes and status codes. They're the _same_ behavioural assertions, run through HTTP. If the adaptor is wired up correctly, the suite passes. If it isn't, it fails in domain terms - not HTTP terms.
-
-The confidence that buys you stacks up nicely. The in-memory out-ports are trusted, because of the contract tests. The wiring is trusted, because the DDT suite passes in the direct configuration. The adaptors are trusted, because the same DDT suite passes in the wrapped configuration. Every layer's correctness is checked by one suite, not by a scattering of disconnected tests that each know a little and trust a lot.
-
-### Fault injection
-
-The contract test only promises the happy path. How the application copes with failures _above_ the adaptor is already covered - that's DDTs with failing fake out-ports, from the table above.
-
-That leaves one gap. You can't reliably provoke a failure _inside_ a real adaptor. You can't make your database throw a connection error on demand - not without some form of remote fault injection, and that's another post.
-
-So to test the adaptor's own error handling, you go underneath it: inject a fake transport - a fake HTTP client, a fake DB driver - into the _real_ adaptor. Now you can make the transport return a 500, a timeout, or a lump of malformed nonsense, and assert on what the adaptor does with it. All in isolation, without needing the real external system to have a bad day on cue.
-
-```mermaid
-flowchart TD
-    subgraph "Contract Test (happy path)"
-        FakeAdaptor["Fake Adaptor"] -. "implements" .-> OutPort["OutPort (interface)"]
-        RealAdaptor["Real Adaptor"] -. "implements" .-> OutPort
-        ContractTest["Contract Test"] --> FakeAdaptor
-        ContractTest --> RealAdaptor
-    end
-
-    subgraph "Adaptor Failure Test"
-        RealAdaptor2["Real Adaptor"] --> FakeTransport["Fake Transport<br>(returns 500 / timeout / bad data)"]
-        AdaptorTest["Unit Test"] --> RealAdaptor2
-    end
-```
-
 ## So what was all that for?
 
 The architecture, in the end, is the easy part. The hexagon has been drawn a thousand times, and you can find the definitions of ports and adaptors anywhere. I'm almost sick to death of seeing it. It's the easy part. Drawing a map is easy.
 
 The harder bit is the _order and the wiring_ - building the city the same way every time, one layer from the last, with exactly one place where each kind of thing gets made. Do that, and you make the architecture _scream_. Do that, and you make the two edges of your application _scream_ too. And if you can do that then you can get some very interesting and useful advantages.
 
-First, you know exactly where to put the things you're adding. A new database? Bootstrap an out-port in the box above. A new use case? Goes in the use cases. And you'll see how to wire it all up too, without one big messy file full of cross-cutting wiring that's just waiting for you to make a mistake and mess up your architecture.
+First, you always know where to make a change. A new database? An out-adaptor, behind the out-port that's already there. A new way in - a CLI, a queue consumer? An in-adaptor on the in-ports you already have. A new thing the application does? A use case. There's one obvious home for each kind of change - and, just as important, one obvious place it does _not_ belong. You're never hunting, and you're never smearing logic across one big cross-cutting file that's just waiting for you to get it wrong.
 
-Next, because you've done this, you now have a perfect view on your out-ports. They are now the single seam in the application - they are the only place anything gets faked. Everything above them is real, always real, wired the same in a test as it is in production.
+That's the whole point of the two edges. They are _hinges_ - [Kent Beck's word](https://newsletter.kentbeck.com/p/hinge) - the places the application is deliberately built to bend. The out-ports are the hinge between your logic and the world it depends on: swap a database, change a provider, and nothing above the hinge has to move. The in-ports are the hinge between your logic and the world that drives it: add HTTP, add a CLI, and nothing below the hinge has to move. A change that would ripple through a tangled codebase stops at a hinge instead.
 
-Finally, you have a perfect view on your in-ports. They are the single _language_ that your application speaks to the outside world. Because a use case is written to express what the application does - in domain terms, readably, for a user - that's the language you write your tests in. And because every in-adaptor has an inverse - a _driver_ that turns the same domain-level calls into HTTP, or a CLI invocation, or whatever the adaptor speaks - you can point that one suite of tests straight at the use cases, or _through_ the HTTP adaptor into the running server, and it reads identically either way. Every test, at every level, speaks the application's own language. None of them speak JSON.
-
-That symmetry is what the whole testing strategy hangs off. One place to fake, one language to drive, and the same suite means something whether it's running against in-memory fakes in a millisecond or against the real database over real HTTP. It's why "the only thing you ever fake is an out-port" is worth repeating until it's boring. Get the wiring right and the tests almost write themselves; get it wrong - smear the construction across the codebase, let a use case lean on another use case, mock something in the middle - and no amount of clever testing will buy the confidence back.
+And here's the loop that makes the whole thing worth the trouble: the very hinges that make the application easy to _change_ are what make it easy to _test_. To test a thing you have to be able to take it apart and hold a piece still - which is exactly what a hinge is for. Easy-to-change and easy-to-test turn out to be one property seen from two sides; buy one and you've bought the other. What you _do_ with that - the domain-driven tests, the contract tests, the fault injection - is a whole strategy of its own, and it's [the next post](/posts/2026/7/3/how-do-you-test-a-ports-and-adaptors-application).
 
 [screaming]: https://blog.cleancoder.com/uncle-bob/2011/09/30/Screaming-Architecture.html
 
 [^cqs]: Two acronyms, easily confused. **CQS** (Command-Query Separation, Bertrand Meyer) is the rule that a thing either _changes_ state and returns nothing, or _reports_ state and changes nothing - never both. **CQRS** (Command-Query Responsibility Segregation, Greg Young) takes that same split and pushes it much further down, into the model itself: a separate write model for the commands and a read model for the queries, sometimes with separate data stores behind them. What I'm describing here is the modest version - CQS drawn at the use-case boundary, so each handler is purely one or purely the other. If you wanted to, you could push that separation all the way down into the domain and end up with something much closer to full CQRS. It's the same idea, just taken further - and a much bigger commitment than this document needs.
-
-[^ddt-refs]: I didn't invent any of this - I've just given it a name I can remember. If you want it from people who've thought about it harder than I have: Aslak Hellesøy [walks through the idea here](https://www.youtube.com/watch?v=sUclXYMDI94), and Nat Pryce [does the same here](https://www.youtube.com/watch?v=Fk4rCn4YLLU). Both are, sadly, YouTube videos.
-
-[^driver-refs]: The trick underneath this - separating the _test driver_ from the _implementation_ of the test, with a little DSL in the middle so the same tests can run against different bindings - is covered beautifully by Chris James and Riya Dattani [in this talk](https://www.youtube.com/watch?v=ZMWJCk_0WrY), and again, in Go and in writing, by Chris James in [Learn Go with Tests](https://quii.gitbook.io/learn-go-with-tests/testing-fundamentals/working-without-mocks).
 
 [^hub]: I've seen it called a `Hub` before in some situations - you can picture it as the bit in the middle of the hexagon where the individual use cases form the spokes of a wheel - but I think this muddies things too much with a new word.
