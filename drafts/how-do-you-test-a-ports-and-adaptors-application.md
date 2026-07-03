@@ -9,7 +9,7 @@ tags:
 
 # How Do You Test a Ports and Adaptors Application?
 
-This is the testing companion to [The Architecture Is the Easy Part](/posts/2026/7/2/the-architecture-is-the-easy-part). It leans on the vocabulary from there - ports, adaptors, use cases, out-ports, and the wiring that holds them together - so if that's unfamiliar, start there and come back.
+This is the testing companion to [The Architecture Is the Easy Part](/drafts/the-architecture-is-the-easy-part). It leans on the vocabulary from there - ports, adaptors, use cases, out-ports, and the wiring that holds them together - so if that's unfamiliar, start there and come back.
 
 One warning before we begin. What follows is *an* approach - the one I reach for - and like everything in this game it is a set of trade-offs, not a law. I'll come to the alternatives, and to where this one costs you, further down.
 

@@ -9,7 +9,7 @@ tags:
 
 # Where Does Authentication Go?
 
-This is a follow-on from [The Architecture Is the Easy Part](/posts/2026/7/2/the-architecture-is-the-easy-part), and it leans hard on the vocabulary from it - ports, adaptors, use cases, out-ports, and the DDTs (domain-driven tests) that drive them. If none of those words mean much to you yet, start there; I'll wait.
+This is a follow-on from [The Architecture Is the Easy Part](/drafts/the-architecture-is-the-easy-part), and it leans hard on the vocabulary from it - ports, adaptors, use cases, out-ports, and the DDTs (domain-driven tests) that drive them. If none of those words mean much to you yet, start there; I'll wait.
 
 That post made a promise I want to cash in: get the wiring right and the hard problems fall into obvious places. So let's take a problem everyone has to solve and nearly everyone puts in the wrong place: authentication.
 

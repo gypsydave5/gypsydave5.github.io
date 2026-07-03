@@ -9,7 +9,7 @@ tags:
 
 # Wiring Up a Ports and Adaptors Application
 
-This is a companion to [The Architecture Is the Easy Part](/posts/2026/7/2/the-architecture-is-the-easy-part), and it assumes the parts named there - the domain, the ports, the use cases, the adaptors. If those are unfamiliar, start there.
+This is a companion to [The Architecture Is the Easy Part](/drafts/the-architecture-is-the-easy-part), and it assumes the parts named there - the domain, the ports, the use cases, the adaptors. If those are unfamiliar, start there.
 
 That post drew the design: the hexagon, the two edges, the names for each part. Here's the question it left open - how do you _build_ that design from nothing, every time the program starts?
 
@@ -91,7 +91,7 @@ flowchart TD
     HA -->|"starts"| App["▶ Running Application"]
 ```
 
-This same ordering happens whether you're starting the real thing or standing up a slice of it - and a slice can start and stop at different points along the chain. That flexibility is where a lot of the value hides - enough that it gets [its own post](/posts/2026/7/3/how-do-you-test-a-ports-and-adaptors-application).
+This same ordering happens whether you're starting the real thing or standing up a slice of it - and a slice can start and stop at different points along the chain. That flexibility is where a lot of the value hides - enough that it gets [its own post](/drafts/how-do-you-test-a-ports-and-adaptors-application).
 
 To reiterate: I call each of these steps a _layer_, in the layered-architecture sense. And underneath all of them sits the domain: its types are used at every single layer.
 
@@ -109,8 +109,8 @@ All of this - the strict order, the fat objects per layer, the one and only one 
 
 The wiring is the one place that can quietly undo the whole architecture. The design is just a picture until something builds it, and if the building is sloppy - dependencies conjured mid-handler, construction smeared everywhere, layers leaking into each other - then the lovely hexagon is a lie. You won't notice for a while. You'll notice the day a simple change fights back.
 
-Do it the disciplined way and the opposite happens: the seams stay real. Because each layer is built from the one below and handed up whole, you can stop the process at any layer you like - which is exactly the trick that makes the whole thing testable. Stand the out-ports up as fakes, build the real use cases on top of them, and drive them directly. That's [the next post](/posts/2026/7/3/how-do-you-test-a-ports-and-adaptors-application).
+Do it the disciplined way and the opposite happens: the seams stay real. Because each layer is built from the one below and handed up whole, you can stop the process at any layer you like - which is exactly the trick that makes the whole thing testable. Stand the out-ports up as fakes, build the real use cases on top of them, and drive them directly. That's [the next post](/drafts/how-do-you-test-a-ports-and-adaptors-application).
 
-[The architecture was the easy part](/posts/2026/7/2/the-architecture-is-the-easy-part). This was the bit that makes it true.
+[The architecture was the easy part](/drafts/the-architecture-is-the-easy-part). This was the bit that makes it true.
 
 [^hub]: I've seen it called a `Hub` before in some situations - you can picture it as the bit in the middle of the hexagon where the individual use cases form the spokes of a wheel - but I think this muddies things too much with a new word.

@@ -9,7 +9,7 @@ tags:
 
 # The Parts of a Ports and Adaptors Application
 
-This is the companion to [The Architecture Is the Easy Part](/posts/2026/7/2/the-architecture-is-the-easy-part). That post argues _why_ you'd want this architecture - because it makes change easy. This one is the concrete version: the actual parts, named and defined, and how they fit together. It's the reference you'll want open while reading [the wiring](/posts/2026/7/3/wiring-up-a-ports-and-adaptors-application) and [the testing](/posts/2026/7/3/how-do-you-test-a-ports-and-adaptors-application) posts.
+This is the companion to [The Architecture Is the Easy Part](/drafts/the-architecture-is-the-easy-part). That post argues _why_ you'd want this architecture - because it makes change easy. This one is the concrete version: the actual parts, named and defined, and how they fit together. It's the reference you'll want open while reading [the wiring](/drafts/wiring-up-a-ports-and-adaptors-application) and [the testing](/drafts/how-do-you-test-a-ports-and-adaptors-application) posts.
 
 ### Names
 
