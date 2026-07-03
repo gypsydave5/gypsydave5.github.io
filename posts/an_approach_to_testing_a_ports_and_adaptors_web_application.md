@@ -11,7 +11,7 @@ tags:
 
 This is an opinionated approach to building a system. It's aimed at web applications, but there's nothing here that wouldn't apply just as well to anything else that takes input from the world, does something, and gives something back.
 
-It draws heavily on Ports and Adaptors - [Alistair Cockburn's Hexagonal Architecture](https://alistair.cockburn.us/hexagonal-architecture/), which is where the pattern, and most of the terminology I use here, comes from - and on Clean Architecture, as laid out in [Getting Your Hands Dirty With Clean Architecture](https://learning.oreilly.com/api/v1/continue/9781805128373/). Where I think the book or Cockdurn could be clearer, I depart from them. Familiarity with all of the above will help, but I'll define my terms as I go.
+It draws heavily on Ports and Adaptors - [Alistair Cockburn's Hexagonal Architecture](https://alistair.cockburn.us/hexagonal-architecture/), which is where the pattern, and most of the terminology I use here, comes from - and on Clean Architecture, as laid out in [Getting Your Hands Dirty With Clean Architecture](https://learning.oreilly.com/api/v1/continue/9781805128373/). Where I think the book or Cockburn could be clearer, I depart from them. Familiarity with all of the above will help, but I'll define my terms as I go.
 
 Here's what I want to cover:
 
@@ -84,35 +84,39 @@ So when we come to make a change, we can see how the existing small parts are us
 
 ##### Know where the change goes
 
-<!-- STUB: one obvious home per kind of change - new adaptor / new out-port / new use case - and one obvious place it does *not* belong. This is the beat the conclusion pays off. -->
+Once the parts fall into distinct categories, working out where a change goes gets a bit easier. This sounds like it shouldn't even be a problem, but I cannot even begin to tell you the amount of time I've spent scratching my chin looking at my IDE and trying to work out _where_ this new magic box will go.
+
+But with a decent architecture - whew! Change to the UI? Fiddle with that view-model and the HTML. New thing the application needs to do? Ooooh, I'll need a use case and some adaptors. Different database? Time to swap out my out-port. (Don't worry about those words yet - we'll name everything properly in a minute. The point is only that there _are_ names, and each name names a home).
+
+And the flip side is, if anything, _more_ useful: you know where a change does _not_ belong. If you're building a database connection in your router, you are doing it wrong.
 
 ##### Know how to make it
 
-<!-- STUB: parts are small, uniform, and fall into distinct categories, so you write the new one in imitation of its siblings. You already know the shape. -->
-
-##### Actually make it - locally
-
-<!-- STUB: the change is bounded; it lands in one place and doesn't ripple. No surgery smeared across the codebase. -->
+Because every part is small, and plays one part in our story, and often has a few siblings that already play the same _kind_ of part, you rarely have to invent anything. You make the new one by following the shape of the ones next to it. A codebase built this way is really a pile of worked examples: you want a new adaptor, so you open the three adaptors that already exist and write a fourth that looks like them.
 
 ##### See that it works
 
-<!-- STUB: to test a thing you take it apart and hold a piece still - exactly what this architecture lets you do (drive the in-port, fake the out-port). A whole strategy of its own: [the testing post](/posts/2026/7/3/how-do-you-test-a-ports-and-adaptors-application). -->
+Those same seams let you lift a single part out and hold it still on its own - which is exactly what you need to check that it works. You can run the piece you changed without standing up the entire universe around it: drive it directly, put something predictable on the other side, and look at what comes back.
+
+But also, because of the way that all the stories that our application tells look the same, then we can be consistent about the ways we test them from the beginning to the end. I'm reserving testing strategies for a later post (or two or three), this is what I'm talking about here.
 
 ##### ...and don't make the next change harder
 
-Here's the kicker: when you break your system into small parts, you need to have an eye on the future. It's not enough that it be "easy to change". It should be easy to change _in the way you expect it to change_.
+All of the above is making it easier to make a change to your application. But here's the final twist: not only do you want it easy to change _now_, you want to _keep_ it just as easy to change _after_ you've changed it. 
 
-If I've built a web app for internet banking, I'd expect it to be easy to add a new route, add a new sort of account, and change the colour of the home page. I'd expect it to be harder to add a new YouTube video to every account. Harder - but not impossible.
-
-And here's the final kicker: not only do you want it easy to change in the ways you expect, you want to _keep_ it that easy to change after you've changed it. This is where we could go and have a whole discussion about technical debt - which is really just the stuff you added that stops you making the changes you need to make easily, usually because you didn't know what changes were coming.
+This is where we could go and have a whole discussion about technical debt - which is really just the stuff you added that stops you making the changes you need to make easily, usually because you didn't know what changes were coming.
 
 That trick - seeing into the future to work out what changes are coming down the line - is why good developers spend so long thinking about the _domain_: the situation the application lives in, the problem it's there to solve. Understand the domain and you understand the changes that are realistically coming, so that you know - to pick the classic - that using a floating-point number for an account balance is _a bad idea_.
 
-And to be clear, I don't mean the "business" domain in some grand sense. What ports and adaptors gives you is a design that separates the logic for working with your domain from the concerns of talking to, and changing things in, the rest of the world. It makes change easy by telling a _simple_ story: small objects that translate the outside world into your domain, solve the problem, and translate back out again. Because the story is simple, you can write a new part in imitation of the others; because the objects are small with simple jobs, you know how to write each one; and because they fall into distinct categories, you know where each one goes.
+But I'm _not_ talking about the business domain here. That's _your_ problem. What I'm talking about is the ports and adaptors architecture. And what ports and adaptors gives you is a design that separates the logic for working with your domain from the concerns of talking to, and changing things in, the rest of the world. And it's an architecture that's designed to keep having things added to - the architecture, as architects love to say, _scales_.
+
+And if you follow it closely, that architecture will be the same both before and after the change that you've made. And so the next change will be just as easy to make.
+
+Why do we care about easy changes? THE BUSINESS. They want you to work quickly, and efficiently, and consistently deliver value. They not only want the change you make now to be quick, but they want the change you make tomorrow, next week, next month, next year, to be just as quick. Which is _why_ THE BUSINESS really cares about architecture, even if they don't know it.
 
 ---
 
-Given all of the above, let's go through what I think you should be doing for ports-and-adaptors.
+Goodness, that was long. I'm sorry. Let's come back down to earth (well, almost, it's still a bit abstract). Given all of the above, let's go through what I think you should be doing for ports-and-adaptors.
 
 ### Names
 
