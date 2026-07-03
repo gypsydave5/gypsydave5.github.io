@@ -88,7 +88,7 @@ So when we come to make a change, we can see how the existing small parts are us
 
 Once the parts fall into distinct categories, working out where a change goes gets a bit easier. This sounds like it shouldn't even be a problem, but I cannot even begin to tell you the amount of time I've spent scratching my chin looking at my IDE and trying to work out _where_ this new magic box will go.
 
-But with a decent architecture - whew! Change to the UI? Fiddle with that view-model and the HTML. New thing the application needs to do? Ooooh, I'll need a use case and some adaptors. Different database? Time to swap out my out-port. (Don't worry about those words yet - we'll name everything properly in a minute. The point is only that there _are_ names, and each name names a home).
+But with a decent architecture - whew! Change to the UI? Fiddle with that view-model and the HTML. New thing the application needs to do? Ooooh, I'll need a use case and some adaptors. Different database? Time to swap out my out-port. (Don't worry about those words yet - they get named and defined properly in [the next post](/posts/2026/7/3/the-parts-of-a-ports-and-adaptors-application). The point is only that there _are_ names, and each name names a home).
 
 And the flip side is, if anything, _more_ useful: you know where a change does _not_ belong. If you're building a database connection in your router, you are doing it wrong.
 
@@ -118,156 +118,13 @@ Why do we care about easy changes? THE BUSINESS. They want you to work quickly, 
 
 ---
 
-Goodness, that was long. I'm sorry. Let's come back down to earth (well, almost, it's still a bit abstract). Given all of the above, let's go through what I think you should be doing for ports-and-adaptors.
-
-### Names
-
-The architecture should be apparent from the code. Not documented-in-a-wiki apparent, but _apparent from what you can see in front of you_. You should be able to open the source, look at the packages, the package names, the classes and interfaces, and see the shape of the whole thing and how the parts talk to each other. This is sometimes called [Screaming Architecture][screaming]: the code should shout what it is. It ought to be _hard_ to misunderstand.
-
-(If you're in a city, you don't need a glossary to know you're in a residential street - you look, and it's a street with residences. And there might be street sign to really drive that home).
-
-The easiest way to get there is to name the things after the role they play in the architecture. There is no prize for inventing your own vocabulary. If it's an out-port, call it an out-port. Same goes for the DDD terms. Consistency beats cleverness every time.
-
-
-#### Domain
-
-The domain has no dependencies. Nothing. It sits at the bottom and everything else is built on top of it.
-
-There are two schools of thought about where the business logic lives.
-
-**Anaemic domain** - the domain types are plain data structures, and all the behaviour lives in the application services and use cases (we'll meet them soon). The logic is easy to find, because it's always in the same place: the use case layer. The cost is that your domain objects can't protect their own invariants: nothing stops you putting one into an invalid state.
-
-**Rich domain** - the behaviour lives inside the domain types themselves. The objects enforce their own invariants and are self-protecting. You get strong encapsulation, but the logic is harder to locate, and more of your design effort goes into the model.
-
-For a simple domain, anaemic is usually fine; the use cases are the right home for the logic. As the domain gets more complicated, a richer model starts to earn its keep. This is a judgement call, not a rule, and anyone who tells you otherwise is selling something. And of course, there's a lot of space between the two where you can do something in-between.
-
-Whether you keep commands separate from queries is a _different_ question, orthogonal to this one - you can do it with either kind of domain, and doing it inside a rich model is more or less what CQRS is.[^cqs]
-
-If you care deeply about this bit (and you should), read the Domain-Driven Design book(s), but for the purposes of this document it's a detail.
-
-#### Application
-
-An application is the domain types _applied_ to solve a business problem.
-
-If the whole application has an interface, that interface is all of the use cases together. If that interface has an implementation, that implementation is the collection of all of the command and query handlers (they're on their way, promise).
-
-An application is made up of:
-
-- the out-ports (interfaces);
-- application services (holding some of them together);
-- the use cases, aka the in-ports (interfaces);
-- and the command and query handlers.
-
-All of them depend on the domain, and all of them use its types. The application is the domain in motion.
-
-#### Port
-
-There are two kinds of port:
-
-- an **Out**-Port is how the application talks to an external service. Also called a "driven" port, because it's where our system makes something else _do something_ - the external thing is driven by us.
-- an **In**-Port is how other programs talk to our service. Also called a "driving" port, because it's where other things make our system _do something_ - they're in the driving seat.
-
-Ports are _abstract_. They are interfaces. That's the whole point of them.
-
-#### Use Case
-
-I use "use case" and "in-port" interchangeably, but I prefer use case, because it keeps you honest: an in-port should be doing something _for a user_. That said, pick one and stick to it - consistency matters more than my preference.
-
-#### Adaptor
-
-An adaptor brings the outside world into the application, or carries the application out to the outside world. Adaptors are always paired with ports.
-
-On the "in" side, an adaptor wraps an in-port to present an external interface. The application hands an in-port to an HTTP adaptor so it can be spoken to over HTTP; a command-line handler could wrap the same in-port to let you drive it from a terminal.
-
-On the "out" side, an adaptor implements an out-port. A database connection gets wrapped up as an adaptor that implements the `Repository` out-port; a call to some other service gets wrapped as an adaptor implementing a `Service` out-port.
-
-So: **in-adaptors** wrap in-ports to face the world, and **out-adaptors** wrap the world to present an out-port to the application.
-
-#### Command / Query Handler
-
-Every use case is either a command handler or a query handler. Both are implementations of use cases; the difference is what they do.
-
-A query returns data and has no side effects. A command has side effects and returns nothing. Drawing that line at the level of the use case is [Command-Query Separation](https://martinfowler.com/bliki/CommandQuerySeparation.html) - CQS - applied to whole handlers rather than to individual methods.[^cqs]
-
-As before: being consistent about this matters more than getting it theoretically perfect.
-
-#### Application Service
-
-Sometimes the same coordination logic - the same little dance of domain types and out-ports - turns up in use case after use case. When it does, you pull it out into an _application service_ and share it.
-
-That is all an application service is: a bit of shared behaviour lifted out of the use cases that need it. It is emphatically _not_ a layer, and it is _not_ a boundary. In proper DDD a use case _is_ an application service - a command or query handler is just an application service that happens to be an in-port - and I'm only giving the shared bits a name of their own so we remember what they're for.
-
-Two rules keep them honest, and they matter more than they look:
-
-- an application service is **never an interface**, and must **never be faked or mocked**. It is real, always, in every test. The only thing you ever fake is an out-port.
-- use cases **never depend on each other**. If two use cases need the same logic, that logic goes into an application service that sits _below_ them. It does not turn one use case into a dependency of another.
-
-A use case, confusingly, _is_ an interface - the in-port that its handler implements. That's not a contradiction with the rule above: an interface and a _fake boundary_ are two different things. The in-port is an interface you _drive from_ - you run the real thing behind it, you never fake it - while the out-port is the interface you _substitute_ a fake for. An application service is neither an interface nor a boundary. It's just shared guts.
-
-You don't always need one. A use case can - and often should - just call the out-ports directly.
-
----
-
-Put all of that together and the architecture looks like this:
-
-```mermaid
-flowchart LR
-    subgraph InAdaptors["In-Adaptors"]
-        HTTP["HTTP Handler"]
-        CLI["CLI Handler"]
-    end
-
-    subgraph Application["Application"]
-        InPorts["In-Ports / Use Cases<br>(interfaces)"]
-        CQH["Command / Query Handlers<br>(implementations)"]
-        AppSvc["Application Services<br>(optional shared helper,<br>not a layer)"]
-        OutPorts["Out-Ports<br>(interfaces)"]
-    end
-    style AppSvc stroke-dasharray: 5 5
-
-    subgraph Domain["Domain"]
-        DomainTypes["Domain Types"]
-    end
-
-    subgraph OutAdaptors["Out-Adaptors"]
-        DB["Database Adaptor"]
-        ExtSvc["HTTP Service Adaptor"]
-    end
-
-    HTTP --> InPorts
-    CLI --> InPorts
-    InPorts --> CQH
-    CQH --> AppSvc
-    CQH --> OutPorts
-    AppSvc --> OutPorts
-    OutPorts --> DB
-    OutPorts --> ExtSvc
-
-    DomainTypes -. "used by" .-> CQH
-    DomainTypes -. "used by" .-> AppSvc
-    DomainTypes -. "used by" .-> OutPorts
-```
-
-
-
-If you've seen the standard hexagonal architecture picture before, this is that, but I've just drawn left-to-right and with the names I'm going to use for the rest of the post, and I've used Mermaid because I'm lazy.
-
-### Building it: the wiring
-
-Right, so that's what we're aiming for in terms of a design. But how do we _build_ it up from nothing - in what order, and where does the construction code live? That turns out to be the part people get wrong most often, and it's a whole topic of its own: [Wiring Up a Ports and Adaptors Application](/posts/2026/7/3/wiring-up-a-ports-and-adaptors-application).
-
 ## So what was all that for?
 
-The architecture, in the end, is the easy part. The hexagon has been drawn a thousand times, and you can find the definitions of ports and adaptors anywhere. I'm almost sick to death of seeing it. It's the easy part. Drawing a map is easy.
+Goodness, that was long. I'm sorry. But I've spent all those words on _why_ without showing you a single box, so let me say plainly what the boxes buy - because it isn't the diagram. Anyone can draw the hexagon.
 
-The harder bit is the _order and the wiring_ - building the city the same way every time, one layer from the last, with exactly one place where each kind of thing gets made. Do that, and you make the architecture _scream_. Do that, and you make the two edges of your application _scream_ too. And if you can do that then you can get some very interesting and useful advantages.
+What you get is the thing this whole post was about: a system that's _easy to change_. And the reason lives in the two edges. They are _hinges_ - [Kent Beck's word](https://newsletter.kentbeck.com/p/hinge) - the places the application is deliberately built to bend. The out-ports are the hinge between your logic and the world it depends on: swap a database, change a provider, and nothing above the hinge has to move. The in-ports are the hinge between your logic and the world that drives it: add HTTP, add a CLI, and nothing below the hinge has to move. A change that would ripple through a tangled codebase stops at a hinge instead.
 
-First, you always know where to make a change. A new database? An out-adaptor, behind the out-port that's already there. A new way in - a CLI, a queue consumer? An in-adaptor on the in-ports you already have. A new thing the application does? A use case. There's one obvious home for each kind of change - and, just as important, one obvious place it does _not_ belong. You're never hunting, and you're never smearing logic across one big cross-cutting file that's just waiting for you to get it wrong.
+And here's the loop that makes it all worth the trouble: the very hinges that make the application easy to _change_ are what make it easy to _test_. To test a thing you have to be able to take it apart and hold a piece still - which is exactly what a hinge is for. Easy-to-change and easy-to-test turn out to be one property seen from two sides; buy one and you've bought the other.
 
-That's the whole point of the two edges. They are _hinges_ - [Kent Beck's word](https://newsletter.kentbeck.com/p/hinge) - the places the application is deliberately built to bend. The out-ports are the hinge between your logic and the world it depends on: swap a database, change a provider, and nothing above the hinge has to move. The in-ports are the hinge between your logic and the world that drives it: add HTTP, add a CLI, and nothing below the hinge has to move. A change that would ripple through a tangled codebase stops at a hinge instead.
+That's the case for the whole approach. What's left is the doing of it: [the parts, named and defined](/posts/2026/7/3/the-parts-of-a-ports-and-adaptors-application); [how you wire them together](/posts/2026/7/3/wiring-up-a-ports-and-adaptors-application); and [the testing that falls out](/posts/2026/7/3/how-do-you-test-a-ports-and-adaptors-application). The architecture, like I said, was the easy part.
 
-And here's the loop that makes the whole thing worth the trouble: the very hinges that make the application easy to _change_ are what make it easy to _test_. To test a thing you have to be able to take it apart and hold a piece still - which is exactly what a hinge is for. Easy-to-change and easy-to-test turn out to be one property seen from two sides; buy one and you've bought the other. What you _do_ with that is a whole strategy of its own - for later!
-
-[screaming]: https://blog.cleancoder.com/uncle-bob/2011/09/30/Screaming-Architecture.html
-
-[^cqs]: Two acronyms, easily confused. **CQS** (Command-Query Separation, Bertrand Meyer) is the rule that a thing either _changes_ state and returns nothing, or _reports_ state and changes nothing - never both. **CQRS** (Command-Query Responsibility Segregation, Greg Young) takes that same split and pushes it much further down, into the model itself: a separate write model for the commands and a read model for the queries, sometimes with separate data stores behind them. What I'm describing here is the modest version - CQS drawn at the use-case boundary, so each handler is purely one or purely the other. If you wanted to, you could push that separation all the way down into the domain and end up with something much closer to full CQRS. It's the same idea, just taken further - and a much bigger commitment than this document needs.
