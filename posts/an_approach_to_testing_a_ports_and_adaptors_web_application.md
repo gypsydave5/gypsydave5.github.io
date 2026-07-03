@@ -363,10 +363,6 @@ flowchart TD
     end
 ```
 
-## A worked example: where does authentication go?
-
-To keep this from turning into a book, I've pulled the worked example out into its own post: [Where Does Authentication Go?](/posts/2026/7/2/where-does-authentication-go). It takes everything above - use cases, out-ports, DDTs, the single fake seam - and points it at the one problem nearly everyone puts in the wrong place. If the approach here convinced you, that's where you see it earn its keep.
-
 ## So what was all that for?
 
 The architecture, in the end, is the easy part. The hexagon has been drawn a thousand times, and you can find the definitions of ports and adaptors anywhere. I'm almost sick to death of seeing it. It's the easy part. Drawing a map is easy.

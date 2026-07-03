@@ -1,7 +1,7 @@
 ---
 title: Where Does Authentication Go?
 description: A worked example for ports and adaptors - pulling authentication apart into the layer each piece belongs in, and keeping your tests able to see it.
-published: true
+published: false
 date: 2026-07-02 11:36:45
 tags:
   - PortsAndAdaptors
