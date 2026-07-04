@@ -37,4 +37,4 @@ tags:
 
 ## Writing style
 
-See `.claude/memory/writing-style.md` for the comprehensive style guide. Key points: British English, conversational but rigorous, strong opinions, footnotes as endnotes at the bottom of the file.
+See `.claude/memory/writing-style.md` for the comprehensive style guide. Key points: British English using **Oxford spelling** — i.e. British forms (`colour`, `behaviour`, `-re`, `defence`) but the `-ize`/`-ization` suffix, NOT `-ise`/`-isation` (so `organize`, `minimize`, `serialize`, `maximizing`). Conversational but rigorous, strong opinions, footnotes as endnotes at the bottom of the file.
