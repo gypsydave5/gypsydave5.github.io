@@ -7,7 +7,7 @@ tags:
   - PortsAndAdaptors
 ---
 
-This is the companion to [The Architecture Is the Easy Part](/posts/2026/7/2/the-architecture-is-the-easy-part). That post argues _why_ you'd want this architecture - because it makes change easy. This one is the concrete version: the actual parts, named and defined, and how they fit together.
+This is the companion to [In Defence of Architecture](/posts/2026/7/2/in-defence-of-architecture). That post argues _why_ you'd want this architecture - because it makes change easy. This one is the concrete version: the actual parts, named and defined, and how they fit together.
 
 We'll go through the ports and adaptors architectural pattern now, and try to evaluate what it is about it that makes change easy, based upon the criteria we saw for how an architecture can help make changes easier.
 
@@ -26,7 +26,7 @@ The easiest way to get there is to name the things after the role they play in t
 
 The domain has no dependencies. Nothing. It sits at the bottom and everything else is built on top of it.
 
-There are two schools of thought about where the business logic for you application lives.
+There are two schools of thought about where the business logic for your application lives.
 
 **Anaemic domain** - the domain types are plain data structures, and all the behaviour lives in the application services and use cases (we'll meet them soon). The logic is easy to find, because it's always in the same place: the use case layer. The cost is that your domain objects can't protect their own invariants: nothing stops you putting one into an invalid state.
 
@@ -149,7 +149,7 @@ If you've seen the standard hexagonal architecture picture before, this is that,
 
 That's the whole cast: the domain, the ports, the adaptors, the use cases and their handlers, and the occasional application service. Not many parts, all told - and each one has a single job and a name that says what that job is.
 
-The naming is the point, and it pays off exactly where I promised it would back in [the argument](/posts/2026/7/2/the-architecture-is-the-easy-part): when you come to make a change, the code itself tells you where it goes. Get the names right and the architecture _screams_ - you open the source and the shape is just _there_, in the packages and the types, impossible to misread. Get the two edges right and they scream too: everything that touches the outside world is an adaptor, and it's obvious which of the two kinds it is.
+The naming is the point, and it pays off exactly where I promised it would back in [the argument](/posts/2026/7/2/in-defence-of-architecture): when you come to make a change, the code itself tells you where it goes. Get the names right and the architecture _screams_ - you open the source and the shape is just _there_, in the packages and the types, impossible to misread. Get the two edges right and they scream too: everything that touches the outside world is an adaptor, and it's obvious which of the two kinds it is.
 
 So change is made easier because we can name all the parts, and each one has a part to play in the story of how the application works. And the parts don't interfere with each other; they can be reused, for sure, but they're not treading on each other's toes. They have _well defined_ responsibilities.
 

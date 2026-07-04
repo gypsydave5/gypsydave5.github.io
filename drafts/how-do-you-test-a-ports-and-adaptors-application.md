@@ -9,7 +9,7 @@ tags:
 
 # How Do You Test a Ports and Adaptors Application?
 
-This is the testing companion to [The Architecture Is the Easy Part](/posts/2026/7/2/the-architecture-is-the-easy-part). It leans on the vocabulary from there - ports, adaptors, use cases, out-ports, and the wiring that holds them together - so if that's unfamiliar, start there and come back.
+This is the testing companion to [In Defence of Architecture](/posts/2026/7/2/in-defence-of-architecture). It leans on the vocabulary from there - ports, adaptors, use cases, out-ports, and the wiring that holds them together - so if that's unfamiliar, start there and come back.
 
 That post said the last thing you need, to change a system safely, is to be able to _see that a change works_. This is that piece. And it turns out to be no accident that the same architecture makes it cheap: the structure that makes an application easy to change is the very thing that makes it easy to test.
 

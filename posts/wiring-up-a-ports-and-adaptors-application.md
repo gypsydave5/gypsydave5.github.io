@@ -7,7 +7,7 @@ tags:
   - PortsAndAdaptors
 ---
 
-This is a companion to [The Architecture Is the Easy Part](/posts/2026/7/2/the-architecture-is-the-easy-part), and it assumes the parts named there - the domain, the ports, the use cases, the adaptors. If those are unfamiliar, start there.
+This is a companion to [In Defence of Architecture](/posts/2026/7/2/in-defence-of-architecture), and it assumes the parts named there - the domain, the ports, the use cases, the adaptors. If those are unfamiliar, start there.
 
 That post drew the design: the hexagon, the two edges, the names for each part. Here's the question it left open - how do you _build_ that design from nothing, every time the program starts?
 
@@ -109,7 +109,7 @@ The wiring is the one place that can quietly undo the whole architecture. The de
 
 Do it the disciplined way and the opposite happens: the seams stay real. Because each layer is built from the one below and handed up whole, you can stop the process at any layer you like - which is exactly the trick that makes the whole thing testable. Stand the out-ports up as fakes, build the real use cases on top of them, and drive them directly.
 
-This is the part [the argument](/posts/2026/7/2/the-architecture-is-the-easy-part) called the beating heart, and here's why. It keeps two of the promises that post made. That a change stays _local_ - held behind a seam instead of rippling out across the codebase. And that making a change doesn't quietly make the next one harder - because everything you add goes in its one right place, in its one right shape, and the structure survives contact with you. The design tells you where things go; the wiring is what stops them drifting anywhere else.
+This is the part [the argument](/posts/2026/7/2/in-defence-of-architecture) called the beating heart, and here's why. It keeps two of the promises that post made. That a change stays _local_ - held behind a seam instead of rippling out across the codebase. And that making a change doesn't quietly make the next one harder - because everything you add goes in its one right place, in its one right shape, and the structure survives contact with you. The design tells you where things go; the wiring is what stops them drifting anywhere else.
 
 And it's what makes the whole thing testable, which is the next post.
 

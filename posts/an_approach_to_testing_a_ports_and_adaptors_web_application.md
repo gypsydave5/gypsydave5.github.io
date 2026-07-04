@@ -20,7 +20,7 @@ Here's the whole of what I want to get across. It grew too big for one post, and
 
 But before any of that, let me try to explain why I'm doing it this way, with a crappy metaphor...
 
-### Building A City Everyday 
+### Building A City Every Day 
 
 An architecture is like a map of a city. It tells you where things are and how they connect - the domain in the middle, the ports at the edges, the roads between them. It's genuinely useful. But a map doesn't tell you how to _build_ the city. Hand someone a map and a pile of bricks and you'll get a mess.
 
@@ -34,7 +34,7 @@ And, in my experience, it's in the "building a city every day" part that things 
 
 ---
 
-Now for some reason, at this point, I had the horrible thought that all my colleagues who ever said that architecture was pointless and we should JFDI, put the function there, and get on with our lives - I had the horrible thought that maybe they were right. And that maybe you're one of them. So I ended up writing a defense of architecture.
+Now for some reason, at this point, I had the horrible thought that all my colleagues who ever said that architecture was pointless and we should JFDI, put the function there, and get on with our lives - I had the horrible thought that maybe they were right. And that maybe you're one of them. So I ended up writing a defence of architecture.
 
 ## Architecture
 
@@ -42,15 +42,15 @@ Now for some reason, at this point, I had the horrible thought that all my colle
 
 This might sound mad, but it's worth at least asking ourselves why we want to choose an architecture. What even is architecture in software, and why do we care about it? I think particularly about when I want to talk to THE BUSINESS. Why do they care?
 
-### Architecture is a silly name
+#### Architecture is a silly name
 
-First, I hate the word architecture. The first thing I think about is architects, who in parodic form (mostly) go about drawing lines and boxes in their ivory towers, never build anything, aren't on the hook for delivering anything, floating around with a smug sense of superiority because they never have to get their hands dirty with the irrelevancies of working software.
+First, I _hate_ the word architecture. The first thing I think about is architects, who in parodic form (well, mostly parodic) go about drawing lines and boxes on their ivory whiteboards, never build anything themselves, aren't on the hook for delivering anything, and float around with a peculiar sense of superiority because they never have to get their hands dirty with the base irrelevancies of working software.
 
-I usually prefer the word "design" as it tends to scare people off less. Design is what we do all the time - write a class, a method signature, some functions that all work together. We're always designing. Architecture feels so... distant and grown-up.
+I usually prefer the word "design" as it tends to scare people off less. Design is what we do all the time - write a class, a method signature, some functions that all work together. We're always designing. Architecture feels so... eugh... distant and grown-up.
 
-Well, let me tell you: architecture is just design, even the really big architectures. It's just design. The only difference is usually scale. We design classes, but we feel like we're architecting distributed systems.
+Well, let me tell you: architecture is just design, even the really big architectures. It's all just design. The only difference is usually scale. We design classes, but we feel like we're architecting when we design distributed systems.
 
-### Architecture is just OO on stilts
+#### Architecture is just Object-Oriented Programming on stilts
 
 The next thing I want to tell you is that if you can design the interactions between a few stateful objects in object-oriented programming, then congratulations, you have the skills to be an architect. The same problems that come up at the "object" level (usually to do with time and state - it's always time and state and concurrency) exist all the way up the stack. It's one of the benefits of the "object metaphor": an object can be seen as a tiny little computer. So if you can work with lots of tiny little computers, you can also work with lots of big wobbly computers.
 
@@ -157,7 +157,7 @@ All the other properties are expressions of having what is a called a ["screamin
 
 - you can see what to do and where to do it quickly and don't waste time scratching your chin working out where to put the code
 -  reduce the chances of you making the change in the wrong place, which will be harder, and take more time
-- finally, you will find it easier to maintain the architecure, and so continue to minimize coupling and maximize cohesion
+- finally, you will find it easier to maintain the architecture, and so continue to minimize coupling and maximize cohesion
 
 Now _how_ those properties emerge, that is a question for the architecture in specific, not in general. To see _how_
 
