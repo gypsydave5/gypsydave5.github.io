@@ -7,7 +7,11 @@ tags:
   - PortsAndAdaptors
 ---
 
-This is the companion to [The Architecture Is the Easy Part](/posts/2026/7/2/the-architecture-is-the-easy-part). That post argues _why_ you'd want this architecture - because it makes change easy. This one is the concrete version: the actual parts, named and defined, and how they fit together. After this, take a look at [the wiring](/posts/2026/7/3/wiring-up-a-ports-and-adaptors-application) post, and eventually the testing one.
+This is the companion to [The Architecture Is the Easy Part](/posts/2026/7/2/the-architecture-is-the-easy-part). That post argues _why_ you'd want this architecture - because it makes change easy. This one is the concrete version: the actual parts, named and defined, and how they fit together.
+
+We'll go through the ports and adaptors architectural pattern now, and try to evaluate what it is about it that makes change easy, based upon the criteria we saw for how an architecture can help make changes easier.
+
+After this, take a look at [the wiring](/posts/2026/7/3/wiring-up-a-ports-and-adaptors-application) post, and eventually the testing one.
 
 ### Names
 
@@ -141,13 +145,17 @@ flowchart LR
 
 If you've seen the standard hexagonal architecture picture before, this is that, but I've just drawn left-to-right and with the names I'm going to use for the rest of the post, and I've used Mermaid because I'm lazy.
 
-## The architecture should scream
+## What makes change easy
 
 That's the whole cast: the domain, the ports, the adaptors, the use cases and their handlers, and the occasional application service. Not many parts, all told - and each one has a single job and a name that says what that job is.
 
 The naming is the point, and it pays off exactly where I promised it would back in [the argument](/posts/2026/7/2/the-architecture-is-the-easy-part): when you come to make a change, the code itself tells you where it goes. Get the names right and the architecture _screams_ - you open the source and the shape is just _there_, in the packages and the types, impossible to misread. Get the two edges right and they scream too: everything that touches the outside world is an adaptor, and it's obvious which of the two kinds it is.
 
-Which is all very well as a picture. But a picture isn't a program - nothing here runs until something builds it, in the right order, from the edges in. In this sense our architecture isn't _screaming_ enough, we also need to make it harder to put things in the wrong places when doing the wiring. That's the next post: [Wiring Up a Ports and Adaptors Application](/posts/2026/7/3/wiring-up-a-ports-and-adaptors-application).
+So change is made easier because we can name all the parts, and each one has a part to play in the story of how the application works. And the parts don't interfere with each other; they can be reused, for sure, but they're not treading on each other's toes. They have _well defined_ responsibilities.
+
+On top of this, we can see that if we keep following this pattern, we can just keep adding features and making changes in the same way, indefinitely, into the future. The pattern of the architecture can easily survive changes that extend it. So not only will we be making easy changes, we'll keep making easy changes.
+
+The next thing I want to make _scream_ is the wiring - the way we build the whole system up from nothing, every time we build it and run it: the instructions for how to build the city. That's the next post: [Wiring Up a Ports and Adaptors Application](/posts/2026/7/3/wiring-up-a-ports-and-adaptors-application).
 
 [screaming]: https://blog.cleancoder.com/uncle-bob/2011/09/30/Screaming-Architecture.html
 

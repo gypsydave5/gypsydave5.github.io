@@ -11,6 +11,8 @@ tags:
 
 This is the testing companion to [The Architecture Is the Easy Part](/posts/2026/7/2/the-architecture-is-the-easy-part). It leans on the vocabulary from there - ports, adaptors, use cases, out-ports, and the wiring that holds them together - so if that's unfamiliar, start there and come back.
 
+That post said the last thing you need, to change a system safely, is to be able to _see that a change works_. This is that piece. And it turns out to be no accident that the same architecture makes it cheap: the structure that makes an application easy to change is the very thing that makes it easy to test.
+
 One warning before we begin. What follows is *an* approach - the one I reach for - and like everything in this game it is a set of trade-offs, not a law. I'll come to the alternatives, and to where this one costs you, further down.
 
 Testing here is done in terms of ports and adaptors, and it comes down to two questions:
@@ -119,6 +121,8 @@ flowchart TD
 Step back and look at what all of this bought. There is one place to fake - the out-ports - and one language to drive in - the in-ports. The same suite of tests means something whether it's running against in-memory fakes in a millisecond or against the real database over real HTTP. Every test, at every level, speaks the application's own language. None of them speak JSON.
 
 That's the whole thing, really. It's why "the only thing you ever fake is an out-port" is worth repeating until it's boring. Get the wiring right and the tests almost write themselves; get it wrong - smear the construction across the codebase, let a use case lean on another use case, mock something in the middle - and no amount of clever testing will buy the confidence back.
+
+And it closes the loop the whole series has been circling. Easy-to-change and easy-to-test are one property seen from two sides. To change a piece safely you take it apart and hold it still; to test it you do exactly the same thing. Buy one and you've bought the other - which is why an architecture built for change hands you its testing strategy nearly for free.
 
 [^ddt-refs]: I didn't invent any of this - I've just given it a name I can remember. If you want it from people who've thought about it harder than I have: Aslak Hellesøy [walks through the idea here](https://www.youtube.com/watch?v=sUclXYMDI94), and Nat Pryce [does the same here](https://www.youtube.com/watch?v=Fk4rCn4YLLU). Both are, sadly, YouTube videos.
 

@@ -107,6 +107,10 @@ All of this - the strict order, the fat objects per layer, the one and only one 
 
 The wiring is the one place that can quietly undo the whole architecture. The design is just a picture until something builds it, and if the building is sloppy - dependencies conjured mid-handler, construction smeared everywhere, layers leaking into each other - then the lovely hexagon is a lie. You won't notice for a while. You'll notice the day a simple change fights back.
 
-Do it the disciplined way and the opposite happens: the seams stay real. Because each layer is built from the one below and handed up whole, you can stop the process at any layer you like - which is exactly the trick that makes the whole thing testable. Stand the out-ports up as fakes, build the real use cases on top of them, and drive them directly. That's next.
+Do it the disciplined way and the opposite happens: the seams stay real. Because each layer is built from the one below and handed up whole, you can stop the process at any layer you like - which is exactly the trick that makes the whole thing testable. Stand the out-ports up as fakes, build the real use cases on top of them, and drive them directly.
+
+This is the part [the argument](/posts/2026/7/2/the-architecture-is-the-easy-part) called the beating heart, and here's why. It keeps two of the promises that post made. That a change stays _local_ - held behind a seam instead of rippling out across the codebase. And that making a change doesn't quietly make the next one harder - because everything you add goes in its one right place, in its one right shape, and the structure survives contact with you. The design tells you where things go; the wiring is what stops them drifting anywhere else.
+
+And it's what makes the whole thing testable, which is the next post.
 
 [^hub]: I've seen it called a `Hub` before in some situations - you can picture it as the bit in the middle of the hexagon where the individual use cases form the spokes of a wheel - but I think this muddies things too much with a new word.
