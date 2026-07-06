@@ -7,7 +7,15 @@ tags:
   - PortsAndAdaptors
 ---
 
-# How Do You Test a Ports and Adaptors Application?
+_**Dave Does Architecture** - a series:_
+
+1. [In Defence of Architecture](/posts/2026/7/2/in-defence-of-architecture)
+2. [The Parts of a Ports and Adaptors Application](/posts/2026/7/3/the-parts-of-a-ports-and-adaptors-application)
+3. [Wiring Up a Ports and Adaptors Application](/posts/2026/7/3/wiring-up-a-ports-and-adaptors-application)
+4. **How Do You Test a Ports and Adaptors Application?** - _you are here_
+5. Where Does Authentication Go? _(coming soon)_
+
+---
 
 This is the testing companion to [In Defence of Architecture](/posts/2026/7/2/in-defence-of-architecture). It leans on the vocabulary from there - ports, adaptors, use cases, out-ports, and the wiring that holds them together - so if that's unfamiliar, start there and come back.
 

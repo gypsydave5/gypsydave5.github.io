@@ -7,6 +7,16 @@ tags:
   - PortsAndAdaptors
 ---
 
+_**Dave Does Architecture** - a series:_
+
+1. **In Defence of Architecture** - _you are here_
+2. [The Parts of a Ports and Adaptors Application](/posts/2026/7/3/the-parts-of-a-ports-and-adaptors-application)
+3. [Wiring Up a Ports and Adaptors Application](/posts/2026/7/3/wiring-up-a-ports-and-adaptors-application)
+4. How Do You Test a Ports and Adaptors Application? _(coming soon)_
+5. Where Does Authentication Go? _(coming soon)_
+
+---
+
 This is an opinionated approach to building a system. It's aimed at web applications, but there's nothing here that wouldn't apply just as well to anything else that takes input from the world, does something, and gives something back.
 
 It draws heavily on Ports and Adaptors - [Alistair Cockburn's Hexagonal Architecture](https://alistair.cockburn.us/hexagonal-architecture/), which is where the pattern, and most of the terminology I use here, comes from - and on Clean Architecture, as laid out in [Getting Your Hands Dirty With Clean Architecture](https://learning.oreilly.com/api/v1/continue/9781805128373/). Where I think the book or Cockburn could be clearer, I depart from them. Familiarity with all of the above will help, but I'll define my terms as I go.

@@ -7,9 +7,19 @@ tags:
   - PortsAndAdaptors
 ---
 
-This is a part of my series on architecture - part three I think -  and it assumes that we've seen the "parts" of a ports and adaptors architecture already: the domain, the ports, the use cases, the adaptors. If those are unfamiliar, start there.
+_**Dave Does Architecture** - a series:_
 
-We've seen why architecture is a good thing, and we've seen what a ports and adaptors architecture looks like when it's all running. But this bit is about _building_ that architecture up from nothing - the thing that happens every time we start the program.
+1. [In Defence of Architecture](/posts/2026/7/2/in-defence-of-architecture)
+2. [The Parts of a Ports and Adaptors Application](/posts/2026/7/3/the-parts-of-a-ports-and-adaptors-application)
+3. **Wiring Up a Ports and Adaptors Application** - _you are here_
+4. How Do You Test a Ports and Adaptors Application? _(coming soon)_
+5. Where Does Authentication Go? _(coming soon)_
+
+---
+
+This is a part of my series on architecture - part three I think - and it assumes that we've seen [the "parts" of a ports and adaptors architecture](/posts/2026/7/3/the-parts-of-a-ports-and-adaptors-application) already: the domain, the ports, the use cases, the adaptors. If those are unfamiliar, start there.
+
+We've seen [why architecture is a good thing](/posts/2026/7/2/in-defence-of-architecture), and we've seen what a ports and adaptors architecture looks like when it's all running. But this bit is about _building_ that architecture up from nothing - the thing that happens every time we start the program.
 
 When you start a program you create a pile of objects and then combine them in particular ways to get the effects you want, both the business logic and the way it talks to the outside world. This creating-and-combining is usually called _wiring up_, and that's what I'm going to call it too. 
 
@@ -19,7 +29,7 @@ And this is one of the places where it can all go a bit wrong.
 
 I've seen a lot of lip-service paid to ports and adaptors, and also a lot of honest attempts at it. People nod at the picture, note it in the architectural decision record, name things "ports" and "adaptors" in the code. But then someone has to actually _build_ the architecture - construct the objects, connect them together, set it running - and that is where the discipline can quietly fall apart. A dependency gets `new`ed up in the middle of a handler because it was easier than threading it through. The construction of a single object ends up smeared across a dozen files. A use case reaches sideways into another use case. None of it shows up in the architecture diagram, which still looks lovely - it shows up six months later, when a change that should have taken an afternoon takes a fortnight.
 
-I find this happens because nobody tries to structure the building in the same way they structure what's been built. Often a huge wobbly file with _all_ the objects in, being constructed in no particular order. And that's a best case scenario - the worst case is when that construction is spread out in some way that some bright spark thought would be useful at the time - building all the parts for one use case _here_ and then the others over _there_, putting all the objects that are called "repository" or all the ones that have a 'Y' in them, over in this folder\. The sort of ad-hoc categorization that I mentioned at the 
+I find this happens because nobody tries to structure the building in the same way they structure what's been built. Often a huge wobbly file with _all_ the objects in, being constructed in no particular order. And that's a best case scenario - the worst case is when that construction is spread out in some way that some bright spark thought would be useful at the time - building all the parts for one use case _here_ and then the others over _there_, putting all the objects that are called "repository" or all the ones that have a 'Y' in them, over in this folder\. The sort of ad-hoc categorization that I mentioned in the first post.
 
 The architecture usually doesn't begin to rot in the design. It starts in the small sins committed in the wiring. So this is the part where I'm going to be most opinionated, because this is a good place to start defending our architecture from entropy by preserving the design.
 
@@ -51,13 +61,13 @@ Same move again: we build `UseCases` from `OutPorts`. This object represents eve
 
 You might have expected an `ApplicationServices` layer to appear here, in between. It doesn't. Application services aren't a layer - they're the shared bits of logic we lift out of the use cases, and they get constructed _in this same step_, from the out-ports, and handed to whichever use cases need them. They sit below the use cases, not between them and the out-ports. Wiring them as their own rung is exactly the mistake that leads someone to think they can be swapped, or faked, or mocked.
 
-The collection of all the use cases here - the `UseCases` object - is _not_ an interface. There should be exactly _one_ way for the application to be wired together - the domain types are always used the same way, the out-ports are always wired up in the same way - so there's nothing to abstract over. (The individual use cases _are_ interfaces, mind you, so the concrete `UseCases` object has a collection of fields on it, each of which is a particular  `UseCase ` - which is an interface.
+The collection of all the use cases here - the `UseCases` object - is _not_ an interface. There should be exactly _one_ way for the application to be wired together - the domain types are always used the same way, the out-ports are always wired up in the same way - so there's nothing to abstract over. (The individual use cases _are_ interfaces, mind you, so the concrete `UseCases` object has a collection of fields on it, each of which is a particular `UseCase` - which is an interface.)
 
 This layer could properly be called the `Application`, because it's where the domain model is actually applied to solve the business problem. If you gather all the use cases like this, I'd recommend calling it the `Application`. It makes it nice to talk about, and nice to work with.[^hub] 
 
 #### The `Adaptors` (`HttpAdaptors`) object
 
-And once more, from the top: we build an  `HttpAdaptors` object from the `UseCases` object. In an HTTP application these are the adaptors that turn a request into a response - the router, the handlers, the controllers. They're the in-adaptors of the use cases (in-ports).
+And once more, from the top: we build an `HttpAdaptors` object from the `UseCases` object. In an HTTP application these are the adaptors that turn a request into a response - the router, the handlers, the controllers. They're the in-adaptors of the use cases (in-ports).
 
 Like the layer below, this object is concrete, but now each of the fields is a concrete adaptor for a `UseCase` - they're all _real_ adaptors, tied to _how_ the application faces the world. HTTP most commonly for me, but it could just as well be a command line, a desktop UI, or something embedded. The rule of thumb is one use case to one adaptor.
 
@@ -107,7 +117,7 @@ This matters because it keeps the temptation out of the domain. The domain and t
 
 All of this - the strict order, the objects representing the dependencies for a layer, the one and only one place where each thing gets constructed and wired together - is a lot of ceremony for something as dull as the wiring. So why do I care?
 
-Because the wiring is one place that can quietly undo the whole architecture. The design is just a picture  of what things _should_ look like when it's all built, and if the building is sloppy - dependencies conjured mid-handler, construction smeared everywhere, layers leaking into each other - then the lovely architecture will quickly become a lie. You won't notice for a while, but you'll certainly notice it the day a simple change starts becomes hard.
+Because the wiring is one place that can quietly undo the whole architecture. The design is just a picture of what things _should_ look like when it's all built, and if the building is sloppy - dependencies conjured mid-handler, construction smeared everywhere, layers leaking into each other - then the lovely architecture will quickly become a lie. You won't notice for a while, but you'll certainly notice it the day a simple change starts to become hard.
 
 Doing it in this structured and disciplined way makes it harder to make mistakes that distort the architectural pattern. I say _harder_, because it's always possible to make a mess of things. It's software development! But if you make the code _scream_ at you how the dependencies stack up and are wired together, then you've got more chance of getting the benefits of the screaming architecture I mentioned up front: easier to see where the change goes, easier to maintain the architectural pattern, which makes it easier to change and easier to keep changing.
 
