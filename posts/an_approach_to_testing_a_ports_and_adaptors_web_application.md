@@ -10,8 +10,8 @@ tags:
 _**Dave Does Architecture** - a series:_
 
 1. **In Defence of Architecture** - _you are here_
-2. [The Parts of a Ports and Adaptors Application](/posts/2026/7/3/the-parts-of-a-ports-and-adaptors-application)
-3. [Wiring Up a Ports and Adaptors Application](/posts/2026/7/3/wiring-up-a-ports-and-adaptors-application)
+2. [The Parts of a Ports and Adaptors Application](/posts/2026/7/3/the-parts-of-a-ports-and-adaptors-application/)
+3. [Wiring Up a Ports and Adaptors Application](/posts/2026/7/3/wiring-up-a-ports-and-adaptors-application/)
 4. How Do You Test a Ports and Adaptors Application? _(coming soon)_
 5. Where Does Authentication Go? _(coming soon)_
 
@@ -24,7 +24,7 @@ It draws heavily on Ports and Adaptors - [Alistair Cockburn's Hexagonal Architec
 Here's the whole of what I want to get across. It grew too big for one post, and so it's turning into a series of posts. Think of it all as _Dave Does Architecture_:
 
 - the **parts** of a ports and adaptors architecture, and the terminology that goes with them - the domain, the ports, the adaptors, the use cases, and how they depend on one another. That's this post.
-- how you **wire it all up** when the program starts - in what order, from the edges in, and where the construction code belongs. That's [Wiring Up a Ports and Adaptors Application](/posts/2026/7/3/wiring-up-a-ports-and-adaptors-application).
+- how you **wire it all up** when the program starts - in what order, from the edges in, and where the construction code belongs. That's [Wiring Up a Ports and Adaptors Application](/posts/2026/7/3/wiring-up-a-ports-and-adaptors-application/).
 - the **testing strategy** that falls out of the whole thing - which, it turns out, is most of the reason to bother. That's for later.
 - And probably something on package/dependency structure, using fitness functions like Konsist (both of these to try and steer you away from screwing up the architecture), as well as a few worked examples on the bits that I have always messed up and how I think you can do them _right_ (I'm looking at you, authentication).
 
@@ -110,7 +110,7 @@ So when we come to make a change, we can see how the existing small parts are us
 
 Once the parts fall into distinct categories, working out where a change goes gets a bit easier. This sounds like it shouldn't even be a problem, but I cannot even begin to tell you the amount of time I've spent scratching my chin looking at my IDE and trying to work out _where_ this new magic box will go.
 
-But with a decent architecture - whew! Change to the UI? Fiddle with that view-model and the HTML. New thing the application needs to do? Ooooh, I'll need a use case and some adaptors. Different database? Time to swap out my out-port. (Don't worry about those words yet - they get named and defined properly in [the next post](/posts/2026/7/3/the-parts-of-a-ports-and-adaptors-application). The point is only that there _are_ names, and each name names a home).
+But with a decent architecture - whew! Change to the UI? Fiddle with that view-model and the HTML. New thing the application needs to do? Ooooh, I'll need a use case and some adaptors. Different database? Time to swap out my out-port. (Don't worry about those words yet - they get named and defined properly in [the next post](/posts/2026/7/3/the-parts-of-a-ports-and-adaptors-application/). The point is only that there _are_ names, and each name names a home).
 
 And the flip side is, if anything, _more_ useful: you know where a change does _not_ belong. If you're building a database connection in your router, you are doing it wrong.
 
@@ -173,8 +173,8 @@ All the other properties are expressions of having what is a called a ["screamin
 
 Now _how_ those properties emerge, that is a question for the architecture in specific, not in general. To see _how_
 
-- [the parts](/posts/2026/7/3/the-parts-of-a-ports-and-adaptors-application) in a ports and adaptors architecture can be made to _scream_ and how they support cohesion and reduce coupling,
-- my opinions about [wiring them together](/posts/2026/7/3/wiring-up-a-ports-and-adaptors-application) in a way that _screams_
+- [the parts](/posts/2026/7/3/the-parts-of-a-ports-and-adaptors-application/) in a ports and adaptors architecture can be made to _scream_ and how they support cohesion and reduce coupling,
+- my opinions about [wiring them together](/posts/2026/7/3/wiring-up-a-ports-and-adaptors-application/) in a way that _screams_
 
 How all of them work together into making the whole system easier to change, well that's coming up next.
 

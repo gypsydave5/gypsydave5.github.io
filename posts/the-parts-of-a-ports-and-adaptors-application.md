@@ -9,19 +9,19 @@ tags:
 
 _**Dave Does Architecture** - a series:_
 
-1. [In Defence of Architecture](/posts/2026/7/2/in-defence-of-architecture)
+1. [In Defence of Architecture](/posts/2026/7/2/in-defence-of-architecture/)
 2. **The Parts of a Ports and Adaptors Application** - _you are here_
-3. [Wiring Up a Ports and Adaptors Application](/posts/2026/7/3/wiring-up-a-ports-and-adaptors-application)
+3. [Wiring Up a Ports and Adaptors Application](/posts/2026/7/3/wiring-up-a-ports-and-adaptors-application/)
 4. How Do You Test a Ports and Adaptors Application? _(coming soon)_
 5. Where Does Authentication Go? _(coming soon)_
 
 ---
 
-This is the companion to [In Defence of Architecture](/posts/2026/7/2/in-defence-of-architecture). That post argues _why_ you'd want this architecture - because it makes change easy. This one is the concrete version: the actual parts, named and defined, and how they fit together.
+This is the companion to [In Defence of Architecture](/posts/2026/7/2/in-defence-of-architecture/). That post argues _why_ you'd want this architecture - because it makes change easy. This one is the concrete version: the actual parts, named and defined, and how they fit together.
 
 We'll go through the ports and adaptors architectural pattern now, and try to evaluate what it is about it that makes change easy, based upon the criteria we saw for how an architecture can help make changes easier.
 
-After this, take a look at [the wiring](/posts/2026/7/3/wiring-up-a-ports-and-adaptors-application) post, and eventually the testing one.
+After this, take a look at [the wiring](/posts/2026/7/3/wiring-up-a-ports-and-adaptors-application/) post, and eventually the testing one.
 
 ### Names
 
@@ -187,7 +187,7 @@ So a change is made easier because we can name all the parts, and each one has a
 
 On top of this, we can see that if we keep following this pattern in ports and adaptors, we can (hopefully) just keep adding features and making changes in the same way, indefinitely, into the future. The pattern of the architecture can easily survive changes that extend it. So not only will we be making easy changes, we'll keep making easy changes.
 
-The next thing I want to make _scream_ is the wiring - the way we build the whole system up from nothing, every time we build it and run it: the instructions for how to build the city. That's the next post: [Wiring Up a Ports and Adaptors Application](/posts/2026/7/3/wiring-up-a-ports-and-adaptors-application).
+The next thing I want to make _scream_ is the wiring - the way we build the whole system up from nothing, every time we build it and run it: the instructions for how to build the city. That's the next post: [Wiring Up a Ports and Adaptors Application](/posts/2026/7/3/wiring-up-a-ports-and-adaptors-application/).
 
 [screaming]: https://blog.cleancoder.com/uncle-bob/2011/09/30/Screaming-Architecture.html
 

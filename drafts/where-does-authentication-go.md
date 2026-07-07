@@ -9,15 +9,15 @@ tags:
 
 _**Dave Does Architecture** - a series:_
 
-1. [In Defence of Architecture](/posts/2026/7/2/in-defence-of-architecture)
-2. [The Parts of a Ports and Adaptors Application](/posts/2026/7/3/the-parts-of-a-ports-and-adaptors-application)
-3. [Wiring Up a Ports and Adaptors Application](/posts/2026/7/3/wiring-up-a-ports-and-adaptors-application)
+1. [In Defence of Architecture](/posts/2026/7/2/in-defence-of-architecture/)
+2. [The Parts of a Ports and Adaptors Application](/posts/2026/7/3/the-parts-of-a-ports-and-adaptors-application/)
+3. [Wiring Up a Ports and Adaptors Application](/posts/2026/7/3/wiring-up-a-ports-and-adaptors-application/)
 4. How Do You Test a Ports and Adaptors Application? _(coming soon)_
 5. **Where Does Authentication Go?** - _you are here_
 
 ---
 
-This is a follow-on from [In Defence of Architecture](/posts/2026/7/2/in-defence-of-architecture), and it leans hard on the vocabulary from it - ports, adaptors, use cases, out-ports, and the DDTs (domain-driven tests) that drive them. If none of those words mean much to you yet, start there; I'll wait.
+This is a follow-on from [In Defence of Architecture](/posts/2026/7/2/in-defence-of-architecture/), and it leans hard on the vocabulary from it - ports, adaptors, use cases, out-ports, and the DDTs (domain-driven tests) that drive them. If none of those words mean much to you yet, start there; I'll wait.
 
 That post made a promise I want to cash in: get the wiring right and the hard problems fall into obvious places. So let's take a problem everyone has to solve and nearly everyone puts in the wrong place: authentication.
 

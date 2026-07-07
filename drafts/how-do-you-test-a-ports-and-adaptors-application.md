@@ -9,15 +9,15 @@ tags:
 
 _**Dave Does Architecture** - a series:_
 
-1. [In Defence of Architecture](/posts/2026/7/2/in-defence-of-architecture)
-2. [The Parts of a Ports and Adaptors Application](/posts/2026/7/3/the-parts-of-a-ports-and-adaptors-application)
-3. [Wiring Up a Ports and Adaptors Application](/posts/2026/7/3/wiring-up-a-ports-and-adaptors-application)
+1. [In Defence of Architecture](/posts/2026/7/2/in-defence-of-architecture/)
+2. [The Parts of a Ports and Adaptors Application](/posts/2026/7/3/the-parts-of-a-ports-and-adaptors-application/)
+3. [Wiring Up a Ports and Adaptors Application](/posts/2026/7/3/wiring-up-a-ports-and-adaptors-application/)
 4. **How Do You Test a Ports and Adaptors Application?** - _you are here_
 5. Where Does Authentication Go? _(coming soon)_
 
 ---
 
-This is the testing companion to [In Defence of Architecture](/posts/2026/7/2/in-defence-of-architecture). It leans on the vocabulary from there - ports, adaptors, use cases, out-ports, and the wiring that holds them together - so if that's unfamiliar, start there and come back.
+This is the testing companion to [In Defence of Architecture](/posts/2026/7/2/in-defence-of-architecture/). It leans on the vocabulary from there - ports, adaptors, use cases, out-ports, and the wiring that holds them together - so if that's unfamiliar, start there and come back.
 
 That post said the last thing you need, to change a system safely, is to be able to _see that a change works_. This is that piece. And it turns out to be no accident that the same architecture makes it cheap: the structure that makes an application easy to change is the very thing that makes it easy to test.
 

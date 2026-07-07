@@ -9,17 +9,17 @@ tags:
 
 _**Dave Does Architecture** - a series:_
 
-1. [In Defence of Architecture](/posts/2026/7/2/in-defence-of-architecture)
-2. [The Parts of a Ports and Adaptors Application](/posts/2026/7/3/the-parts-of-a-ports-and-adaptors-application)
+1. [In Defence of Architecture](/posts/2026/7/2/in-defence-of-architecture/)
+2. [The Parts of a Ports and Adaptors Application](/posts/2026/7/3/the-parts-of-a-ports-and-adaptors-application/)
 3. **Wiring Up a Ports and Adaptors Application** - _you are here_
 4. How Do You Test a Ports and Adaptors Application? _(coming soon)_
 5. Where Does Authentication Go? _(coming soon)_
 
 ---
 
-This is a part of my series on architecture - part three I think - and it assumes that we've seen [the "parts" of a ports and adaptors architecture](/posts/2026/7/3/the-parts-of-a-ports-and-adaptors-application) already: the domain, the ports, the use cases, the adaptors. If those are unfamiliar, start there.
+This is a part of my series on architecture - part three I think - and it assumes that we've seen [the "parts" of a ports and adaptors architecture](/posts/2026/7/3/the-parts-of-a-ports-and-adaptors-application/) already: the domain, the ports, the use cases, the adaptors. If those are unfamiliar, start there.
 
-We've seen [why architecture is a good thing](/posts/2026/7/2/in-defence-of-architecture), and we've seen what a ports and adaptors architecture looks like when it's all running. But this bit is about _building_ that architecture up from nothing - the thing that happens every time we start the program.
+We've seen [why architecture is a good thing](/posts/2026/7/2/in-defence-of-architecture/), and we've seen what a ports and adaptors architecture looks like when it's all running. But this bit is about _building_ that architecture up from nothing - the thing that happens every time we start the program.
 
 When you start a program you create a pile of objects and then combine them in particular ways to get the effects you want, both the business logic and the way it talks to the outside world. This creating-and-combining is usually called _wiring up_, and that's what I'm going to call it too. 
 
@@ -101,7 +101,7 @@ flowchart TD
     HA -->|"starts"| App["▶ Running Application"]
 ```
 
-This same ordering happens whether you're starting the real thing or standing up a slice of it - and a slice can start and stop at different points along the chain. That flexibility is where a lot of the value hides - enough that it gets [its own post](/drafts/how-do-you-test-a-ports-and-adaptors-application).
+This same ordering happens whether you're starting the real thing or standing up a slice of it - and a slice can start and stop at different points along the chain. That flexibility is where a lot of the value hides - enough that it gets [its own post](/drafts/how-do-you-test-a-ports-and-adaptors-application/).
 
 To reiterate: I call each of these steps a _layer_, in the layered-architecture sense. And underneath all of them sits the domain: its types are used at every single layer.
 
