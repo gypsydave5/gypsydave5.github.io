@@ -63,6 +63,8 @@ An application is made up of:
 
 All of them depend on the domain, and all of them use its types. The application is the domain in motion.
 
+Strictly speaking, the application here - all those parts I've listed above - _is_ the "ports and adaptors architecture" we're talking about.
+
 #### Port
 
 There are two kinds of port:
@@ -90,7 +92,7 @@ So: **in-adaptors** wrap in-ports to face the world, and **out-adaptors** wrap t
 
 Every use case is either a command handler or a query handler. Both are implementations of use cases; the difference is what they do.
 
-A query returns data and has no side effects. A command has side effects and returns nothing. Drawing that line at the level of the use case is [Command-Query Separation](https://martinfowler.com/bliki/CommandQuerySeparation.html) - CQS - applied to whole handlers rather than to individual methods.[^cqs]
+A query returns data and has no side effects. A command has side effects and returns nothing. Drawing that line at the level of the use case is [Command-Query Separation](https://martinfowler.com/bliki/CommandQuerySeparation.html) - CQS - applied to whole handlers rather than to individual methods.[^cqs] Personally, I'm a big fan of CQS, and I think it's worthwhile trying to make that separation in your use cases. But you don't have to.
 
 As before: being consistent about this matters more than getting it theoretically perfect.
 
@@ -102,10 +104,8 @@ That is all an application service is: a bit of shared behaviour lifted out of t
 
 Two rules keep them honest, and they matter more than they look:
 
-- an application service is **never an interface**, and must **never be faked or mocked**. It is real, always, in every test. The only thing you ever fake is an out-port.
+- an application service is **never an interface**, and must **never be faked or mocked**. It is real, always, in every situation. There should never be a need to have an "alternative" version of an application service.
 - use cases **never depend on each other**. If two use cases need the same logic, that logic goes into an application service that sits _below_ them. It does not turn one use case into a dependency of another.
-
-A use case, confusingly, _is_ an interface - the in-port that its handler implements. That's not a contradiction with the rule above: an interface and a _fake boundary_ are two different things. The in-port is an interface you _drive from_ - you run the real thing behind it, you never fake it - while the out-port is the interface you _substitute_ a fake for. An application service is neither an interface nor a boundary. It's just shared guts.
 
 You don't always need one. A use case can - and often should - just call the out-ports directly.
 
@@ -149,6 +149,7 @@ flowchart LR
     DomainTypes -. "used by" .-> CQH
     DomainTypes -. "used by" .-> AppSvc
     DomainTypes -. "used by" .-> OutPorts
+    DomainTypes -. "used by" .-> InPorts
 ```
 
 

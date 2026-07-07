@@ -25,7 +25,7 @@ Here's the whole of what I want to get across. It grew too big for one post, and
 
 - the **parts** of a ports and adaptors architecture, and the terminology that goes with them - the domain, the ports, the adaptors, the use cases, and how they depend on one another. That's this post.
 - how you **wire it all up** when the program starts - in what order, from the edges in, and where the construction code belongs. That's [Wiring Up a Ports and Adaptors Application](/posts/2026/7/3/wiring-up-a-ports-and-adaptors-application/).
-- the **testing strategy** that falls out of the whole thing - which, it turns out, is most of the reason to bother. That's for later.
+- the **testing strategy** that falls out of the whole thing. That's for later.
 - And probably something on package/dependency structure, using fitness functions like Konsist (both of these to try and steer you away from screwing up the architecture), as well as a few worked examples on the bits that I have always messed up and how I think you can do them _right_ (I'm looking at you, authentication).
 
 But before any of that, let me try to explain why I'm doing it this way, with a crappy metaphor...
