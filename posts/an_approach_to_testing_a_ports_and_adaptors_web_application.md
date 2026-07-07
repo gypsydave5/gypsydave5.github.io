@@ -70,7 +70,7 @@ But we've not answered my question: why architect at all? Two tempting answers, 
 
 #### It tells you where things are?
 
-In its simplest form, architecture is just a folder structure, right?. We put _this_ sort of function over _here_ and _that_ sort of function over _there_. So now I know where all the functions that deal with maths are.
+In its simplest form, architecture is just a folder structure, right? We put _this_ sort of function over _here_ and _that_ sort of function over _there_. So now I know where all the functions that deal with maths are.
 
 "What is the best folder structure for my node / Go / python project?" the cry goes out. The _intention_ is good - keeping things organized. But being "organized" isn't an architecture. Putting all my yellow bricks together, and then all my red bricks together, is not a building.
 

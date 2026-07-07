@@ -165,13 +165,13 @@ So how does this help "make change easy"?
 
 As I said in the beginning, the thing that makes an architecture easy to change (and keep being easy to change) is how well it manages coupling and cohesion. The things that need to change together should be easy to change together, the things that shouldn't change at the same time as each other shouldn't need to change together.
 
-This is expressed in ports and adaptors by the relationship between our - well, our ports and adaptors. What these seems offer is a way to keep things that shouldn't change together from getting tangled up with each other, and forcing you to couple those changes together.
+This is expressed in ports and adaptors by the relationship between our - well, our ports and adaptors. What these seams offer is a way to keep things that shouldn't change together from getting tangled up with each other, and forcing you to couple those changes together.
 
 An extreme example of this: imagine if your use cases were returning HTTP codes and HTML. Why not, you might say. It's an HTTP application after all. This is better, because now my adaptors have to do less work. Well done me. But then, one morning, you are told to put the same application into the command line. Oh no, you should say to yourself. Now I need to change the adaptors, yes, I saw that one coming. But because my use cases know so much about HTTP, I either need to write some weird adaptors that change HTTP stuff to CLI stuff, or I need to change my use cases to return something different (hopefully something not coupled to the CLI because you don't want to make the same mistake twice).
 
-This is what coupling looks like. The way you communicate to the user (HTTP, CLI, etc) is has been _coupled_ to the application logic - the use case. The use case should be something abstract, and not be coupled to the specific way in which your users are currently using your application.
+This is what coupling looks like. The way you communicate to the user (HTTP, CLI, etc) has been _coupled_ to the application logic - the use case. The use case should be something abstract, and not be coupled to the specific way in which your users are currently using your application.
 
-This is the extreme version, but there are slight variations. Over on the other side, coupling out ports to databases if usually _worse_ as it means that things like database connections and other database specific types (and specific to database implementations) start getting scattered about into your domain code.
+This is the extreme version, but there are slight variations. Over on the other side, coupling out-ports to databases is usually _worse_ as it means that things like database connections and other database-specific types (and specific to database implementations) start getting scattered about into your domain code.
 
 This is what will really bring developing your application to a standstill, when fiddling about with one type in the database, or changing a query parameter to a path parameter, means changing hundreds of files at once. If you find yourself doing this, for whatever reason, step back and start asking yourself some hard questions about why all these things are coupled together, and if they really need to be, and what you can do to stop it.
 
