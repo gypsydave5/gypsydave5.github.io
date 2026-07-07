@@ -159,11 +159,33 @@ If you've seen the standard hexagonal architecture picture before, this is that,
 
 That's the whole cast: the domain, the ports, the adaptors, the use cases and their handlers, and the occasional application service. Not many parts, all told - and each one has a single job and a name that says what that job is.
 
-The naming is the point, and it pays off exactly where I promised it would back in [the argument](/posts/2026/7/2/in-defence-of-architecture): when you come to make a change, the code itself tells you where it goes. Get the names right and the architecture _screams_ - you open the source and the shape is just _there_, in the packages and the types, impossible to misread. Get the two edges right and they scream too: everything that touches the outside world is an adaptor, and it's obvious which of the two kinds it is.
+So how does this help "make change easy"?
 
-So change is made easier because we can name all the parts, and each one has a part to play in the story of how the application works. And the parts don't interfere with each other; they can be reused, for sure, but they're not treading on each other's toes. They have _well defined_ responsibilities.
+### Decoupling made easy
 
-On top of this, we can see that if we keep following this pattern, we can just keep adding features and making changes in the same way, indefinitely, into the future. The pattern of the architecture can easily survive changes that extend it. So not only will we be making easy changes, we'll keep making easy changes.
+As I said in the beginning, the thing that makes an architecture easy to change (and keep being easy to change) is how well it manages coupling and cohesion. The things that need to change together should be easy to change together, the things that shouldn't change at the same time as each other shouldn't need to change together.
+
+This is expressed in ports and adaptors by the relationship between our - well, our ports and adaptors. What these seems offer is a way to keep things that shouldn't change together from getting tangled up with each other, and forcing you to couple those changes together.
+
+An extreme example of this: imagine if your use cases were returning HTTP codes and HTML. Why not, you might say. It's an HTTP application after all. This is better, because now my adaptors have to do less work. Well done me. But then, one morning, you are told to put the same application into the command line. Oh no, you should say to yourself. Now I need to change the adaptors, yes, I saw that one coming. But because my use cases know so much about HTTP, I either need to write some weird adaptors that change HTTP stuff to CLI stuff, or I need to change my use cases to return something different (hopefully something not coupled to the CLI because you don't want to make the same mistake twice).
+
+This is what coupling looks like. The way you communicate to the user (HTTP, CLI, etc) is has been _coupled_ to the application logic - the use case. The use case should be something abstract, and not be coupled to the specific way in which your users are currently using your application.
+
+This is the extreme version, but there are slight variations. Over on the other side, coupling out ports to databases if usually _worse_ as it means that things like database connections and other database specific types (and specific to database implementations) start getting scattered about into your domain code.
+
+This is what will really bring developing your application to a standstill, when fiddling about with one type in the database, or changing a query parameter to a path parameter, means changing hundreds of files at once. If you find yourself doing this, for whatever reason, step back and start asking yourself some hard questions about why all these things are coupled together, and if they really need to be, and what you can do to stop it.
+
+But to go back to the specifics of ports and adaptors (and domain-driven design, come to think of it): the benefit of this architecture is that it helps keep different concerns in your application from becoming coupled. When you change the business logic of your application, _only_ the domain (if it's a rich domain) and maybe the use cases (more anaemic domains) should change. The "outside" layers (the ports, the adaptors) should _not_ change (much). And inversely, if you're changing the way the application stores its data, or shows information to a user, you _shouldn't_ have to touch the "inside" layers like the use cases and the domain.
+
+Ports and adaptors gives you a pre-packaged and scalable architecture for managing coupling and cohesion between the "outside" and the "inside" - mostly by helping you keep them decoupled.
+
+### Now _scream!_
+
+The second benefit is _all the other stuff_ I mentioned in the first post - the _screaming_. Get the names right and the architecture _screams_ - you open the source and the shape is just _there_, in the packages and the types, impossible to misread. Get the "inside" and the "outside" right and they scream too: everything that touches the outside world is an adaptor, and it's obvious which of the two kinds it is.
+
+So a change is made easier because we can name all the parts, and each one has a part to play in the story of how the application works. And the parts don't interfere with each other; they can be reused, for sure, but they're not treading on each other's toes. They have _well defined_ responsibilities (and we're back to the coupling and cohesion).
+
+On top of this, we can see that if we keep following this pattern in ports and adaptors, we can (hopefully) just keep adding features and making changes in the same way, indefinitely, into the future. The pattern of the architecture can easily survive changes that extend it. So not only will we be making easy changes, we'll keep making easy changes.
 
 The next thing I want to make _scream_ is the wiring - the way we build the whole system up from nothing, every time we build it and run it: the instructions for how to build the city. That's the next post: [Wiring Up a Ports and Adaptors Application](/posts/2026/7/3/wiring-up-a-ports-and-adaptors-application).
 

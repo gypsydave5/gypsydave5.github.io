@@ -1,6 +1,6 @@
 ---
 title: In Defence of Architecture
-description: Anyone can draw the hexagon. The value is in how you wire a ports-and-adaptors application together - which is what makes it easy to change, and easy to test.
+description: In which architecture as an idea in software is defended
 published: true
 date: 2026-07-02 10:36:45
 tags:
@@ -21,7 +21,7 @@ This is an opinionated approach to building a system. It's aimed at web applicat
 
 It draws heavily on Ports and Adaptors - [Alistair Cockburn's Hexagonal Architecture](https://alistair.cockburn.us/hexagonal-architecture/), which is where the pattern, and most of the terminology I use here, comes from - and on Clean Architecture, as laid out in [Getting Your Hands Dirty With Clean Architecture](https://learning.oreilly.com/api/v1/continue/9781805128373/). Where I think the book or Cockburn could be clearer, I depart from them. Familiarity with all of the above will help, but I'll define my terms as I go.
 
-Here's the whole of what I want to get across. It grew too big for one post, and so it's turning into a series of posts. Think of it all as Dave Does Architecture:
+Here's the whole of what I want to get across. It grew too big for one post, and so it's turning into a series of posts. Think of it all as _Dave Does Architecture_:
 
 - the **parts** of a ports and adaptors architecture, and the terminology that goes with them - the domain, the ports, the adaptors, the use cases, and how they depend on one another. That's this post.
 - how you **wire it all up** when the program starts - in what order, from the edges in, and where the construction code belongs. That's [Wiring Up a Ports and Adaptors Application](/posts/2026/7/3/wiring-up-a-ports-and-adaptors-application).
@@ -70,7 +70,9 @@ But we've not answered my question: why architect at all? Two tempting answers, 
 
 #### It tells you where things are?
 
-In its simplest form, architecture is just a folder structure. We put _this_ sort of function over _here_ and _that_ sort of function over _there_. So now I know where all the functions that deal with maths are.
+In its simplest form, architecture is just a folder structure, right?. We put _this_ sort of function over _here_ and _that_ sort of function over _there_. So now I know where all the functions that deal with maths are.
+
+"What is the best folder structure for my node / Go / python project?" the cry goes out. The _intention_ is good - keeping things organized. But being "organized" isn't an architecture. Putting all my yellow bricks together, and then all my red bricks together, is not a building.
 
 Well, that's nice. But what sort of functions are we talking about?
 
