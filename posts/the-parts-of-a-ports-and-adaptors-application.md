@@ -3,18 +3,10 @@ title: The Parts of a Ports and Adaptors Application
 description: A tour of the parts of a ports-and-adaptors architecture and the names for them - domain, ports, adaptors, use cases, handlers - and how they depend on one another.
 published: true
 date: 2026-07-03 11:00:00
+series: Dave Does Architecture
+part: 2
 tags:
   - PortsAndAdaptors
----
-
-_**Dave Does Architecture** - a series:_
-
-1. [In Defence of Architecture](/posts/2026/7/2/in-defence-of-architecture/)
-2. **The Parts of a Ports and Adaptors Application** - _you are here_
-3. [Wiring Up a Ports and Adaptors Application](/posts/2026/7/3/wiring-up-a-ports-and-adaptors-application/)
-4. How Do You Test a Ports and Adaptors Application? _(coming soon)_
-5. Where Does Authentication Go? _(coming soon)_
-
 ---
 
 This is the companion to [In Defence of Architecture](/posts/2026/7/2/in-defence-of-architecture/). That post argues _why_ you'd want this architecture - because it makes change easy. This one is the concrete version: the actual parts, named and defined, and how they fit together.

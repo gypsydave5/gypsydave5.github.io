@@ -3,18 +3,10 @@ title: Wiring Up a Ports and Adaptors Application
 description: Once you know the parts of a ports-and-adaptors application, you have to build them - in the right order, from the edges in. This is how, and where the wiring code belongs.
 published: true
 date: 2026-07-03 12:36:45
+series: Dave Does Architecture
+part: 3
 tags:
   - PortsAndAdaptors
----
-
-_**Dave Does Architecture** - a series:_
-
-1. [In Defence of Architecture](/posts/2026/7/2/in-defence-of-architecture/)
-2. [The Parts of a Ports and Adaptors Application](/posts/2026/7/3/the-parts-of-a-ports-and-adaptors-application/)
-3. **Wiring Up a Ports and Adaptors Application** - _you are here_
-4. How Do You Test a Ports and Adaptors Application? _(coming soon)_
-5. Where Does Authentication Go? _(coming soon)_
-
 ---
 
 This is a part of my series on architecture - part three I think - and it assumes that we've seen [the "parts" of a ports and adaptors architecture](/posts/2026/7/3/the-parts-of-a-ports-and-adaptors-application/) already: the domain, the ports, the use cases, the adaptors. If those are unfamiliar, start there.
@@ -101,7 +93,7 @@ flowchart TD
     HA -->|"starts"| App["▶ Running Application"]
 ```
 
-This same ordering happens whether you're starting the real thing or standing up a slice of it - and a slice can start and stop at different points along the chain. That flexibility is where a lot of the value hides - enough that it gets [its own post](/drafts/how-do-you-test-a-ports-and-adaptors-application/).
+This same ordering happens whether you're starting the real thing or standing up a slice of it - and a slice can start and stop at different points along the chain. That flexibility is where a lot of the value hides - enough that it gets [its own post](/drafts/how-do-you-test-an-out-port/).
 
 To reiterate: I call each of these steps a _layer_, in the layered-architecture sense. And underneath all of them sits the domain: its types are used at every single layer.
 

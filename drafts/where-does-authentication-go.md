@@ -3,6 +3,8 @@ title: Where Does Authentication Go?
 description: A worked example for ports and adaptors - pulling authentication apart into the layer each piece belongs in, and keeping your tests able to see it.
 published: false
 date: 2026-07-02 11:36:45
+series: Dave Does Architecture
+part: 6
 tags:
   - PortsAndAdaptors
 ---
@@ -12,8 +14,9 @@ _**Dave Does Architecture** - a series:_
 1. [In Defence of Architecture](/posts/2026/7/2/in-defence-of-architecture/)
 2. [The Parts of a Ports and Adaptors Application](/posts/2026/7/3/the-parts-of-a-ports-and-adaptors-application/)
 3. [Wiring Up a Ports and Adaptors Application](/posts/2026/7/3/wiring-up-a-ports-and-adaptors-application/)
-4. How Do You Test a Ports and Adaptors Application? _(coming soon)_
-5. **Where Does Authentication Go?** - _you are here_
+4. How Do You Test an Out-Port? _(coming soon)_
+5. Domain-Driven Tests _(coming soon)_
+6. **Where Does Authentication Go?** - _you are here_
 
 ---
 

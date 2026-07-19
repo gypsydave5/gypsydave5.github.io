@@ -3,18 +3,10 @@ title: In Defence of Architecture
 description: In which architecture as an idea in software is defended
 published: true
 date: 2026-07-02 10:36:45
+series: Dave Does Architecture
+part: 1
 tags:
   - PortsAndAdaptors
----
-
-_**Dave Does Architecture** - a series:_
-
-1. **In Defence of Architecture** - _you are here_
-2. [The Parts of a Ports and Adaptors Application](/posts/2026/7/3/the-parts-of-a-ports-and-adaptors-application/)
-3. [Wiring Up a Ports and Adaptors Application](/posts/2026/7/3/wiring-up-a-ports-and-adaptors-application/)
-4. How Do You Test a Ports and Adaptors Application? _(coming soon)_
-5. Where Does Authentication Go? _(coming soon)_
-
 ---
 
 This is an opinionated approach to building a system. It's aimed at web applications, but there's nothing here that wouldn't apply just as well to anything else that takes input from the world, does something, and gives something back.
@@ -56,7 +48,7 @@ This might sound mad, but it's worth at least asking ourselves why we want to ch
 
 First, I _hate_ the word architecture. The first thing I think about is architects, who in parodic form (well, mostly parodic) go about drawing lines and boxes on their ivory whiteboards, never build anything themselves, aren't on the hook for delivering anything, and float around with a peculiar sense of superiority because they never have to get their hands dirty with the base irrelevancies of working software.
 
-I usually prefer the word "design" as it tends to scare people off less. Design is what we do all the time - write a class, a method signature, some functions that all work together. We're always designing. Architecture feels so... eugh... distant and grown-up.
+I usually prefer the word "design" as it tends to scare people off less. And by "people", I mean "me". I am scared of architecture. Design is what we do all the time - write a class, a method signature, some functions that all work together. We're always designing. Architecture feels so... sigh... distant and grown-up.
 
 Well, let me tell you: architecture is just design, even the really big architectures. It's all just design. The only difference is usually scale. We design classes, but we feel like we're architecting when we design distributed systems.
 

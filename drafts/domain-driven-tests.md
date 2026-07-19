@@ -1,8 +1,10 @@
 ---
-title: How Do You Test a Ports and Adaptors Application?
-description: The testing strategy that a clean ports-and-adaptors wiring buys you - domain-driven tests, contract tests, fault injection - and the trade-offs that come with it.
+title: Domain-Driven Tests
+description: Once you can trust a fake out-port, you can drive the whole application through one suite of domain-driven tests - direct or through HTTP, against fakes or the real thing - and inject faults where you need them.
 published: false
-date: 2026-07-03 10:36:45
+date: 2026-07-03 13:36:45
+series: Dave Does Architecture
+part: 5
 tags:
   - PortsAndAdaptors
 ---
@@ -12,23 +14,13 @@ _**Dave Does Architecture** - a series:_
 1. [In Defence of Architecture](/posts/2026/7/2/in-defence-of-architecture/)
 2. [The Parts of a Ports and Adaptors Application](/posts/2026/7/3/the-parts-of-a-ports-and-adaptors-application/)
 3. [Wiring Up a Ports and Adaptors Application](/posts/2026/7/3/wiring-up-a-ports-and-adaptors-application/)
-4. **How Do You Test a Ports and Adaptors Application?** - _you are here_
-5. Where Does Authentication Go? _(coming soon)_
+4. How Do You Test an Out-Port? _(coming soon)_
+5. **Domain-Driven Tests** - _you are here_
+6. Where Does Authentication Go? _(coming soon)_
 
 ---
 
-This is the testing companion to [In Defence of Architecture](/posts/2026/7/2/in-defence-of-architecture/). It leans on the vocabulary from there - ports, adaptors, use cases, out-ports, and the wiring that holds them together - so if that's unfamiliar, start there and come back.
-
-That post said the last thing you need, to change a system safely, is to be able to _see that a change works_. This is that piece. And it turns out to be no accident that the same architecture makes it cheap: the structure that makes an application easy to change is the very thing that makes it easy to test.
-
-One warning before we begin. What follows is *an* approach - the one I reach for - and like everything in this game it is a set of trade-offs, not a law. I'll come to the alternatives, and to where this one costs you, further down.
-
-Testing here is done in terms of ports and adaptors, and it comes down to two questions:
-
-- what do I want my out-ports to be?
-- and at which layer am I going to test?
-
-Get those two right and the failure scenarios mostly answer themselves.
+In the [previous post](/drafts/how-do-you-test-an-out-port/) we got a single out-port under test, and - the important bit - a fake implementation of it that behaves _indistinguishably_ from the real thing, guaranteed by a contract test. Now we cash that in. Once you trust the fake, you can drive the _whole_ application on top of it.
 
 ### What do I want my out-ports to be?
 
@@ -107,22 +99,7 @@ The contract test only promises the happy path. How the application copes with f
 
 That leaves one gap. You can't reliably provoke a failure _inside_ a real adaptor. You can't make your database throw a connection error on demand - not without some form of remote fault injection, and that's another post.
 
-So to test the adaptor's own error handling, you go underneath it: inject a fake transport - a fake HTTP client, a fake DB driver - into the _real_ adaptor. Now you can make the transport return a 500, a timeout, or a lump of malformed nonsense, and assert on what the adaptor does with it. All in isolation, without needing the real external system to have a bad day on cue.
-
-```mermaid
-flowchart TD
-    subgraph "Contract Test (happy path)"
-        FakeAdaptor["Fake Adaptor"] -. "implements" .-> OutPort["OutPort (interface)"]
-        RealAdaptor["Real Adaptor"] -. "implements" .-> OutPort
-        ContractTest["Contract Test"] --> FakeAdaptor
-        ContractTest --> RealAdaptor
-    end
-
-    subgraph "Adaptor Failure Test"
-        RealAdaptor2["Real Adaptor"] --> FakeTransport["Fake Transport<br>(returns 500 / timeout / bad data)"]
-        AdaptorTest["Unit Test"] --> RealAdaptor2
-    end
-```
+So to test the adaptor's own error handling, you go underneath it: inject a fake transport - a fake HTTP client, a fake DB driver - into the _real_ adaptor. Now you can make the transport return a 500, a timeout, or a lump of malformed nonsense, and assert on what the adaptor does with it. All in isolation, without needing the real external system to have a bad day on cue. (We saw exactly this move - a stub driven actor behind the real adaptor - back in the [out-port post](/drafts/how-do-you-test-an-out-port/).)
 
 ## One suite, every level
 

@@ -98,8 +98,45 @@
 <article>
   <h1>{{.Title}}</h1>
   <time datetime="{{.Date.Format "2006-01-02T15:04"}}" >{{.Date.Format "Jan 02, 2006"}}</time>
+  {{template "series-nav" .}}
   {{.Body}}
 </article>
+{{end}}
+
+{{define "series-nav"}}
+{{if .SeriesPosts}}
+<nav class="series-nav">
+  <p><em><a href="/{{.SeriesPath}}"><strong>{{.Series}}</strong></a> — a series:</em></p>
+  <ol>
+    {{$current := .Part}}
+    {{range .SeriesPosts}}
+    <li>
+      {{if eq .Part $current}}<strong>{{.Title}}</strong> — <em>you are here</em>{{else}}<a href="/posts/{{.Path}}">{{.Title}}</a>{{end}}
+    </li>
+    {{end}}
+  </ol>
+</nav>
+{{end}}
+{{end}}
+
+{{define "series-index"}}
+<!DOCTYPE html>
+<html lang="en">
+  {{template "head" .Name}}
+  <body>
+    <main>
+      {{template "header"}}
+      <section class="post-list">
+        <h1>{{.Name}}</h1>
+        <ol>
+          {{range .Posts}}
+          <li><a href="/posts/{{.Path}}">{{.Title}}</a></li>
+          {{end}}
+        </ol>
+      </section>
+    </main>
+  </body>
+</html>
 {{end}}
 
 {{define "mathjax"}}
